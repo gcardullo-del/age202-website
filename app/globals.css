@@ -1,0 +1,266 @@
+@import "tailwindcss";
+
+:root{
+
+  --navy:#0B132B;
+  --navy-light:#16213E;
+
+  --lime:#CCFF00;
+
+  --graphite:#1B1F24;
+
+  --stone:#2A2E35;
+
+  --white:#FFFFFF;
+
+  --text:#F4F4F4;
+
+  --muted:#B8BDC8;
+
+  --border:#2E3440;
+
+  --success:#22C55E;
+
+  --warning:#F59E0B;
+
+  --danger:#EF4444;
+
+  --radius:18px;
+
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+background:var(--navy);
+
+color:var(--text);
+
+font-family:Inter,sans-serif;
+
+overflow-x:hidden;
+
+}
+
+::selection{
+
+background:var(--lime);
+
+color:black;
+
+}
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+}
+
+img{
+
+display:block;
+
+max-width:100%;
+
+height:auto;
+
+}
+
+button{
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.container{
+
+width:min(1440px,92%);
+
+margin:auto;
+
+}
+
+.section{
+
+padding:110px 0;
+
+}
+
+.section-title{
+
+font-size:48px;
+
+font-weight:800;
+
+letter-spacing:-2px;
+
+margin-bottom:20px;
+
+}
+
+.section-subtitle{
+
+font-size:18px;
+
+color:var(--muted);
+
+line-height:1.8;
+
+max-width:700px;
+
+margin-bottom:60px;
+
+}
+
+.btn-primary{
+
+background:var(--lime);
+
+color:black;
+
+padding:16px 34px;
+
+border-radius:999px;
+
+font-weight:700;
+
+display:inline-flex;
+
+align-items:center;
+
+gap:12px;
+
+transition:.35s;
+
+}
+
+.btn-primary:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 20px 45px rgba(204,255,0,.28);
+
+}
+
+.btn-secondary{
+
+border:1px solid var(--lime);
+
+padding:16px 34px;
+
+border-radius:999px;
+
+display:inline-flex;
+
+gap:12px;
+
+font-weight:700;
+
+}
+
+.card{
+
+background:linear-gradient(180deg,#111826,#0B132B);
+
+border:1px solid var(--border);
+
+border-radius:var(--radius);
+
+overflow:hidden;
+
+transition:.4s;
+
+}
+
+.card:hover{
+
+transform:translateY(-8px);
+
+border-color:var(--lime);
+
+box-shadow:0 30px 60px rgba(0,0,0,.45);
+
+}
+
+.badge{
+
+display:inline-flex;
+
+padding:8px 14px;
+
+border-radius:999px;
+
+background:rgba(204,255,0,.12);
+
+border:1px solid var(--lime);
+
+font-size:12px;
+
+font-weight:700;
+
+letter-spacing:.08em;
+
+text-transform:uppercase;
+
+color:var(--lime);
+
+}
+
+::-webkit-scrollbar{
+
+width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#0B132B;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:var(--lime);
+
+border-radius:999px;
+
+}
+
+.fade-up{
+
+animation:fadeUp .8s ease forwards;
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
