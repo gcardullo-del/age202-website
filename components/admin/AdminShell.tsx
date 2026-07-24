@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import AdminHeader from "./AdminHeader";
 import AdminSidebar from "./AdminSidebar";
@@ -17,29 +17,21 @@ export default function AdminShell({
   children,
 }: AdminShellProps) {
   return (
-    <div className="flex min-h-screen bg-[#050B18]">
-
+    <div className="flex h-screen overflow-hidden bg-[#050B18]">
       <AdminSidebar />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <AdminHeader
           title={title}
           description={description}
         />
 
-        <div className="flex-1 overflow-y-auto">
-
-          <div className="mx-auto w-full max-w-7xl px-8 py-8">
-
+        <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <div className="mx-auto w-full max-w-7xl px-5 py-8 pb-28 sm:px-8">
             {children}
-
           </div>
-
-        </div>
-
+        </main>
       </div>
-
     </div>
   );
 }
