@@ -1,14 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import {
-  ImagePlus,
-  UploadCloud,
-} from "lucide-react";
-import {
-  type FileRejection,
-  useDropzone,
-} from "react-dropzone";
+import { ImagePlus, UploadCloud } from "lucide-react";
+import { type FileRejection, useDropzone } from "react-dropzone";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const MAX_FILES = 10;
@@ -16,53 +10,40 @@ const MAX_FILES = 10;
 type DropZoneProps = {
   onFilesAccepted: (files: File[]) => void;
   disabled?: boolean;
+  remainingSlots?: number;
 };
 
-function getRejectionMessage(
-  rejection: FileRejection,
-): string {
+function getRejectionMessage(rejection: FileRejection): string {
   const fileName = rejection.file.name;
-
-  const messages = rejection.errors.map((error) => {
-    switch (error.code) {
-      case "file-invalid-type":
-        return `${fileName}: formato non supportato.`;
-
-      case "file-too-large":
-        return `${fileName}: il file supera 10 MB.`;
-
-      case "too-many-files":
-        return `Puoi selezionare al massimo ${MAX_FILES} immagini.`;
-
-      default:
-        return `${fileName}: impossibile aggiungere il file.`;
-    }
-  });
-
-  return messages.join(" ");
+  return rejection.errors
+    .map((error) => {
+      switch (error.code) {
+        case "file-invalid-type":
+          return `${fileName}: formato non supportato.`;
+        case "file-too-large":
+          return `${fileName}: il file supera 10 MB.`;
+        case "too-many-files":
+          return `Puoi selezionare al massimo ${MAX_FILES} immagini.`;
+        default:
+          return `${fileName}: impossibile aggiungere il file.`;
+      }
+    })
+    .join(" ");
 }
 
 export default function DropZone({
   onFilesAccepted,
   disabled = false,
+  remainingSlots = MAX_FILES,
 }: DropZoneProps) {
   const handleDropAccepted = useCallback(
-    (files: File[]) => {
-      onFilesAccepted(files);
-    },
+    (files: File[]) => onFilesAccepted(files),
     [onFilesAccepted],
   );
 
-  const handleDropRejected = useCallback(
-    (rejections: FileRejection[]) => {
-      const message = rejections
-        .map(getRejectionMessage)
-        .join("\n");
-
-      window.alert(message);
-    },
-    [],
-  );
+  const handleDropRejected = useCallback((rejections: FileRejection[]) => {
+    window.alert(rejections.map(getRejectionMessage).join("\n"));
+  }, []);
 
   const {
     getRootProps,
@@ -73,20 +54,18 @@ export default function DropZone({
   } = useDropzone({
     onDropAccepted: handleDropAccepted,
     onDropRejected: handleDropRejected,
-
     accept: {
       "image/jpeg": [".jpg", ".jpeg"],
       "image/png": [".png"],
       "image/webp": [".webp"],
     },
-
     multiple: true,
-    maxFiles: MAX_FILES,
+    maxFiles: Math.max(1, remainingSlots),
     maxSize: MAX_FILE_SIZE,
     disabled,
   });
 
-  const dropZoneStateClass = isDragReject
+  const stateClass = isDragReject
     ? "border-red-400/60 bg-red-400/[0.06]"
     : isDragAccept
       ? "border-lime-300/60 bg-lime-300/[0.06]"
@@ -96,74 +75,29 @@ export default function DropZone({
 
   return (
     <div
-      {...getRootProps({
-        className: [
-          "group flex min-h-[280px] cursor-pointer flex-col",
-          "items-center justify-center rounded-3xl border-2",
-          "border-dashed p-8 text-center outline-none transition",
-          "focus-visible:border-lime-300/60",
-          "focus-visible:ring-4 focus-visible:ring-lime-300/10",
-          disabled
-            ? "cursor-not-allowed opacity-50"
-            : "",
-          dropZoneStateClass,
-        ].join(" "),
-      })}
+      {...getRootProps()}
+      className={`group cursor-pointer rounded-3xl border border-dashed p-8 text-center transition ${stateClass} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
     >
       <input {...getInputProps()} />
-
-      <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/[0.04] text-white/40 transition group-hover:bg-lime-300/10 group-hover:text-lime-300">
-        {isDragActive ? (
-          <ImagePlus
-            size={34}
-            strokeWidth={1.6}
-          />
-        ) : (
-          <UploadCloud
-            size={34}
-            strokeWidth={1.6}
-          />
-        )}
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-white/60 transition group-hover:bg-lime-300/10 group-hover:text-lime-300">
+        {isDragActive ? <UploadCloud size={26} /> : <ImagePlus size={26} />}
       </div>
-
-      <h3 className="mt-7 text-xl font-semibold text-white">
+      <h3 className="mt-4 text-base font-semibold text-white">
         {isDragReject
-          ? "Some files are not valid"
+          ? "Alcuni file non sono validi"
           : isDragActive
-            ? "Drop the images here"
-            : "Upload Artifact Images"}
+            ? "Rilascia qui le immagini"
+            : "Carica le immagini del reperto"}
       </h3>
-
-      <p className="mt-3 max-w-lg text-sm leading-7 text-white/40">
-        Drag and drop photographs here, or click to browse
-        your computer.
+      <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-white/45">
+        Trascina le fotografie oppure clicca per selezionarle dal computer.
       </p>
-
-      <div className="mt-6 flex flex-wrap justify-center gap-2">
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          JPG
-        </span>
-
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          PNG
-        </span>
-
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          WEBP
-        </span>
-
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          Maximum 10 MB
-        </span>
-
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45">
-          Up to 10 images
-        </span>
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] uppercase tracking-[0.16em] text-white/35">
+        <span>JPG</span><span>•</span><span>PNG</span><span>•</span><span>WEBP</span><span>•</span><span>Max 10 MB</span><span>•</span><span>{remainingSlots} posti disponibili</span>
       </div>
-
-      <div className="mt-7 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition group-hover:border-lime-300/30">
-        Browse Images
-      </div>
+      <span className="mt-5 inline-flex rounded-xl bg-lime-300 px-4 py-2 text-sm font-semibold text-[#08111F]">
+        Sfoglia immagini
+      </span>
     </div>
   );
 }
