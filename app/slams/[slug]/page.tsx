@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
 import ArchiveExplorer from "@/components/archive/ArchiveExplorer";
@@ -227,7 +228,9 @@ export default async function GrandSlamPage({
           </div>
 
           {grandSlamProducts.length > 0 ? (
-            <ArchiveExplorer products={grandSlamProducts} />
+            <Suspense fallback={null}>
+              <ArchiveExplorer products={grandSlamProducts} />
+            </Suspense>
           ) : (
             <EmptyRoom grandSlamName={grandSlam.name} />
           )}

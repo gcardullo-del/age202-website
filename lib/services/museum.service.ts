@@ -30,6 +30,17 @@ function normalizeGroupKey(
     : fallback;
 }
 
+
+function getGroupCount(value: unknown): number {
+  if (typeof value !== "object" || value === null || !("_all" in value)) {
+    return 0;
+  }
+
+  const count = (value as { _all?: unknown })._all;
+
+  return typeof count === "number" ? count : 0;
+}
+
 export async function getMuseumStatistics(): Promise<MuseumStatistics> {
   const [
     artifacts,
@@ -83,6 +94,9 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
 
     prisma.artifact.groupBy({
       by: ["availability"],
+      orderBy: {
+        availability: "asc",
+      },
       _count: {
         _all: true,
       },
@@ -90,6 +104,9 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
 
     prisma.artifact.groupBy({
       by: ["rarity"],
+      orderBy: {
+        rarity: "asc",
+      },
       _count: {
         _all: true,
       },
@@ -97,6 +114,9 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
 
     prisma.artifact.groupBy({
       by: ["category"],
+      orderBy: {
+        category: "asc",
+      },
       _count: {
         _all: true,
       },
@@ -111,7 +131,7 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
           "UNSPECIFIED",
         );
 
-        result[key] = group._count._all;
+        result[key] = getGroupCount(group._count);
 
         return result;
       },
@@ -126,7 +146,7 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
           "UNSPECIFIED",
         );
 
-        result[key] = group._count._all;
+        result[key] = getGroupCount(group._count);
 
         return result;
       },
@@ -141,7 +161,7 @@ export async function getMuseumStatistics(): Promise<MuseumStatistics> {
           "UNSPECIFIED",
         );
 
-        result[key] = group._count._all;
+        result[key] = getGroupCount(group._count);
 
         return result;
       },

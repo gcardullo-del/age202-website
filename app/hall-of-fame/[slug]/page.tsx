@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import ArchiveExplorer from "@/components/archive/ArchiveExplorer";
 import MuseumEnding from "@/components/hall-of-fame/MuseumEnding";
@@ -171,7 +172,9 @@ export default async function PlayerPage({
           </div>
 
           {playerProducts.length > 0 ? (
-            <ArchiveExplorer products={playerProducts} />
+            <Suspense fallback={null}>
+              <ArchiveExplorer products={playerProducts} />
+            </Suspense>
           ) : (
             <div className="relative overflow-hidden rounded-[34px] border border-dashed border-white/15 bg-[#0A1425]/80 px-6 py-20 text-center backdrop-blur-xl md:py-28">
               <div

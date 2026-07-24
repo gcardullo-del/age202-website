@@ -78,11 +78,11 @@ model Brand {
 }
 
 model Artifact {
-  id            String @id @default(cuid())
-  archiveNumber String @unique
+  id            String  @id @default(cuid())
+  archiveNumber String  @unique
   title         String
   subtitle      String?
-  slug          String @unique
+  slug          String  @unique
 
   description       String?
   museumStory       String?
@@ -100,7 +100,7 @@ model Artifact {
   colour    String?
   material  String?
   condition ArtifactCondition
-  rarity    ArtifactRarity @default(COMMON)
+  rarity    ArtifactRarity    @default(COMMON)
 
   authentic        Boolean  @default(false)
   authenticityCode String?  @unique
@@ -123,12 +123,12 @@ model Artifact {
   player   Player @relation(fields: [playerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   brandId String
-  brand   Brand @relation(fields: [brandId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  brand   Brand  @relation(fields: [brandId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  images ArtifactImage[]
-certificate Certificate?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  images      ArtifactImage[]
+  certificate Certificate?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   @@index([playerId])
   @@index([brandId])
@@ -161,6 +161,7 @@ model ArtifactImage {
   @@index([sortOrder])
   @@index([isCover])
 }
+
 model Certificate {
   id        String   @id @default(cuid())
   code      String   @unique
@@ -171,12 +172,7 @@ model Certificate {
   qrCodeUrl String?
 
   artifactId String   @unique
-  artifact   Artifact @relation(
-    fields: [artifactId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  artifact   Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

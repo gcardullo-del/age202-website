@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import ArchiveExplorer from "@/components/archive/ArchiveExplorer";
 import ArchiveHero from "@/components/archive/ArchiveHero";
@@ -21,7 +22,9 @@ export default function ArchivePage() {
 
       <ArchiveTimeline />
 
-      <ArchiveExplorer products={products} />
+      <Suspense fallback={null}>
+        <ArchiveExplorer products={products} />
+      </Suspense>
     </main>
   );
 }
