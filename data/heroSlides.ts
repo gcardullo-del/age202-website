@@ -2,46 +2,50 @@ export const heroSlides = [
   {
     id: 1,
     player: "Roger Federer",
-    title: "Elegance Never Fades",
+    title: "Every Shirt\nTells a Story.",
     description:
-      "Scopri una selezione esclusiva di capi autentici dedicati al giocatore che ha rivoluzionato il tennis con la sua eleganza.",
-    image: "/players/federer-hero.jpeg",
+      "Discover authentic apparel inspired by Roger Federer. Every piece in the AGE202 Archive represents elegance, history and one of tennis' greatest champions.",
+    image: "/hero/federer-hero.png",
     accent: "#C7FF00",
   },
+
   {
     id: 2,
     player: "Rafael Nadal",
-    title: "King of Clay",
+    title: "Built on Passion.",
     description:
-      "La collezione dedicata al dominatore della terra rossa e ai suoi look più iconici.",
-    image: "/players/nadal-hero.jpg",
+      "Explore iconic outfits worn during Rafael Nadal's legendary career. From clay-court dominance to Grand Slam triumphs.",
+    image: "/hero/nadal-hero.jpg",
     accent: "#FF6B35",
   },
+
   {
     id: 3,
     player: "Novak Djokovic",
-    title: "Built to Win",
+    title: "History Never Stops.",
     description:
-      "L'abbigliamento del campione con il maggior numero di Slam della storia.",
-    image: "/players/djokovic-hero.jpg",
+      "A collection dedicated to one of the greatest champions ever. Authentic apparel from an extraordinary career.",
+    image: "/hero/djokovic-hero.jpg",
     accent: "#39D353",
   },
+
   {
     id: 4,
     player: "Jannik Sinner",
-    title: "The New Generation",
+    title: "The New Era.",
     description:
-      "Scopri la collezione dedicata al talento italiano che ha conquistato il tennis mondiale.",
-    image: "/players/sinner-hero.jpg",
+      "Discover the apparel that marks the rise of a new generation. Authentic pieces dedicated to Italy's tennis phenomenon.",
+    image: "/hero/sinner-hero.jpg",
     accent: "#F97316",
   },
+
   {
     id: 5,
     player: "Carlos Alcaraz",
-    title: "Future is Now",
+    title: "Future in Motion.",
     description:
-      "Velocità, energia e talento: la collezione dedicata al campione spagnolo.",
-    image: "/players/alcaraz-hero.jpg",
+      "Energy, speed and talent. A curated archive dedicated to one of the brightest stars of modern tennis.",
+    image: "/hero/alcaraz-hero.jpg",
     accent: "#38BDF8",
   },
 ];

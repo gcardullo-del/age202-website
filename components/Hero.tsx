@@ -7,19 +7,23 @@ export default function Hero() {
     <section className="relative h-screen overflow-hidden">
 
       {/* Background */}
+
       <div className="absolute inset-0">
 
-        <Image
-          src="/images/hero/federer-hero.jpg"
-          alt="Roger Federer"
-          fill
-          priority
-          className="object-cover"
-        />
+<Image
+  src="/hero/federer-hero.png"
+  alt="Roger Federer"
+  fill
+  priority
+  className="object-cover"
+  style={{
+    objectPosition: "65% center",
+  }}
+/>
 
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/60" />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#07192f] via-[#07192f]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050B18]/95 via-[#050B18]/60 to-transparent" />
 
       </div>
 
@@ -29,52 +33,83 @@ export default function Hero() {
 
         <div className="relative z-10 flex h-screen items-center">
 
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
 
-            <span className="tracking-[8px] uppercase text-lime-400 text-sm">
+            <span className="text-sm font-bold uppercase tracking-[0.45em] text-[#C8FF00]">
 
-              Curated Tennis Collections
+              AGE202 DIGITAL ARCHIVE
 
             </span>
 
-            <h1 className="mt-8 text-7xl lg:text-8xl font-black text-white leading-none">
+            <h1 className="mt-8 text-6xl leading-[0.95] font-black text-white md:text-7xl xl:text-8xl">
 
-              AGE202
+              Every Shirt
+              <br />
+              Tells a Story.
 
             </h1>
 
-            <h2 className="mt-8 text-5xl lg:text-6xl text-white font-light">
+            <p className="mt-8 max-w-2xl text-xl leading-9 text-white/80">
 
-              SECOND HAND.
-
-            </h2>
-
-            <h2 className="text-5xl lg:text-6xl font-black text-lime-400">
-
-              FIRST SET.
-
-            </h2>
-
-            <p className="mt-8 max-w-xl text-xl leading-9 text-white/80">
-
-              Collezioni autentiche dedicate ai più grandi campioni
-              della storia del tennis.
+              Discover authentic tennis apparel worn during the sport's
+              most iconic moments. Every piece is carefully curated,
+              authenticated and preserved inside the AGE202 Archive.
 
             </p>
 
-            <div className="mt-12 flex gap-5">
+            <div className="mt-14 flex flex-wrap gap-5">
 
               <Button>
 
-                Esplora le Collezioni
+                Explore Archive
 
               </Button>
 
               <Button variant="secondary">
 
-                The Vault
+                Enter The Vault
 
               </Button>
+
+            </div>
+
+            <div className="mt-20 flex items-center gap-10">
+
+              <div>
+
+                <p className="text-4xl font-black text-[#C8FF00]">
+                  500+
+                </p>
+
+                <p className="mt-2 text-xs uppercase tracking-[0.3em] text-gray-400">
+                  Archive Pieces
+                </p>
+
+              </div>
+
+              <div>
+
+                <p className="text-4xl font-black text-[#C8FF00]">
+                  5
+                </p>
+
+                <p className="mt-2 text-xs uppercase tracking-[0.3em] text-gray-400">
+                  Champions
+                </p>
+
+              </div>
+
+              <div>
+
+                <p className="text-4xl font-black text-[#C8FF00]">
+                  100%
+                </p>
+
+                <p className="mt-2 text-xs uppercase tracking-[0.3em] text-gray-400">
+                  Authentic
+                </p>
+
+              </div>
 
             </div>
 
@@ -83,6 +118,18 @@ export default function Hero() {
         </div>
 
       </Container>
+
+      {/* Scroll Indicator */}
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
+
+        <div className="h-14 w-[2px] bg-white/20">
+
+          <div className="h-7 w-[2px] animate-pulse bg-[#C8FF00]" />
+
+        </div>
+
+      </div>
 
     </section>
   );

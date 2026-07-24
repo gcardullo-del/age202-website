@@ -12,10 +12,7 @@ export default function ChampionGrid() {
 
       <Container>
 
-        <SectionTitle
-          eyebrow="Collections"
-          title="The Champions"
-        />
+       <SectionTitle title="The Champions" />
 
         <div className="mt-14 grid gap-6 lg:grid-cols-4">
 

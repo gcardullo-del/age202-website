@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ArtifactStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ArtifactCondition {
+  MINT
+  EXCELLENT
+  VERY_GOOD
+  GOOD
+  FAIR
+}
+
+enum ArtifactCategory {
+  SHIRT
+  POLO
+  JACKET
+  SHORTS
+  SHOES
+  CAP
+  ACCESSORY
+}
+
+enum ArtifactRarity {
+  COMMON
+  RARE
+  VERY_RARE
+  LEGENDARY
+}
+
+enum ArtifactAvailability {
+  AVAILABLE
+  SOLD
+  COMING_SOON
+  NOT_FOR_SALE
+}
+
+model Player {
+  id            String  @id @default(cuid())
+  name          String
+  slug          String  @unique
+  country       String?
+  biography     String?
+  heroImage     String?
+  portraitImage String?
+
+  artifacts Artifact[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model Brand {
+  id      String  @id @default(cuid())
+  name    String
+  slug    String  @unique
+  logo    String?
+  history String?
+
+  artifacts Artifact[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model Artifact {
+  id            String @id @default(cuid())
+  archiveNumber String @unique
+  title         String
+  subtitle      String?
+  slug          String @unique
+
+  description       String?
+  museumStory       String?
+  historicalContext String?
+  curatorNote       String?
+
+  year       Int?
+  season     String?
+  tournament String?
+  collection String?
+  edition    String?
+
+  category  ArtifactCategory?
+  size      String?
+  colour    String?
+  material  String?
+  condition ArtifactCondition
+  rarity    ArtifactRarity @default(COMMON)
+
+  authentic        Boolean  @default(false)
+  authenticityCode String?  @unique
+  vintage          Boolean  @default(false)
+  tags             String[] @default([])
+
+  status       ArtifactStatus       @default(DRAFT)
+  availability ArtifactAvailability @default(COMING_SOON)
+  featured     Boolean              @default(false)
+  publishedAt  DateTime?
+
+  price     Decimal? @db.Decimal(10, 2)
+  currency  String   @default("EUR")
+  vintedUrl String?
+
+  metaTitle       String?
+  metaDescription String?
+
+  playerId String
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  brandId String
+  brand   Brand @relation(fields: [brandId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  images ArtifactImage[]
+certificate Certificate?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([playerId])
+  @@index([brandId])
+  @@index([status])
+  @@index([availability])
+  @@index([category])
+  @@index([rarity])
+  @@index([featured])
+  @@index([publishedAt])
+  @@index([year])
+  @@index([tournament])
+  @@index([collection])
+  @@index([createdAt])
+}
+
+model ArtifactImage {
+  id        String  @id @default(cuid())
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+  isCover   Boolean @default(false)
+
+  artifactId String
+  artifact   Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([artifactId])
+  @@index([sortOrder])
+  @@index([isCover])
+}
+model Certificate {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  issuedAt  DateTime @default(now())
+  verified  Boolean  @default(true)
+  curator   String?
+  notes     String?
+  qrCodeUrl String?
+
+  artifactId String   @unique
+  artifact   Artifact @relation(
+    fields: [artifactId],
+    references: [id],
+    onDelete: Cascade,
+    onUpdate: Cascade
+  )
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([issuedAt])
+  @@index([verified])
+  @@index([createdAt])
+}
