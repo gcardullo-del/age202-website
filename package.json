@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "update:ranking": "tsx scripts/import-atp-ranking.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

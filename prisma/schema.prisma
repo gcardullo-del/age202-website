@@ -51,6 +51,7 @@ enum ArtifactAvailability {
   COMING_SOON
   NOT_FOR_SALE
 }
+
 model Player {
   id   String @id @default(cuid())
   name String
@@ -76,8 +77,9 @@ model Player {
 
   artifacts Artifact[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  atpPlayer AtpPlayer?
 
   @@index([name])
   @@index([collectionType])
@@ -205,4 +207,43 @@ model Certificate {
   @@index([issuedAt])
   @@index([verified])
   @@index([createdAt])
+}
+
+model AtpPlayer {
+  id String @id @default(cuid())
+
+  rank         Int
+  previousRank Int?
+
+  name      String
+  firstName String?
+  lastName  String?
+  slug      String  @unique
+
+  country     String
+  countryCode String
+
+  points Int
+  age    Int?
+
+  imageUrl String?
+
+  playerId String? @unique
+  player   Player? @relation(fields: [playerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  rankingDate DateTime @default(now())
+  source      String   @default("AGE202")
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([rank])
+  @@index([previousRank])
+  @@index([name])
+  @@index([countryCode])
+  @@index([points])
+  @@index([active])
+  @@index([rankingDate])
 }
