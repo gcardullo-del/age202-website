@@ -1,4 +1,5 @@
 import type {
+  ArtifactAvailability,
   ArtifactCategory,
   ArtifactCondition,
   ArtifactRarity,
@@ -15,6 +16,15 @@ export const ALLOWED_ARTIFACT_IMAGE_TYPES =
     "image/jpeg",
     "image/png",
     "image/webp",
+  ]);
+
+
+const ARTIFACT_AVAILABILITIES =
+  new Set<ArtifactAvailability>([
+    "AVAILABLE",
+    "SOLD",
+    "COMING_SOON",
+    "NOT_FOR_SALE",
   ]);
 
 const ARTIFACT_CONDITIONS =
@@ -344,4 +354,55 @@ export function createUniqueSlug(
   }
 
   return `${baseSlug}-${Date.now()}`;
+}
+
+
+export function getArtifactAvailability(
+  formData: FormData,
+  fieldName = "availability",
+  fallback: ArtifactAvailability = "COMING_SOON",
+): ArtifactAvailability {
+  const value = getOptionalString(
+    formData,
+    fieldName,
+  );
+
+  if (!value) {
+    return fallback;
+  }
+
+  if (
+    !ARTIFACT_AVAILABILITIES.has(
+      value as ArtifactAvailability,
+    )
+  ) {
+    throw new Error(
+      `${fieldName} contains an invalid availability status.`,
+    );
+  }
+
+  return value as ArtifactAvailability;
+}
+
+export function getArtifactTags(
+  formData: FormData,
+  fieldName = "tags",
+): string[] {
+  const value = getOptionalString(
+    formData,
+    fieldName,
+  );
+
+  if (!value) {
+    return [];
+  }
+
+  return Array.from(
+    new Set(
+      value
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+    ),
+  );
 }

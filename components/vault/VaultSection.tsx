@@ -10,7 +10,7 @@ import type { CSSProperties } from "react";
 
 import MuseumButton from "@/components/ui/MuseumButton";
 import { products } from "@/data/products";
-import { themeColors } from "@/lib/theme";
+import { age202Theme } from "@/lib/theme";
 
 const vaultPiece =
   products.find((product) => product.featured) ??
@@ -21,9 +21,9 @@ const vaultPiece =
 
 const vaultTheme = {
   "--vault-background":
-    themeColors.background.primary,
+    age202Theme.colors.background.primary,
   "--vault-accent":
-    themeColors.brand.lime,
+    age202Theme.colors.brand.lime,
   "--vault-panel": "#08101F",
 } as CSSProperties;
 

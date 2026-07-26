@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import type { ArtifactAvailability } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import {
   deleteArtifactImage as deleteStoredArtifactImage,
@@ -10,10 +9,12 @@ import {
 } from "@/lib/services/artifactStorage.service";
 import {
   MAX_ARTIFACT_IMAGES,
+  getArtifactAvailability,
   getArtifactCategory,
   getArtifactCondition,
   getArtifactRarity,
   getArtifactStatus,
+  getArtifactTags,
   getBoolean,
   getCoverImageIndex,
   getImageFiles,
@@ -24,32 +25,9 @@ import {
   slugify,
 } from "./utils/artifactForm.utils";
 
-const ARTIFACT_AVAILABILITIES = new Set([
-  "AVAILABLE",
-  "SOLD",
-  "COMING_SOON",
-  "NOT_FOR_SALE",
-]);
-
 type OrderedMediaItem =
   | { type: "existing"; id: string }
   | { type: "new"; index: number };
-
-function getArtifactAvailability(formData: FormData): ArtifactAvailability {
-  const value = getOptionalString(formData, "availability");
-  if (value && ARTIFACT_AVAILABILITIES.has(value as ArtifactAvailability)) {
-    return value as ArtifactAvailability;
-  }
-  return "COMING_SOON";
-}
-
-function getArtifactTags(formData: FormData): string[] {
-  const value = getOptionalString(formData, "tags");
-  if (!value) return [];
-  return Array.from(
-    new Set(value.split(",").map((tag) => tag.trim()).filter(Boolean)),
-  );
-}
 
 function getSubmittedMediaOrder(
   formData: FormData,

@@ -53,7 +53,11 @@ export async function deleteArtifactImage(
     bucketIndex + BUCKET.length + 2,
   );
 
-  await supabaseAdmin.storage
+  const { error } = await supabaseAdmin.storage
     .from(BUCKET)
     .remove([path]);
+
+  if (error) {
+    throw new Error(error.message);
+  }
 }

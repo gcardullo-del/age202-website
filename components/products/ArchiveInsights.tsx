@@ -47,11 +47,11 @@ export default function ArchiveInsights({
       <div className="mt-12 rounded-[24px] border border-white/10 bg-[#08101F] p-8">
 
         <div className="text-sm font-bold uppercase tracking-[0.25em] text-[#C8FF00]">
-          Curator's Note
+          Curator&apos;s Note
         </div>
 
         <p className="mt-5 text-lg leading-8 text-gray-300 italic">
-          "{curatorNote}"
+          &ldquo;{curatorNote}&rdquo;
         </p>
 
       </div>

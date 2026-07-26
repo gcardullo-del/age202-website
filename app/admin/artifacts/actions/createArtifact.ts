@@ -3,10 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import type {
-  ArtifactAvailability,
-} from "@/generated/prisma/client";
-
 import {
   createArtifact as createArtifactRepository,
   deleteArtifact as deleteArtifactRepository,
@@ -24,10 +20,12 @@ import {
 
 import {
   createUniqueSlug,
+  getArtifactAvailability,
   getArtifactCategory,
   getArtifactCondition,
   getArtifactRarity,
   getArtifactStatus,
+  getArtifactTags,
   getBoolean,
   getCoverImageIndex,
   getImageFiles,
@@ -35,56 +33,6 @@ import {
   getOptionalString,
   getRequiredString,
 } from "./utils/artifactForm.utils";
-
-const ARTIFACT_AVAILABILITIES =
-  new Set<ArtifactAvailability>([
-    "AVAILABLE",
-    "SOLD",
-    "COMING_SOON",
-    "NOT_FOR_SALE",
-  ]);
-
-function getArtifactAvailability(
-  formData: FormData,
-): ArtifactAvailability {
-  const value = getOptionalString(
-    formData,
-    "availability",
-  );
-
-  if (
-    value &&
-    ARTIFACT_AVAILABILITIES.has(
-      value as ArtifactAvailability,
-    )
-  ) {
-    return value as ArtifactAvailability;
-  }
-
-  return "COMING_SOON";
-}
-
-function getArtifactTags(
-  formData: FormData,
-): string[] {
-  const value = getOptionalString(
-    formData,
-    "tags",
-  );
-
-  if (!value) {
-    return [];
-  }
-
-  return Array.from(
-    new Set(
-      value
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-    ),
-  );
-}
 
 export async function createArtifact(
   formData: FormData,

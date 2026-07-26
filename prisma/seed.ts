@@ -26,6 +26,9 @@ const players = [
       "Una delle figure più iconiche della storia del tennis, celebrato per eleganza, tecnica e longevità.",
     heroImage: "/players/federer-hero.jpg",
     portraitImage: "/players/federer.jpg",
+    collectionType: "FEATURED" as const,
+    displayOrder: 1,
+    active: true,
   },
   {
     name: "Rafael Nadal",
@@ -35,6 +38,9 @@ const players = [
       "Campione simbolo della terra battuta, famoso per intensità, resilienza e straordinario spirito competitivo.",
     heroImage: "/players/nadal-hero.jpg",
     portraitImage: "/players/nadal.jpg",
+    collectionType: "FEATURED" as const,
+    displayOrder: 2,
+    active: true,
   },
   {
     name: "Novak Djokovic",
@@ -44,6 +50,9 @@ const players = [
       "Campione dalla completezza tecnica eccezionale, noto per elasticità, risposta e solidità mentale.",
     heroImage: "/players/djokovic-hero.jpg",
     portraitImage: "/players/djokovic.jpg",
+    collectionType: "FEATURED" as const,
+    displayOrder: 3,
+    active: true,
   },
   {
     name: "Jannik Sinner",
@@ -53,6 +62,9 @@ const players = [
       "Protagonista del tennis contemporaneo italiano, riconoscibile per potenza, precisione e compostezza.",
     heroImage: "/players/sinner-hero.jpg",
     portraitImage: "/players/sinner.jpg",
+    collectionType: "FEATURED" as const,
+    displayOrder: 4,
+    active: true,
   },
   {
     name: "Carlos Alcaraz",
@@ -62,6 +74,9 @@ const players = [
       "Campione della nuova generazione, caratterizzato da atletismo, creatività e tennis spettacolare.",
     heroImage: "/players/alcaraz-hero.jpg",
     portraitImage: "/players/alcaraz.jpg",
+    collectionType: "FEATURED" as const,
+    displayOrder: 5,
+    active: true,
   },
 ] as const;
 
@@ -110,8 +125,21 @@ async function main(): Promise<void> {
         biography: player.biography,
         heroImage: player.heroImage,
         portraitImage: player.portraitImage,
+        collectionType: player.collectionType,
+        displayOrder: player.displayOrder,
+        active: player.active,
       },
-      create: player,
+      create: {
+        name: player.name,
+        slug: player.slug,
+        country: player.country,
+        biography: player.biography,
+        heroImage: player.heroImage,
+        portraitImage: player.portraitImage,
+        collectionType: player.collectionType,
+        displayOrder: player.displayOrder,
+        active: player.active,
+      },
     });
 
     console.log(`✅ Giocatore salvato: ${player.name}`);
@@ -127,7 +155,12 @@ async function main(): Promise<void> {
         logo: brand.logo,
         history: brand.history,
       },
-      create: brand,
+      create: {
+        name: brand.name,
+        slug: brand.slug,
+        logo: brand.logo,
+        history: brand.history,
+      },
     });
 
     console.log(`✅ Brand salvato: ${brand.name}`);

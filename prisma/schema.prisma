@@ -7,6 +7,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PlayerCollectionType {
+  FEATURED
+  LEGEND
+  RISING_STAR
+  ARCHIVE
+}
+
 enum ArtifactStatus {
   DRAFT
   PUBLISHED
@@ -44,15 +51,28 @@ enum ArtifactAvailability {
   COMING_SOON
   NOT_FOR_SALE
 }
-
 model Player {
-  id            String  @id @default(cuid())
-  name          String
-  slug          String  @unique
-  country       String?
-  biography     String?
+  id   String @id @default(cuid())
+  name String
+  slug String @unique
+
+  firstName String?
+  lastName  String?
+  nickname  String?
+
+  country   String?
+  biography String?
+  quote     String?
+
+  debutYear Int?
+  accent    String @default("#C8FF00")
+
   heroImage     String?
   portraitImage String?
+
+  collectionType PlayerCollectionType @default(ARCHIVE)
+  displayOrder   Int?
+  active         Boolean              @default(true)
 
   artifacts Artifact[]
 
@@ -60,6 +80,10 @@ model Player {
   updatedAt DateTime @updatedAt
 
   @@index([name])
+  @@index([collectionType])
+  @@index([displayOrder])
+  @@index([active])
+  @@index([debutYear])
 }
 
 model Brand {
@@ -127,8 +151,9 @@ model Artifact {
 
   images      ArtifactImage[]
   certificate Certificate?
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([playerId])
   @@index([brandId])

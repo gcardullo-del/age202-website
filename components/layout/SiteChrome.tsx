@@ -28,7 +28,10 @@ export default function SiteChrome({ children }: SiteChromeProps) {
     <>
       <MuseumNavbar />
 
-      <main id="main-content" className="min-h-screen pt-24">
+      {/* Compensa l’altezza della navbar fixed */}
+      <div aria-hidden="true" style={{ height: "90px" }} />
+
+      <main id="main-content" className="min-h-screen">
         {children}
       </main>
 

@@ -178,7 +178,7 @@ function ChampionImage({
                 shouldReduceMotion
                   ? undefined
                   : {
-                      scale: [1.015, 1.035, 1.015],
+                      scale: [1.005, 1.018, 1.005],
                     }
               }
               transition={{
@@ -187,14 +187,31 @@ function ChampionImage({
                 ease: "easeInOut",
               }}
             >
+              {/*
+               * Ambient layer: fills the panel without forcing the main
+               * portrait to be cropped. The blur turns any empty side space
+               * into a deliberate cinematic background.
+               */}
               <Image
                 src={champion.image}
-                alt={`${champion.name} — ${champion.nickname}`}
+                alt=""
+                aria-hidden="true"
                 fill
                 priority={activeIndex === 0}
                 sizes="(max-width: 1024px) 100vw, 55vw"
-                className="object-cover object-[58%_center] transition-transform duration-[1800ms] ease-out group-hover:scale-[1.015]"
+                className="scale-110 object-cover opacity-35 blur-2xl saturate-75"
               />
+
+              <div className="absolute inset-x-[3%] bottom-[170px] top-[4%] sm:inset-x-[4%] sm:bottom-[190px] lg:inset-x-[3%] lg:bottom-[205px] xl:inset-x-[4%]">
+                <Image
+                  src={champion.image}
+                  alt={`${champion.name} — ${champion.nickname}`}
+                  fill
+                  priority={activeIndex === 0}
+                  sizes="(max-width: 1024px) 94vw, 52vw"
+                  className="object-contain object-center drop-shadow-[0_32px_55px_rgba(0,0,0,0.6)] transition-transform duration-[1800ms] ease-out group-hover:scale-[1.008]"
+                />
+              </div>
             </motion.div>
           </motion.div>
         </motion.div>

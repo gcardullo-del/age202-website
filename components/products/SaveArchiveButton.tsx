@@ -17,15 +17,18 @@ export default function SaveArchiveButton({
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    try {
-      const savedArchives = getSavedArchives();
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        const savedArchives = getSavedArchives();
+        setIsSaved(savedArchives.includes(productId));
+      } catch {
+        setIsSaved(false);
+      } finally {
+        setIsReady(true);
+      }
+    });
 
-      setIsSaved(savedArchives.includes(productId));
-    } catch {
-      setIsSaved(false);
-    } finally {
-      setIsReady(true);
-    }
+    return () => window.cancelAnimationFrame(frame);
   }, [productId]);
 
   function handleSave() {

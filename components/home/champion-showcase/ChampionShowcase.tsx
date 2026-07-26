@@ -64,18 +64,18 @@ export default function ChampionShowcase({
    * la lista dei campioni o l’identificatore iniziale.
    */
   useEffect(() => {
-    if (champions.length === 0) {
-      setActiveIndex(0);
-      return;
-    }
-
-    setActiveIndex((currentIndex) => {
-      if (currentIndex >= champions.length) {
-        return initialIndex;
+    const frame = window.requestAnimationFrame(() => {
+      if (champions.length === 0) {
+        setActiveIndex(0);
+        return;
       }
 
-      return currentIndex;
+      setActiveIndex((currentIndex) =>
+        currentIndex >= champions.length ? initialIndex : currentIndex
+      );
     });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [champions.length, initialIndex]);
 
   const selectChampion = useCallback(

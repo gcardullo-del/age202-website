@@ -4,23 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import type {
-  PlayerProfile,
-  PlayerSlug,
-} from "@/data/players";
+import type { PlayerProfile, PlayerSlug } from "@/data/players";
 
 type Props = {
   player: PlayerProfile;
   archivePieces: number;
 };
 
-const playerAccentColors: Record<PlayerSlug, string> = {
-  federer: "#C8FF00",
-  nadal: "#FF7A18",
-  djokovic: "#4EA5FF",
-  sinner: "#8DFF61",
-  alcaraz: "#FFD54A",
-};
 
 const playerExhibitNumbers: Record<PlayerSlug, string> = {
   federer: "01",

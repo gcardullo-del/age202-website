@@ -159,8 +159,8 @@ function AnimatedCounter({
   useEffect(() => {
     if (!shouldStart) return;
     if (shouldReduceMotion) {
-      setDisplayValue(value);
-      return;
+      const frame = requestAnimationFrame(() => setDisplayValue(value));
+      return () => cancelAnimationFrame(frame);
     }
 
     let frame = 0;

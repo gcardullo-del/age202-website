@@ -3,22 +3,12 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import type {
-  PlayerProfile,
-  PlayerSlug,
-} from "@/data/players";
+import type { PlayerProfile } from "@/data/players";
 
 type Props = {
   player: PlayerProfile;
 };
 
-const playerAccentColors: Record<PlayerSlug, string> = {
-  federer: "#C8FF00",
-  nadal: "#FF7A18",
-  djokovic: "#4EA5FF",
-  sinner: "#8DFF61",
-  alcaraz: "#FFD54A",
-};
 
 export default function PlayerBiography({
   player,

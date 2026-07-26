@@ -5,15 +5,27 @@ import {
   ChevronRight,
   CircleDollarSign,
   Eye,
+  Filter,
   ImageIcon,
   Pencil,
   Plus,
+  Search,
   ShieldCheck,
   Sparkles,
+  X,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
+import type {
+  ArtifactAvailability,
+  ArtifactRarity,
+  ArtifactStatus,
+  Prisma,
+} from "@/generated/prisma/client";
+
 import AdminShell from "@/components/admin/AdminShell";
+import DeleteArtifactButton from "@/components/admin/artifacts/DeleteArtifactButton";
 import AdminBadge from "@/components/admin/ui/AdminBadge";
 import AdminEmptyState from "@/components/admin/ui/AdminEmptyState";
 import AdminPanel from "@/components/admin/ui/AdminPanel";
@@ -86,8 +98,91 @@ function getAvailabilityTone(
   }
 }
 
-export default async function ArtifactsPage() {
-  const artifacts = await prisma.artifact.findMany({
+type ArtifactsPageProps = {
+  searchParams: Promise<{
+    q?: string;
+    status?: string;
+    availability?: string;
+    player?: string;
+    brand?: string;
+    rarity?: string;
+  }>;
+};
+
+function normalizedFilter(value: string | undefined): string {
+  return value?.trim() ?? "";
+}
+
+const ARTIFACT_STATUSES = new Set<ArtifactStatus>([
+  "DRAFT",
+  "PUBLISHED",
+  "ARCHIVED",
+]);
+
+const ARTIFACT_AVAILABILITIES = new Set<ArtifactAvailability>([
+  "AVAILABLE",
+  "SOLD",
+  "COMING_SOON",
+  "NOT_FOR_SALE",
+]);
+
+const ARTIFACT_RARITIES = new Set<ArtifactRarity>([
+  "COMMON",
+  "RARE",
+  "VERY_RARE",
+  "LEGENDARY",
+]);
+
+function parseEnumFilter<T extends string>(
+  value: string | undefined,
+  allowedValues: Set<T>,
+): T | undefined {
+  const normalizedValue = value?.trim();
+
+  if (!normalizedValue || !allowedValues.has(normalizedValue as T)) {
+    return undefined;
+  }
+
+  return normalizedValue as T;
+}
+
+export default async function ArtifactsPage({
+  searchParams,
+}: ArtifactsPageProps) {
+  const params = await searchParams;
+  const query = normalizedFilter(params.q);
+  const status = parseEnumFilter(params.status, ARTIFACT_STATUSES);
+  const availability = parseEnumFilter(
+    params.availability,
+    ARTIFACT_AVAILABILITIES,
+  );
+  const playerId = normalizedFilter(params.player);
+  const brandId = normalizedFilter(params.brand);
+  const rarity = parseEnumFilter(params.rarity, ARTIFACT_RARITIES);
+
+  const where = {
+    ...(query
+      ? {
+          OR: [
+            { title: { contains: query, mode: "insensitive" as const } },
+            { archiveNumber: { contains: query, mode: "insensitive" as const } },
+            { tournament: { contains: query, mode: "insensitive" as const } },
+            { collection: { contains: query, mode: "insensitive" as const } },
+            { player: { name: { contains: query, mode: "insensitive" as const } } },
+            { brand: { name: { contains: query, mode: "insensitive" as const } } },
+          ],
+        }
+      : {}),
+    ...(status ? { status } : {}),
+    ...(availability ? { availability } : {}),
+    ...(rarity ? { rarity } : {}),
+    ...(playerId ? { playerId } : {}),
+    ...(brandId ? { brandId } : {}),
+  } satisfies Prisma.ArtifactWhereInput;
+
+  const [artifacts, players, brands, totalCount, publishedCount, draftCount, certificateCount] =
+    await Promise.all([
+      prisma.artifact.findMany({
     include: {
       player: true,
       brand: true,
@@ -105,20 +200,22 @@ export default async function ArtifactsPage() {
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+        where,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      prisma.player.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+      prisma.brand.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
+      prisma.artifact.count(),
+      prisma.artifact.count({ where: { status: "PUBLISHED" } }),
+      prisma.artifact.count({ where: { status: "DRAFT" } }),
+      prisma.certificate.count(),
+    ]);
 
-  const publishedCount = artifacts.filter(
-    (artifact) => artifact.status === "PUBLISHED",
-  ).length;
-  const draftCount = artifacts.filter(
-    (artifact) => artifact.status === "DRAFT",
-  ).length;
-  const certificateCount = artifacts.filter(
-    (artifact) => artifact.certificate,
-  ).length;
+  const hasActiveFilters = Boolean(
+    query || status || availability || playerId || brandId || rarity,
+  );
 
   return (
     <AdminShell
@@ -160,7 +257,7 @@ export default async function ArtifactsPage() {
                   Total archive
                 </p>
                 <p className="mt-3 text-3xl font-semibold text-white">
-                  {artifacts.length}
+                  {totalCount}
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-3 text-white/50">
@@ -218,6 +315,90 @@ export default async function ArtifactsPage() {
           </AdminPanel>
         </div>
 
+        <AdminPanel className="p-5 sm:p-6">
+          <form className="space-y-4" method="get">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/35">
+                  <Filter className="h-4 w-4" aria-hidden="true" />
+                  Inventory filters
+                </div>
+                <p className="mt-2 text-sm text-white/45">
+                  Search and narrow the catalog without changing the archive structure.
+                </p>
+              </div>
+
+              {hasActiveFilters ? (
+                <Link
+                  href="/admin/artifacts"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-white/55 transition hover:text-white"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                  Clear filters
+                </Link>
+              ) : null}
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+              <label className="relative md:col-span-2 xl:col-span-2">
+                <span className="sr-only">Search artifacts</span>
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" aria-hidden="true" />
+                <input
+                  type="search"
+                  name="q"
+                  defaultValue={query}
+                  placeholder="Title, archive no., player, tournament..."
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/[0.035] pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-lime-300/35 focus:bg-white/[0.05]"
+                />
+              </label>
+
+              <select name="status" defaultValue={status ?? ""} className="h-12 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35">
+                <option value="">All statuses</option>
+                <option value="DRAFT">Draft</option>
+                <option value="PUBLISHED">Published</option>
+                <option value="ARCHIVED">Archived</option>
+              </select>
+
+              <select name="availability" defaultValue={availability ?? ""} className="h-12 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35">
+                <option value="">All availability</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="SOLD">Sold</option>
+                <option value="COMING_SOON">Coming soon</option>
+                <option value="NOT_FOR_SALE">Not for sale</option>
+              </select>
+
+              <select name="player" defaultValue={playerId} className="h-12 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35">
+                <option value="">All players</option>
+                {players.map((player) => (
+                  <option key={player.id} value={player.id}>{player.name}</option>
+                ))}
+              </select>
+
+              <select name="brand" defaultValue={brandId} className="h-12 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35">
+                <option value="">All brands</option>
+                {brands.map((brand) => (
+                  <option key={brand.id} value={brand.id}>{brand.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <select name="rarity" defaultValue={rarity ?? ""} className="h-11 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35 sm:min-w-48">
+                <option value="">All rarities</option>
+                <option value="COMMON">Common</option>
+                <option value="RARE">Rare</option>
+                <option value="VERY_RARE">Very rare</option>
+                <option value="LEGENDARY">Legendary</option>
+              </select>
+
+              <button type="submit" className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-white px-5 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200">
+                <Search className="h-4 w-4" aria-hidden="true" />
+                Apply filters
+              </button>
+            </div>
+          </form>
+        </AdminPanel>
+
         <AdminPanel className="overflow-hidden">
           <div className="flex flex-col gap-4 border-b border-white/10 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
@@ -231,7 +412,7 @@ export default async function ArtifactsPage() {
 
             <div className="flex items-center gap-2 text-xs font-medium text-white/35">
               <Sparkles className="h-4 w-4 text-yellow-100/60" aria-hidden="true" />
-              {artifacts.length} catalog entries
+              {artifacts.length} of {totalCount} catalog entries
             </div>
           </div>
 
@@ -248,11 +429,12 @@ export default async function ArtifactsPage() {
                     <div className="flex min-w-0 items-center gap-4 sm:gap-5">
                       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#08111F] sm:h-24 sm:w-24">
                         {coverImage ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
+                          <Image
                             src={coverImage.url}
                             alt={coverImage.alt ?? artifact.title}
-                            className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                            fill
+                            sizes="96px"
+                            className="object-cover transition duration-300 group-hover:scale-[1.03]"
                           />
                         ) : (
                           <div className="flex h-full w-full flex-col items-center justify-center bg-[radial-gradient(circle_at_top,rgba(190,242,100,0.08),transparent_65%)] text-white/25">
@@ -369,6 +551,11 @@ export default async function ArtifactsPage() {
                         Edit
                         <ChevronRight className="h-4 w-4" aria-hidden="true" />
                       </Link>
+
+                      <DeleteArtifactButton
+                        artifactId={artifact.id}
+                        artifactTitle={artifact.title}
+                      />
                     </div>
                   </article>
                 );
@@ -376,10 +563,14 @@ export default async function ArtifactsPage() {
             </div>
           ) : (
             <AdminEmptyState
-              title="No artifacts yet"
-              description="Create the first catalog entry and start building the AGE202 digital tennis museum."
-              actionLabel="Create First Artifact"
-              actionHref="/admin/artifacts/new"
+              title={hasActiveFilters ? "No matching artifacts" : "No artifacts yet"}
+              description={
+                hasActiveFilters
+                  ? "Try adjusting or clearing the current inventory filters."
+                  : "Create the first catalog entry and start building the AGE202 digital tennis museum."
+              }
+              actionLabel={hasActiveFilters ? "Clear Filters" : "Create First Artifact"}
+              actionHref={hasActiveFilters ? "/admin/artifacts" : "/admin/artifacts/new"}
             />
           )}
         </AdminPanel>

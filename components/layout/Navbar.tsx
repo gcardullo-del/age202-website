@@ -72,8 +72,12 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setMobileMenuOpen(false);
-    setPlayersOpen(false);
+    const frame = window.requestAnimationFrame(() => {
+      setMobileMenuOpen(false);
+      setPlayersOpen(false);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
 
   useEffect(() => {

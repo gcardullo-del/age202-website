@@ -1,33 +1,40 @@
 @import "tailwindcss";
 
-/* ==========================================================================
-   AGE202 — Global Theme
-   ========================================================================== */
-
+/* AGE202 Design System — Sprint 4.0 */
 :root {
-  /* Brand */
-  --navy: #0b132b;
-  --navy-light: #16213e;
-  --lime: #ccff00;
+  color-scheme: dark;
 
-  /* Neutral */
-  --white: #ffffff;
-  --text: #f4f4f4;
-  --muted: #b8bdc8;
-  --border: #2e3440;
+  --age-bg-primary: #050b18;
+  --age-bg-deep: #030711;
+  --age-bg-elevated: #07101d;
+  --age-surface: rgba(255, 255, 255, 0.025);
+  --age-surface-hover: rgba(255, 255, 255, 0.045);
 
-  /* Status */
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --age-lime: #c8ff00;
+  --age-lime-soft: rgba(200, 255, 0, 0.12);
 
-  /* Radius */
-  --radius: 18px;
+  --age-text-primary: #ffffff;
+  --age-text-secondary: rgba(255, 255, 255, 0.72);
+  --age-text-muted: rgba(255, 255, 255, 0.48);
+  --age-text-subtle: rgba(255, 255, 255, 0.3);
+
+  --age-border-subtle: rgba(255, 255, 255, 0.08);
+  --age-border-default: rgba(255, 255, 255, 0.1);
+  --age-border-strong: rgba(255, 255, 255, 0.16);
+
+  --age-radius-small: 16px;
+  --age-radius-medium: 24px;
+  --age-radius-large: 32px;
+  --age-radius-pill: 9999px;
+
+  --age-shadow-card: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --age-shadow-floating: 0 34px 110px rgba(0, 0, 0, 0.42);
+  --age-shadow-lime: 0 0 45px rgba(200, 255, 0, 0.16);
+
+  --age-content: 1480px;
+  --age-wide: 1700px;
+  --age-reading: 850px;
 }
-
-/* ==========================================================================
-   Reset
-   ========================================================================== */
 
 *,
 *::before,
@@ -42,21 +49,21 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--age-bg-primary);
 }
 
 body {
+  min-height: 100vh;
   overflow-x: hidden;
-  background: var(--navy);
-  color: var(--text);
-  font-family: Inter, sans-serif;
+  background:
+    radial-gradient(circle at 15% -10%, rgba(200, 255, 0, 0.045), transparent 30%),
+    var(--age-bg-primary);
+  color: var(--age-text-primary);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/* ==========================================================================
-   Elements
-   ========================================================================== */
 
 a {
   color: inherit;
@@ -85,50 +92,54 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--lime);
+  outline: 2px solid var(--age-lime);
   outline-offset: 3px;
 }
 
-/* ==========================================================================
-   Selection
-   ========================================================================== */
-
 ::selection {
-  background: var(--lime);
-  color: #000;
+  background: var(--age-lime);
+  color: var(--age-bg-primary);
 }
-
-/* ==========================================================================
-   Scrollbar
-   ========================================================================== */
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--navy);
+  background: var(--age-bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--lime);
-  border-radius: 999px;
+  border-radius: var(--age-radius-pill);
+  background: var(--age-lime);
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: #d9ff4d;
-}
-
-/* Firefox */
 
 * {
-  scrollbar-color: var(--lime) var(--navy);
+  scrollbar-color: var(--age-lime) var(--age-bg-primary);
   scrollbar-width: thin;
 }
 
-/* ==========================================================================
-   Accessibility
-   ========================================================================== */
+.age202-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.age202-noise {
+  position: relative;
+  isolation: isolate;
+}
+
+.age202-noise::after {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

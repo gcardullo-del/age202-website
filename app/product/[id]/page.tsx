@@ -5,6 +5,11 @@ import { notFound } from "next/navigation";
 
 import { products } from "@/data/products";
 import type { Product } from "@/data/product.types";
+import ArtifactPassport from "@/components/museum/ArtifactPassport";
+import ArtifactProvenance from "@/components/museum/ArtifactProvenance";
+import MuseumScore from "@/components/museum/MuseumScore";
+import RarityBadge from "@/components/museum/RarityBadge";
+import { createMuseumArtifactView } from "@/lib/museum/artifact-view";
 
 type PageProps = {
   params: Promise<{
@@ -18,13 +23,6 @@ const playerSlugs: Record<string, string> = {
   "Novak Djokovic": "djokovic",
   "Jannik Sinner": "sinner",
   "Carlos Alcaraz": "alcaraz",
-};
-
-const rarityLabels: Record<Product["rarity"], string> = {
-  common: "Common",
-  rare: "Rare",
-  "very-rare": "Very Rare",
-  legendary: "Legendary",
 };
 
 const statusLabels: Record<Product["status"], string> = {
@@ -78,6 +76,7 @@ export default async function ProductPage({
   }
 
   const playerSlug = playerSlugs[product.player];
+  const museumArtifact = createMuseumArtifactView(product);
 
   const productImages = Array.from(
     new Set(
@@ -90,21 +89,19 @@ export default async function ProductPage({
   );
 
   const relatedProducts = products
-    .filter(
-      (item) =>
-        item.id !== product.id &&
-        (
-          item.player === product.player ||
-          item.tournament === product.tournament ||
-          item.brand === product.brand
-        )
-    )
-    .slice(0, 3);
-
-  const isRare =
-    product.rarity === "rare" ||
-    product.rarity === "very-rare" ||
-    product.rarity === "legendary";
+    .filter((item) => item.id !== product.id)
+    .map((item) => ({
+      item,
+      relevance:
+        (item.player === product.player ? 4 : 0) +
+        (item.tournament === product.tournament ? 3 : 0) +
+        (item.brand === product.brand ? 2 : 0) +
+        (item.rarity === product.rarity ? 1 : 0),
+    }))
+    .filter(({ relevance }) => relevance > 0)
+    .sort((a, b) => b.relevance - a.relevance || b.item.year - a.item.year)
+    .slice(0, 3)
+    .map(({ item }) => item);
 
   return (
     <main className="min-h-screen bg-[#050B18] text-white">
@@ -170,11 +167,7 @@ export default async function ProductPage({
                 {statusLabels[product.status]}
               </span>
 
-              {isRare && (
-                <span className="rounded-full border border-amber-300/30 bg-[#050B18]/80 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-amber-200 backdrop-blur-xl">
-                  {rarityLabels[product.rarity]}
-                </span>
-              )}
+              <RarityBadge rarity={product.rarity} compact />
             </div>
 
             <div className="absolute bottom-5 left-5 rounded-full border border-white/10 bg-[#050B18]/80 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 backdrop-blur-xl">
@@ -284,6 +277,10 @@ export default async function ProductPage({
         </div>
       </section>
 
+      <ArtifactPassport artifact={museumArtifact} />
+
+      <MuseumScore product={product} />
+
       {/* MUSEUM STORY */}
 
       <section className="border-y border-white/10 bg-[#08101F]">
@@ -328,6 +325,8 @@ export default async function ProductPage({
         </div>
       </section>
 
+      <ArtifactProvenance artifact={museumArtifact} />
+
       {/* CERTIFICATE */}
 
       <section className="mx-auto max-w-7xl px-6 py-20 md:px-8 lg:py-28">
@@ -356,6 +355,13 @@ export default async function ProductPage({
               <p className="mt-3 font-mono text-lg font-bold text-white">
                 {product.authenticityCode}
               </p>
+
+              <Link
+                href={`/certificate/${encodeURIComponent(product.authenticityCode)}`}
+                className="mt-5 inline-flex items-center text-[10px] font-black uppercase tracking-[0.22em] text-[#C8FF00] transition-opacity hover:opacity-70"
+              >
+                Verify public record →
+              </Link>
             </div>
           </div>
         </div>

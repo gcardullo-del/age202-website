@@ -47,11 +47,11 @@ export default function SavedArchives({
       }
     }
 
-    loadSavedArchives();
-
+    const frame = window.requestAnimationFrame(loadSavedArchives);
     window.addEventListener("storage", loadSavedArchives);
 
     return () => {
+      window.cancelAnimationFrame(frame);
       window.removeEventListener("storage", loadSavedArchives);
     };
   }, []);

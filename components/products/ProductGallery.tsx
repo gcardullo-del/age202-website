@@ -33,7 +33,12 @@ export default function ProductGallery({
   const viewerTouchStartX = useRef<number | null>(null);
   const viewerTouchEndX = useRef<number | null>(null);
 
-  const selectedImage = safeImages[selectedIndex];
+  const displayedIndex =
+    safeImages.length === 0
+      ? 0
+      : Math.min(selectedIndex, safeImages.length - 1);
+
+  const selectedImage = safeImages[displayedIndex];
 
   const previousImage = useCallback(() => {
     if (safeImages.length <= 1) {
@@ -122,12 +127,6 @@ export default function ProductGallery({
       document.body.style.overflow = previousOverflow;
     };
   }, [viewerOpen]);
-
-  useEffect(() => {
-    if (selectedIndex >= safeImages.length) {
-      setSelectedIndex(0);
-    }
-  }, [safeImages.length, selectedIndex]);
 
   const handleGalleryTouchStart = (
     event: React.TouchEvent<HTMLDivElement>
@@ -245,7 +244,7 @@ export default function ProductGallery({
 
           <Image
             src={selectedImage}
-            alt={`${title} image ${selectedIndex + 1}`}
+            alt={`${title} image ${displayedIndex + 1}`}
             fill
             priority={selectedIndex === 0}
             sizes="(max-width: 1024px) 100vw, 55vw"
@@ -258,7 +257,7 @@ export default function ProductGallery({
           {/* IMAGE COUNTER */}
 
           <div className="pointer-events-none absolute right-5 top-5 z-20 rounded-full border border-white/10 bg-[#050B18]/70 px-4 py-2 text-xs font-bold tracking-[0.2em] text-white backdrop-blur-md">
-            {String(selectedIndex + 1).padStart(2, "0")} /{" "}
+            {String(displayedIndex + 1).padStart(2, "0")} /{" "}
             {String(safeImages.length).padStart(2, "0")}
           </div>
 
@@ -306,7 +305,7 @@ export default function ProductGallery({
         {safeImages.length > 1 && (
           <div className="flex gap-3 overflow-x-auto pb-2">
             {safeImages.map((image, index) => {
-              const active = selectedIndex === index;
+              const active = displayedIndex === index;
 
               return (
                 <button
@@ -444,7 +443,7 @@ export default function ProductGallery({
                   <Image
                     src={selectedImage}
                     alt={`${title} fullscreen image ${
-                      selectedIndex + 1
+                      displayedIndex + 1
                     }`}
                     fill
                     priority
@@ -462,7 +461,7 @@ export default function ProductGallery({
               {/* VIEWER COUNTER */}
 
               <div className="pointer-events-none absolute left-1/2 top-5 z-20 -translate-x-1/2 rounded-full border border-white/10 bg-black/55 px-5 py-2 text-[10px] font-black tracking-[0.25em] text-white backdrop-blur-xl">
-                {String(selectedIndex + 1).padStart(2, "0")} /{" "}
+                {String(displayedIndex + 1).padStart(2, "0")} /{" "}
                 {String(safeImages.length).padStart(2, "0")}
               </div>
 
@@ -499,7 +498,7 @@ export default function ProductGallery({
                   <div className="flex gap-2 overflow-x-auto pb-1">
                     {safeImages.map((image, index) => {
                       const active =
-                        selectedIndex === index;
+                        displayedIndex === index;
 
                       return (
                         <button
@@ -539,7 +538,7 @@ export default function ProductGallery({
 
                     <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.22em] text-gray-500">
                       Archive image{" "}
-                      {String(selectedIndex + 1).padStart(
+                      {String(displayedIndex + 1).padStart(
                         2,
                         "0"
                       )}

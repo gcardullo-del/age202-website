@@ -51,7 +51,7 @@ export default function Hero() {
 
             <p className="mt-8 max-w-2xl text-xl leading-9 text-white/80">
 
-              Discover authentic tennis apparel worn during the sport's
+              Discover authentic tennis apparel worn during the sport&apos;s
               most iconic moments. Every piece is carefully curated,
               authenticated and preserved inside the AGE202 Archive.
 

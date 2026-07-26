@@ -1,6 +1,7 @@
 import type {
   Product,
   ProductCategory,
+  ProductRarity,
   ProductStatus,
 } from "@/data/product.types";
 
@@ -16,7 +17,9 @@ export type ArchiveFilters = {
   tournament: string;
   year: string;
   brand: string;
+  collection: string;
   category: ProductCategory | "";
+  rarity: ProductRarity | "";
   status: ProductStatus | "";
 };
 
@@ -25,7 +28,9 @@ export type ArchiveFilterOptions = {
   tournaments: string[];
   years: number[];
   brands: string[];
+  collections: string[];
   categories: ProductCategory[];
+  rarities: ProductRarity[];
   statuses: ProductStatus[];
 };
 

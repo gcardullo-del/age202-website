@@ -1,310 +1,44 @@
-import type {
-  ArtifactAvailability,
-  ArtifactCategory,
-  ArtifactCondition,
-  ArtifactRarity,
-  ArtifactStatus,
-  Prisma,
-} from "@/generated/prisma/client";
-
 import { prisma } from "@/lib/prisma";
 
-const artifactRelations = {
+type CreateArtifactData =
+  Parameters<typeof prisma.artifact.create>[0]["data"];
+
+const publicArtifactInclude = {
   player: true,
   brand: true,
   images: {
-    orderBy: {
-      sortOrder: "asc",
-    },
+    orderBy: [
+      {
+        isCover: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+    ],
   },
-} satisfies Prisma.ArtifactInclude;
-
-const publishedArtifactWhere = {
-  status: "PUBLISHED",
-} satisfies Prisma.ArtifactWhereInput;
-
-export type CreateArtifactData = {
-  archiveNumber: string;
-  title: string;
-  subtitle?: string;
-
-  slug: string;
-
-  description?: string;
-  museumStory?: string;
-  historicalContext?: string;
-  curatorNote?: string;
-
-  year?: number;
-  season?: string;
-  tournament?: string;
-  collection?: string;
-  edition?: string;
-
-  category?: ArtifactCategory;
-  rarity?: ArtifactRarity;
-
-  size?: string;
-  colour?: string;
-  material?: string;
-
-  condition: ArtifactCondition;
-
-  availability?: ArtifactAvailability;
-  price?: number | string;
-  currency?: string;
-  vintedUrl?: string;
-
-  authentic?: boolean;
-  authenticityCode?: string;
-  vintage?: boolean;
-  tags?: string[];
-
-  status?: ArtifactStatus;
-  featured?: boolean;
-
-  playerId: string;
-  brandId: string;
+  certificate: true,
 };
 
-export type UpdateArtifactData =
-  Partial<CreateArtifactData>;
-
-export async function getArtifacts() {
-  return prisma.artifact.findMany({
-    include: artifactRelations,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-}
-
-export async function getArtifactById(
-  id: string,
-) {
-  return prisma.artifact.findUnique({
-    where: {
-      id,
-    },
-    include: artifactRelations,
-  });
-}
-
-export async function getArtifactBySlug(
-  slug: string,
-) {
-  return prisma.artifact.findUnique({
-    where: {
-      slug,
-    },
-    include: artifactRelations,
-  });
-}
-
-export async function getArtifactByArchiveNumber(
-  archiveNumber: string,
-) {
-  return prisma.artifact.findUnique({
-    where: {
-      archiveNumber,
-    },
-    include: artifactRelations,
-  });
-}
-
-export async function getPublishedArtifacts() {
-  return prisma.artifact.findMany({
-    where: publishedArtifactWhere,
-    include: artifactRelations,
-    orderBy: [
-      {
-        featured: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-  });
-}
-
-export async function getPublishedArtifactBySlug(
-  slug: string,
-) {
-  return prisma.artifact.findFirst({
-    where: {
-      ...publishedArtifactWhere,
-      slug,
-    },
-    include: artifactRelations,
-  });
-}
-
-export async function getRelatedPublishedArtifacts(
-  artifactId: string,
-  playerId: string,
-  brandId: string,
-  limit = 4,
-) {
-  return prisma.artifact.findMany({
-    where: {
-      ...publishedArtifactWhere,
-
-      id: {
-        not: artifactId,
-      },
-
-      OR: [
-        {
-          playerId,
-        },
-        {
-          brandId,
-        },
-      ],
-    },
-
-    include: artifactRelations,
-
-    orderBy: [
-      {
-        featured: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-
-    take: Math.max(
-      1,
-      Math.min(limit, 12),
-    ),
-  });
-}
-
+/**
+ * Crea un nuovo reperto.
+ *
+ * Le immagini vengono caricate e registrate separatamente
+ * attraverso ArtifactImageRepository e ArtifactStorageService.
+ */
 export async function createArtifact(
   data: CreateArtifactData,
 ) {
   return prisma.artifact.create({
-    data: {
-      archiveNumber: data.archiveNumber,
-
-      title: data.title,
-      subtitle: data.subtitle,
-
-      slug: data.slug,
-
-      description: data.description,
-      museumStory: data.museumStory,
-      historicalContext:
-        data.historicalContext,
-      curatorNote: data.curatorNote,
-
-      year: data.year,
-      season: data.season,
-      tournament: data.tournament,
-      collection: data.collection,
-      edition: data.edition,
-
-      category: data.category,
-
-      rarity:
-        data.rarity ?? "COMMON",
-
-      size: data.size,
-      colour: data.colour,
-      material: data.material,
-
-      condition: data.condition,
-
-      availability:
-        data.availability ??
-        "COMING_SOON",
-
-      price: data.price,
-
-      currency:
-        data.currency ?? "EUR",
-
-      vintedUrl: data.vintedUrl,
-
-      authentic:
-        data.authentic ?? false,
-
-      authenticityCode:
-        data.authenticityCode,
-
-      vintage:
-        data.vintage ?? false,
-
-      tags:
-        data.tags ?? [],
-
-      status:
-        data.status ?? "DRAFT",
-
-      featured:
-        data.featured ?? false,
-
-      player: {
-        connect: {
-          id: data.playerId,
-        },
-      },
-
-      brand: {
-        connect: {
-          id: data.brandId,
-        },
-      },
-    },
-
-    include: artifactRelations,
+    data,
   });
 }
 
-export async function updateArtifact(
-  id: string,
-  data: UpdateArtifactData,
-) {
-  const {
-    playerId,
-    brandId,
-    ...artifactData
-  } = data;
-
-  return prisma.artifact.update({
-    where: {
-      id,
-    },
-
-    data: {
-      ...artifactData,
-
-      ...(playerId
-        ? {
-            player: {
-              connect: {
-                id: playerId,
-              },
-            },
-          }
-        : {}),
-
-      ...(brandId
-        ? {
-            brand: {
-              connect: {
-                id: brandId,
-              },
-            },
-          }
-        : {}),
-    },
-
-    include: artifactRelations,
-  });
-}
-
+/**
+ * Elimina un reperto dal database.
+ *
+ * ArtifactImage e Certificate vengono eliminati automaticamente
+ * grazie alle relazioni Prisma configurate con onDelete: Cascade.
+ */
 export async function deleteArtifact(
   id: string,
 ) {
@@ -315,112 +49,160 @@ export async function deleteArtifact(
   });
 }
 
-export async function searchArtifacts(
-  query: string,
+/**
+ * Restituisce i reperti pubblicati e messi in evidenza.
+ */
+export async function getFeaturedArtifacts(
+  limit = 6,
 ) {
-  const q = query.trim();
-
-  if (!q) {
-    return getArtifacts();
-  }
-
   return prisma.artifact.findMany({
     where: {
-      OR: [
-        {
-          title: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          subtitle: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          archiveNumber: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          description: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          museumStory: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          historicalContext: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          tournament: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          collection: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          vintedUrl: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          authenticityCode: {
-            contains: q,
-            mode: "insensitive",
-          },
-        },
-
-        {
-          player: {
-            name: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-
-        {
-          brand: {
-            name: {
-              contains: q,
-              mode: "insensitive",
-            },
-          },
-        },
-      ],
+      featured: true,
+      status: "PUBLISHED",
     },
+    include: publicArtifactInclude,
+    orderBy: [
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: limit,
+  });
+}
 
-    include: artifactRelations,
+/**
+ * Restituisce i reperti pubblicati appartenenti
+ * a un giocatore attivo.
+ */
+export async function getArtifactsByPlayerSlug(
+  playerSlug: string,
+) {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+      player: {
+        slug: playerSlug,
+        active: true,
+      },
+    },
+    include: publicArtifactInclude,
+    orderBy: [
+      {
+        featured: "desc",
+      },
+      {
+        year: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+  });
+}
 
+/**
+ * Restituisce un reperto tramite slug senza applicare
+ * restrizioni sullo stato.
+ *
+ * Questa funzione può essere utilizzata dall'area Admin.
+ */
+export async function getArtifactBySlug(
+  slug: string,
+) {
+  return prisma.artifact.findUnique({
+    where: {
+      slug,
+    },
+    include: publicArtifactInclude,
+  });
+}
+
+/**
+ * Restituisce un singolo reperto visibile pubblicamente.
+ *
+ * Le bozze e i reperti archiviati non vengono restituiti.
+ * Anche il giocatore collegato deve essere attivo.
+ */
+export async function getPublishedArtifactBySlug(
+  slug: string,
+) {
+  return prisma.artifact.findFirst({
+    where: {
+      slug,
+      status: "PUBLISHED",
+      player: {
+        active: true,
+      },
+    },
+    include: publicArtifactInclude,
+  });
+}
+
+/**
+ * Restituisce reperti correlati appartenenti allo stesso
+ * giocatore del reperto corrente.
+ */
+export async function getRelatedArtifacts({
+  artifactId,
+  playerId,
+  limit = 3,
+}: {
+  artifactId: string;
+  playerId: string;
+  limit?: number;
+}) {
+  return prisma.artifact.findMany({
+    where: {
+      id: {
+        not: artifactId,
+      },
+      playerId,
+      status: "PUBLISHED",
+    },
+    include: publicArtifactInclude,
+    orderBy: [
+      {
+        featured: "desc",
+      },
+      {
+        year: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: limit,
+  });
+}
+
+/**
+ * Restituisce gli slug di tutti i reperti pubblicati.
+ *
+ * Verrà utilizzata da generateStaticParams() nella pagina
+ * pubblica /artifacts/[slug].
+ */
+export async function getPublishedArtifactSlugs() {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+      player: {
+        active: true,
+      },
+    },
+    select: {
+      slug: true,
+    },
     orderBy: {
-      createdAt: "desc",
+      createdAt: "asc",
     },
   });
 }

@@ -12,7 +12,7 @@ export default function EmptyState() {
       <p className="mt-5 max-w-lg text-lg leading-8 text-gray-400">
         Nessun articolo corrisponde ai filtri selezionati.
         Prova a modificare la ricerca oppure esplora
-        l'intero archivio AGE202.
+        l&apos;intero archivio AGE202.
       </p>
 
       <Link

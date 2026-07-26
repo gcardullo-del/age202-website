@@ -9,7 +9,9 @@ export const initialArchiveFilters: ArchiveFilters = {
   tournament: "",
   year: "",
   brand: "",
+  collection: "",
   category: "",
+  rarity: "",
   status: "",
 };
 
@@ -34,9 +36,17 @@ export function filterProducts(
       !filters.brand ||
       product.brand === filters.brand;
 
+    const matchesCollection =
+      !filters.collection ||
+      product.collection === filters.collection;
+
     const matchesCategory =
       !filters.category ||
       product.category === filters.category;
+
+    const matchesRarity =
+      !filters.rarity ||
+      product.rarity === filters.rarity;
 
     const matchesStatus =
       !filters.status ||
@@ -47,7 +57,9 @@ export function filterProducts(
       matchesTournament &&
       matchesYear &&
       matchesBrand &&
+      matchesCollection &&
       matchesCategory &&
+      matchesRarity &&
       matchesStatus
     );
   });
@@ -73,8 +85,16 @@ export function getArchiveFilterOptions(
       products.map((product) => product.brand)
     ),
 
+    collections: getUniqueTextValues(
+      products.map((product) => product.collection)
+    ),
+
     categories: Array.from(
       new Set(products.map((product) => product.category))
+    ).sort(),
+
+    rarities: Array.from(
+      new Set(products.map((product) => product.rarity))
     ).sort(),
 
     statuses: Array.from(

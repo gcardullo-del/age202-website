@@ -5,7 +5,7 @@ export const heroSlides = [
     title: "Every Shirt\nTells a Story.",
     description:
       "Discover authentic apparel inspired by Roger Federer. Every piece in the AGE202 Archive represents elegance, history and one of tennis' greatest champions.",
-    image: "/hero/federer-hero.png",
+    image: "/players/federer/banner.jpg",
     accent: "#C7FF00",
   },
 
@@ -15,7 +15,7 @@ export const heroSlides = [
     title: "Built on Passion.",
     description:
       "Explore iconic outfits worn during Rafael Nadal's legendary career. From clay-court dominance to Grand Slam triumphs.",
-    image: "/hero/nadal-hero.jpg",
+    image: "/players/nadal/banner.jpg",
     accent: "#FF6B35",
   },
 
@@ -25,7 +25,7 @@ export const heroSlides = [
     title: "History Never Stops.",
     description:
       "A collection dedicated to one of the greatest champions ever. Authentic apparel from an extraordinary career.",
-    image: "/hero/djokovic-hero.jpg",
+    image: "/players/djokovic/banner.jpg",
     accent: "#39D353",
   },
 
@@ -35,7 +35,7 @@ export const heroSlides = [
     title: "The New Era.",
     description:
       "Discover the apparel that marks the rise of a new generation. Authentic pieces dedicated to Italy's tennis phenomenon.",
-    image: "/hero/sinner-hero.jpg",
+    image: "/players/sinner/banner.jpg",
     accent: "#F97316",
   },
 
@@ -45,7 +45,7 @@ export const heroSlides = [
     title: "Future in Motion.",
     description:
       "Energy, speed and talent. A curated archive dedicated to one of the brightest stars of modern tennis.",
-    image: "/hero/alcaraz-hero.jpg",
+    image: "/players/alcaraz/banner.jpg",
     accent: "#38BDF8",
   },
 ];

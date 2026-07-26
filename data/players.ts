@@ -137,10 +137,10 @@ export const players: PlayerProfile[] = [
     signature:
       "Elegance, precision and a legacy that changed tennis forever.",
 
-    image: "/players/federer.jpg",
-    heroImage: "/players/federer.jpg",
-    portraitImage: "/players/federer.jpg",
-    cardImage: "/players/federer.jpg",
+  image: "/players/federer/hero.jpg",
+heroImage: "/players/federer/banner.jpg",
+portraitImage: "/players/federer/portrait.jpg",
+cardImage: "/players/federer/gallery.jpg",
 
     theme: {
       accent: "#C8FF00",
@@ -260,10 +260,10 @@ export const players: PlayerProfile[] = [
      * hero asset was /players/nadal.webp. All portrait-compatible fields now
      * use the same existing asset to prevent a broken Museum Portrait.
      */
-    image: "/players/nadal.webp",
-    heroImage: "/players/nadal.webp",
-    portraitImage: "/players/nadal.webp",
-    cardImage: "/players/nadal.webp",
+   image: "/players/nadal/hero.jpg",
+heroImage: "/players/nadal/banner.jpg",
+portraitImage: "/players/nadal/portrait.jpeg",
+cardImage: "/players/nadal/gallery.jpg",
 
     theme: {
       accent: "#FF7A18",
@@ -377,10 +377,10 @@ export const players: PlayerProfile[] = [
     signature:
       "Precision, resilience and record-breaking excellence.",
 
-    image: "/players/djokovic.jpg",
-    heroImage: "/players/djokovic.jpg",
-    portraitImage: "/players/djokovic.jpg",
-    cardImage: "/players/djokovic.jpg",
+   image: "/players/djokovic/hero.jpg",
+heroImage: "/players/djokovic/banner.jpg",
+portraitImage: "/players/djokovic/portrait.jpeg",
+cardImage: "/players/djokovic/gallery.jpg",
 
     theme: {
       accent: "#4EA5FF",
@@ -501,10 +501,10 @@ export const players: PlayerProfile[] = [
      * The old portrait field pointed to /players/sinner.jpg, while the working
      * hero asset was /players/sinner.jpeg. The paths are now aligned.
      */
-    image: "/players/sinner.jpeg",
-    heroImage: "/players/sinner.jpeg",
-    portraitImage: "/players/sinner.jpeg",
-    cardImage: "/players/sinner.jpeg",
+    image: "/players/sinner/hero.jpg",
+heroImage: "/players/sinner/banner.jpg",
+portraitImage: "/players/sinner/portrait.jpeg",
+cardImage: "/players/sinner/gallery.jpg",
 
     theme: {
       accent: "#8DFF61",
@@ -635,11 +635,10 @@ export const players: PlayerProfile[] = [
     signature:
       "Explosive movement, fearless creativity and a new era of tennis.",
 
-    image: "/players/alcaraz.jpg",
-    heroImage: "/players/alcaraz.jpg",
-    portraitImage: "/players/alcaraz.jpg",
-    cardImage: "/players/alcaraz.jpg",
-
+   image: "/players/alcaraz/hero.jpg",
+heroImage: "/players/alcaraz/banner.jpg",
+portraitImage: "/players/alcaraz/portrait.jpg",
+cardImage: "/players/alcaraz/gallery.jpg",
     theme: {
       accent: "#FFD54A",
       secondary: "#2C2208",

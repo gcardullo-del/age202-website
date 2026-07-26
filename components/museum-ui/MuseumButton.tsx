@@ -99,6 +99,12 @@ export default function MuseumButton(
     ...buttonProps
   } = props as NativeButtonProps;
 
+  void _variant;
+  void _size;
+  void _icon;
+  void _className;
+  void _href;
+
   return (
     <button
       {...buttonProps}

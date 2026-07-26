@@ -9,7 +9,7 @@ import {
   revealUp,
   staggerContainer,
 } from "@/lib/motion";
-import { themeColors } from "@/lib/theme";
+import { age202Theme } from "@/lib/theme";
 
 const museumStats: MuseumStatProps[] = [
   {
@@ -31,8 +31,8 @@ const museumStats: MuseumStatProps[] = [
 ];
 
 const heroTheme = {
-  "--museum-bg": themeColors.background.primary,
-  "--museum-accent": themeColors.brand.lime,
+  "--museum-bg": age202Theme.colors.background.primary,
+  "--museum-accent": age202Theme.colors.brand.lime,
 } as CSSProperties;
 
 export default function MuseumHero() {

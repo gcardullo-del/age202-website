@@ -9,7 +9,7 @@ import type {
   ReactNode,
 } from "react";
 
-import { themeColors } from "@/lib/theme";
+import { age202Theme } from "@/lib/theme";
 
 export type MuseumButtonVariant =
   | "primary"
@@ -56,9 +56,9 @@ export type MuseumButtonProps =
 
 const buttonTheme = {
   "--museum-button-background":
-    themeColors.background.primary,
+    age202Theme.colors.background.primary,
   "--museum-button-accent":
-    themeColors.brand.lime,
+    age202Theme.colors.brand.lime,
 } as CSSProperties;
 
 const baseClasses =

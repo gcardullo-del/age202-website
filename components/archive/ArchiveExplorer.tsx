@@ -73,18 +73,18 @@ export default function ArchiveExplorer({
       return;
     }
 
-    setFilters((currentFilters) => {
-      if (currentFilters.player === matchingPlayer) {
-        return currentFilters;
-      }
+    const frame = window.requestAnimationFrame(() => {
+      setFilters((currentFilters) => {
+        if (currentFilters.player === matchingPlayer) {
+          return currentFilters;
+        }
 
-      return {
-        ...currentFilters,
-        player: matchingPlayer,
-      };
-    });
+        return {
+          ...currentFilters,
+          player: matchingPlayer,
+        };
+      });
 
-    window.requestAnimationFrame(() => {
       document
         .getElementById("archive-explorer")
         ?.scrollIntoView({
@@ -92,6 +92,8 @@ export default function ArchiveExplorer({
           block: "start",
         });
     });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [searchParams, filterOptions.players]);
 
   const archiveResult = useMemo(
@@ -111,7 +113,9 @@ export default function ArchiveExplorer({
       tournament: "Tournament",
       year: "Year",
       brand: "Brand",
+      collection: "Collection",
       category: "Category",
+      rarity: "Rarity",
       status: "Status",
     };
 
@@ -220,7 +224,43 @@ export default function ArchiveExplorer({
             </div>
           </div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.28em] text-[#C8FF00]">
+                  Curated discovery paths
+                </p>
+                <p className="mt-2 text-sm text-gray-500">
+                  Enter the archive through one of its most meaningful museum routes.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <DiscoveryButton
+                  label="Legendary pieces"
+                  active={filters.rarity === "legendary"}
+                  onClick={() => updateFilter("rarity", "legendary")}
+                />
+                <DiscoveryButton
+                  label="Authenticated"
+                  active={query === "authentic"}
+                  onClick={() => setQuery("authentic")}
+                />
+                <DiscoveryButton
+                  label="Available now"
+                  active={filters.status === "available"}
+                  onClick={() => updateFilter("status", "available")}
+                />
+                <DiscoveryButton
+                  label="Vintage archive"
+                  active={query === "vintage"}
+                  onClick={() => setQuery("vintage")}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
             <FilterSelect
               label="Player"
               value={filters.player}
@@ -258,11 +298,29 @@ export default function ArchiveExplorer({
             />
 
             <FilterSelect
+              label="Collection"
+              value={filters.collection}
+              options={filterOptions.collections}
+              onChange={(value) =>
+                updateFilter("collection", value)
+              }
+            />
+
+            <FilterSelect
               label="Category"
               value={filters.category}
               options={filterOptions.categories}
               onChange={(value) =>
                 updateFilter("category", value)
+              }
+            />
+
+            <FilterSelect
+              label="Rarity"
+              value={filters.rarity}
+              options={filterOptions.rarities}
+              onChange={(value) =>
+                updateFilter("rarity", value)
               }
             />
 
@@ -391,6 +449,33 @@ export default function ArchiveExplorer({
         </div>
       </div>
     </section>
+  );
+}
+
+type DiscoveryButtonProps = {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+};
+
+function DiscoveryButton({
+  label,
+  active,
+  onClick,
+}: DiscoveryButtonProps) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={`rounded-full border px-4 py-2 text-[9px] font-black uppercase tracking-[0.18em] transition ${
+        active
+          ? "border-[#C8FF00]/60 bg-[#C8FF00]/10 text-[#C8FF00]"
+          : "border-white/10 bg-[#050B18] text-gray-400 hover:border-[#C8FF00]/35 hover:text-white"
+      }`}
+    >
+      {label}
+    </button>
   );
 }
 

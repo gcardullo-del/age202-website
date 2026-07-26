@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const products = [
   {
     title: "Nike RF Polo Wimbledon 2017",
@@ -56,11 +58,15 @@ export default function Vault() {
 
               <div className="overflow-hidden">
 
-                <img
-                  src={product.image}
-                  className="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
-                  alt={product.title}
-                />
+                <div className="relative h-72 w-full">
+                  <Image
+                    src={product.image}
+                    alt={product.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                  />
+                </div>
 
               </div>
 
