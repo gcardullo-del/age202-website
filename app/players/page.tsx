@@ -1,103 +1,115 @@
 import type { Metadata } from "next";
-import { Users } from "lucide-react";
 
-import PlatformPage from "@/components/platform/PlatformPage";
-import { getFeaturedPlayers } from "@/lib/repositories/player.repository";
+import PlayersExperience, {
+  type FeaturedPlayerCard,
+  type NationSummary,
+} from "@/components/players/PlayersExperience";
+import {
+  getFeaturedPlayers,
+  getOtherPlayers,
+} from "@/lib/repositories/player.repository";
 
 export const metadata: Metadata = {
   title: "Players",
   description:
-    "Explore the official AGE202 player galleries and the expanding digital tennis archive.",
+    "Explore the official AGE202 champion collections and the dynamic ATP Top 50 tennis archive.",
+  alternates: {
+    canonical: "/players",
+  },
+  openGraph: {
+    title: "Players | AGE202",
+    description:
+      "Five iconic champion collections and a living ATP archive inside the AGE202 digital tennis museum.",
+    url: "/players",
+    images: [
+      {
+        url: "/players/federernew.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AGE202 Players archive",
+      },
+    ],
+  },
 };
 
-/**
- * Manteniamo temporaneamente la compatibilità con le attuali pagine:
- *
- * /archives/federer
- * /archives/nadal
- * /archives/djokovic
- * /archives/sinner
- * /archives/alcaraz
- *
- * Quando creeremo /players/[slug], questa funzione verrà rimossa.
- */
+const LEGACY_ARCHIVE_SLUGS: Record<string, string> = {
+  "roger-federer": "federer",
+  federer: "federer",
+  "rafael-nadal": "nadal",
+  nadal: "nadal",
+  "novak-djokovic": "djokovic",
+  djokovic: "djokovic",
+  "jannik-sinner": "sinner",
+  sinner: "sinner",
+  "carlos-alcaraz": "alcaraz",
+  alcaraz: "alcaraz",
+};
+
 function getLegacyArchiveHref(slug: string): string {
-  const slugParts = slug.split("-");
-  const archiveSlug = slugParts[slugParts.length - 1];
+  const archiveSlug =
+    LEGACY_ARCHIVE_SLUGS[slug] ?? slug.split("-").at(-1) ?? slug;
 
   return `/archives/${archiveSlug}`;
 }
 
-function getPlayerDescription(player: {
-  country: string | null;
-  biography: string | null;
-  _count: {
-    artifacts: number;
+function normalizeFeaturedPlayer(
+  player: Awaited<ReturnType<typeof getFeaturedPlayers>>[number],
+): FeaturedPlayerCard {
+  return {
+    id: player.id,
+    name: player.name,
+    slug: player.slug,
+    country: player.country,
+    biography: player.biography,
+    heroImage: player.heroImage,
+    portraitImage: player.portraitImage,
+    debutYear: player.debutYear,
+    accent: player.accent,
+    artifactCount: player._count.artifacts,
+    href: getLegacyArchiveHref(player.slug),
   };
-}): string {
-  const artifactCount = player._count.artifacts;
+}
 
-  const archiveLabel =
-    artifactCount === 1
-      ? "1 artifact in the archive"
-      : `${artifactCount} artifacts in the archive`;
+function buildNationSummary(
+  players: Awaited<ReturnType<typeof getOtherPlayers>>,
+): NationSummary[] {
+  const counts = new Map<string, number>();
 
-  if (player.biography) {
-    return `${player.biography} ${archiveLabel}.`;
+  for (const player of players) {
+    const country = player.atpPlayer?.country?.trim() || player.country?.trim();
+
+    if (!country) continue;
+
+    counts.set(country, (counts.get(country) ?? 0) + 1);
   }
 
-  if (player.country) {
-    return `${player.country}. ${archiveLabel}.`;
-  }
-
-  return `${archiveLabel}.`;
+  return [...counts.entries()]
+    .map(([country, count]) => ({ country, count }))
+    .sort((first, second) => {
+      if (first.count !== second.count) return second.count - first.count;
+      return first.country.localeCompare(second.country);
+    })
+    .slice(0, 6);
 }
 
 export default async function PlayersPage() {
-  const featuredPlayers = await getFeaturedPlayers();
+  const [featuredPlayersData, atpPlayers] = await Promise.all([
+    getFeaturedPlayers(),
+    getOtherPlayers(),
+  ]);
 
-  const playerFeatures = featuredPlayers.map((player) => ({
-    title: player.name,
-    description: getPlayerDescription(player),
-    href: getLegacyArchiveHref(player.slug),
-
-    /*
-     * Le immagini vengono lette direttamente dal database.
-     * heroImage ha la priorità; portraitImage viene usata come fallback.
-     */
-    image: player.heroImage ?? player.portraitImage ?? undefined,
-
-    /*
-     * Usiamo soltanto campi già presenti nel database reale.
-     */
-    label:
-      player.collectionType === "FEATURED"
-        ? "Featured collection"
-        : "Player collection",
-  }));
-
-  const features = [
-    ...playerFeatures,
-    {
-      title: "Other Players",
-      description:
-        "Explore artifacts connected to Grand Slam champions, legends and tour players beyond the five principal AGE202 galleries.",
-      href: "/players/other-players",
-      label: "Extended archive",
-      period: "Open Era",
-    },
-  ];
+  const featuredPlayers = featuredPlayersData.map(normalizeFeaturedPlayer);
+  const totalArtifactCount = featuredPlayers.reduce(
+    (total, player) => total + player.artifactCount,
+    0,
+  );
 
   return (
-    <PlatformPage
-      eyebrow="The museum galleries"
-      title="Players"
-      intro="Enter the official AGE202 player galleries: five dedicated champion collections and an expanding archive representing the wider history of professional tennis."
-      icon={Users}
-      features={features}
-      sectionEyebrow="Player collections"
-      sectionTitle="Explore the galleries"
-      sectionDescription="Each gallery brings together authenticated garments, historical references and collectible pieces connected to the careers that shaped modern tennis."
+    <PlayersExperience
+      featuredPlayers={featuredPlayers}
+      atpPlayerCount={atpPlayers.length}
+      totalArtifactCount={totalArtifactCount}
+      nations={buildNationSummary(atpPlayers)}
     />
   );
 }

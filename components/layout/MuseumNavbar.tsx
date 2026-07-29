@@ -20,12 +20,12 @@ const playerLinks = [
   ["Novak Djokovic", "/archives/djokovic"],
   ["Jannik Sinner", "/archives/sinner"],
   ["Carlos Alcaraz", "/archives/alcaraz"],
-  ["Other Players", "/players/other-players"],
+  ["ATP Archive", "/players/other-players"],
 ] as const;
 
 const primaryLinks = [
   ["ATP Ranking", "/atp-ranking"],
-  ["Results", "/tournament-results"],
+  ["Results", "/results"],
   ["Tennis History", "/tennis-history"],
   ["Memorabilia", "/memorabilia"],
   ["Collaborations", "/collaborations"],

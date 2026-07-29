@@ -33,7 +33,7 @@ const milestones: Milestone[] = [
     description:
       "The All England Club stages the first gentlemen’s singles championship and establishes the foundation of modern competitive tennis.",
     accent: "London · Grass",
-    href: "/slams/wimbledon",
+    href: "/results/grand-slams/wimbledon",
   },
   {
     year: "1891",
@@ -42,7 +42,7 @@ const milestones: Milestone[] = [
     description:
       "A national championship is created in France, beginning the story that would later become Roland Garros.",
     accent: "Paris · Clay",
-    href: "/slams/roland-garros",
+    href: "/results/grand-slams/roland-garros",
   },
   {
     year: "1905",
@@ -51,7 +51,7 @@ const milestones: Milestone[] = [
     description:
       "The Australasian Championships are first contested, opening a new chapter for tennis in the Southern Hemisphere.",
     accent: "Melbourne · Hard",
-    href: "/slams/australian-open",
+    href: "/results/grand-slams/australian-open",
   },
   {
     year: "1927",
@@ -127,12 +127,31 @@ const milestones: Milestone[] = [
 const eras = ["All eras", "Origins", "Classic Era", "Open Era", "Modern Era"] as const;
 
 const slamRooms = [
-  { name: "Australian Open", detail: "Open Era champions", href: "/slams/australian-open", number: "01" },
-  { name: "Roland Garros", detail: "Open Era champions", href: "/slams/roland-garros", number: "02" },
-  { name: "Wimbledon", detail: "Open Era champions", href: "/slams/wimbledon", number: "03" },
-  { name: "US Open", detail: "Open Era champions", href: "/slams/us-open", number: "04" },
+  {
+    name: "Australian Open",
+    detail: "Open Era champions",
+    href: "/results/grand-slams/australian-open",
+    number: "01",
+  },
+  {
+    name: "Roland Garros",
+    detail: "Open Era champions",
+    href: "/results/grand-slams/roland-garros",
+    number: "02",
+  },
+  {
+    name: "Wimbledon",
+    detail: "Open Era champions",
+    href: "/results/grand-slams/wimbledon",
+    number: "03",
+  },
+  {
+    name: "US Open",
+    detail: "Open Era champions",
+    href: "/results/grand-slams/us-open",
+    number: "04",
+  },
 ];
-
 export default function TennisHistoryPage() {
   const [query, setQuery] = useState("");
   const [era, setEra] = useState<(typeof eras)[number]>("All eras");

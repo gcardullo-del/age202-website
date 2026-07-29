@@ -11,10 +11,10 @@ type Props = {
 };
 
 const slamRoutes: Record<PlayerTrophy["tournament"], string> = {
-  "Australian Open": "/slams/australian-open",
-  "Roland Garros": "/slams/roland-garros",
-  Wimbledon: "/slams/wimbledon",
-  "US Open": "/slams/us-open",
+  "Australian Open": "/results/grand-slams/australian-open",
+  "Roland Garros": "/results/grand-slams/roland-garros",
+  Wimbledon: "/results/grand-slams/wimbledon",
+  "US Open": "/results/grand-slams/us-open",
 };
 
 const slamMetadata: Record<

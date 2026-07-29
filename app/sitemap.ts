@@ -29,9 +29,34 @@ const staticRoutes = [
     priority: 0.9,
   },
   {
-    path: "/slams",
-    changeFrequency: "monthly",
-    priority: 0.8,
+    path: "/results",
+    changeFrequency: "weekly",
+    priority: 0.95,
+  },
+  {
+    path: "/results/grand-slams",
+    changeFrequency: "weekly",
+    priority: 0.9,
+  },
+  {
+    path: "/results/grand-slams/australian-open",
+    changeFrequency: "weekly",
+    priority: 0.85,
+  },
+  {
+    path: "/results/grand-slams/roland-garros",
+    changeFrequency: "weekly",
+    priority: 0.85,
+  },
+  {
+    path: "/results/grand-slams/wimbledon",
+    changeFrequency: "weekly",
+    priority: 0.85,
+  },
+  {
+    path: "/results/grand-slams/us-open",
+    changeFrequency: "weekly",
+    priority: 0.85,
   },
   {
     path: "/vault",

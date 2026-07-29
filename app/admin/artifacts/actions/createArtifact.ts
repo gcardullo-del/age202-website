@@ -14,6 +14,10 @@ import {
 } from "@/lib/repositories/artifactImage.repository";
 
 import {
+  createCertificate,
+} from "@/lib/repositories/certificate.repository";
+
+import {
   deleteArtifactImage as deleteStoredArtifactImage,
   uploadArtifactImage,
 } from "@/lib/services/artifactStorage.service";
@@ -50,6 +54,11 @@ export async function createArtifact(
   const brandId = getRequiredString(
     formData,
     "brandId",
+  );
+
+  const authentic = getBoolean(
+    formData,
+    "authentic",
   );
 
   const images = getImageFiles(formData);
@@ -187,11 +196,7 @@ export async function createArtifact(
           "vintedUrl",
         ),
 
-      authentic:
-        getBoolean(
-          formData,
-          "authentic",
-        ),
+      authentic,
 
       authenticityCode:
         getOptionalString(
@@ -222,14 +227,10 @@ export async function createArtifact(
     });
 
   const uploadedUrls: string[] = [];
-  const createdImageIds: string[] =
-    [];
+  const createdImageIds: string[] = [];
 
   try {
-    for (const [
-      index,
-      file,
-    ] of images.entries()) {
+    for (const [index, file] of images.entries()) {
       const publicUrl =
         await uploadArtifactImage(
           artifact.id,
@@ -242,9 +243,7 @@ export async function createArtifact(
         await createArtifactImage({
           artifactId: artifact.id,
           url: publicUrl,
-          alt: `${title} — image ${
-            index + 1
-          }`,
+          alt: `${title} — image ${index + 1}`,
           sortOrder: index,
           isCover:
             index === coverImageIndex,
@@ -254,23 +253,36 @@ export async function createArtifact(
         artifactImage.id,
       );
     }
+
+    if (authentic) {
+      await createCertificate({
+        artifactId: artifact.id,
+        curator: "AGE202 Museum",
+        verified: true,
+        notes:
+          getOptionalString(
+            formData,
+            "curatorNote",
+          ) ?? undefined,
+      });
+    }
   } catch (error) {
     await Promise.allSettled(
       createdImageIds.map((id) =>
-        deleteArtifactImageRepository(
-          id,
-        ),
+        deleteArtifactImageRepository(id),
       ),
     );
 
     await Promise.allSettled(
       uploadedUrls.map((url) =>
-        deleteStoredArtifactImage(
-          url,
-        ),
+        deleteStoredArtifactImage(url),
       ),
     );
 
+    /*
+     * Certificate e ArtifactImage vengono rimossi dal database
+     * automaticamente tramite onDelete: Cascade.
+     */
     await deleteArtifactRepository(
       artifact.id,
     ).catch(() => undefined);
@@ -280,10 +292,13 @@ export async function createArtifact(
 
   revalidatePath("/admin");
   revalidatePath("/admin/artifacts");
+  revalidatePath("/admin/certificates");
+
   revalidatePath("/archive");
-  revalidatePath(
-    `/archive/${artifact.slug}`,
-  );
+  revalidatePath(`/archive/${artifact.slug}`);
+
+  revalidatePath(`/products/${artifact.id}`);
+  revalidatePath(`/products/${artifact.slug}`);
 
   redirect("/admin/artifacts");
 }

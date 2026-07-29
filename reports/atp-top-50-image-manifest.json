@@ -1,0 +1,514 @@
+{
+  "generatedAt": "2026-07-27T08:50:08.779Z",
+  "archiveRange": {
+    "firstRank": 1,
+    "lastRank": 50
+  },
+  "summary": {
+    "players": 50,
+    "imagesPresent": 0,
+    "imagesMissing": 50
+  },
+  "players": [
+    {
+      "rank": 1,
+      "name": "Jannik Sinner",
+      "slug": "jannik-sinner",
+      "country": "Italy",
+      "points": 13450,
+      "imageFileName": "jannik-sinner.webp",
+      "publicImagePath": "/players/other-players/top-50/jannik-sinner.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 2,
+      "name": "Alexander Zverev",
+      "slug": "alexander-zverev",
+      "country": "Germany",
+      "points": 8480,
+      "imageFileName": "alexander-zverev.webp",
+      "publicImagePath": "/players/other-players/top-50/alexander-zverev.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 3,
+      "name": "Carlos Alcaraz",
+      "slug": "carlos-alcaraz",
+      "country": "Spain",
+      "points": 8160,
+      "imageFileName": "carlos-alcaraz.webp",
+      "publicImagePath": "/players/other-players/top-50/carlos-alcaraz.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 4,
+      "name": "Felix Auger-Aliassime",
+      "slug": "felix-auger-aliassime",
+      "country": "Canada",
+      "points": 4740,
+      "imageFileName": "felix-auger-aliassime.webp",
+      "publicImagePath": "/players/other-players/top-50/felix-auger-aliassime.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 5,
+      "name": "Alex de Minaur",
+      "slug": "alex-de-minaur",
+      "country": "Australia",
+      "points": 4110,
+      "imageFileName": "alex-de-minaur.webp",
+      "publicImagePath": "/players/other-players/top-50/alex-de-minaur.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 6,
+      "name": "Ben Shelton",
+      "slug": "ben-shelton",
+      "country": "United States",
+      "points": 3770,
+      "imageFileName": "ben-shelton.webp",
+      "publicImagePath": "/players/other-players/top-50/ben-shelton.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 7,
+      "name": "Novak Djokovic",
+      "slug": "novak-djokovic",
+      "country": "Serbia",
+      "points": 3760,
+      "imageFileName": "novak-djokovic.webp",
+      "publicImagePath": "/players/other-players/top-50/novak-djokovic.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 8,
+      "name": "Daniil Medvedev",
+      "slug": "daniil-medvedev",
+      "country": "Russia",
+      "points": 3670,
+      "imageFileName": "daniil-medvedev.webp",
+      "publicImagePath": "/players/other-players/top-50/daniil-medvedev.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 9,
+      "name": "Flavio Cobolli",
+      "slug": "flavio-cobolli",
+      "country": "Italy",
+      "points": 3460,
+      "imageFileName": "flavio-cobolli.webp",
+      "publicImagePath": "/players/other-players/top-50/flavio-cobolli.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 10,
+      "name": "Taylor Fritz",
+      "slug": "taylor-fritz",
+      "country": "United States",
+      "points": 3365,
+      "imageFileName": "taylor-fritz.webp",
+      "publicImagePath": "/players/other-players/top-50/taylor-fritz.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 11,
+      "name": "Alexander Bublik",
+      "slug": "alexander-bublik",
+      "country": "Kazakhstan",
+      "points": 2610,
+      "imageFileName": "alexander-bublik.webp",
+      "publicImagePath": "/players/other-players/top-50/alexander-bublik.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 12,
+      "name": "Jiri Lehecka",
+      "slug": "jiri-lehecka",
+      "country": "Czechia",
+      "points": 2510,
+      "imageFileName": "jiri-lehecka.webp",
+      "publicImagePath": "/players/other-players/top-50/jiri-lehecka.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 13,
+      "name": "Casper Ruud",
+      "slug": "casper-ruud",
+      "country": "Norway",
+      "points": 2435,
+      "imageFileName": "casper-ruud.webp",
+      "publicImagePath": "/players/other-players/top-50/casper-ruud.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 14,
+      "name": "Andrey Rublev",
+      "slug": "andrey-rublev",
+      "country": "Russia",
+      "points": 2380,
+      "imageFileName": "andrey-rublev.webp",
+      "publicImagePath": "/players/other-players/top-50/andrey-rublev.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 15,
+      "name": "Lorenzo Musetti",
+      "slug": "lorenzo-musetti",
+      "country": "Italy",
+      "points": 2315,
+      "imageFileName": "lorenzo-musetti.webp",
+      "publicImagePath": "/players/other-players/top-50/lorenzo-musetti.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 16,
+      "name": "Learner Tien",
+      "slug": "learner-tien",
+      "country": "United States",
+      "points": 2270,
+      "imageFileName": "learner-tien.webp",
+      "publicImagePath": "/players/other-players/top-50/learner-tien.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 17,
+      "name": "Frances Tiafoe",
+      "slug": "frances-tiafoe",
+      "country": "United States",
+      "points": 2230,
+      "imageFileName": "frances-tiafoe.webp",
+      "publicImagePath": "/players/other-players/top-50/frances-tiafoe.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 18,
+      "name": "Jakub Mensik",
+      "slug": "jakub-mensik",
+      "country": "Czechia",
+      "points": 2205,
+      "imageFileName": "jakub-mensik.webp",
+      "publicImagePath": "/players/other-players/top-50/jakub-mensik.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 19,
+      "name": "Valentin Vacherot",
+      "slug": "valentin-vacherot",
+      "country": "Monaco",
+      "points": 2188,
+      "imageFileName": "valentin-vacherot.webp",
+      "publicImagePath": "/players/other-players/top-50/valentin-vacherot.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 20,
+      "name": "Alejandro Davidovich Fokina",
+      "slug": "alejandro-davidovich-fokina",
+      "country": "Spain",
+      "points": 2160,
+      "imageFileName": "alejandro-davidovich-fokina.webp",
+      "publicImagePath": "/players/other-players/top-50/alejandro-davidovich-fokina.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 21,
+      "name": "Luciano Darderi",
+      "slug": "luciano-darderi",
+      "country": "Italy",
+      "points": 2125,
+      "imageFileName": "luciano-darderi.webp",
+      "publicImagePath": "/players/other-players/top-50/luciano-darderi.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 22,
+      "name": "Francisco Cerundolo",
+      "slug": "francisco-cerundolo",
+      "country": "Argentina",
+      "points": 2060,
+      "imageFileName": "francisco-cerundolo.webp",
+      "publicImagePath": "/players/other-players/top-50/francisco-cerundolo.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 23,
+      "name": "Arthur Fils",
+      "slug": "arthur-fils",
+      "country": "France",
+      "points": 1990,
+      "imageFileName": "arthur-fils.webp",
+      "publicImagePath": "/players/other-players/top-50/arthur-fils.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 24,
+      "name": "Tommy Paul",
+      "slug": "tommy-paul",
+      "country": "United States",
+      "points": 1975,
+      "imageFileName": "tommy-paul.webp",
+      "publicImagePath": "/players/other-players/top-50/tommy-paul.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 25,
+      "name": "Rafael Jodar",
+      "slug": "rafael-jodar",
+      "country": "Spain",
+      "points": 1927,
+      "imageFileName": "rafael-jodar.webp",
+      "publicImagePath": "/players/other-players/top-50/rafael-jodar.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 26,
+      "name": "Karen Khachanov",
+      "slug": "karen-khachanov",
+      "country": "Russia",
+      "points": 1780,
+      "imageFileName": "karen-khachanov.webp",
+      "publicImagePath": "/players/other-players/top-50/karen-khachanov.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 27,
+      "name": "Arthur Rinderknech",
+      "slug": "arthur-rinderknech",
+      "country": "France",
+      "points": 1723,
+      "imageFileName": "arthur-rinderknech.webp",
+      "publicImagePath": "/players/other-players/top-50/arthur-rinderknech.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 28,
+      "name": "Joao Fonseca",
+      "slug": "joao-fonseca",
+      "country": "Brazil",
+      "points": 1710,
+      "imageFileName": "joao-fonseca.webp",
+      "publicImagePath": "/players/other-players/top-50/joao-fonseca.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 29,
+      "name": "Ugo Humbert",
+      "slug": "ugo-humbert",
+      "country": "France",
+      "points": 1575,
+      "imageFileName": "ugo-humbert.webp",
+      "publicImagePath": "/players/other-players/top-50/ugo-humbert.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 30,
+      "name": "Alejandro Tabilo",
+      "slug": "alejandro-tabilo",
+      "country": "Chile",
+      "points": 1508,
+      "imageFileName": "alejandro-tabilo.webp",
+      "publicImagePath": "/players/other-players/top-50/alejandro-tabilo.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 31,
+      "name": "Tomas Martin Etcheverry",
+      "slug": "tomas-martin-etcheverry",
+      "country": "Argentina",
+      "points": 1460,
+      "imageFileName": "tomas-martin-etcheverry.webp",
+      "publicImagePath": "/players/other-players/top-50/tomas-martin-etcheverry.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 32,
+      "name": "Brandon Nakashima",
+      "slug": "brandon-nakashima",
+      "country": "United States",
+      "points": 1435,
+      "imageFileName": "brandon-nakashima.webp",
+      "publicImagePath": "/players/other-players/top-50/brandon-nakashima.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 33,
+      "name": "Matteo Arnaldi",
+      "slug": "matteo-arnaldi",
+      "country": "Italy",
+      "points": 1399,
+      "imageFileName": "matteo-arnaldi.webp",
+      "publicImagePath": "/players/other-players/top-50/matteo-arnaldi.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 34,
+      "name": "Zizou Bergs",
+      "slug": "zizou-bergs",
+      "country": "Belgium",
+      "points": 1340,
+      "imageFileName": "zizou-bergs.webp",
+      "publicImagePath": "/players/other-players/top-50/zizou-bergs.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 35,
+      "name": "Ignacio Buse",
+      "slug": "ignacio-buse",
+      "country": "Peru",
+      "points": 1312,
+      "imageFileName": "ignacio-buse.webp",
+      "publicImagePath": "/players/other-players/top-50/ignacio-buse.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 36,
+      "name": "Arthur Fery",
+      "slug": "arthur-fery",
+      "country": "United Kingdom",
+      "points": 1297,
+      "imageFileName": "arthur-fery.webp",
+      "publicImagePath": "/players/other-players/top-50/arthur-fery.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 37,
+      "name": "Raphael Collignon",
+      "slug": "raphael-collignon",
+      "country": "Belgium",
+      "points": 1234,
+      "imageFileName": "raphael-collignon.webp",
+      "publicImagePath": "/players/other-players/top-50/raphael-collignon.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 38,
+      "name": "Alexander Blockx",
+      "slug": "alexander-blockx",
+      "country": "Belgium",
+      "points": 1218,
+      "imageFileName": "alexander-blockx.webp",
+      "publicImagePath": "/players/other-players/top-50/alexander-blockx.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 39,
+      "name": "Cameron Norrie",
+      "slug": "cameron-norrie",
+      "country": "United Kingdom",
+      "points": 1205,
+      "imageFileName": "cameron-norrie.webp",
+      "publicImagePath": "/players/other-players/top-50/cameron-norrie.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 40,
+      "name": "Corentin Moutet",
+      "slug": "corentin-moutet",
+      "country": "France",
+      "points": 1123,
+      "imageFileName": "corentin-moutet.webp",
+      "publicImagePath": "/players/other-players/top-50/corentin-moutet.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 41,
+      "name": "Jan-Lennard Struff",
+      "slug": "jan-lennard-struff",
+      "country": "Germany",
+      "points": 1104,
+      "imageFileName": "jan-lennard-struff.webp",
+      "publicImagePath": "/players/other-players/top-50/jan-lennard-struff.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 42,
+      "name": "Matteo Berrettini",
+      "slug": "matteo-berrettini",
+      "country": "Italy",
+      "points": 1075,
+      "imageFileName": "matteo-berrettini.webp",
+      "publicImagePath": "/players/other-players/top-50/matteo-berrettini.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 43,
+      "name": "Jaume Munar",
+      "slug": "jaume-munar",
+      "country": "Spain",
+      "points": 1075,
+      "imageFileName": "jaume-munar.webp",
+      "publicImagePath": "/players/other-players/top-50/jaume-munar.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 44,
+      "name": "Alex Michelsen",
+      "slug": "alex-michelsen",
+      "country": "United States",
+      "points": 1050,
+      "imageFileName": "alex-michelsen.webp",
+      "publicImagePath": "/players/other-players/top-50/alex-michelsen.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 45,
+      "name": "Ethan Quinn",
+      "slug": "ethan-quinn",
+      "country": "United States",
+      "points": 1021,
+      "imageFileName": "ethan-quinn.webp",
+      "publicImagePath": "/players/other-players/top-50/ethan-quinn.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 46,
+      "name": "Adrian Mannarino",
+      "slug": "adrian-mannarino",
+      "country": "France",
+      "points": 1005,
+      "imageFileName": "adrian-mannarino.webp",
+      "publicImagePath": "/players/other-players/top-50/adrian-mannarino.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 47,
+      "name": "Mariano Navone",
+      "slug": "mariano-navone",
+      "country": "Argentina",
+      "points": 1005,
+      "imageFileName": "mariano-navone.webp",
+      "publicImagePath": "/players/other-players/top-50/mariano-navone.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 48,
+      "name": "Nuno Borges",
+      "slug": "nuno-borges",
+      "country": "Portugal",
+      "points": 995,
+      "imageFileName": "nuno-borges.webp",
+      "publicImagePath": "/players/other-players/top-50/nuno-borges.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 49,
+      "name": "Terence Atmane",
+      "slug": "terence-atmane",
+      "country": "France",
+      "points": 992,
+      "imageFileName": "terence-atmane.webp",
+      "publicImagePath": "/players/other-players/top-50/terence-atmane.webp",
+      "imageExists": false
+    },
+    {
+      "rank": 50,
+      "name": "Juan Manuel Cerundolo",
+      "slug": "juan-manuel-cerundolo",
+      "country": "Argentina",
+      "points": 989,
+      "imageFileName": "juan-manuel-cerundolo.webp",
+      "publicImagePath": "/players/other-players/top-50/juan-manuel-cerundolo.webp",
+      "imageExists": false
+    }
+  ]
+}

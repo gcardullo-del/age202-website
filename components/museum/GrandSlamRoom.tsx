@@ -43,14 +43,14 @@ export default function GrandSlamRoom({
             </h2>
 
             <p className="mt-7 max-w-3xl text-base leading-8 text-gray-400">
-              Enter the four most prestigious rooms of the AGE202
-              Digital Museum and explore garments connected to the
-              defining stages of tennis history.
+              Enter the four most prestigious rooms of the AGE202 Digital
+              Museum and explore garments connected to the defining stages of
+              tennis history.
             </p>
           </div>
 
           <Link
-            href="/slams"
+            href="/results/grand-slams"
             className="inline-flex items-center justify-center gap-3 self-start rounded-full border border-white/15 bg-white/[0.03] px-7 py-4 text-[11px] font-black uppercase tracking-[0.22em] text-white transition-all duration-300 hover:border-[#C8FF00]/50 hover:text-[#C8FF00] xl:self-auto"
           >
             View all rooms
@@ -63,12 +63,8 @@ export default function GrandSlamRoom({
 
       <div className="relative grid lg:grid-cols-2">
         {grandSlams.map((grandSlam, index) => {
-          const matchingProducts = products.filter(
-            (product) =>
-              productMatchesGrandSlam(
-                product,
-                grandSlam
-              )
+          const matchingProducts = products.filter((product) =>
+            productMatchesGrandSlam(product, grandSlam),
           );
 
           return (
@@ -98,7 +94,7 @@ function GrandSlamCard({
 }: GrandSlamCardProps) {
   return (
     <Link
-      href={`/slams/${grandSlam.slug}`}
+      href={`/results/grand-slams/${grandSlam.slug}`}
       className="group relative min-h-[480px] overflow-hidden border-b border-white/10 p-7 transition-colors duration-500 hover:bg-white/[0.025] md:p-10 lg:border-r lg:[&:nth-child(even)]:border-r-0 lg:[&:nth-child(n+3)]:border-b-0"
     >
       {/* GLOW */}
@@ -154,9 +150,7 @@ function GrandSlamCard({
 
             <GrandSlamDetail
               label="Archive"
-              value={`${pieces} ${
-                pieces === 1 ? "piece" : "pieces"
-              }`}
+              value={`${pieces} ${pieces === 1 ? "piece" : "pieces"}`}
             />
           </div>
         </div>
