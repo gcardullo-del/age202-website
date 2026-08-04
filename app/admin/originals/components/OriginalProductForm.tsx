@@ -25,6 +25,10 @@ import type {
   OriginalProductStatus,
 } from "@/generated/prisma/client";
 
+import type {
+  MediaAssetWithFolder,
+} from "@/lib/repositories/media.repository";
+
 import MediaUploader, {
   type ExistingMediaImage,
 } from "@/components/media/MediaUploader";
@@ -150,10 +154,12 @@ export default function OriginalProductForm({
   mode = "create",
   productId,
   initialValues,
+  libraryAssets = [],
 }: {
   mode?: FormMode;
   productId?: string;
   initialValues?: OriginalProductInitialValues;
+  libraryAssets?: MediaAssetWithFolder[];
 }) {
   const [activeSection, setActiveSection] =
     useState<SectionId>(
@@ -669,6 +675,9 @@ export default function OriginalProductForm({
                   existingImages={
                     initialValues?.images ??
                     []
+                  }
+                  libraryAssets={
+                    libraryAssets
                   }
                 />
               </div>

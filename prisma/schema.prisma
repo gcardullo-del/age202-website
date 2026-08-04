@@ -8,27 +8,28 @@ datasource db {
 }
 
 model Player {
-  id             String               @id @default(cuid())
-  name           String
-  slug           String               @unique
-  country        String?
-  biography      String?
-  heroImage      String?
-  portraitImage  String?
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
-  accent         String               @default("#C8FF00")
-  active         Boolean              @default(true)
-  collectionType PlayerCollectionType @default(ARCHIVE)
-  debutYear      Int?
-  displayOrder   Int?
-  firstName      String?
-  lastName       String?
-  nickname       String?
-  quote          String?
-  artifacts      Artifact[]
-  atpPlayer      AtpPlayer?
-  playerProfile  PlayerProfile?
+  id                String                   @id @default(cuid())
+  name              String
+  slug              String                   @unique
+  country           String?
+  biography         String?
+  heroImage         String?
+  portraitImage     String?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  accent            String                   @default("#C8FF00")
+  active            Boolean                  @default(true)
+  collectionType    PlayerCollectionType     @default(ARCHIVE)
+  debutYear         Int?
+  displayOrder      Int?
+  firstName         String?
+  lastName          String?
+  nickname          String?
+  quote             String?
+  artifacts         Artifact[]
+  atpPlayer         AtpPlayer?
+  playerProfile     PlayerProfile?
+  museumCollections MuseumCollectionPlayer[]
 
   @@index([name])
   @@index([collectionType])
@@ -84,47 +85,48 @@ model Brand {
 }
 
 model Artifact {
-  id                String               @id @default(cuid())
-  archiveNumber     String               @unique
+  id                String                     @id @default(cuid())
+  archiveNumber     String                     @unique
   title             String
-  slug              String               @unique
+  slug              String                     @unique
   description       String?
   year              Int?
   size              String?
   colour            String?
   material          String?
   condition         ArtifactCondition
-  status            ArtifactStatus       @default(DRAFT)
-  featured          Boolean              @default(false)
+  status            ArtifactStatus             @default(DRAFT)
+  featured          Boolean                    @default(false)
   playerId          String
   brandId           String
-  createdAt         DateTime             @default(now())
-  updatedAt         DateTime             @updatedAt
-  authentic         Boolean              @default(false)
-  authenticityCode  String?              @unique
-  availability      ArtifactAvailability @default(COMING_SOON)
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
+  authentic         Boolean                    @default(false)
+  authenticityCode  String?                    @unique
+  availability      ArtifactAvailability       @default(COMING_SOON)
   category          ArtifactCategory?
   collection        String?
   curatorNote       String?
-  currency          String               @default("EUR")
+  currency          String                     @default("EUR")
   edition           String?
   historicalContext String?
   metaDescription   String?
   metaTitle         String?
   museumStory       String?
-  price             Decimal?             @db.Decimal(10, 2)
+  price             Decimal?                   @db.Decimal(10, 2)
   publishedAt       DateTime?
-  rarity            ArtifactRarity       @default(COMMON)
+  rarity            ArtifactRarity             @default(COMMON)
   season            String?
   subtitle          String?
-  tags              String[]             @default([])
+  tags              String[]                   @default([])
   tournament        String?
-  vintage           Boolean              @default(false)
+  vintage           Boolean                    @default(false)
   vintedUrl         String?
-  brand             Brand                @relation(fields: [brandId], references: [id])
-  player            Player               @relation(fields: [playerId], references: [id])
+  brand             Brand                      @relation(fields: [brandId], references: [id])
+  player            Player                     @relation(fields: [playerId], references: [id])
   images            ArtifactImage[]
   certificate       Certificate?
+  museumCollections MuseumCollectionArtifact[]
 
   @@index([playerId])
   @@index([brandId])
@@ -175,31 +177,32 @@ model Certificate {
 }
 
 model OriginalProduct {
-  id              String                      @id @default(cuid())
-  title           String
-  subtitle        String?
-  slug            String                      @unique
-  description     String?
-  collection      String?
-  edition         String?
-  category        OriginalProductCategory
-  material        String?
-  colour          String?
-  sizes           String[]                    @default([])
-  tags            String[]                    @default([])
-  price           Decimal?                    @db.Decimal(10, 2)
-  currency        String                      @default("EUR")
-  vintedUrl       String?
-  availability    OriginalProductAvailability @default(COMING_SOON)
-  status          OriginalProductStatus       @default(DRAFT)
-  featured        Boolean                     @default(false)
-  displayOrder    Int?
-  metaTitle       String?
-  metaDescription String?
-  publishedAt     DateTime?
-  createdAt       DateTime                    @default(now())
-  updatedAt       DateTime                    @updatedAt
-  images          OriginalProductImage[]
+  id                String                      @id @default(cuid())
+  title             String
+  subtitle          String?
+  slug              String                      @unique
+  description       String?
+  collection        String?
+  edition           String?
+  category          OriginalProductCategory
+  material          String?
+  colour            String?
+  sizes             String[]                    @default([])
+  tags              String[]                    @default([])
+  price             Decimal?                    @db.Decimal(10, 2)
+  currency          String                      @default("EUR")
+  vintedUrl         String?
+  availability      OriginalProductAvailability @default(COMING_SOON)
+  status            OriginalProductStatus       @default(DRAFT)
+  featured          Boolean                     @default(false)
+  displayOrder      Int?
+  metaTitle         String?
+  metaDescription   String?
+  publishedAt       DateTime?
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
+  images            OriginalProductImage[]
+  museumCollections MuseumCollectionOriginal[]
 
   @@index([category])
   @@index([availability])
@@ -259,6 +262,160 @@ model AtpPlayer {
   @@index([points])
   @@index([previousRank])
   @@index([rankingDate])
+}
+
+model MediaFolder {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  assets      MediaAsset[]
+
+  @@index([name])
+  @@index([createdAt])
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  title        String
+  alt          String?
+  originalName String
+  url          String
+  mimeType     String
+  extension    String
+  size         Int
+  width        Int?
+  height       Int?
+  tags         String[] @default([])
+  folderId     String?
+  isUsed       Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  folder             MediaFolder?            @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  heroForCollections MuseumCollection[]      @relation("MuseumCollectionHeroMedia")
+  museumCollections  MuseumCollectionMedia[]
+
+  @@index([title])
+  @@index([originalName])
+  @@index([mimeType])
+  @@index([extension])
+  @@index([folderId])
+  @@index([isUsed])
+  @@index([createdAt])
+}
+
+model MuseumCollection {
+  id              String           @id @default(cuid())
+  name            String
+  slug            String           @unique
+  eyebrow         String?
+  title           String
+  subtitle        String?
+  description     String?
+  type            CollectionType   @default(PLAYER)
+  status          CollectionStatus @default(DRAFT)
+  heroTitle       String?
+  heroSubtitle    String?
+  heroImageUrl    String?
+  heroMediaId     String?
+  primaryColor    String           @default("#C8FF00")
+  secondaryColor  String           @default("#08111F")
+  accentColor     String           @default("#FFFFFF")
+  featured        Boolean          @default(false)
+  displayOrder    Int?
+  metaTitle       String?
+  metaDescription String?
+  publishedAt     DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  heroMedia MediaAsset? @relation("MuseumCollectionHeroMedia", fields: [heroMediaId], references: [id], onDelete: SetNull)
+
+  players   MuseumCollectionPlayer[]
+  artifacts MuseumCollectionArtifact[]
+  originals MuseumCollectionOriginal[]
+  media     MuseumCollectionMedia[]
+
+  @@index([name])
+  @@index([type])
+  @@index([status])
+  @@index([featured])
+  @@index([displayOrder])
+  @@index([publishedAt])
+  @@index([heroMediaId])
+  @@index([createdAt])
+}
+
+model MuseumCollectionPlayer {
+  id           String   @id @default(cuid())
+  collectionId String
+  playerId     String
+  sortOrder    Int      @default(0)
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  collection MuseumCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  player     Player           @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, playerId])
+  @@index([collectionId])
+  @@index([playerId])
+  @@index([sortOrder])
+}
+
+model MuseumCollectionArtifact {
+  id           String   @id @default(cuid())
+  collectionId String
+  artifactId   String
+  sortOrder    Int      @default(0)
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  collection MuseumCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  artifact   Artifact         @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, artifactId])
+  @@index([collectionId])
+  @@index([artifactId])
+  @@index([sortOrder])
+}
+
+model MuseumCollectionOriginal {
+  id                String   @id @default(cuid())
+  collectionId      String
+  originalProductId String
+  sortOrder         Int      @default(0)
+  featured          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+
+  collection      MuseumCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  originalProduct OriginalProduct  @relation(fields: [originalProductId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, originalProductId])
+  @@index([collectionId])
+  @@index([originalProductId])
+  @@index([sortOrder])
+}
+
+model MuseumCollectionMedia {
+  id           String   @id @default(cuid())
+  collectionId String
+  mediaAssetId String
+  caption      String?
+  sortOrder    Int      @default(0)
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  collection MuseumCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset       @relation(fields: [mediaAssetId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, mediaAssetId])
+  @@index([collectionId])
+  @@index([mediaAssetId])
+  @@index([sortOrder])
 }
 
 enum PlayerCollectionType {
@@ -329,5 +486,20 @@ enum OriginalProductCategory {
   BAG
   POSTER
   ACCESSORY
+  OTHER
+}
+
+enum CollectionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CollectionType {
+  PLAYER
+  ERA
+  TOURNAMENT
+  THEME
+  BRAND
   OTHER
 }

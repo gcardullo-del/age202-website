@@ -4,6 +4,9 @@ import {
 
 import AdminShell from "@/components/admin/AdminShell";
 
+import {
+  getAllMedia,
+} from "@/lib/repositories/media.repository";
 import { prisma } from "@/lib/prisma";
 
 import DeleteOriginalProductButton from "../components/DeleteOriginalProductButton";
@@ -21,8 +24,11 @@ export default async function EditOriginalPage({
 }) {
   const { id } = await params;
 
-  const product =
-    await prisma.originalProduct.findUnique(
+  const [
+    product,
+    mediaAssets,
+  ] = await Promise.all([
+    prisma.originalProduct.findUnique(
       {
         where: {
           id,
@@ -40,7 +46,12 @@ export default async function EditOriginalPage({
           },
         },
       },
-    );
+    ),
+
+    getAllMedia({
+      mimeType: "image/",
+    }),
+  ]);
 
   if (!product) {
     notFound();
@@ -54,13 +65,18 @@ export default async function EditOriginalPage({
       <div className="mb-5 flex justify-end">
         <DeleteOriginalProductButton
           productId={product.id}
-          productTitle={product.title}
+          productTitle={
+            product.title
+          }
         />
       </div>
 
       <OriginalProductForm
         mode="edit"
         productId={product.id}
+        libraryAssets={
+          mediaAssets
+        }
         initialValues={{
           title: product.title,
           subtitle:

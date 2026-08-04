@@ -4,12 +4,12 @@ import {
   getAllMedia,
 } from "@/lib/repositories/media.repository";
 
-import OriginalProductForm from "../components/OriginalProductForm";
+import CollectionForm from "../components/CollectionForm";
 
 export const dynamic =
   "force-dynamic";
 
-export default async function NewOriginalPage() {
+export default async function NewCollectionPage() {
   const mediaAssets =
     await getAllMedia({
       mimeType: "image/",
@@ -17,11 +17,11 @@ export default async function NewOriginalPage() {
 
   return (
     <AdminShell
-      title="New Original"
-      description="Create an official AGE202 branded product."
+      title="New Collection"
+      description="Create a new curated AGE202 museum collection."
     >
-      <OriginalProductForm
-        libraryAssets={
+      <CollectionForm
+        mediaAssets={
           mediaAssets
         }
       />

@@ -1,6 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import {
+  revalidatePath,
+} from "next/cache";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/lib/prisma";
@@ -14,7 +16,6 @@ import {
   MAX_ORIGINAL_IMAGES,
   getBoolean,
   getCommaSeparatedValues,
-  getCoverImageIndex,
   getImageFiles,
   getOptionalNumber,
   getOptionalString,
@@ -25,6 +26,19 @@ import {
   getStringArray,
   slugify,
 } from "./originalForm.utils";
+
+type SubmittedMediaOrderItem =
+  | {
+      type: "existing";
+      imageId: string;
+    }
+  | {
+      type: "library";
+      mediaAssetId: string;
+    }
+  | {
+      type: "new";
+    };
 
 async function createAvailableSlug(
   requestedValue: string,
@@ -59,6 +73,71 @@ async function createAvailableSlug(
     : baseSlug;
 }
 
+function parseMediaOrder(
+  formData: FormData,
+): SubmittedMediaOrderItem[] {
+  const rawOrder =
+    getOptionalString(
+      formData,
+      "mediaOrder",
+    );
+
+  if (!rawOrder) {
+    return [];
+  }
+
+  return rawOrder
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .flatMap(
+      (
+        entry,
+      ): SubmittedMediaOrderItem[] => {
+        const [
+          type,
+          value,
+        ] = entry.split(":");
+
+        if (
+          type === "existing" &&
+          value?.trim()
+        ) {
+          return [
+            {
+              type: "existing",
+              imageId:
+                value.trim(),
+            },
+          ];
+        }
+
+        if (
+          type === "library" &&
+          value?.trim()
+        ) {
+          return [
+            {
+              type: "library",
+              mediaAssetId:
+                value.trim(),
+            },
+          ];
+        }
+
+        if (type === "new") {
+          return [
+            {
+              type: "new",
+            },
+          ];
+        }
+
+        return [];
+      },
+    );
+}
+
 export async function updateOriginalProduct(
   formData: FormData,
 ): Promise<void> {
@@ -68,10 +147,11 @@ export async function updateOriginalProduct(
       "productId",
     );
 
-  const title = getRequiredString(
-    formData,
-    "title",
-  );
+  const title =
+    getRequiredString(
+      formData,
+      "title",
+    );
 
   const current =
     await prisma.originalProduct.findUnique(
@@ -95,13 +175,27 @@ export async function updateOriginalProduct(
     );
   }
 
-  const newImages =
+  const newImageFiles =
     getImageFiles(formData);
 
+  const selectedMediaAssetIds =
+    Array.from(
+      new Set(
+        getStringArray(
+          formData,
+          "selectedMediaAssetIds",
+        ),
+      ),
+    );
+
   const requestedRemovedIds =
-    getStringArray(
-      formData,
-      "removedImageIds",
+    Array.from(
+      new Set(
+        getStringArray(
+          formData,
+          "removedImageIds",
+        ),
+      ),
     );
 
   const currentImageIds =
@@ -111,15 +205,8 @@ export async function updateOriginalProduct(
       ),
     );
 
-  const removedIds =
-    Array.from(
-      new Set(
-        requestedRemovedIds,
-      ),
-    );
-
   if (
-    removedIds.some(
+    requestedRemovedIds.some(
       (id) =>
         !currentImageIds.has(id),
     )
@@ -130,7 +217,9 @@ export async function updateOriginalProduct(
   }
 
   const removedIdSet =
-    new Set(removedIds);
+    new Set(
+      requestedRemovedIds,
+    );
 
   const remainingImages =
     current.images.filter(
@@ -142,13 +231,46 @@ export async function updateOriginalProduct(
 
   if (
     remainingImages.length +
-      newImages.length >
+      newImageFiles.length +
+      selectedMediaAssetIds.length >
     MAX_ORIGINAL_IMAGES
   ) {
     throw new Error(
       `An Original product can contain a maximum of ${MAX_ORIGINAL_IMAGES} images.`,
     );
   }
+
+  const libraryAssets =
+    selectedMediaAssetIds.length > 0
+      ? await prisma.mediaAsset.findMany(
+          {
+            where: {
+              id: {
+                in: selectedMediaAssetIds,
+              },
+            },
+          },
+        )
+      : [];
+
+  if (
+    libraryAssets.length !==
+    selectedMediaAssetIds.length
+  ) {
+    throw new Error(
+      "One or more selected Media Library images could not be found.",
+    );
+  }
+
+  const libraryAssetMap =
+    new Map(
+      libraryAssets.map(
+        (asset) => [
+          asset.id,
+          asset,
+        ],
+      ),
+    );
 
   const requestedExistingCoverId =
     getOptionalString(
@@ -165,17 +287,116 @@ export async function updateOriginalProduct(
     )
   ) {
     throw new Error(
-      "The selected cover image is not available.",
+      "The selected existing cover image is not available.",
     );
   }
 
-  const submittedNewCoverIndex =
-    newImages.length > 0
-      ? getCoverImageIndex(
-          formData,
-          newImages.length,
-        )
-      : -1;
+  const requestedLibraryCoverId =
+    getOptionalString(
+      formData,
+      "libraryCoverMediaAssetId",
+    );
+
+  if (
+    requestedLibraryCoverId &&
+    !libraryAssetMap.has(
+      requestedLibraryCoverId,
+    )
+  ) {
+    throw new Error(
+      "The selected Media Library cover image is not available.",
+    );
+  }
+
+  const submittedOrder =
+    parseMediaOrder(formData);
+
+  const orderedItems:
+    SubmittedMediaOrderItem[] = [];
+
+  const usedExistingIds =
+    new Set<string>();
+
+  const usedLibraryIds =
+    new Set<string>();
+
+  let usedNewCount = 0;
+
+  for (const item of submittedOrder) {
+    if (
+      item.type === "existing" &&
+      remainingImages.some(
+        (image) =>
+          image.id ===
+          item.imageId,
+      ) &&
+      !usedExistingIds.has(
+        item.imageId,
+      )
+    ) {
+      orderedItems.push(item);
+      usedExistingIds.add(
+        item.imageId,
+      );
+    }
+
+    if (
+      item.type === "library" &&
+      libraryAssetMap.has(
+        item.mediaAssetId,
+      ) &&
+      !usedLibraryIds.has(
+        item.mediaAssetId,
+      )
+    ) {
+      orderedItems.push(item);
+      usedLibraryIds.add(
+        item.mediaAssetId,
+      );
+    }
+
+    if (
+      item.type === "new" &&
+      usedNewCount <
+        newImageFiles.length
+    ) {
+      orderedItems.push(item);
+      usedNewCount += 1;
+    }
+  }
+
+  for (const image of remainingImages) {
+    if (
+      !usedExistingIds.has(
+        image.id,
+      )
+    ) {
+      orderedItems.push({
+        type: "existing",
+        imageId: image.id,
+      });
+    }
+  }
+
+  for (const id of selectedMediaAssetIds) {
+    if (!usedLibraryIds.has(id)) {
+      orderedItems.push({
+        type: "library",
+        mediaAssetId: id,
+      });
+    }
+  }
+
+  while (
+    usedNewCount <
+    newImageFiles.length
+  ) {
+    orderedItems.push({
+      type: "new",
+    });
+
+    usedNewCount += 1;
+  }
 
   const slug =
     await createAvailableSlug(
@@ -195,7 +416,7 @@ export async function updateOriginalProduct(
   }> = [];
 
   try {
-    for (const file of newImages) {
+    for (const file of newImageFiles) {
       const url =
         await uploadArtifactImage(
           productId,
@@ -331,7 +552,8 @@ export async function updateOriginalProduct(
         );
 
         if (
-          removedIds.length > 0
+          requestedRemovedIds.length >
+          0
         ) {
           await transaction.originalProductImage.deleteMany(
             {
@@ -339,7 +561,7 @@ export async function updateOriginalProduct(
                 originalProductId:
                   productId,
                 id: {
-                  in: removedIds,
+                  in: requestedRemovedIds,
                 },
               },
             },
@@ -358,36 +580,120 @@ export async function updateOriginalProduct(
           },
         );
 
-        for (const [
-          index,
-          image,
-        ] of remainingImages.entries()) {
-          await transaction.originalProductImage.update(
-            {
-              where: {
-                id: image.id,
-              },
-              data: {
-                alt:
-                  image.alt ??
-                  `${title} — image ${
-                    index + 1
-                  }`,
-                sortOrder: index,
-              },
-            },
+        const existingImageMap =
+          new Map(
+            remainingImages.map(
+              (image) => [
+                image.id,
+                image,
+              ],
+            ),
           );
-        }
 
-        const createdImages: Array<{
-          id: string;
-          index: number;
-        }> = [];
+        let uploadedIndex = 0;
+
+        let selectedCoverImageId:
+          string | undefined;
 
         for (const [
-          index,
-          uploaded,
-        ] of uploadedImages.entries()) {
+          sortOrder,
+          item,
+        ] of orderedItems.entries()) {
+          if (
+            item.type === "existing"
+          ) {
+            const existingImage =
+              existingImageMap.get(
+                item.imageId,
+              );
+
+            if (!existingImage) {
+              continue;
+            }
+
+            await transaction.originalProductImage.update(
+              {
+                where: {
+                  id:
+                    existingImage.id,
+                },
+                data: {
+                  alt:
+                    existingImage.alt ??
+                    `${title} — image ${
+                      sortOrder + 1
+                    }`,
+                  sortOrder,
+                },
+              },
+            );
+
+            if (
+              item.imageId ===
+              requestedExistingCoverId
+            ) {
+              selectedCoverImageId =
+                item.imageId;
+            }
+
+            continue;
+          }
+
+          if (
+            item.type === "library"
+          ) {
+            const asset =
+              libraryAssetMap.get(
+                item.mediaAssetId,
+              );
+
+            if (!asset) {
+              throw new Error(
+                "A selected Media Library asset is no longer available.",
+              );
+            }
+
+            const created =
+              await transaction.originalProductImage.create(
+                {
+                  data: {
+                    originalProductId:
+                      productId,
+                    url: asset.url,
+                    alt:
+                      asset.alt ??
+                      asset.title ??
+                      `${title} — image ${
+                        sortOrder + 1
+                      }`,
+                    sortOrder,
+                    isCover: false,
+                  },
+                },
+              );
+
+            if (
+              item.mediaAssetId ===
+              requestedLibraryCoverId
+            ) {
+              selectedCoverImageId =
+                created.id;
+            }
+
+            continue;
+          }
+
+          const uploaded =
+            uploadedImages[
+              uploadedIndex
+            ];
+
+          uploadedIndex += 1;
+
+          if (!uploaded) {
+            continue;
+          }
+
           const created =
             await transaction.originalProductImage.create(
               {
@@ -396,45 +702,101 @@ export async function updateOriginalProduct(
                     productId,
                   url: uploaded.url,
                   alt: `${title} — image ${
-                    remainingImages.length +
-                    index +
-                    1
+                    sortOrder + 1
                   }`,
-                  sortOrder:
-                    remainingImages.length +
-                    index,
+                  sortOrder,
                   isCover: false,
                 },
               },
             );
 
-          createdImages.push({
-            id: created.id,
-            index,
-          });
+          if (
+            !selectedCoverImageId &&
+            !requestedExistingCoverId &&
+            !requestedLibraryCoverId
+          ) {
+            const requestedNewCoverIndex =
+              Number.parseInt(
+                getOptionalString(
+                  formData,
+                  "coverImageIndex",
+                ) ?? "-1",
+                10,
+              );
+
+            if (
+              requestedNewCoverIndex ===
+              uploadedIndex - 1
+            ) {
+              selectedCoverImageId =
+                created.id;
+            }
+          }
         }
 
-        const coverId =
-          requestedExistingCoverId ??
-          (submittedNewCoverIndex >= 0
-            ? createdImages.find(
-                (image) =>
-                  image.index ===
-                  submittedNewCoverIndex,
-              )?.id
-            : undefined) ??
-          remainingImages.find(
-            (image) =>
-              image.isCover,
-          )?.id ??
-          remainingImages[0]?.id ??
-          createdImages[0]?.id;
+        if (
+          selectedMediaAssetIds.length >
+          0
+        ) {
+          await transaction.mediaAsset.updateMany(
+            {
+              where: {
+                id: {
+                  in: selectedMediaAssetIds,
+                },
+              },
+              data: {
+                isUsed: true,
+              },
+            },
+          );
+        }
 
-        if (coverId) {
+        if (!selectedCoverImageId) {
+          const previousCover =
+            remainingImages.find(
+              (image) =>
+                image.isCover,
+            );
+
+          if (
+            previousCover &&
+            !removedIdSet.has(
+              previousCover.id,
+            )
+          ) {
+            selectedCoverImageId =
+              previousCover.id;
+          }
+        }
+
+        if (!selectedCoverImageId) {
+          const firstImage =
+            await transaction.originalProductImage.findFirst(
+              {
+                where: {
+                  originalProductId:
+                    productId,
+                },
+                orderBy: {
+                  sortOrder: "asc",
+                },
+                select: {
+                  id: true,
+                },
+              },
+            );
+
+          selectedCoverImageId =
+            firstImage?.id;
+        }
+
+        if (selectedCoverImageId) {
           await transaction.originalProductImage.update(
             {
               where: {
-                id: coverId,
+                id:
+                  selectedCoverImageId,
               },
               data: {
                 isCover: true,
