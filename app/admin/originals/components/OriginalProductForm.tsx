@@ -980,10 +980,9 @@ export default function OriginalProductForm({
                       coverImage.url
                     }
                     alt={
-                      coverImage.alt ??
-                      title ||
-                      "Original preview"
-                    }
+  (coverImage.alt ?? title) ||
+  "Original preview"
+}
                     fill
                     sizes="330px"
                     className="object-cover"
