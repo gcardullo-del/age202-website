@@ -13,6 +13,12 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { getPlayerPortraitPath } from "@/lib/players/portraits";
+import {
+  getRankingPlayerHref,
+  getRankingPlayerLinkLabel,
+} from "@/lib/players/ranking-links";
+
 type LinkedPlayer = {
   id: string;
   name: string;
@@ -40,6 +46,7 @@ type AtpPlayer = {
   availableArtifacts: number;
   hasAvailableArtifacts: boolean;
   collectionUrl: string | null;
+  archiveUrl: string | null;
 };
 
 type Props = {
@@ -278,29 +285,102 @@ function VariationBadge({
 
 function PlayerAvatar({
   player,
+  variant = "table",
+  linked = true,
 }: {
   player: AtpPlayer;
+  variant?: "table" | "feature";
+  linked?: boolean;
 }) {
-  const portraitImage =
-    player.player?.portraitImage ??
-    player.imageUrl;
+  const [failed, setFailed] = useState(false);
+
+  const portraitImage = getPlayerPortraitPath({
+    name: player.name,
+    slug: player.player?.slug,
+  });
+
+  const playerHref = getRankingPlayerHref({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
+
+  const isFeature = variant === "feature";
+
+  const avatar = (
+    <div
+      className={[
+        "relative shrink-0 rounded-full p-[2px]",
+        "bg-[linear-gradient(145deg,rgba(204,255,0,0.5),rgba(255,255,255,0.06),rgba(204,255,0,0.12))]",
+        "shadow-[0_0_0_1px_rgba(255,255,255,0.05),0_12px_32px_rgba(0,0,0,0.32)]",
+        "transition duration-300",
+        "group-hover/avatar:scale-[1.04]",
+        "group-hover/avatar:shadow-[0_0_0_1px_rgba(204,255,0,0.35),0_0_28px_rgba(204,255,0,0.16)]",
+        isFeature ? "h-16 w-16" : "h-12 w-12",
+      ].join(" ")}
+    >
+      <div className="relative h-full w-full overflow-hidden rounded-full border border-black/30 bg-[linear-gradient(145deg,rgba(204,255,0,0.12),rgba(255,255,255,0.025))]">
+        {!failed ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={portraitImage}
+            alt={`Ritratto di ${player.name}`}
+            className="h-full w-full object-cover object-top saturate-[0.9] transition duration-500 group-hover/avatar:scale-[1.09] group-hover/avatar:saturate-100"
+            loading={isFeature ? "eager" : "lazy"}
+            onError={() => setFailed(true)}
+          />
+        ) : (
+          <div
+            className={[
+              "grid h-full w-full place-items-center font-mono font-black uppercase tracking-[0.08em] text-[#ccff00]",
+              isFeature ? "text-sm" : "text-[10px]",
+            ].join(" ")}
+          >
+            {getPlayerInitials(player.name)}
+          </div>
+        )}
+
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#030a16]/50 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-inset ring-white/10" />
+      </div>
+
+      <span
+        className={[
+          "absolute -bottom-1 -right-1 grid place-items-center rounded-full border-2 border-[#060e1b] bg-[#ccff00] font-mono font-black text-[#030a16] shadow-[0_4px_14px_rgba(0,0,0,0.35)]",
+          isFeature
+            ? "h-6 min-w-6 px-1 text-[8px]"
+            : "h-5 min-w-5 px-1 text-[7px]",
+        ].join(" ")}
+        aria-hidden="true"
+      >
+        {player.rank}
+      </span>
+
+      {player.collectionUrl ? (
+        <span
+          className="absolute -left-0.5 top-0 h-2.5 w-2.5 rounded-full border-2 border-[#060e1b] bg-[#ccff00] shadow-[0_0_12px_rgba(204,255,0,0.7)]"
+          aria-hidden="true"
+        />
+      ) : player.archiveUrl ? (
+        <span
+          className="absolute -left-0.5 top-0 h-2.5 w-2.5 rounded-full border-2 border-[#060e1b] bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.55)]"
+          aria-hidden="true"
+        />
+      ) : null}
+    </div>
+  );
+
+  if (!linked || !playerHref) {
+    return avatar;
+  }
 
   return (
-    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-white/10 bg-[linear-gradient(145deg,rgba(204,255,0,0.12),rgba(255,255,255,0.025))]">
-      {portraitImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={portraitImage}
-          alt={player.name}
-          className="h-full w-full object-cover object-top"
-          loading="lazy"
-        />
-      ) : (
-        <div className="grid h-full w-full place-items-center font-mono text-[10px] font-black uppercase tracking-[0.08em] text-[#ccff00]">
-          {getPlayerInitials(player.name)}
-        </div>
-      )}
-    </div>
+    <Link
+      href={playerHref}
+      aria-label={`Apri la pagina di ${player.name}`}
+      className="group/avatar shrink-0 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#060e1b]"
+    >
+      {avatar}
+    </Link>
   );
 }
 
@@ -309,6 +389,16 @@ function PlayerName({
 }: {
   player: AtpPlayer;
 }) {
+  const playerHref = getRankingPlayerHref({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
+
+  const linkLabel = getRankingPlayerLinkLabel({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
+
   const content = (
     <div className="min-w-0">
       <div className="flex min-w-0 items-center gap-2">
@@ -322,6 +412,12 @@ function PlayerName({
             className="shrink-0 text-[#ccff00]"
             aria-hidden="true"
           />
+        ) : null}
+
+        {linkLabel ? (
+          <span className="hidden shrink-0 rounded-full border border-white/10 bg-white/[0.025] px-2 py-1 font-mono text-[6px] font-black uppercase tracking-[0.12em] text-white/35 transition group-hover/player:border-[#ccff00]/25 group-hover/player:text-[#ccff00] xl:inline-flex">
+            {linkLabel}
+          </span>
         ) : null}
       </div>
 
@@ -343,13 +439,13 @@ function PlayerName({
     </div>
   );
 
-  if (!player.collectionUrl) {
+  if (!playerHref) {
     return content;
   }
 
   return (
     <Link
-      href={player.collectionUrl}
+      href={playerHref}
       className="group/player min-w-0 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00]/60"
     >
       {content}
@@ -362,15 +458,48 @@ function CollectionStatus({
 }: {
   player: AtpPlayer;
 }) {
-  if (!player.collectionUrl) {
+  const playerHref = getRankingPlayerHref({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
+
+  if (player.collectionUrl && player.hasAvailableArtifacts) {
     return (
-      <span className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-white/20">
-        —
-      </span>
+      <Link
+        href={player.collectionUrl}
+        className="group/archive inline-flex items-center gap-2 rounded-full border border-[#ccff00]/25 bg-[#ccff00]/[0.055] px-3 py-2 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-[#ccff00] transition hover:border-[#ccff00]/55 hover:bg-[#ccff00] hover:text-black"
+      >
+        {formatAvailableItems(
+          player.availableArtifacts,
+        )}
+
+        <ArrowRight
+          size={12}
+          className="transition group-hover/archive:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </Link>
     );
   }
 
-  if (!player.hasAvailableArtifacts) {
+  if (player.archiveUrl) {
+    return (
+      <Link
+        href={player.archiveUrl}
+        className="group/archive inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-2 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-white/40 transition hover:border-[#ccff00]/30 hover:text-[#ccff00]"
+      >
+        ATP Archive
+
+        <ArrowRight
+          size={12}
+          className="transition group-hover/archive:translate-x-0.5"
+          aria-hidden="true"
+        />
+      </Link>
+    );
+  }
+
+  if (player.collectionUrl) {
     return (
       <Link
         href={player.collectionUrl}
@@ -388,20 +517,385 @@ function CollectionStatus({
   }
 
   return (
-    <Link
-      href={player.collectionUrl}
-      className="group/archive inline-flex items-center gap-2 rounded-full border border-[#ccff00]/25 bg-[#ccff00]/[0.055] px-3 py-2 font-mono text-[8px] font-black uppercase tracking-[0.12em] text-[#ccff00] transition hover:border-[#ccff00]/55 hover:bg-[#ccff00] hover:text-black"
-    >
-      {formatAvailableItems(
-        player.availableArtifacts,
-      )}
+    <span className="font-mono text-[8px] font-black uppercase tracking-[0.15em] text-white/20">
+      —
+    </span>
+  );
+}
 
-      <ArrowRight
-        size={12}
-        className="transition group-hover/archive:translate-x-0.5"
-        aria-hidden="true"
-      />
-    </Link>
+
+
+function PlayerHoverIntelligence({
+  player,
+}: {
+  player: AtpPlayer;
+}) {
+  const playerHref = getRankingPlayerHref({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
+
+  const variation = getVariation(
+    player.rank,
+    player.previousRank,
+  );
+
+  const profileLabel = player.collectionUrl
+    ? "Featured Collection"
+    : player.archiveUrl
+      ? "ATP Archive"
+      : "Ranking Profile";
+
+  return (
+    <div className="pointer-events-none absolute left-[calc(100%+14px)] top-1/2 z-50 hidden w-[330px] -translate-y-1/2 opacity-0 transition duration-200 group-hover/row:pointer-events-auto group-hover/row:opacity-100 2xl:block">
+      <div className="relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#07101D]/98 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#ccff00]/[0.055] blur-3xl" />
+
+        <div className="relative">
+          <div className="flex items-start gap-4">
+            <PlayerAvatar
+              player={player}
+              variant="feature"
+              linked={false}
+            />
+
+            <div className="min-w-0 flex-1">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-[#ccff00]">
+                {profileLabel}
+              </p>
+
+              <h4 className="mt-2 truncate text-xl font-black uppercase tracking-[-0.035em] text-white">
+                {player.name}
+              </h4>
+
+              <div className="mt-3 flex items-center gap-3">
+                <Flag
+                  code={player.countryCode}
+                  country={player.country}
+                />
+
+                <span className="truncate text-xs font-bold text-white/48">
+                  {player.country}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-2">
+            <div className="rounded-xl border border-white/10 bg-white/[0.025] p-3">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/25">
+                Current rank
+              </p>
+
+              <p className="mt-2 text-xl font-black text-white">
+                #{player.rank}
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/[0.025] p-3">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/25">
+                ATP points
+              </p>
+
+              <p className="mt-2 text-xl font-black tabular-nums text-white">
+                {formatPoints(player.points)}
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/[0.025] p-3">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/25">
+                Age
+              </p>
+
+              <p className="mt-2 text-xl font-black text-white">
+                {player.age ?? "—"}
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-white/[0.025] p-3">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/25">
+                Weekly trend
+              </p>
+
+              <p
+                className={[
+                  "mt-2 text-sm font-black uppercase",
+                  variation.direction === "up"
+                    ? "text-emerald-400"
+                    : variation.direction === "down"
+                      ? "text-rose-400"
+                      : "text-white/35",
+                ].join(" ")}
+              >
+                {variation.direction === "stable"
+                  ? "Stable"
+                  : variation.label}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-black/15 px-4 py-3">
+            <div>
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/24">
+                AGE202 status
+              </p>
+
+              <p className="mt-1 text-xs font-black uppercase text-white/65">
+                {profileLabel}
+              </p>
+            </div>
+
+            {playerHref ? (
+              <Link
+                href={playerHref}
+                className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-[#ccff00]/25 bg-[#ccff00]/[0.055] px-3 py-2 font-mono text-[7px] font-black uppercase tracking-[0.12em] text-[#ccff00] transition hover:bg-[#ccff00] hover:text-black"
+              >
+                Open
+                <ArrowRight size={11} aria-hidden="true" />
+              </Link>
+            ) : (
+              <span className="font-mono text-[7px] font-black uppercase tracking-[0.12em] text-white/20">
+                View only
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <span className="absolute right-full top-1/2 h-4 w-4 -translate-y-1/2 translate-x-2 rotate-45 border-b border-l border-white/10 bg-[#07101D]" />
+    </div>
+  );
+}
+
+function RankingPodium({
+  players,
+}: {
+  players: AtpPlayer[];
+}) {
+  const podiumPlayers = players.slice(0, 3);
+
+  if (podiumPlayers.length < 3) {
+    return null;
+  }
+
+  const [leader, second, third] = podiumPlayers;
+
+  const podiumOrder = [
+    {
+      player: second,
+      position: 2,
+      heightClass: "min-h-[250px]",
+      accentClass:
+        "border-slate-300/20 bg-[linear-gradient(180deg,rgba(203,213,225,0.055),rgba(6,14,27,0.96))]",
+      medalClass:
+        "border-slate-300/30 bg-slate-300/10 text-slate-200",
+      orderClass: "order-2 lg:order-1",
+    },
+    {
+      player: leader,
+      position: 1,
+      heightClass: "min-h-[310px]",
+      accentClass:
+        "border-[#ccff00]/30 bg-[linear-gradient(180deg,rgba(204,255,0,0.085),rgba(6,14,27,0.98))] shadow-[0_24px_90px_rgba(204,255,0,0.08)]",
+      medalClass:
+        "border-[#ccff00]/35 bg-[#ccff00]/10 text-[#ccff00]",
+      orderClass: "order-1 lg:order-2",
+    },
+    {
+      player: third,
+      position: 3,
+      heightClass: "min-h-[235px]",
+      accentClass:
+        "border-orange-400/20 bg-[linear-gradient(180deg,rgba(251,146,60,0.055),rgba(6,14,27,0.96))]",
+      medalClass:
+        "border-orange-400/30 bg-orange-400/10 text-orange-300",
+      orderClass: "order-3",
+    },
+  ];
+
+  const leaderPoints = leader.points ?? 0;
+
+  return (
+    <section className="mt-5 overflow-hidden rounded-[2rem] border border-white/10 bg-[#040b16] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.28)] sm:p-6 lg:p-8">
+      <div className="flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-[8px] font-black uppercase tracking-[0.22em] text-[#ccff00]">
+            ATP Top 3
+          </p>
+
+          <h3 className="mt-2 text-3xl font-black uppercase tracking-[-0.045em] text-white sm:text-4xl">
+            World podium
+          </h3>
+        </div>
+
+        <p className="max-w-xl text-sm leading-7 text-white/35 sm:text-right">
+          The three leading players in the current ATP ranking, connected to
+          the AGE202 archive experience.
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3 lg:items-end">
+        {podiumOrder.map(
+          ({
+            player,
+            position,
+            heightClass,
+            accentClass,
+            medalClass,
+            orderClass,
+          }) => {
+            const playerHref = getRankingPlayerHref({
+              archiveUrl: player.archiveUrl,
+              collectionUrl: player.collectionUrl,
+            });
+
+            const pointsGap =
+              position === 1 || leaderPoints === 0
+                ? null
+                : Math.max(
+                    leaderPoints - (player.points ?? 0),
+                    0,
+                  );
+
+            const content = (
+              <article
+                className={[
+                  "group/podium relative flex overflow-hidden rounded-[1.75rem] border p-5 transition duration-300 hover:-translate-y-1 sm:p-6",
+                  heightClass,
+                  accentClass,
+                ].join(" ")}
+              >
+                <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full border border-white/[0.045]" />
+                <div className="pointer-events-none absolute -bottom-20 -left-16 h-44 w-44 rounded-full bg-white/[0.018] blur-2xl" />
+
+                <div className="relative flex w-full flex-col">
+                  {player.collectionUrl ? (
+                  <div className="mb-4 flex items-center justify-between rounded-xl border border-[#ccff00]/15 bg-[#ccff00]/[0.04] px-3 py-2">
+                    <span className="inline-flex items-center gap-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-[#ccff00]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#ccff00] shadow-[0_0_10px_rgba(204,255,0,0.8)]" />
+                      AGE202 Featured Collection
+                    </span>
+                  </div>
+                ) : player.archiveUrl ? (
+                  <div className="mb-4 flex items-center justify-between rounded-xl border border-cyan-300/15 bg-cyan-300/[0.035] px-3 py-2">
+                    <span className="inline-flex items-center gap-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-cyan-200/75">
+                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.65)]" />
+                      ATP Archive Profile
+                    </span>
+                  </div>
+                ) : null}
+
+                <div className="flex items-start justify-between gap-4">
+                    <PlayerAvatar
+                      player={player}
+                      variant="feature"
+                      linked={false}
+                    />
+
+                    <span
+                      className={[
+                        "inline-flex h-9 min-w-9 items-center justify-center rounded-full border px-2 font-mono text-[10px] font-black",
+                        medalClass,
+                      ].join(" ")}
+                    >
+                      #{position}
+                    </span>
+                  </div>
+
+                  <div className="mt-8">
+                    <p className="font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/28">
+                      ATP World Ranking
+                    </p>
+
+                    <h4 className="mt-3 text-2xl font-black uppercase leading-[0.95] tracking-[-0.04em] text-white transition group-hover/podium:text-[#ccff00]">
+                      {player.name}
+                    </h4>
+
+                    <div className="mt-3 flex items-center gap-3">
+                      <Flag
+                        code={player.countryCode}
+                        country={player.country}
+                      />
+
+                      <span className="truncate text-xs font-bold text-white/48">
+                        {player.country}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-auto pt-8">
+                    <div className="flex items-end justify-between gap-4 border-t border-white/10 pt-5">
+                      <div>
+                        <p className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/24">
+                          ATP points
+                        </p>
+
+                        <p className="mt-2 text-2xl font-black tabular-nums tracking-[-0.04em] text-white">
+                          {formatPoints(player.points)}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/24">
+                          Gap to leader
+                        </p>
+
+                        <p className="mt-2 font-mono text-[10px] font-black uppercase text-white/42">
+                          {pointsGap === null
+                            ? "Leader"
+                            : `-${formatPoints(pointsGap)}`}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.055]">
+                      <div
+                        className="h-full rounded-full bg-[#ccff00] transition-all duration-700"
+                        style={{
+                          width:
+                            leaderPoints > 0
+                              ? `${Math.max(
+                                  ((player.points ?? 0) /
+                                    leaderPoints) *
+                                    100,
+                                  3,
+                                )}%`
+                              : "0%",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </article>
+            );
+
+            if (!playerHref) {
+              return (
+                <div
+                  key={player.id}
+                  className={orderClass}
+                >
+                  {content}
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={player.id}
+                href={playerHref}
+                className={[
+                  "block rounded-[1.75rem] outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00]/60",
+                  orderClass,
+                ].join(" ")}
+              >
+                {content}
+              </Link>
+            );
+          },
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -584,46 +1078,75 @@ export function AtpRankingTable({
   return (
     <div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#060e1b] p-5">
-          <div className="absolute right-[-30px] top-[-35px] h-28 w-28 rounded-full border border-[#ccff00]/10" />
+        <div className="group/feature relative overflow-hidden rounded-2xl border border-white/10 bg-[#060e1b] p-5 transition hover:border-[#ccff00]/25">
+          <div className="absolute right-[-30px] top-[-35px] h-28 w-28 rounded-full border border-[#ccff00]/10 transition duration-500 group-hover/feature:scale-110" />
+          <div className="absolute -bottom-16 -right-12 h-32 w-32 rounded-full bg-[#ccff00]/[0.035] blur-2xl" />
 
-          <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[#ccff00]">
-            World leader
-          </p>
+          {players[0] ? (
+            <div className="relative flex items-center gap-4">
+              <PlayerAvatar
+                player={players[0]}
+                variant="feature"
+              />
 
-          <p className="mt-3 truncate text-xl font-black uppercase tracking-[-0.03em] text-white">
-            {players[0]?.name ?? "—"}
-          </p>
+              <div className="min-w-0">
+                <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[#ccff00]">
+                  World leader
+                </p>
 
-          <p className="mt-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-            {formatPoints(
-              players[0]?.points ?? null,
-            )}{" "}
-            points
-          </p>
+                <p className="mt-2 truncate text-xl font-black uppercase tracking-[-0.03em] text-white">
+                  {players[0].name}
+                </p>
+
+                <p className="mt-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                  {formatPoints(players[0].points)} points
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="text-xl font-black text-white/30">
+              —
+            </p>
+          )}
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#060e1b] p-5">
-          <div className="absolute right-[-30px] top-[-35px] h-28 w-28 rounded-full border border-emerald-400/10" />
+        <div className="group/feature relative overflow-hidden rounded-2xl border border-white/10 bg-[#060e1b] p-5 transition hover:border-emerald-400/25">
+          <div className="absolute right-[-30px] top-[-35px] h-28 w-28 rounded-full border border-emerald-400/10 transition duration-500 group-hover/feature:scale-110" />
+          <div className="absolute -bottom-16 -right-12 h-32 w-32 rounded-full bg-emerald-400/[0.035] blur-2xl" />
 
-          <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-emerald-400">
-            Biggest climber
-          </p>
+          {biggestClimber ? (
+            <div className="relative flex items-center gap-4">
+              <PlayerAvatar
+                player={biggestClimber}
+                variant="feature"
+              />
 
-          <p className="mt-3 truncate text-xl font-black uppercase tracking-[-0.03em] text-white">
-            {biggestClimber?.name ?? "—"}
-          </p>
+              <div className="min-w-0">
+                <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-emerald-400">
+                  Biggest climber
+                </p>
 
-          <p className="mt-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
-            {biggestClimber
-              ? `Up ${
-                  getVariation(
-                    biggestClimber.rank,
-                    biggestClimber.previousRank,
-                  ).value
-                } positions`
-              : "No movement available"}
-          </p>
+                <p className="mt-2 truncate text-xl font-black uppercase tracking-[-0.03em] text-white">
+                  {biggestClimber.name}
+                </p>
+
+                <p className="mt-2 font-mono text-[9px] font-black uppercase tracking-[0.14em] text-white/35">
+                  Up{" "}
+                  {
+                    getVariation(
+                      biggestClimber.rank,
+                      biggestClimber.previousRank,
+                    ).value
+                  }{" "}
+                  positions
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="text-xl font-black text-white/30">
+              No movement available
+            </p>
+          )}
         </div>
 
         <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#060e1b] p-5">
@@ -659,6 +1182,8 @@ export function AtpRankingTable({
           </p>
         </div>
       </div>
+
+      <RankingPodium players={players} />
 
       <div className="mt-5 rounded-[1.7rem] border border-white/10 bg-[#050c17]/90 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:p-5">
         <div className="grid gap-3 xl:grid-cols-[minmax(300px,1fr)_220px_220px_auto]">
@@ -804,8 +1329,8 @@ export function AtpRankingTable({
 
       {filteredPlayers.length > 0 ? (
         <>
-          <div className="mt-5 hidden overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#060e1b] shadow-[0_24px_70px_rgba(0,0,0,0.25)] md:block">
-            <table className="w-full table-fixed">
+          <div className="mt-5 hidden overflow-visible rounded-[1.7rem] border border-white/10 bg-[#060e1b] shadow-[0_24px_70px_rgba(0,0,0,0.25)] md:block">
+            <table className="w-full table-fixed rounded-[1.7rem]">
               <colgroup>
                 <col className="w-[7%]" />
                 <col className="w-[7%]" />
@@ -849,7 +1374,14 @@ export function AtpRankingTable({
                   (player) => (
                     <tr
                       key={player.id}
-                      className="group relative border-b border-white/[0.055] transition last:border-b-0 hover:bg-white/[0.035]"
+                      className={[
+                        "group/row relative border-b border-white/[0.055] transition duration-300 last:border-b-0",
+                        player.collectionUrl
+                          ? "bg-[linear-gradient(90deg,rgba(204,255,0,0.055),transparent_42%)] hover:bg-[linear-gradient(90deg,rgba(204,255,0,0.095),rgba(255,255,255,0.025)_58%,transparent)]"
+                          : player.archiveUrl
+                            ? "bg-[linear-gradient(90deg,rgba(103,232,249,0.035),transparent_38%)] hover:bg-[linear-gradient(90deg,rgba(103,232,249,0.07),rgba(255,255,255,0.02)_58%,transparent)]"
+                            : "hover:bg-white/[0.035]",
+                      ].join(" ")}
                     >
                       <td
                         className={[
@@ -860,7 +1392,11 @@ export function AtpRankingTable({
                               ? "border-slate-300"
                               : player.rank === 3
                                 ? "border-orange-400"
-                                : "border-transparent group-hover:border-[#ccff00]",
+                                : player.collectionUrl
+                                  ? "border-[#ccff00]/70"
+                                  : player.archiveUrl
+                                    ? "border-cyan-300/60"
+                                    : "border-transparent group-hover/row:border-[#ccff00]",
                         ].join(" ")}
                       >
                         <div className="flex items-center gap-2">
@@ -886,6 +1422,18 @@ export function AtpRankingTable({
                             ).padStart(2, "0")}
                           </span>
                         </div>
+
+                        {player.collectionUrl ? (
+                          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[#ccff00]/20 bg-[#ccff00]/[0.045] px-2 py-1 font-mono text-[6px] font-black uppercase tracking-[0.12em] text-[#ccff00]">
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#ccff00] shadow-[0_0_10px_rgba(204,255,0,0.8)]" />
+                            Featured
+                          </span>
+                        ) : player.archiveUrl ? (
+                          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-cyan-300/15 bg-cyan-300/[0.035] px-2 py-1 font-mono text-[6px] font-black uppercase tracking-[0.12em] text-cyan-200/75">
+                            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(103,232,249,0.65)]" />
+                            Archive
+                          </span>
+                        ) : null}
                       </td>
 
                       <td className="px-5 py-4 text-center">
@@ -949,6 +1497,12 @@ export function AtpRankingTable({
                           player={player}
                         />
                       </td>
+
+                      <td className="pointer-events-none absolute inset-y-0 right-0 p-0">
+                        <PlayerHoverIntelligence
+                          player={player}
+                        />
+                      </td>
                     </tr>
                   ),
                 )}
@@ -960,7 +1514,14 @@ export function AtpRankingTable({
             {filteredPlayers.map((player) => (
               <article
                 key={player.id}
-                className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#060e1b] p-5 transition hover:border-[#ccff00]/25"
+                className={[
+                  "group relative overflow-hidden rounded-[1.5rem] border p-5 transition duration-300",
+                  player.collectionUrl
+                    ? "border-[#ccff00]/20 bg-[linear-gradient(135deg,rgba(204,255,0,0.06),rgba(6,14,27,0.98)_52%)] shadow-[0_18px_48px_rgba(204,255,0,0.035)] hover:border-[#ccff00]/45"
+                    : player.archiveUrl
+                      ? "border-cyan-300/15 bg-[linear-gradient(135deg,rgba(103,232,249,0.045),rgba(6,14,27,0.98)_52%)] hover:border-cyan-300/35"
+                      : "border-white/10 bg-[#060e1b] hover:border-[#ccff00]/25",
+                ].join(" ")}
               >
                 <div
                   className={[
@@ -971,7 +1532,11 @@ export function AtpRankingTable({
                         ? "bg-slate-300"
                         : player.rank === 3
                           ? "bg-orange-400"
-                          : "bg-[#ccff00] opacity-0 transition group-hover:opacity-100",
+                          : player.collectionUrl
+                            ? "bg-[#ccff00]"
+                            : player.archiveUrl
+                              ? "bg-cyan-300"
+                              : "bg-[#ccff00] opacity-0 transition group-hover:opacity-100",
                   ].join(" ")}
                 />
 
@@ -1047,32 +1612,45 @@ export function AtpRankingTable({
                   </div>
                 </div>
 
-                {player.collectionUrl ? (
-                  <Link
-                    href={player.collectionUrl}
-                    className={[
-                      "mt-4 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 font-mono text-[9px] font-black uppercase tracking-[0.14em] transition",
-                      player.hasAvailableArtifacts
-                        ? "bg-[#ccff00] text-black hover:bg-white"
-                        : "border border-white/10 bg-white/[0.025] text-white/45 hover:border-[#ccff00]/30 hover:text-[#ccff00]",
-                    ].join(" ")}
-                  >
-                    {player.hasAvailableArtifacts
-                      ? `Explore ${formatAvailableItems(
-                          player.availableArtifacts,
-                        )}`
-                      : "Archive coming soon"}
+                {(() => {
+                  const playerHref = getRankingPlayerHref({
+    archiveUrl: player.archiveUrl,
+    collectionUrl: player.collectionUrl,
+  });
 
-                    <ArrowRight
-                      size={14}
-                      aria-hidden="true"
-                    />
-                  </Link>
-                ) : (
-                  <div className="mt-4 flex w-full items-center justify-center rounded-full border border-white/10 bg-white/[0.02] px-4 py-3 font-mono text-[8px] font-black uppercase tracking-[0.14em] text-white/25">
-                    No AGE202 profile
-                  </div>
-                )}
+                  if (!playerHref) {
+                    return (
+                      <div className="mt-4 flex w-full items-center justify-center rounded-full border border-white/10 bg-white/[0.02] px-4 py-3 font-mono text-[8px] font-black uppercase tracking-[0.14em] text-white/25">
+                        No AGE202 profile
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      href={playerHref}
+                      className={[
+                        "mt-4 flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 font-mono text-[9px] font-black uppercase tracking-[0.14em] transition",
+                        player.hasAvailableArtifacts
+                          ? "bg-[#ccff00] text-black hover:bg-white"
+                          : "border border-white/10 bg-white/[0.025] text-white/45 hover:border-[#ccff00]/30 hover:text-[#ccff00]",
+                      ].join(" ")}
+                    >
+                      {player.hasAvailableArtifacts
+                        ? `Explore ${formatAvailableItems(
+                            player.availableArtifacts,
+                          )}`
+                        : player.archiveUrl
+                          ? "Open ATP Archive"
+                          : "Archive coming soon"}
+
+                      <ArrowRight
+                        size={14}
+                        aria-hidden="true"
+                      />
+                    </Link>
+                  );
+                })()}
               </article>
             ))}
           </div>

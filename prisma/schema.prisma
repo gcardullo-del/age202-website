@@ -174,6 +174,59 @@ model Certificate {
   @@index([createdAt])
 }
 
+model OriginalProduct {
+  id              String                      @id @default(cuid())
+  title           String
+  subtitle        String?
+  slug            String                      @unique
+  description     String?
+  collection      String?
+  edition         String?
+  category        OriginalProductCategory
+  material        String?
+  colour          String?
+  sizes           String[]                    @default([])
+  tags            String[]                    @default([])
+  price           Decimal?                    @db.Decimal(10, 2)
+  currency        String                      @default("EUR")
+  vintedUrl       String?
+  availability    OriginalProductAvailability @default(COMING_SOON)
+  status          OriginalProductStatus       @default(DRAFT)
+  featured        Boolean                     @default(false)
+  displayOrder    Int?
+  metaTitle       String?
+  metaDescription String?
+  publishedAt     DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+  images          OriginalProductImage[]
+
+  @@index([category])
+  @@index([availability])
+  @@index([status])
+  @@index([featured])
+  @@index([displayOrder])
+  @@index([publishedAt])
+  @@index([collection])
+  @@index([createdAt])
+}
+
+model OriginalProductImage {
+  id                String          @id @default(cuid())
+  url               String
+  alt               String?
+  sortOrder         Int             @default(0)
+  isCover           Boolean         @default(false)
+  originalProductId String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  originalProduct   OriginalProduct @relation(fields: [originalProductId], references: [id], onDelete: Cascade)
+
+  @@index([originalProductId])
+  @@index([sortOrder])
+  @@index([isCover])
+}
+
 model AtpPlayer {
   id           String  @id
   rank         Int
@@ -251,4 +304,30 @@ enum ArtifactAvailability {
   SOLD
   COMING_SOON
   NOT_FOR_SALE
+}
+
+enum OriginalProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OriginalProductAvailability {
+  AVAILABLE
+  SOLD
+  COMING_SOON
+  NOT_FOR_SALE
+}
+
+enum OriginalProductCategory {
+  TSHIRT
+  POLO
+  HOODIE
+  SWEATSHIRT
+  CAP
+  BOTTLE
+  BAG
+  POSTER
+  ACCESSORY
+  OTHER
 }

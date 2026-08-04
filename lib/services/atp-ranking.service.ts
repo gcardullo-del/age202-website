@@ -21,6 +21,19 @@ function formatAtpPlayer(
     Boolean(player?.active) &&
     availableArtifacts > 0;
 
+  const isFeaturedCollection =
+    player?.collectionType === "FEATURED";
+
+  const collectionUrl =
+    player && isFeaturedCollection
+      ? `/archives/${player.slug}`
+      : null;
+
+  const archiveUrl =
+    atpPlayer.rank <= 50
+      ? `/players/${atpPlayer.slug}`
+      : null;
+
   return {
     ...atpPlayer,
 
@@ -32,16 +45,15 @@ function formatAtpPlayer(
           active: player.active,
           portraitImage:
             player.portraitImage,
+          collectionType:
+            player.collectionType,
         }
       : null,
 
     availableArtifacts,
-
     hasAvailableArtifacts,
-
-    collectionUrl: player
-      ? `/archives/${player.slug}`
-      : null,
+    collectionUrl,
+    archiveUrl,
   };
 }
 

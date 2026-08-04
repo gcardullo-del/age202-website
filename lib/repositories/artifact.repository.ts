@@ -50,6 +50,33 @@ export async function deleteArtifact(
 }
 
 /**
+ * Restituisce tutti i reperti pubblicati destinati
+ * alle pagine pubbliche, incluso lo Shop.
+ */
+export async function getPublishedArtifacts() {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+      player: {
+        active: true,
+      },
+    },
+    include: publicArtifactInclude,
+    orderBy: [
+      {
+        featured: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+  });
+}
+
+/**
  * Restituisce i reperti pubblicati e messi in evidenza.
  */
 export async function getFeaturedArtifacts(
@@ -59,6 +86,9 @@ export async function getFeaturedArtifacts(
     where: {
       featured: true,
       status: "PUBLISHED",
+      player: {
+        active: true,
+      },
     },
     include: publicArtifactInclude,
     orderBy: [
@@ -69,7 +99,10 @@ export async function getFeaturedArtifacts(
         createdAt: "desc",
       },
     ],
-    take: limit,
+    take: Math.max(
+      1,
+      Math.min(Math.trunc(limit), 24),
+    ),
   });
 }
 
@@ -126,7 +159,7 @@ export async function getArtifactBySlug(
 /**
  * Restituisce un singolo reperto visibile pubblicamente.
  *
- * Le bozze e i reperti archiviati non vengono restituiti.
+ * Le bozze e i reperti archiviati non vengono restituite.
  * Anche il giocatore collegato deve essere attivo.
  */
 export async function getPublishedArtifactBySlug(
@@ -180,14 +213,17 @@ export async function getRelatedArtifacts({
         createdAt: "desc",
       },
     ],
-    take: limit,
+    take: Math.max(
+      1,
+      Math.min(Math.trunc(limit), 12),
+    ),
   });
 }
 
 /**
  * Restituisce gli slug di tutti i reperti pubblicati.
  *
- * Verrà utilizzata da generateStaticParams() nella pagina
+ * Utilizzata da generateStaticParams() nella pagina
  * pubblica /artifacts/[slug].
  */
 export async function getPublishedArtifactSlugs() {

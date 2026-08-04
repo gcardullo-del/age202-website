@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -18,13 +19,16 @@ import {
   Trophy,
 } from "lucide-react";
 
+import ArchiveDirectory, {
+  type AtpArchiveDirectoryPlayer,
+} from "@/components/players/atp/ArchiveDirectory";
 import ArchiveGrid from "@/components/players/atp/ArchiveGrid";
 import ArchiveHero from "@/components/players/atp/ArchiveHero";
 import ArchiveInsight from "@/components/players/atp/ArchiveInsight";
 import ArchiveToolbar from "@/components/players/atp/ArchiveToolbar";
 
 import type {
-  AtpArchiveExplorerProps,
+  AtpArchivePlayer,
   RankingFilter,
   SortOption,
 } from "@/components/players/atp/types";
@@ -36,6 +40,12 @@ import {
 export type {
   AtpArchivePlayer,
 } from "@/components/players/atp/types";
+
+type AtpArchiveExplorerProps = {
+  premiumPlayers: AtpArchivePlayer[];
+  archiveDirectory:
+    AtpArchiveDirectoryPlayer[];
+};
 
 const VALID_RANKING_FILTERS: RankingFilter[] = [
   "ALL",
@@ -74,28 +84,136 @@ function isSortOption(
   );
 }
 
+function sortPremiumPlayers(
+  players: AtpArchivePlayer[],
+  sortOption: SortOption,
+): AtpArchivePlayer[] {
+  return [...players].sort(
+    (first, second) => {
+      if (sortOption === "RANK_DESC") {
+        return (
+          (second.ranking ?? 0) -
+          (first.ranking ?? 0)
+        );
+      }
+
+      if (
+        sortOption === "POINTS_DESC"
+      ) {
+        return (
+          (second.points ?? 0) -
+          (first.points ?? 0)
+        );
+      }
+
+      if (
+        sortOption ===
+        "ARTIFACTS_DESC"
+      ) {
+        return (
+          second.artifactCount -
+          first.artifactCount
+        );
+      }
+
+      if (sortOption === "NAME_ASC") {
+        return first.name.localeCompare(
+          second.name,
+          "it-IT",
+        );
+      }
+
+      return (
+        (first.ranking ??
+          Number.MAX_SAFE_INTEGER) -
+        (second.ranking ??
+          Number.MAX_SAFE_INTEGER)
+      );
+    },
+  );
+}
+
+function sortDirectoryPlayers(
+  players: AtpArchiveDirectoryPlayer[],
+  sortOption: SortOption,
+): AtpArchiveDirectoryPlayer[] {
+  return [...players].sort(
+    (first, second) => {
+      if (sortOption === "RANK_DESC") {
+        return (
+          second.ranking -
+          first.ranking
+        );
+      }
+
+      if (
+        sortOption === "POINTS_DESC"
+      ) {
+        return (
+          (second.points ?? 0) -
+          (first.points ?? 0)
+        );
+      }
+
+      if (sortOption === "NAME_ASC") {
+        return first.name.localeCompare(
+          second.name,
+          "it-IT",
+        );
+      }
+
+      return (
+        first.ranking -
+        second.ranking
+      );
+    },
+  );
+}
+
 export default function AtpArchiveExplorer({
-  players,
+  premiumPlayers,
+  archiveDirectory,
 }: AtpArchiveExplorerProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams =
+    useSearchParams();
 
-  const availableCountries = players
-    .map((player) => player.country?.trim())
-    .filter(
-      (country): country is string =>
-        Boolean(country),
-    );
-
-  const countries = Array.from(
-    new Set(availableCountries),
-  ).sort((first, second) =>
-    first.localeCompare(second, "it-IT"),
+  const allCountries = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          [
+            ...premiumPlayers.map(
+              (player) =>
+                player.country?.trim(),
+            ),
+            ...archiveDirectory.map(
+              (player) =>
+                player.country?.trim(),
+            ),
+          ].filter(
+            (
+              country,
+            ): country is string =>
+              Boolean(country),
+          ),
+        ),
+      ).sort((first, second) =>
+        first.localeCompare(
+          second,
+          "it-IT",
+        ),
+      ),
+    [
+      archiveDirectory,
+      premiumPlayers,
+    ],
   );
 
   const initialQuery =
-    searchParams.get("q")?.trim() ?? "";
+    searchParams.get("q")?.trim() ??
+    "";
 
   const initialRankingParam =
     searchParams.get("ranking");
@@ -106,15 +224,16 @@ export default function AtpArchiveExplorer({
   const initialSortParam =
     searchParams.get("sort");
 
-  const [query, setQuery] = useState(
-    initialQuery,
-  );
+  const [query, setQuery] =
+    useState(initialQuery);
 
   const [
     rankingFilter,
     setRankingFilter,
   ] = useState<RankingFilter>(
-    isRankingFilter(initialRankingParam)
+    isRankingFilter(
+      initialRankingParam,
+    )
       ? initialRankingParam
       : "ALL",
   );
@@ -124,7 +243,9 @@ export default function AtpArchiveExplorer({
     setCountryFilter,
   ] = useState(
     initialCountryParam &&
-      countries.includes(initialCountryParam)
+      allCountries.includes(
+        initialCountryParam,
+      )
       ? initialCountryParam
       : "ALL",
   );
@@ -139,19 +260,26 @@ export default function AtpArchiveExplorer({
   );
 
   useEffect(() => {
-    const params = new URLSearchParams(
-      searchParams.toString(),
-    );
+    const params =
+      new URLSearchParams(
+        searchParams.toString(),
+      );
 
-    const normalizedQuery = query.trim();
+    const normalizedQuery =
+      query.trim();
 
     if (normalizedQuery) {
-      params.set("q", normalizedQuery);
+      params.set(
+        "q",
+        normalizedQuery,
+      );
     } else {
       params.delete("q");
     }
 
-    if (rankingFilter !== "ALL") {
+    if (
+      rankingFilter !== "ALL"
+    ) {
       params.set(
         "ranking",
         rankingFilter,
@@ -160,7 +288,9 @@ export default function AtpArchiveExplorer({
       params.delete("ranking");
     }
 
-    if (countryFilter !== "ALL") {
+    if (
+      countryFilter !== "ALL"
+    ) {
       params.set(
         "country",
         countryFilter,
@@ -169,8 +299,13 @@ export default function AtpArchiveExplorer({
       params.delete("country");
     }
 
-    if (sortOption !== "RANK_ASC") {
-      params.set("sort", sortOption);
+    if (
+      sortOption !== "RANK_ASC"
+    ) {
+      params.set(
+        "sort",
+        sortOption,
+      );
     } else {
       params.delete("sort");
     }
@@ -188,21 +323,22 @@ export default function AtpArchiveExplorer({
       return;
     }
 
-    const nextUrl = nextQueryString
-      ? `${pathname}?${nextQueryString}`
-      : pathname;
+    const nextUrl =
+      nextQueryString
+        ? `${pathname}?${nextQueryString}`
+        : pathname;
 
-    const timeoutId = window.setTimeout(
-      () => {
+    const timeoutId =
+      window.setTimeout(() => {
         router.replace(nextUrl, {
           scroll: false,
         });
-      },
-      250,
-    );
+      }, 250);
 
     return () => {
-      window.clearTimeout(timeoutId);
+      window.clearTimeout(
+        timeoutId,
+      );
     };
   }, [
     countryFilter,
@@ -214,119 +350,122 @@ export default function AtpArchiveExplorer({
     sortOption,
   ]);
 
-  const normalizedQuery = query
-    .trim()
-    .toLocaleLowerCase("it-IT");
-
-  const matchingPlayers =
-    players.filter((player) => {
-      const normalizedName =
-        player.name.toLocaleLowerCase(
-          "it-IT",
-        );
-
-      const normalizedCountry =
-        player.country?.toLocaleLowerCase(
-          "it-IT",
-        );
-
-      const matchesQuery =
-        normalizedQuery.length === 0 ||
-        normalizedName.includes(
-          normalizedQuery,
-        ) ||
-        normalizedCountry?.includes(
-          normalizedQuery,
-        );
-
-      const matchesCountry =
-        countryFilter === "ALL" ||
-        player.country === countryFilter;
-
-      return (
-        matchesQuery &&
-        matchesCountry &&
-        matchesRanking(
-          player.ranking,
-          rankingFilter,
-        )
-      );
-    });
-
-  const filteredPlayers = [
-    ...matchingPlayers,
-  ].sort((first, second) => {
-    if (sortOption === "RANK_DESC") {
-      return (
-        (second.ranking ?? 0) -
-        (first.ranking ?? 0)
-      );
-    }
-
-    if (sortOption === "POINTS_DESC") {
-      return (
-        (second.points ?? 0) -
-        (first.points ?? 0)
-      );
-    }
-
-    if (
-      sortOption === "ARTIFACTS_DESC"
-    ) {
-      return (
-        second.artifactCount -
-        first.artifactCount
-      );
-    }
-
-    if (sortOption === "NAME_ASC") {
-      return first.name.localeCompare(
-        second.name,
+  const normalizedQuery =
+    query
+      .trim()
+      .toLocaleLowerCase(
         "it-IT",
       );
-    }
+
+  function matchesTextAndCountry(
+    player: {
+      name: string;
+      country: string | null;
+    },
+  ): boolean {
+    const normalizedName =
+      player.name.toLocaleLowerCase(
+        "it-IT",
+      );
+
+    const normalizedCountry =
+      player.country?.toLocaleLowerCase(
+        "it-IT",
+      );
+
+    const matchesQuery =
+      normalizedQuery.length === 0 ||
+      normalizedName.includes(
+        normalizedQuery,
+      ) ||
+      Boolean(
+        normalizedCountry?.includes(
+          normalizedQuery,
+        ),
+      );
+
+    const matchesCountry =
+      countryFilter === "ALL" ||
+      player.country ===
+        countryFilter;
 
     return (
-      (first.ranking ??
-        Number.MAX_SAFE_INTEGER) -
-      (second.ranking ??
-        Number.MAX_SAFE_INTEGER)
+      matchesQuery &&
+      matchesCountry
     );
-  });
+  }
 
-  const archiveStatistics = players.reduce(
-    (statistics, player) => {
-      statistics.artifactCount +=
-        player.artifactCount;
+  const filteredPremiumPlayers =
+    sortPremiumPlayers(
+      premiumPlayers.filter(
+        (player) =>
+          matchesTextAndCountry(
+            player,
+          ) &&
+          matchesRanking(
+            player.ranking,
+            rankingFilter,
+          ),
+      ),
+      sortOption,
+    );
 
-      if (
-        player.collectionType ===
-        "FEATURED"
-      ) {
-        statistics.championCount += 1;
-      }
+  const filteredDirectoryPlayers =
+    sortDirectoryPlayers(
+      rankingFilter === "ALL"
+        ? archiveDirectory.filter(
+            matchesTextAndCountry,
+          )
+        : [],
+      sortOption,
+    );
 
-      if (player.artifactCount > 0) {
-        statistics.playersWithArtifacts +=
-          1;
-      }
+  const totalPlayers =
+    premiumPlayers.length +
+    archiveDirectory.length;
 
-      if (
-        player.ranking !== null &&
-        player.ranking <= 10
-      ) {
-        statistics.topTenPlayers += 1;
-      }
+  const filteredPlayers =
+    filteredPremiumPlayers.length +
+    filteredDirectoryPlayers.length;
 
-      return statistics;
-    },
-    {
-      artifactCount: 0,
-      championCount: 0,
-      playersWithArtifacts: 0,
-      topTenPlayers: 0,
-    },
-  );
+  const archiveStatistics =
+    premiumPlayers.reduce(
+      (statistics, player) => {
+        statistics.artifactCount +=
+          player.artifactCount;
+
+        if (
+          player.collectionType ===
+          "FEATURED"
+        ) {
+          statistics.championCount +=
+            1;
+        }
+
+        if (
+          player.artifactCount > 0
+        ) {
+          statistics
+            .playersWithArtifacts += 1;
+        }
+
+        if (
+          player.ranking !== null &&
+          player.ranking <= 10
+        ) {
+          statistics.topTenPlayers +=
+            1;
+        }
+
+        return statistics;
+      },
+      {
+        artifactCount: 0,
+        championCount: 0,
+        playersWithArtifacts: 0,
+        topTenPlayers: 0,
+      },
+    );
 
   function resetFilters() {
     setQuery("");
@@ -342,31 +481,40 @@ export default function AtpArchiveExplorer({
   return (
     <main className="min-h-screen overflow-hidden bg-[#050B18] text-white">
       <ArchiveHero
-        playerCount={players.length}
-        countryCount={countries.length}
+        playerCount={totalPlayers}
+        countryCount={
+          allCountries.length
+        }
         artifactCount={
-          archiveStatistics.artifactCount
+          archiveStatistics
+            .artifactCount
         }
       />
 
       <ArchiveToolbar
         query={query}
         setQuery={setQuery}
-        rankingFilter={rankingFilter}
+        rankingFilter={
+          rankingFilter
+        }
         setRankingFilter={
           setRankingFilter
         }
-        countryFilter={countryFilter}
+        countryFilter={
+          countryFilter
+        }
         setCountryFilter={
           setCountryFilter
         }
         sortOption={sortOption}
-        setSortOption={setSortOption}
-        countries={countries}
-        filteredPlayers={
-          filteredPlayers.length
+        setSortOption={
+          setSortOption
         }
-        totalPlayers={players.length}
+        countries={allCountries}
+        filteredPlayers={
+          filteredPlayers
+        }
+        totalPlayers={totalPlayers}
         onReset={resetFilters}
       />
 
@@ -375,7 +523,8 @@ export default function AtpArchiveExplorer({
           <ArchiveInsight
             icon={Crown}
             value={
-              archiveStatistics.championCount
+              archiveStatistics
+                .championCount
             }
             label="Champion Collections"
           />
@@ -383,7 +532,8 @@ export default function AtpArchiveExplorer({
           <ArchiveInsight
             icon={Trophy}
             value={
-              archiveStatistics.topTenPlayers
+              archiveStatistics
+                .topTenPlayers
             }
             label="Current Top 10"
           />
@@ -391,7 +541,8 @@ export default function AtpArchiveExplorer({
           <ArchiveInsight
             icon={Shirt}
             value={
-              archiveStatistics.playersWithArtifacts
+              archiveStatistics
+                .playersWithArtifacts
             }
             label="Players with artifacts"
           />
@@ -399,7 +550,8 @@ export default function AtpArchiveExplorer({
           <ArchiveInsight
             icon={GalleryVerticalEnd}
             value={
-              archiveStatistics.artifactCount
+              archiveStatistics
+                .artifactCount
             }
             label="Published artifacts"
           />
@@ -407,8 +559,21 @@ export default function AtpArchiveExplorer({
       </section>
 
       <ArchiveGrid
-        players={filteredPlayers}
-        totalPlayers={players.length}
+        players={
+          filteredPremiumPlayers
+        }
+        totalPlayers={
+          premiumPlayers.length
+        }
+      />
+
+      <ArchiveDirectory
+        players={
+          filteredDirectoryPlayers
+        }
+        totalPlayers={
+          archiveDirectory.length
+        }
       />
     </main>
   );

@@ -1,11 +1,36 @@
 import type { LucideIcon } from "lucide-react";
 import { Trophy, UserRound } from "lucide-react";
 
+type PlayerProfileData = {
+  birthDate: Date | null;
+  birthPlace: string | null;
+  residence: string | null;
+  height: number | null;
+  weight: number | null;
+  plays: string | null;
+  backhand: string | null;
+  coach: string | null;
+  turnedPro: number | null;
+  careerHigh: number | null;
+  atpTitles: number;
+  grandSlams: number;
+  masters1000: number;
+  atpFinals: number;
+  olympicGold: number;
+  davisCup: number;
+  prizeMoney:
+    | {
+        toString(): string;
+      }
+    | null;
+};
+
 type PlayerDossierPlayer = {
   name: string;
   firstName: string | null;
   lastName: string | null;
   debutYear: number | null;
+  playerProfile: PlayerProfileData | null;
 };
 
 type PlayerDossierRanking = {
@@ -23,18 +48,108 @@ type PlayerDossierProps = {
   brands: string[];
 };
 
-function formatPoints(points: number | null | undefined): string {
-  if (points === null || points === undefined) {
+function formatPoints(
+  points: number | null | undefined,
+): string {
+  if (
+    points === null ||
+    points === undefined
+  ) {
     return "—";
   }
 
-  return new Intl.NumberFormat("it-IT").format(points);
+  return new Intl.NumberFormat(
+    "it-IT",
+  ).format(points);
+}
+
+function formatDate(
+  value: Date | null | undefined,
+): string {
+  if (!value) {
+    return "—";
+  }
+
+  return new Intl.DateTimeFormat(
+    "en-GB",
+    {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    },
+  ).format(value);
+}
+
+function formatMeasurement(
+  value: number | null | undefined,
+  unit: string,
+): string {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "—";
+  }
+
+  return `${value} ${unit}`;
+}
+
+function formatCareerHigh(
+  value: number | null | undefined,
+): string {
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "—";
+  }
+
+  return `ATP #${value}`;
+}
+
+function formatPrizeMoney(
+  value:
+    | {
+        toString(): string;
+      }
+    | null
+    | undefined,
+): string {
+  if (!value) {
+    return "—";
+  }
+
+  const numericValue = Number(
+    value.toString(),
+  );
+
+  if (!Number.isFinite(numericValue)) {
+    return "—";
+  }
+
+  return new Intl.NumberFormat(
+    "en-US",
+    {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    },
+  ).format(numericValue);
 }
 
 function displayValue(
-  value: string | number | null | undefined,
+  value:
+    | string
+    | number
+    | null
+    | undefined,
 ): string {
-  if (value === null || value === undefined || value === "") {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
     return "—";
   }
 
@@ -49,6 +164,12 @@ export default function PlayerDossier({
   artifactCount,
   brands,
 }: PlayerDossierProps) {
+  const profile = player.playerProfile;
+
+  const turnedPro =
+    profile?.turnedPro ??
+    player.debutYear;
+
   return (
     <section
       id="player-dossier"
@@ -67,8 +188,9 @@ export default function PlayerDossier({
           </div>
 
           <p className="max-w-xl text-sm leading-7 text-white/45 lg:text-right">
-            Only information currently supported by the AGE202 data model is
-            displayed. Unsupported fields remain marked with an em dash.
+            Verified biographical and career information connected to the
+            AGE202 player profile. Missing values remain marked with an em
+            dash.
           </p>
         </div>
 
@@ -78,17 +200,18 @@ export default function PlayerDossier({
             icon={UserRound}
             items={[
               ["Full name", player.name],
-              ["First name", player.firstName ?? "—"],
-              ["Last name", player.lastName ?? "—"],
+              ["First name", player.firstName],
+              ["Last name", player.lastName],
               ["Country", countryLabel],
-              ["Age", ranking?.age ? String(ranking.age) : "—"],
-              ["Birth date", "—"],
-              ["Birth place", "—"],
-              ["Height", "—"],
-              ["Weight", "—"],
-              ["Plays", "—"],
-              ["Backhand", "—"],
-              ["Coach", "—"],
+              ["Age", ranking?.age],
+              ["Birth date", formatDate(profile?.birthDate)],
+              ["Birth place", profile?.birthPlace],
+              ["Residence", profile?.residence],
+              ["Height", formatMeasurement(profile?.height, "cm")],
+              ["Weight", formatMeasurement(profile?.weight, "kg")],
+              ["Plays", profile?.plays],
+              ["Backhand", profile?.backhand],
+              ["Coach", profile?.coach],
             ]}
           />
 
@@ -96,21 +219,30 @@ export default function PlayerDossier({
             title="Career"
             icon={Trophy}
             items={[
-              ["Current ranking", ranking ? `ATP #${ranking.rank}` : "—"],
-              ["ATP points", formatPoints(ranking?.points)],
-              ["Career high", "—"],
               [
-                "Turned pro",
-                player.debutYear ? String(player.debutYear) : "—",
+                "Current ranking",
+                ranking
+                  ? `ATP #${ranking.rank}`
+                  : "—",
               ],
-              ["ATP titles", "—"],
-              ["Grand Slams", "—"],
-              ["ATP Finals", "—"],
-              ["Masters 1000", "—"],
-              ["Prize money", "—"],
+              ["ATP points", formatPoints(ranking?.points)],
+              ["Career high", formatCareerHigh(profile?.careerHigh)],
+              ["Turned pro", turnedPro],
+              ["ATP titles", profile?.atpTitles],
+              ["Grand Slams", profile?.grandSlams],
+              ["Masters 1000", profile?.masters1000],
+              ["ATP Finals", profile?.atpFinals],
+              ["Olympic gold", profile?.olympicGold],
+              ["Davis Cup", profile?.davisCup],
+              ["Prize money", formatPrizeMoney(profile?.prizeMoney)],
               ["Collection", collectionLabel],
-              ["Artifacts", String(artifactCount)],
-              ["Brands", brands.length > 0 ? brands.join(", ") : "—"],
+              ["Artifacts", artifactCount],
+              [
+                "Brands",
+                brands.length > 0
+                  ? brands.join(", ")
+                  : "—",
+              ],
             ]}
           />
         </div>
@@ -126,8 +258,8 @@ export default function PlayerDossier({
             </h3>
 
             <p className="mt-5 text-sm leading-7 text-white/42">
-              The timeline intentionally includes only milestones that can be
-              derived from the current profile and ranking records.
+              The timeline includes only milestones supported by the player
+              profile, current ATP ranking and AGE202 archive records.
             </p>
           </div>
 
@@ -136,14 +268,29 @@ export default function PlayerDossier({
 
             <div className="space-y-8">
               <TimelineItem
-                year={player.debutYear ? String(player.debutYear) : "—"}
+                year={turnedPro ? String(turnedPro) : "—"}
                 title="Professional debut"
                 description={
-                  player.debutYear
-                    ? `${player.name} entered the professional circuit.`
+                  turnedPro
+                    ? `${player.name} entered the professional circuit in ${turnedPro}.`
                     : "Professional debut year has not yet been recorded."
                 }
-                active={Boolean(player.debutYear)}
+                active={Boolean(turnedPro)}
+              />
+
+              <TimelineItem
+                year={
+                  profile?.careerHigh
+                    ? `#${profile.careerHigh}`
+                    : "—"
+                }
+                title="Career-high ATP ranking"
+                description={
+                  profile?.careerHigh
+                    ? `${player.name} reached a career-high singles ranking of ATP #${profile.careerHigh}.`
+                    : "Career-high ranking has not yet been recorded."
+                }
+                active={Boolean(profile?.careerHigh)}
               />
 
               <TimelineItem
@@ -180,7 +327,12 @@ export default function PlayerDossier({
 type DossierPanelProps = {
   title: string;
   icon: LucideIcon;
-  items: Array<[string, string]>;
+  items: Array<
+    [
+      string,
+      string | number | null | undefined,
+    ]
+  >;
 };
 
 function DossierPanel({
@@ -216,7 +368,7 @@ function DossierPanel({
               {label}
             </dt>
 
-            <dd className="mt-2 text-sm font-bold uppercase tracking-[0.04em] text-white/72">
+            <dd className="mt-2 break-words text-sm font-bold uppercase tracking-[0.04em] text-white/72">
               {displayValue(value)}
             </dd>
           </div>

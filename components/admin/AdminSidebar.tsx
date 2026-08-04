@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
+  ShoppingBag,
   Tags,
   Users,
 } from "lucide-react";
@@ -24,6 +25,11 @@ const navigationItems = [
     label: "Artifacts",
     href: "/admin/artifacts",
     icon: Archive,
+  },
+  {
+    label: "Originals",
+    href: "/admin/originals",
+    icon: ShoppingBag,
   },
   {
     label: "Players",
@@ -47,12 +53,18 @@ const navigationItems = [
   },
 ];
 
-function isRouteActive(pathname: string, href: string) {
+function isRouteActive(
+  pathname: string,
+  href: string,
+) {
   if (href === "/admin") {
     return pathname === href;
   }
 
-  return pathname === href || pathname.startsWith(`${href}/`);
+  return (
+    pathname === href ||
+    pathname.startsWith(`${href}/`)
+  );
 }
 
 export default function AdminSidebar() {
@@ -81,19 +93,24 @@ export default function AdminSidebar() {
         className="flex-1 overflow-y-auto px-4 py-6"
       >
         <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/35">
-          Museum Management
+          Content Management
         </p>
 
         <ul className="space-y-1.5">
           {navigationItems.map((item) => {
             const Icon = item.icon;
-            const active = isRouteActive(pathname, item.href);
+            const active = isRouteActive(
+              pathname,
+              item.href,
+            );
 
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={
+                    active ? "page" : undefined
+                  }
                   className={[
                     "group flex min-h-12 items-center gap-3 rounded-2xl border px-3.5 py-3 transition-all duration-200",
                     active
@@ -109,7 +126,10 @@ export default function AdminSidebar() {
                         : "bg-white/[0.05] text-white/55 group-hover:text-white",
                     ].join(" ")}
                   >
-                    <Icon size={18} strokeWidth={1.8} />
+                    <Icon
+                      size={18}
+                      strokeWidth={1.8}
+                    />
                   </span>
 
                   <span className="flex-1 text-sm font-medium">
@@ -139,10 +159,15 @@ export default function AdminSidebar() {
           className="group flex min-h-12 items-center gap-3 rounded-2xl px-3.5 py-3 text-white/55 transition-colors hover:bg-white/[0.04] hover:text-white"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/[0.05]">
-            <Settings size={18} strokeWidth={1.8} />
+            <Settings
+              size={18}
+              strokeWidth={1.8}
+            />
           </span>
 
-          <span className="flex-1 text-sm font-medium">Settings</span>
+          <span className="flex-1 text-sm font-medium">
+            Settings
+          </span>
         </Link>
 
         <button
@@ -150,10 +175,15 @@ export default function AdminSidebar() {
           className="group mt-1 flex min-h-12 w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left text-white/40 transition-colors hover:bg-red-400/10 hover:text-red-300"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/[0.05] transition-colors group-hover:bg-red-400/10">
-            <LogOut size={18} strokeWidth={1.8} />
+            <LogOut
+              size={18}
+              strokeWidth={1.8}
+            />
           </span>
 
-          <span className="flex-1 text-sm font-medium">Sign out</span>
+          <span className="flex-1 text-sm font-medium">
+            Sign out
+          </span>
         </button>
 
         <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-3">

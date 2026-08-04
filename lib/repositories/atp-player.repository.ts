@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 
 import { MAX_ATP_PLAYERS } from "@/lib/atp/constants";
 import { prisma } from "@/lib/prisma";
@@ -24,6 +25,7 @@ const playerCollectionInclude = {
       slug: true,
       active: true,
       portraitImage: true,
+      collectionType: true,
 
       /*
        * Mantenuto temporaneamente per garantire la compatibilità
@@ -292,6 +294,8 @@ export async function replaceAtpRanking(
 
       await transaction.atpPlayer.createMany({
         data: orderedPlayers.map((player) => ({
+          id: randomUUID(),
+
           rank: player.rank,
           previousRank: player.previousRank,
 
