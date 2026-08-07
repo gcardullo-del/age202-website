@@ -8,6 +8,10 @@ import {
   getChampionBySlug,
 } from "@/data/champions";
 
+import {
+  getMuseumPlayerBySlug,
+} from "@/lib/services/museum/player-museum.service";
+
 type ArchivePageProps = {
   params: Promise<{
     player: string;
@@ -19,9 +23,11 @@ type ArchivePageProps = {
 ========================================================= */
 
 export function generateStaticParams() {
-  return champions.map((champion) => ({
-    player: champion.slug,
-  }));
+  return champions.map(
+    (champion) => ({
+      player: champion.slug,
+    }),
+  );
 }
 
 /* =========================================================
@@ -33,11 +39,13 @@ export async function generateMetadata({
 }: ArchivePageProps): Promise<Metadata> {
   const { player } = await params;
 
-  const champion = getChampionBySlug(player);
+  const champion =
+    getChampionBySlug(player);
 
   if (!champion) {
     return {
-      title: "Archive Not Found | AGE202",
+      title:
+        "Archive Not Found | AGE202",
       description:
         "The requested AGE202 champion archive could not be found.",
     };
@@ -45,7 +53,12 @@ export async function generateMetadata({
 
   return {
     title: `${champion.name} Archive | AGE202`,
-    description: champion.description,
+    description:
+      champion.description,
+    alternates: {
+      canonical:
+        `/archives/${champion.slug}`,
+    },
   };
 }
 
@@ -58,28 +71,51 @@ export default async function ArchivePage({
 }: ArchivePageProps) {
   const { player } = await params;
 
-  const champion = getChampionBySlug(player);
+  const champion =
+    getChampionBySlug(player);
 
   if (!champion) {
     notFound();
   }
 
+  /*
+   * Durante la migrazione, i contenuti narrativi
+   * continuano a provenire da data/champions,
+   * mentre gli artifact pubblicati vengono letti
+   * dal CMS tramite il Museum Domain.
+   */
+  const museumPlayer =
+    await getMuseumPlayerBySlug(
+      champion.slug,
+    );
+
   /* =======================================================
      NEXT CHAMPION
   ======================================================= */
 
-  const currentChampionIndex = champions.findIndex(
-    (item) => item.slug === champion.slug
-  );
+  const currentChampionIndex =
+    champions.findIndex(
+      (item) =>
+        item.slug ===
+        champion.slug,
+    );
 
   const nextChampion =
-    champions[(currentChampionIndex + 1) % champions.length];
+    champions[
+      (currentChampionIndex + 1) %
+        champions.length
+    ];
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#050b18] text-white">
       <ChampionArchive
         champion={champion}
-        nextChampion={nextChampion}
+        nextChampion={
+          nextChampion
+        }
+        museumPlayer={
+          museumPlayer
+        }
       />
     </main>
   );

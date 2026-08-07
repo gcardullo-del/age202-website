@@ -77,6 +77,39 @@ export async function getPublishedArtifacts() {
 }
 
 /**
+ * Restituisce gli ultimi reperti pubblicati.
+ *
+ * Questa query alimenta la sezione Latest Museum Pieces
+ * della homepage e privilegia esclusivamente la data
+ * di pubblicazione, senza dare priorità a featured.
+ */
+export async function getLatestArtifacts(
+  limit = 6,
+) {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+      player: {
+        active: true,
+      },
+    },
+    include: publicArtifactInclude,
+    orderBy: [
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: Math.max(
+      1,
+      Math.min(Math.trunc(limit), 12),
+    ),
+  });
+}
+
+/**
  * Restituisce i reperti pubblicati e messi in evidenza.
  */
 export async function getFeaturedArtifacts(
@@ -140,6 +173,30 @@ export async function getArtifactsByPlayerSlug(
 }
 
 /**
+ * Restituisce un reperto tramite ID senza applicare
+ * restrizioni sullo stato.
+ *
+ * Questa funzione è destinata all'area Admin e alle Dashboard.
+ */
+export async function getArtifactById(
+  artifactId: string,
+) {
+  const normalizedId =
+    artifactId.trim();
+
+  if (!normalizedId) {
+    return null;
+  }
+
+  return prisma.artifact.findUnique({
+    where: {
+      id: normalizedId,
+    },
+    include: publicArtifactInclude,
+  });
+}
+
+/**
  * Restituisce un reperto tramite slug senza applicare
  * restrizioni sullo stato.
  *
@@ -148,9 +205,16 @@ export async function getArtifactsByPlayerSlug(
 export async function getArtifactBySlug(
   slug: string,
 ) {
+  const normalizedSlug =
+    slug.trim();
+
+  if (!normalizedSlug) {
+    return null;
+  }
+
   return prisma.artifact.findUnique({
     where: {
-      slug,
+      slug: normalizedSlug,
     },
     include: publicArtifactInclude,
   });

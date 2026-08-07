@@ -22,6 +22,7 @@ export const federer: Champion = {
     "A visual language built around simplicity, refinement and timeless performance.",
 
   image: "/players/federer/hero.jpg",
+  signatureImage: "/signatures/federer.svg",
   accent: "#C8FF00",
 
   trophies: {

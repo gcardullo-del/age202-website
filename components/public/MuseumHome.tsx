@@ -15,6 +15,11 @@ import {
 } from "lucide-react";
 import ArtifactPassport from "@/components/public/ArtifactPassport";
 import MuseumTimeline from "@/components/public/MuseumTimeline";
+import OpeningExperience from "@/components/public/OpeningExperience";
+import ExploreTheMuseum from "@/components/home/ExploreTheMuseum";
+import LatestArrivals from "@/components/home/LatestArrivals";
+import TodaysMuseumHighlights from "@/components/home/TodaysMuseumHighlights";
+import OpeningFilm from "@/components/home/OpeningFilm";
 
 const collections = [
   {
@@ -71,7 +76,10 @@ const reveal = {
 
 export default function MuseumHome() {
   return (
-    <main className="overflow-hidden bg-[#050b18] text-white">
+    <>
+      <OpeningExperience />
+
+      <main className="overflow-hidden bg-[#050b18] text-white">
       <section className="relative min-h-[100svh] overflow-hidden border-b border-white/10 pt-[86px]">
         <Image src="/hero/museum-hero.jpg" alt="Roger Federer reaching for the ball on a grass tennis court" fill priority sizes="100vw" className="object-cover object-[62%_center] sm:object-[58%_center] lg:object-center" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,8,18,.98)_0%,rgba(3,8,18,.94)_22%,rgba(3,8,18,.62)_47%,rgba(3,8,18,.12)_76%,rgba(3,8,18,.35)_100%)]" />
@@ -210,8 +218,10 @@ export default function MuseumHome() {
           </div>
         </div>
       </section>
-
-      <ArtifactPassport />
+      <LatestArrivals />
+      <OpeningFilm />
+      <ExploreTheMuseum />
+      <TodaysMuseumHighlights />
 
       <MuseumTimeline />
       <section className="border-b border-white/10 bg-[#071021] px-6 py-24 sm:px-8 lg:px-12 lg:py-32">
@@ -416,6 +426,7 @@ export default function MuseumHome() {
           <Link href="/about" className="mt-10 inline-flex items-center gap-3 rounded-full border border-white/20 px-7 py-4 text-sm font-bold uppercase tracking-[.15em] transition hover:border-[#ccff00] hover:text-[#ccff00]">Discover why AGE202 <ArrowRight size={16} /></Link>
         </motion.div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

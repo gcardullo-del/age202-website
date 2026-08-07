@@ -1,6 +1,15 @@
 import Image from "next/image";
+import Link from "next/link";
 
-import type { Champion } from "@/data/champions";
+import {
+  ArrowDown,
+  BadgeCheck,
+  Sparkles,
+} from "lucide-react";
+
+import type {
+  Champion,
+} from "@/data/champions";
 
 type ArchiveHeroProps = {
   champion: Champion;
@@ -9,7 +18,10 @@ type ArchiveHeroProps = {
 export default function ArchiveHero({
   champion,
 }: ArchiveHeroProps) {
-  const debutSuffix = String(champion.debutYear).slice(-2);
+  const debutSuffix = String(
+    champion.debutYear,
+  ).slice(-2);
+
 
   return (
     <section className="relative isolate flex min-h-[calc(100svh-96px)] overflow-hidden border-b border-white/[0.07] bg-[#050B18]">
@@ -22,33 +34,37 @@ export default function ArchiveHero({
         alt={`${champion.name} archive hero`}
         fill
         priority
-        quality={100}
         sizes="100vw"
-        className="object-cover object-center"
+        className="object-cover object-[68%_center] sm:object-[70%_center] lg:object-[72%_center]"
       />
 
       {/* =====================================================
-          BACKGROUND OVERLAYS
+          CINEMATIC BACKGROUND OVERLAYS
       ====================================================== */}
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-r from-[#050B18] via-[#050B18]/95 to-[#050B18]/20"
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,11,24,0.98)_0%,rgba(5,11,24,0.92)_24%,rgba(5,11,24,0.66)_44%,rgba(5,11,24,0.24)_66%,rgba(5,11,24,0.06)_82%,rgba(5,11,24,0.16)_100%)]"
       />
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-t from-[#050B18] via-[#050B18]/20 to-black/35"
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,15,0.42)_0%,transparent_28%,transparent_64%,rgba(5,11,24,0.82)_100%)]"
       />
 
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:80px_80px]"
+        className="absolute inset-0 bg-[radial-gradient(circle_at_72%_34%,transparent_0%,transparent_26%,rgba(5,11,24,0.10)_48%,rgba(5,11,24,0.36)_100%)]"
       />
 
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#050B18] to-transparent"
+        className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:80px_80px] opacity-60"
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050B18] via-[#050B18]/48 to-transparent"
       />
 
       {/* =====================================================
@@ -57,9 +73,19 @@ export default function ArchiveHero({
 
       <div
         aria-hidden="true"
-        className="absolute -left-44 top-1/4 h-[420px] w-[420px] rounded-full opacity-20 blur-[150px]"
+        className="absolute -left-44 top-1/4 h-[420px] w-[420px] rounded-full opacity-[0.16] blur-[150px]"
         style={{
-          backgroundColor: champion.accent,
+          backgroundColor:
+            champion.accent,
+        }}
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute right-[8%] top-[18%] h-[320px] w-[320px] rounded-full opacity-[0.07] blur-[130px]"
+        style={{
+          backgroundColor:
+            champion.accent,
         }}
       />
 
@@ -67,7 +93,8 @@ export default function ArchiveHero({
         aria-hidden="true"
         className="absolute -right-48 bottom-[-160px] h-[500px] w-[500px] rounded-full opacity-[0.08] blur-[170px]"
         style={{
-          backgroundColor: champion.accent,
+          backgroundColor:
+            champion.accent,
         }}
       />
 
@@ -86,37 +113,43 @@ export default function ArchiveHero({
           MAIN CONTENT
       ====================================================== */}
 
-      <div className="relative z-10 flex w-full items-center py-16 sm:py-20 lg:py-24">
+      <div className="relative z-10 flex w-full items-center py-16 sm:py-20 lg:pb-36 lg:pt-24">
         <div className="mx-auto w-full max-w-[1440px] px-6 sm:px-8 lg:px-12">
-          <div className="max-w-5xl">
+          <div className="max-w-[820px]">
             {/* Archive badges */}
 
             <div className="flex flex-wrap items-center gap-3">
               <span
                 className="inline-flex items-center gap-3 rounded-full border px-4 py-2 text-[9px] font-black uppercase tracking-[0.28em] backdrop-blur-xl sm:text-[10px]"
                 style={{
-                  color: champion.accent,
-                  borderColor: `${champion.accent}55`,
-                  backgroundColor: `${champion.accent}12`,
+                  color:
+                    champion.accent,
+                  borderColor:
+                    `${champion.accent}55`,
+                  backgroundColor:
+                    `${champion.accent}12`,
                 }}
               >
                 <span
                   aria-hidden="true"
                   className="h-1.5 w-1.5 rounded-full"
                   style={{
-                    backgroundColor: champion.accent,
-                    boxShadow: `0 0 14px ${champion.accent}`,
+                    backgroundColor:
+                      champion.accent,
+                    boxShadow:
+                      `0 0 14px ${champion.accent}`,
                   }}
                 />
 
                 AGE202 Digital Archive
               </span>
 
-              <span className="inline-flex rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[9px] font-black uppercase tracking-[0.24em] text-white/45 backdrop-blur-xl sm:text-[10px]">
-                Museum Profile
-              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/25 px-4 py-2 text-[9px] font-black uppercase tracking-[0.24em] text-white/50 backdrop-blur-xl sm:text-[10px]">
+                <BadgeCheck
+                  className="h-3.5 w-3.5"
+                  aria-hidden="true"
+                />
 
-              <span className="inline-flex rounded-full border border-white/10 bg-black/20 px-4 py-2 text-[9px] font-black uppercase tracking-[0.24em] text-white/45 backdrop-blur-xl sm:text-[10px]">
                 Verified Champion
               </span>
             </div>
@@ -128,15 +161,18 @@ export default function ArchiveHero({
                 aria-hidden="true"
                 className="h-px w-10 sm:w-14"
                 style={{
-                  backgroundColor: champion.accent,
-                  boxShadow: `0 0 12px ${champion.accent}`,
+                  backgroundColor:
+                    champion.accent,
+                  boxShadow:
+                    `0 0 12px ${champion.accent}`,
                 }}
               />
 
               <p
                 className="text-[10px] font-black uppercase tracking-[0.34em] sm:text-xs"
                 style={{
-                  color: champion.accent,
+                  color:
+                    champion.accent,
                 }}
               >
                 {champion.nickname}
@@ -145,65 +181,173 @@ export default function ArchiveHero({
 
             {/* Player name */}
 
-            <h1 className="mt-6 text-[clamp(4rem,10vw,9.5rem)] font-black leading-[0.8] tracking-[-0.075em] text-white">
+            <h1 className="mt-6 text-[clamp(4rem,9.2vw,8.8rem)] font-black leading-[0.8] tracking-[-0.075em] text-white">
               <span className="block">
                 {champion.firstName}
               </span>
 
-              <span className="block text-white/55">
+              <span className="block text-white/68">
                 {champion.lastName}
               </span>
             </h1>
 
+            {/* Curatorial quote and signature */}
+
+            <div className="mt-9 max-w-2xl border-l pl-5 sm:mt-11 sm:pl-7">
+              <div
+                className="absolute"
+                aria-hidden="true"
+              />
+
+              <div
+                className="border-l"
+                style={{
+                  borderColor:
+                    `${champion.accent}80`,
+                }}
+              >
+                <div className="pl-5 sm:pl-7">
+                  <div className="flex items-center gap-2">
+                    <Sparkles
+                      className="h-4 w-4"
+                      style={{
+                        color:
+                          champion.accent,
+                      }}
+                      aria-hidden="true"
+                    />
+
+                    <p className="font-mono text-[8px] font-black uppercase tracking-[0.24em] text-white/30">
+                      Curatorial portrait
+                    </p>
+                  </div>
+
+                  <p className="mt-4 max-w-xl text-lg font-medium italic leading-8 text-white/78 sm:text-xl sm:leading-9">
+                    {champion.quote}
+                  </p>
+
+                  {champion.signatureImage ? (
+  <div className="mt-5">
+    <Image
+      src={champion.signatureImage}
+      alt={`${champion.name} signature`}
+      width={220}
+      height={90}
+      className="h-auto w-[150px] opacity-85 brightness-0 invert sm:w-[185px]"
+    />
+  </div>
+) : (
+  <p
+    className="mt-5 text-sm font-semibold tracking-[0.08em]"
+    style={{
+      color: champion.accent,
+    }}
+  >
+    {champion.name}
+  </p>
+)}
+                </div>
+              </div>
+            </div>
+
             {/* Description */}
 
-            <p className="mt-9 max-w-2xl text-base leading-8 text-white/55 sm:mt-11 sm:text-lg sm:leading-9 lg:text-xl">
+            <p className="mt-8 max-w-2xl text-base leading-8 text-white/58 sm:text-lg sm:leading-9">
               {champion.description}
             </p>
 
+            {/* Primary CTA */}
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="#career-timeline"
+                className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#050B18] transition duration-300 hover:-translate-y-0.5"
+                style={{
+                  backgroundColor:
+                    champion.accent,
+                  boxShadow:
+                    `0 16px 45px ${champion.accent}20`,
+                }}
+              >
+                Begin the experience
+
+                <ArrowDown
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1"
+                  aria-hidden="true"
+                />
+              </Link>
+
+              <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/30">
+                Scroll through the legacy
+              </span>
+            </div>
+
             {/* Museum metadata */}
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 border-l-2 pl-5 sm:mt-12 sm:pl-6"
+            <div
+              className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5 border-l-2 pl-5 sm:mt-12 sm:pl-6"
               style={{
-                borderColor: champion.accent,
+                borderColor:
+                  champion.accent,
               }}
             >
               <ArchiveMeta
                 label="Nationality"
-                value={champion.nationality}
+                value={
+                  champion.nationality
+                }
               />
 
               <ArchiveMeta
                 label="Professional debut"
-                value={String(champion.debutYear)}
+                value={String(
+                  champion.debutYear,
+                )}
               />
 
               <ArchiveMeta
                 label="Primary brand"
-                value={champion.mainBrand}
+                value={
+                  champion.mainBrand
+                }
               />
             </div>
 
             {/* Hero statistics */}
 
-            <div className="mt-12 grid max-w-3xl grid-cols-1 overflow-hidden rounded-[24px] border border-white/10 bg-black/25 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:grid-cols-3">
+            <div className="mt-10 grid max-w-3xl grid-cols-1 overflow-hidden rounded-[24px] border border-white/10 bg-black/30 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:mt-12 sm:grid-cols-3">
               <HeroStat
-                label="Archive Pieces"
-                value={String(champion.archivePieces)}
-                accent={champion.accent}
+                label="Grand Slams"
+                value={String(
+                  champion.trophies
+                    .grandSlams,
+                )}
+                accent={
+                  champion.accent
+                }
               />
 
               <HeroStat
-                label="Professional Debut"
-                value={String(champion.debutYear)}
-                accent={champion.accent}
+                label="ATP Titles"
+                value={String(
+                  champion.trophies
+                    .atpTitles,
+                )}
+                accent={
+                  champion.accent
+                }
                 className="border-t border-white/10 sm:border-l sm:border-t-0"
               />
 
               <HeroStat
-                label="Main Brand"
-                value={champion.mainBrand}
-                accent={champion.accent}
+                label="Weeks at No. 1"
+                value={String(
+                  champion.trophies
+                    .weeksAtNo1,
+                )}
+                accent={
+                  champion.accent
+                }
                 className="border-t border-white/10 sm:border-l sm:border-t-0"
               />
             </div>
@@ -235,7 +379,9 @@ export default function ArchiveHero({
           <ArchiveStripItem
             label="Archive status"
             value="Active"
-            accent={champion.accent}
+            accent={
+              champion.accent
+            }
           />
         </div>
       </div>
@@ -246,8 +392,10 @@ export default function ArchiveHero({
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 z-30 h-px"
         style={{
-          background: `linear-gradient(90deg, transparent, ${champion.accent}, transparent)`,
-          boxShadow: `0 0 24px ${champion.accent}`,
+          background:
+            `linear-gradient(90deg, transparent, ${champion.accent}, transparent)`,
+          boxShadow:
+            `0 0 24px ${champion.accent}`,
         }}
       />
     </section>
@@ -305,7 +453,7 @@ function ArchiveMeta({
         {label}
       </p>
 
-      <p className="mt-2 text-xs font-black uppercase tracking-[0.1em] text-white/75 sm:text-sm">
+      <p className="mt-2 text-xs font-black uppercase tracking-[0.1em] text-white/78 sm:text-sm">
         {value}
       </p>
     </div>

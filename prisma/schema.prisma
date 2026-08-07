@@ -8,28 +8,40 @@ datasource db {
 }
 
 model Player {
-  id                String                   @id @default(cuid())
-  name              String
-  slug              String                   @unique
-  country           String?
-  biography         String?
-  heroImage         String?
-  portraitImage     String?
-  createdAt         DateTime                 @default(now())
-  updatedAt         DateTime                 @updatedAt
-  accent            String                   @default("#C8FF00")
-  active            Boolean                  @default(true)
-  collectionType    PlayerCollectionType     @default(ARCHIVE)
-  debutYear         Int?
-  displayOrder      Int?
-  firstName         String?
-  lastName          String?
-  nickname          String?
-  quote             String?
+  id              String               @id @default(cuid())
+  name            String
+  slug            String               @unique
+  country         String?
+  biography       String?
+  heroImage       String?
+  portraitImage   String?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  accent          String               @default("#C8FF00")
+  active          Boolean              @default(true)
+  collectionType  PlayerCollectionType @default(ARCHIVE)
+  metaTitle       String?
+  metaDescription String?
+  canonicalUrl    String?
+  openGraphImage  String?
+
+  robotsIndex  Boolean @default(true)
+  robotsFollow Boolean @default(true)
+
+  publishedAt  DateTime?
+  debutYear    Int?
+  displayOrder Int?
+  firstName    String?
+  lastName     String?
+  nickname     String?
+  quote        String?
+
   artifacts         Artifact[]
   atpPlayer         AtpPlayer?
   playerProfile     PlayerProfile?
+  careerEvents      PlayerCareerEvent[]
   museumCollections MuseumCollectionPlayer[]
+  equipment         PlayerEquipment[]
 
   @@index([name])
   @@index([collectionType])
@@ -69,6 +81,58 @@ model PlayerProfile {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   player           Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model PlayerEquipment {
+  id          String                  @id @default(cuid())
+  playerId    String
+  category    PlayerEquipmentCategory
+  name        String
+  brand       String?
+  period      String?
+  description String?
+  curiosity   String?
+  imageUrl    String?
+  featured    Boolean                 @default(false)
+  sortOrder   Int                     @default(0)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, category, name])
+  @@index([playerId])
+  @@index([category])
+  @@index([featured])
+  @@index([sortOrder])
+}
+
+model PlayerCareerEvent {
+  id          String              @id @default(cuid())
+  playerId    String
+  year        Int
+  month       Int?
+  day         Int?
+  title       String
+  subtitle    String?
+  description String?
+  category    CareerEventCategory @default(MILESTONE)
+  imageUrl    String?
+  location    String?
+  tournament  String?
+  featured    Boolean             @default(false)
+  sortOrder   Int                 @default(0)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+  @@index([playerId, year])
+  @@index([playerId, sortOrder])
+  @@index([category])
+  @@index([featured])
+  @@index([year])
 }
 
 model Brand {
@@ -425,6 +489,22 @@ enum PlayerCollectionType {
   ARCHIVE
 }
 
+enum CareerEventCategory {
+  DEBUT
+  RANKING
+  TITLE
+  GRAND_SLAM
+  MASTERS_1000
+  ATP_FINALS
+  OLYMPICS
+  DAVIS_CUP
+  RIVALRY
+  COMEBACK
+  RETIREMENT
+  MILESTONE
+  OTHER
+}
+
 enum ArtifactStatus {
   DRAFT
   PUBLISHED
@@ -501,5 +581,15 @@ enum CollectionType {
   TOURNAMENT
   THEME
   BRAND
+  OTHER
+}
+
+enum PlayerEquipmentCategory {
+  RACQUET
+  STRINGS
+  SHOES
+  APPAREL
+  BAG
+  ACCESSORY
   OTHER
 }

@@ -22,7 +22,11 @@ export const nadal: Champion = {
     "Every point deserves maximum effort. Every match deserves total commitment.",
 
   image: "/players/nadal/hero.jpg",
-  accent: "#FF6B35",
+
+  signatureImage:
+    "/signatures/nadal.svg",
+
+  accent: "#C65A1E",
 
   trophies: {
     grandSlams: 22,
@@ -61,7 +65,7 @@ export const nadal: Champion = {
       year: 2013,
       title: "Historic Comeback",
       description:
-        "Returns from injury to reclaim the World No.1 ranking after one of the greatest comeback seasons ever.",
+        "Returns from injury to reclaim the World No. 1 ranking after one of the greatest comeback seasons ever.",
     },
     {
       year: 2022,

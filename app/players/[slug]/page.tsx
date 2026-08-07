@@ -10,12 +10,14 @@ import PlayerDossier from "@/components/players/atp/PlayerDossier";
 import PlayerHero from "@/components/players/atp/PlayerHero";
 import PlayerIntelligence from "@/components/players/atp/PlayerIntelligence";
 import PlayerOverview from "@/components/players/atp/PlayerOverview";
+import RelatedCollections from "@/components/players/atp/RelatedCollections";
 import RelatedPlayers from "@/components/players/atp/RelatedPlayers";
 import TrophyCabinet from "@/components/players/atp/TrophyCabinet";
 
 import {
   getAdjacentArchivePlayers,
   getPlayerBySlug,
+  getPlayerRelatedCollections,
 } from "@/lib/repositories/player.repository";
 
 const getCachedPlayerBySlug = cache((slug: string) =>
@@ -164,15 +166,24 @@ export default async function PlayerPage({
   const ranking = player.atpPlayer;
   const profile = player.playerProfile;
 
-  const adjacentPlayers = ranking
-    ? await getAdjacentArchivePlayers(
-        ranking.rank,
-        player.id,
-      )
-    : {
-        previousPlayer: null,
-        nextPlayer: null,
-      };
+  const [
+    adjacentPlayers,
+    relatedCollections,
+  ] = await Promise.all([
+    ranking
+      ? getAdjacentArchivePlayers(
+          ranking.rank,
+          player.id,
+        )
+      : Promise.resolve({
+          previousPlayer: null,
+          nextPlayer: null,
+        }),
+
+    getPlayerRelatedCollections(
+      player.id,
+    ),
+  ]);
 
   /*
    * Le Hero dei Top 50 vivono in:
@@ -412,6 +423,13 @@ export default async function PlayerPage({
             label="Passport"
           />
 
+          {relatedCollections.length > 0 ? (
+            <ProfileIndexLink
+              href="#related-collections"
+              label="Collections"
+            />
+          ) : null}
+
           {archiveConnections.length > 0 ? (
             <ProfileIndexLink
               href="#related-players"
@@ -490,6 +508,13 @@ export default async function PlayerPage({
           archiveScoreLabel
         }
       />
+
+      {relatedCollections.length > 0 ? (
+        <RelatedCollections
+          playerName={player.name}
+          collections={relatedCollections}
+        />
+      ) : null}
 
       {archiveConnections.length > 0 ? (
         <RelatedPlayers

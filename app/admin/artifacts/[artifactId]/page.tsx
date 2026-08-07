@@ -7,21 +7,21 @@ import ArtifactForm from "../new/components/ArtifactForm";
 
 type PageProps = {
   params: Promise<{
-    id: string;
+    artifactId: string;
   }>;
 };
 
 export default async function EditArtifactPage({
   params,
 }: PageProps) {
-  const { id } = await params;
+  const { artifactId } = await params;
 
   const [artifact, players, brands] =
     await Promise.all([
       prisma.artifact.findUnique({
-        where: {
-          id,
-        },
+       where: {
+  id: artifactId,
+},
 
         include: {
           images: {

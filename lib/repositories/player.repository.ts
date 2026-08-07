@@ -324,6 +324,20 @@ export async function getPlayerBySlug(
       atpPlayer: true,
       playerProfile: true,
 
+      equipment: {
+        orderBy: [
+          {
+            sortOrder: "asc",
+          },
+          {
+            category: "asc",
+          },
+          {
+            name: "asc",
+          },
+        ],
+      },
+
       artifacts: {
         where: {
           status: "PUBLISHED",
@@ -551,5 +565,45 @@ export async function getAllActivePlayers() {
     include: archivePlayerInclude,
 
     orderBy: activePlayerOrder,
+  });
+}
+
+export async function getPlayerRelatedCollections(
+  playerId: string,
+) {
+  return prisma.museumCollection.findMany({
+    where: {
+      status: "PUBLISHED",
+
+      players: {
+        some: {
+          playerId,
+        },
+      },
+    },
+
+    include: {
+      heroMedia: true,
+
+      _count: {
+        select: {
+          players: true,
+          artifacts: true,
+          originals: true,
+        },
+      },
+    },
+
+    orderBy: [
+      {
+        featured: "desc",
+      },
+      {
+        displayOrder: "asc",
+      },
+      {
+        title: "asc",
+      },
+    ],
   });
 }

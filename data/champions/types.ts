@@ -39,6 +39,8 @@ export type Champion = {
 
   image: string;
 
+  signatureImage?: string;
+
   accent: string;
 
   trophies: TrophyStats;

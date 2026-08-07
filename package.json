@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "update:ranking": "tsx scripts/import-atp-ranking.ts",
+    "db:seed:federer": "tsx scripts/upsert-federer-profile.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

@@ -7,26 +7,30 @@ export const djokovic: Champion = {
   name: "Novak Djokovic",
   firstName: "Novak",
   lastName: "Djokovic",
-  nickname: "The Complete Champion",
+  nickname: "The Record Breaker",
 
   nationality: "Serbia",
   debutYear: 2003,
 
   mainBrand: "Lacoste",
-  archivePieces: 16,
+  archivePieces: 24,
 
   description:
-    "Technical precision, extraordinary flexibility and relentless consistency define one of the greatest careers in tennis history.",
+    "Precision, resilience and extraordinary adaptability created one of the most complete competitive identities in tennis history.",
 
   quote:
-    "Excellence is achieved through discipline, resilience and continuous evolution.",
+    "Every challenge is an opportunity to evolve, endure and reach a higher level.",
 
   image: "/players/djokovic/hero.jpg",
-  accent: "#4CB5F5",
+
+  signatureImage:
+    "/signatures/djokovic.svg",
+
+  accent: "#2C5CC5",
 
   trophies: {
     grandSlams: 24,
-    atpTitles: 100,
+    atpTitles: 101,
     weeksAtNo1: 428,
     masters1000: 40,
     olympicGold: 1,
@@ -37,48 +41,48 @@ export const djokovic: Champion = {
       year: 2003,
       title: "Professional Debut",
       description:
-        "Begins his professional career on the ATP Tour.",
+        "Djokovic begins his professional career and starts his rise from Belgrade to the highest level of international tennis.",
     },
     {
       year: 2008,
-      title: "First Grand Slam",
+      title: "First Australian Open",
       description:
-        "Wins the Australian Open, becoming Serbia's first men's Grand Slam champion.",
+        "He wins his first Grand Slam championship in Melbourne and establishes himself among the leading players of his generation.",
     },
     {
       year: 2011,
-      title: "Historic Season",
+      title: "World No. 1",
       description:
-        "Produces one of the greatest seasons ever, winning three Grand Slam titles and becoming World No.1.",
+        "A historic season of dominance brings three Grand Slam titles and Djokovic's first rise to the top of the ATP rankings.",
     },
     {
       year: 2016,
       title: "Career Grand Slam",
       description:
-        "Captures Roland Garros and completes victories at all four major tournaments.",
-    },
-    {
-      year: 2021,
-      title: "20th Grand Slam",
-      description:
-        "Equals the all-time Grand Slam record with victories in Australia, Paris and Wimbledon.",
+        "Victory at Roland Garros completes his collection of all four major championships and confirms his mastery on every surface.",
     },
     {
       year: 2023,
-      title: "24 Grand Slam Titles",
+      title: "Twenty-Fourth Grand Slam",
       description:
-        "Sets a new all-time record for Grand Slam singles championships.",
+        "Djokovic wins the US Open to reach a record twenty-four major singles championships.",
     },
     {
       year: 2024,
       title: "Olympic Gold",
       description:
-        "Completes his career by winning the Olympic singles gold medal.",
+        "He triumphs in Paris to complete the Career Golden Slam and secure the major honour that had remained missing from his career.",
+    },
+    {
+      year: 2025,
+      title: "One Hundred Tour Titles",
+      description:
+        "Djokovic captures the Geneva title and becomes only the third man in the Open Era to win one hundred tour-level singles trophies.",
     },
   ],
 
   legacy:
-    "Novak Djokovic established new standards of physical preparation, mental resilience and consistency. His achievements across every surface make him one of the most accomplished players in tennis history.",
+    "Novak Djokovic transformed consistency, movement and mental resilience into a record-breaking competitive standard. His ability to adapt across every surface, overcome the strongest era of rivals and perform under extreme pressure made him one of the most complete and successful champions in tennis history.",
 
   certificateId: "AGE-DJO-001",
 };

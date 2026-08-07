@@ -543,7 +543,16 @@ export default async function ArtifactsPage({
                           <Eye className="h-4 w-4" aria-hidden="true" />
                         </Link>
                       ) : null}
-
+<Link
+  href={`/admin/artifacts/${artifact.id}/dashboard`}
+  className="inline-flex items-center justify-center gap-2 rounded-xl border border-lime-300/20 bg-lime-300/10 px-4 py-2.5 text-sm font-semibold text-lime-200 transition hover:bg-lime-300/20"
+>
+  Dashboard
+  <ChevronRight
+    className="h-4 w-4"
+    aria-hidden="true"
+  />
+</Link>
                       <Link
                         href={`/admin/artifacts/${artifact.id}`}
                         className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold text-white/75 transition hover:border-lime-300/30 hover:bg-lime-300/10 hover:text-lime-200"
