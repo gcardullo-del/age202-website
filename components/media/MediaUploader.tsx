@@ -63,6 +63,9 @@ type MediaImage =
 type MediaUploaderProps = {
   existingImages?: ExistingMediaImage[];
   libraryAssets?: MediaAssetWithFolder[];
+  onCoverChange?: (
+    coverUrl: string | null,
+  ) => void;
 };
 
 function createFileKey(
@@ -150,16 +153,14 @@ function createLibraryImage(
 export default function MediaUploader({
   existingImages = [],
   libraryAssets = [],
+  onCoverChange,
 }: MediaUploaderProps) {
-  const initialRef = useRef(
-    createExistingImages(
-      existingImages,
-    ),
-  );
-
   const [images, setImages] =
     useState<MediaImage[]>(
-      () => initialRef.current,
+      () =>
+        createExistingImages(
+          existingImages,
+        ),
     );
 
   const [
@@ -615,10 +616,8 @@ export default function MediaUploader({
         );
 
         const reset =
-          initialRef.current.map(
-            (image) => ({
-              ...image,
-            }),
+          createExistingImages(
+            existingImages,
           );
 
         imagesRef.current =
@@ -649,7 +648,9 @@ export default function MediaUploader({
         "reset",
         handleReset,
       );
-  }, []);
+  }, [
+    existingImages,
+  ]);
 
   useEffect(
     () => () =>
@@ -664,6 +665,15 @@ export default function MediaUploader({
       (image) =>
         image.isCover,
     );
+
+  useEffect(() => {
+    onCoverChange?.(
+      selectedCover?.src ?? null,
+    );
+  }, [
+    onCoverChange,
+    selectedCover?.src,
+  ]);
 
   const newImages =
     images.filter(

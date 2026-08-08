@@ -1,11 +1,19 @@
+"use client";
+
 import {
   Eye,
   Star,
 } from "lucide-react";
 
-import type { ArtifactStatus } from "@/generated/prisma/client";
+import type {
+  ArtifactStatus,
+} from "@/generated/prisma/client";
 
 import FormSection from "@/components/admin/FormSection";
+
+import {
+  useArtifactStudio,
+} from "./ArtifactStudioContext";
 
 export type PublicationInitialValues = {
   status?: ArtifactStatus | null;
@@ -26,6 +34,10 @@ const labelClass =
 export default function PublicationCard({
   initialValues,
 }: PublicationCardProps) {
+  const {
+    updatePreview,
+  } = useArtifactStudio();
+
   return (
     <FormSection
       title="Publication"
@@ -48,6 +60,12 @@ export default function PublicationCard({
               className={inputClass}
               defaultValue={
                 initialValues?.status ?? "DRAFT"
+              }
+              onChange={(event) =>
+                updatePreview({
+                  status:
+                    event.target.value,
+                })
               }
             >
               <option value="DRAFT">
@@ -110,6 +128,12 @@ export default function PublicationCard({
               className="mt-1 h-5 w-5 rounded border-white/20 bg-[#0A1222] text-lime-300 accent-lime-300"
               defaultChecked={
                 initialValues?.featured ?? false
+              }
+              onChange={(event) =>
+                updatePreview({
+                  featured:
+                    event.target.checked,
+                })
               }
             />
 

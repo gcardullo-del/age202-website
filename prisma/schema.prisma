@@ -482,6 +482,57 @@ model MuseumCollectionMedia {
   @@index([sortOrder])
 }
 
+model MuseumSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  group       String   @default("general")
+  label       String?
+  description String?
+  value       Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([group])
+  @@index([updatedAt])
+}
+
+model MuseumPage {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  title        String
+  eyebrow      String?
+  subtitle     String?
+  excerpt      String?
+  content      String?
+  heroImage    String?
+  status       MuseumPageStatus @default(DRAFT)
+  featured     Boolean          @default(false)
+  displayOrder Int?
+
+  metaTitle       String?
+  metaDescription String?
+  canonicalUrl    String?
+  openGraphImage  String?
+  robotsIndex     Boolean @default(true)
+  robotsFollow    Boolean @default(true)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status])
+  @@index([featured])
+  @@index([displayOrder])
+  @@index([publishedAt])
+  @@index([updatedAt])
+}
+
+enum MuseumPageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 enum PlayerCollectionType {
   FEATURED
   LEGEND

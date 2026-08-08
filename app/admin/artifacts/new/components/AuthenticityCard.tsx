@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  useArtifactStudio,
+} from "./ArtifactStudioContext";
+
 type AuthenticityCardProps = {
   authentic?: boolean;
   authenticityCode?: string | null;
@@ -13,6 +17,10 @@ export default function AuthenticityCard({
   vintage = false,
   tags = [],
 }: AuthenticityCardProps) {
+  const {
+    updatePreview,
+  } = useArtifactStudio();
+
   return (
     <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl shadow-black/20 backdrop-blur-sm">
       <div className="mb-6">
@@ -38,6 +46,12 @@ export default function AuthenticityCard({
               name="authentic"
               value="true"
               defaultChecked={authentic}
+              onChange={(event) =>
+                updatePreview({
+                  authentic:
+                    event.target.checked,
+                })
+              }
               className="mt-1 h-4 w-4 rounded border-white/20 bg-black/30 accent-amber-300"
             />
 
@@ -59,6 +73,12 @@ export default function AuthenticityCard({
               name="vintage"
               value="true"
               defaultChecked={vintage}
+              onChange={(event) =>
+                updatePreview({
+                  vintage:
+                    event.target.checked,
+                })
+              }
               className="mt-1 h-4 w-4 rounded border-white/20 bg-black/30 accent-amber-300"
             />
 

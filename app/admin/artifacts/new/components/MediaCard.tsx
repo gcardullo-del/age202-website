@@ -1,9 +1,22 @@
-import { ImagePlus } from "lucide-react";
+"use client";
+
+import {
+  useCallback,
+} from "react";
+
+import {
+  ImagePlus,
+} from "lucide-react";
 
 import FormSection from "@/components/admin/FormSection";
+
 import MediaUploader, {
   type ExistingMediaImage,
 } from "@/components/media/MediaUploader";
+
+import {
+  useArtifactStudio,
+} from "./ArtifactStudioContext";
 
 type MediaCardProps = {
   existingImages?: ExistingMediaImage[];
@@ -12,15 +25,45 @@ type MediaCardProps = {
 export default function MediaCard({
   existingImages = [],
 }: MediaCardProps) {
+  const {
+    updatePreview,
+  } = useArtifactStudio();
+
+  const handleCoverChange =
+    useCallback(
+      (
+        coverUrl:
+          | string
+          | null,
+      ) => {
+        updatePreview({
+          coverImage:
+            coverUrl,
+        });
+      },
+      [
+        updatePreview,
+      ],
+    );
+
   return (
     <FormSection
       title="Media"
       description="Upload and manage the images for this museum artifact."
-      icon={<ImagePlus size={20} />}
+      icon={
+        <ImagePlus
+          size={20}
+        />
+      }
     >
       <div className="space-y-6">
         <MediaUploader
-          existingImages={existingImages}
+          existingImages={
+            existingImages
+          }
+          onCoverChange={
+            handleCoverChange
+          }
         />
 
         <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-5">

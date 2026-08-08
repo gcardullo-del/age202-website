@@ -10,15 +10,21 @@ type SiteChromeProps = Readonly<{
   children: ReactNode;
 }>;
 
-export default function SiteChrome({ children }: SiteChromeProps) {
+export default function SiteChrome({
+  children,
+}: SiteChromeProps) {
   const pathname = usePathname();
 
   const isAdminRoute =
-    pathname === "/admin" || pathname.startsWith("/admin/");
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/");
 
   if (isAdminRoute) {
     return (
-      <main id="main-content" className="min-h-screen">
+      <main
+        id="main-content"
+        className="min-h-screen"
+      >
         {children}
       </main>
     );
@@ -28,10 +34,20 @@ export default function SiteChrome({ children }: SiteChromeProps) {
     <>
       <MuseumNavbar />
 
-      {/* Compensa l’altezza della navbar fixed */}
-      <div aria-hidden="true" style={{ height: "90px" }} />
+      {/*
+       * MuseumNavbar è fixed e alta 86px.
+       * Questo spacer riserva fisicamente lo spazio
+       * della navbar per tutte le pagine pubbliche.
+       */}
+      <div
+        aria-hidden="true"
+        className="h-[86px] shrink-0"
+      />
 
-      <main id="main-content" className="min-h-screen">
+      <main
+        id="main-content"
+        className="min-h-screen"
+      >
         {children}
       </main>
 

@@ -837,7 +837,7 @@ type NumberFieldProps = {
 function NumberField({
   name,
   label,
-  initialValue = 0,
+  initialValue = null,
   placeholder = "0",
 }: NumberFieldProps) {
   return (
@@ -846,12 +846,12 @@ function NumberField({
         {label}
       </FieldLabel>
 
-      <input
+        <input
         type="number"
         min="0"
         name={name}
         defaultValue={
-          initialValue ?? 0
+          initialValue ?? ""
         }
         className={numberInputClassName}
         placeholder={placeholder}

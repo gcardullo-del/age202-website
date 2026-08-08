@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ExternalLink,
   ShoppingBag,
@@ -8,6 +10,10 @@ import type {
 } from "@/generated/prisma/client";
 
 import FormSection from "@/components/admin/FormSection";
+
+import {
+  useArtifactStudio,
+} from "./ArtifactStudioContext";
 
 export type MarketplaceInitialValues = {
   availability?: ArtifactAvailability | null;
@@ -29,6 +35,10 @@ const labelClass =
 export default function MarketplaceCard({
   initialValues,
 }: MarketplaceCardProps) {
+  const {
+    updatePreview,
+  } = useArtifactStudio();
+
   return (
     <FormSection
       title="Marketplace"
@@ -52,6 +62,12 @@ export default function MarketplaceCard({
               defaultValue={
                 initialValues?.availability ??
                 "COMING_SOON"
+              }
+              onChange={(event) =>
+                updatePreview({
+                  availability:
+                    event.target.value,
+                })
               }
             >
               <option value="COMING_SOON">
@@ -99,6 +115,13 @@ export default function MarketplaceCard({
                   ? String(initialValues.price)
                   : ""
               }
+              onChange={(event) =>
+                updatePreview({
+                  price:
+                    event.target.value ||
+                    null,
+                })
+              }
             />
 
             <p className="mt-3 text-sm leading-6 text-white/35">
@@ -122,6 +145,12 @@ export default function MarketplaceCard({
               defaultValue={
                 initialValues?.currency ??
                 "EUR"
+              }
+              onChange={(event) =>
+                updatePreview({
+                  currency:
+                    event.target.value,
+                })
               }
             >
               <option value="EUR">

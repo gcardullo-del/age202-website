@@ -426,7 +426,7 @@ export default async function PlayersPage({
                   ).length;
 
                 const dashboardHref =
-                  `/admin/players/${player.id}/dashboard`;
+  `/admin/players/${player.id}`;
 
                 const editHref =
                   `/admin/players/${player.id}`;

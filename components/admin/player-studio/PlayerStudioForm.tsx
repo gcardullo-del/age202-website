@@ -1,4 +1,5 @@
 "use client";
+import { useSearchParams } from "next/navigation";
 
 import {
   createContext,
@@ -752,7 +753,18 @@ function buildWarnings({
 
   return warnings;
 }
+function isPlayerStudioSectionId(
+  value: string | null,
+): value is PlayerStudioSectionId {
+  if (!value) {
+    return false;
+  }
 
+  return sectionDefinitions.some(
+    (section) =>
+      section.id === value,
+  );
+}
 export default function PlayerStudioForm({
   mode = "create",
   playerId,
@@ -765,13 +777,26 @@ export default function PlayerStudioForm({
   submitLabel,
   backHref,
 }: PlayerStudioFormProps) {
+    const searchParams =
+    useSearchParams();
+
+  const requestedSection =
+    searchParams.get("section");
+
+  const resolvedInitialSection:
+    PlayerStudioSectionId =
+    isPlayerStudioSectionId(
+      requestedSection,
+    )
+      ? requestedSection
+      : initialSection;
   const [
-    activeSection,
-    setActiveSection,
-  ] =
-    useState<PlayerStudioSectionId>(
-      initialSection,
-    );
+  activeSection,
+  setActiveSection,
+] =
+  useState<PlayerStudioSectionId>(
+    resolvedInitialSection,
+  );
 
   const [preview, setPreview] =
     useState<PlayerPreviewData>({
@@ -927,24 +952,59 @@ export default function PlayerStudioForm({
             />
 
             <div className="min-w-0 p-4 sm:p-6 lg:p-8">
-              {sections[
-                activeSection
-              ] ?? (
-                <div className="grid min-h-[420px] place-items-center rounded-3xl border border-dashed border-white/10 bg-white/[0.015] p-8 text-center">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lime-200/70">
-                      Player Studio
-                    </p>
+              {sectionDefinitions.map(
+                (section) => {
+                  const content =
+                    sections[
+                      section.id
+                    ];
 
-                    <h2 className="mt-3 text-2xl font-semibold text-white">
-                      Section coming next
-                    </h2>
+                  if (!content) {
+                    if (
+                      section.id !==
+                      activeSection
+                    ) {
+                      return null;
+                    }
 
-                    <p className="mt-3 max-w-md text-sm leading-6 text-white/40">
-                      This workspace is ready for the next modular Player Studio section.
-                    </p>
-                  </div>
-                </div>
+                    return (
+                      <div
+                        key={
+                          section.id
+                        }
+                        className="grid min-h-[420px] place-items-center rounded-3xl border border-dashed border-white/10 bg-white/[0.015] p-8 text-center"
+                      >
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lime-200/70">
+                            Player Studio
+                          </p>
+
+                          <h2 className="mt-3 text-2xl font-semibold text-white">
+                            Section coming next
+                          </h2>
+
+                          <p className="mt-3 max-w-md text-sm leading-6 text-white/40">
+                            This workspace is ready for the next modular Player Studio section.
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div
+                      key={
+                        section.id
+                      }
+                      hidden={
+                        section.id !==
+                        activeSection
+                      }
+                    >
+                      {content}
+                    </div>
+                  );
+                },
               )}
             </div>
 

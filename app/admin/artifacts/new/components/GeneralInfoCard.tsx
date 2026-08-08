@@ -1,3 +1,5 @@
+"use client";
+
 import type {
   ArtifactCategory,
   ArtifactCondition,
@@ -5,6 +7,10 @@ import type {
   Brand,
   Player,
 } from "@/generated/prisma/client";
+
+import {
+  useArtifactStudio,
+} from "./ArtifactStudioContext";
 
 export type GeneralInfoInitialValues = {
   title?: string | null;
@@ -49,6 +55,40 @@ export default function GeneralInfoCard({
   brands,
   initialValues,
 }: Props) {
+  const {
+    updatePreview,
+  } = useArtifactStudio();
+
+  function updatePlayerPreview(
+    playerId: string,
+  ) {
+    const player =
+      players.find(
+        (item) =>
+          item.id === playerId,
+      );
+
+    updatePreview({
+      playerName:
+        player?.name ?? null,
+    });
+  }
+
+  function updateBrandPreview(
+    brandId: string,
+  ) {
+    const brand =
+      brands.find(
+        (item) =>
+          item.id === brandId,
+      );
+
+    updatePreview({
+      brandName:
+        brand?.name ?? null,
+    });
+  }
+
   return (
     <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
       <div className="border-b border-white/10 px-8 py-6">
@@ -78,6 +118,12 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="Nike Federer Wimbledon Polo 2017"
             defaultValue={initialValues?.title ?? ""}
+            onChange={(event) =>
+              updatePreview({
+                title:
+                  event.target.value,
+              })
+            }
           />
         </div>
 
@@ -95,6 +141,13 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="The championship look from Federer's eighth Wimbledon title"
             defaultValue={initialValues?.subtitle ?? ""}
+            onChange={(event) =>
+              updatePreview({
+                subtitle:
+                  event.target.value ||
+                  null,
+              })
+            }
           />
 
           <p className={helperClass}>
@@ -117,6 +170,13 @@ export default function GeneralInfoCard({
             placeholder="AGE202-0001"
             defaultValue={
               initialValues?.archiveNumber ?? ""
+            }
+            onChange={(event) =>
+              updatePreview({
+                archiveNumber:
+                  event.target.value ||
+                  null,
+              })
             }
           />
         </div>
@@ -142,6 +202,16 @@ export default function GeneralInfoCard({
                 ? String(initialValues.year)
                 : ""
             }
+            onChange={(event) => {
+              const value =
+                event.target.value.trim();
+
+              updatePreview({
+                year: value
+                  ? Number(value)
+                  : null,
+              });
+            }}
           />
         </div>
 
@@ -160,6 +230,11 @@ export default function GeneralInfoCard({
             className={inputClass}
             defaultValue={
               initialValues?.playerId ?? ""
+            }
+            onChange={(event) =>
+              updatePlayerPreview(
+                event.target.value,
+              )
             }
           >
             <option
@@ -195,6 +270,11 @@ export default function GeneralInfoCard({
             className={inputClass}
             defaultValue={
               initialValues?.brandId ?? ""
+            }
+            onChange={(event) =>
+              updateBrandPreview(
+                event.target.value,
+              )
             }
           >
             <option
@@ -250,6 +330,13 @@ export default function GeneralInfoCard({
             defaultValue={
               initialValues?.tournament ?? ""
             }
+            onChange={(event) =>
+              updatePreview({
+                tournament:
+                  event.target.value ||
+                  null,
+              })
+            }
           />
         </div>
 
@@ -268,6 +355,13 @@ export default function GeneralInfoCard({
             placeholder="NikeCourt Roger Federer Collection"
             defaultValue={
               initialValues?.collection ?? ""
+            }
+            onChange={(event) =>
+              updatePreview({
+                collection:
+                  event.target.value ||
+                  null,
+              })
             }
           />
         </div>
@@ -305,6 +399,13 @@ export default function GeneralInfoCard({
             className={inputClass}
             defaultValue={
               initialValues?.category ?? ""
+            }
+            onChange={(event) =>
+              updatePreview({
+                category:
+                  event.target.value ||
+                  null,
+              })
             }
           >
             <option value="">
@@ -355,6 +456,13 @@ export default function GeneralInfoCard({
             className={inputClass}
             defaultValue={
               initialValues?.rarity ?? "COMMON"
+            }
+            onChange={(event) =>
+              updatePreview({
+                rarity:
+                  event.target.value ||
+                  null,
+              })
             }
           >
             <option value="COMMON">
@@ -436,6 +544,13 @@ export default function GeneralInfoCard({
             defaultValue={
               initialValues?.condition ??
               "EXCELLENT"
+            }
+            onChange={(event) =>
+              updatePreview({
+                condition:
+                  event.target.value ||
+                  null,
+              })
             }
           >
             <option value="MINT">

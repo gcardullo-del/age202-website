@@ -14,6 +14,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 
 const STORAGE_KEY =
@@ -24,6 +25,34 @@ const EXPERIENCE_DURATION =
 
 const AUDIO_PLAYBACK_RATE =
   0.75;
+
+function subscribeToClient() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+function hasSeenOpeningExperience(): boolean {
+  if (typeof window === "undefined") {
+    return true;
+  }
+
+  try {
+    return (
+      window.sessionStorage.getItem(
+        STORAGE_KEY,
+      ) === "true"
+    );
+  } catch {
+    return false;
+  }
+}
 
 const phrases = [
   {
@@ -62,11 +91,17 @@ export default function OpeningExperience() {
       null,
     );
 
-  const [isReady, setIsReady] =
-    useState(false);
+  const isClient =
+    useSyncExternalStore(
+      subscribeToClient,
+      getClientSnapshot,
+      getServerSnapshot,
+    );
 
-  const [isVisible, setIsVisible] =
-    useState(false);
+  const [
+    isDismissed,
+    setIsDismissed,
+  ] = useState(false);
 
   const [hasStarted, setHasStarted] =
     useState(false);
@@ -116,7 +151,7 @@ export default function OpeningExperience() {
         // The experience still works if storage is unavailable.
       }
 
-      setIsVisible(false);
+      setIsDismissed(true);
     }, [
       stopAudio,
       stopTimer,
@@ -183,30 +218,13 @@ export default function OpeningExperience() {
       );
     }, []);
 
-  useEffect(() => {
-    let hasSeenExperience = false;
-
-    try {
-      hasSeenExperience =
-        window.sessionStorage.getItem(
-          STORAGE_KEY,
-        ) === "true";
-    } catch {
-      hasSeenExperience = false;
-    }
-
-    setIsVisible(
-      !hasSeenExperience,
-    );
-
-    setIsReady(true);
-  }, []);
+  const isVisible =
+    isClient &&
+    !isDismissed &&
+    !hasSeenOpeningExperience();
 
   useEffect(() => {
-    if (
-      !isReady ||
-      !isVisible
-    ) {
+    if (!isVisible) {
       return;
     }
 
@@ -224,15 +242,10 @@ export default function OpeningExperience() {
       stopAudio();
     };
   }, [
-    isReady,
     isVisible,
     stopAudio,
     stopTimer,
   ]);
-
-  if (!isReady) {
-    return null;
-  }
 
   return (
     <AnimatePresence>

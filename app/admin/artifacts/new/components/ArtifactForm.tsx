@@ -1,6 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useState,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import {
   BadgeCheck,
@@ -24,6 +28,14 @@ import type {
 } from "@/generated/prisma/client";
 
 import type { ExistingMediaImage } from "@/components/media/MediaUploader";
+
+import {
+  ArtifactStudioProvider,
+} from "./ArtifactStudioContext";
+
+import type {
+  ArtifactPreviewData,
+} from "./ArtifactPreviewCard";
 
 import { createArtifact } from "../../actions/createArtifact";
 import { updateArtifact } from "../../actions/updateArtifact";
@@ -160,6 +172,105 @@ export default function ArtifactForm({
   const [activeSection, setActiveSection] =
     useState<WorkspaceSection>("general");
 
+  const initialPlayer =
+    players.find(
+      (player) =>
+        player.id ===
+        initialValues?.playerId,
+    ) ?? null;
+
+  const initialBrand =
+    brands.find(
+      (brand) =>
+        brand.id ===
+        initialValues?.brandId,
+    ) ?? null;
+
+  const initialCoverImage =
+    initialValues?.images?.find(
+      (image) => image.isCover,
+    )?.url ??
+    initialValues?.images?.[0]?.url ??
+    null;
+
+  const [
+    preview,
+    setPreview,
+  ] = useState<ArtifactPreviewData>({
+    title:
+      initialValues?.title ?? "",
+
+    subtitle:
+      initialValues?.subtitle ?? null,
+
+    archiveNumber:
+      initialValues?.archiveNumber ?? null,
+
+    year:
+      initialValues?.year ?? null,
+
+    tournament:
+      initialValues?.tournament ?? null,
+
+    collection:
+      initialValues?.collection ?? null,
+
+    playerName:
+      initialPlayer?.name ?? null,
+
+    brandName:
+      initialBrand?.name ?? null,
+
+    category:
+      initialValues?.category ?? null,
+
+    rarity:
+      initialValues?.rarity ?? null,
+
+    condition:
+      initialValues?.condition ?? null,
+
+    availability:
+      initialValues?.availability ?? null,
+
+    price:
+      initialValues?.price ?? null,
+
+    currency:
+      initialValues?.currency ?? "EUR",
+
+    authentic:
+      initialValues?.authentic ?? false,
+
+    vintage:
+      initialValues?.vintage ?? false,
+
+    featured:
+      initialValues?.featured ?? false,
+
+    status:
+      initialValues?.status ?? "DRAFT",
+
+    coverImage:
+      initialCoverImage,
+  });
+
+  const updatePreview =
+    useCallback(
+      (
+        values:
+          Partial<ArtifactPreviewData>,
+      ) => {
+        setPreview(
+          (current) => ({
+            ...current,
+            ...values,
+          }),
+        );
+      },
+      [],
+    );
+
   const isEditing = mode === "edit";
 
   if (isEditing && !artifactId) {
@@ -192,10 +303,17 @@ export default function ArtifactForm({
     : null;
 
   return (
-    <form
-      action={formAction}
-      className="pb-8"
+    <ArtifactStudioProvider
+      value={{
+        preview,
+        setPreview,
+        updatePreview,
+      }}
     >
+      <form
+        action={formAction}
+        className="pb-8"
+      >
       {artifactId && (
         <input
           type="hidden"
@@ -536,6 +654,7 @@ export default function ArtifactForm({
           </button>
         </div>
       </div>
-    </form>
+      </form>
+    </ArtifactStudioProvider>
   );
 }

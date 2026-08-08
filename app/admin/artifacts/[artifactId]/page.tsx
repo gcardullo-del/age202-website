@@ -19,9 +19,9 @@ export default async function EditArtifactPage({
   const [artifact, players, brands] =
     await Promise.all([
       prisma.artifact.findUnique({
-       where: {
-  id: artifactId,
-},
+        where: {
+          id: artifactId,
+        },
 
         include: {
           images: {

@@ -1,16 +1,25 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://www.age202.com";
+const siteUrl =
+  "https://www.age202.com";
 
-export default function robots(): MetadataRoute.Robots {
+export default function robots():
+  MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
+        disallow: [
+          "/admin/",
+        ],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+
+    sitemap:
+      `${siteUrl}/sitemap.xml`,
+
+    host:
+      siteUrl,
   };
 }

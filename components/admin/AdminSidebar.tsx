@@ -2,17 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import {
   Archive,
   ChevronRight,
   Image,
   Layers3,
   LayoutDashboard,
+  ListOrdered,
   LogOut,
   Settings,
   ShoppingBag,
-  Tags,
   Users,
+  Home,
 } from "lucide-react";
 
 const navigationItems = [
@@ -21,6 +23,11 @@ const navigationItems = [
     href: "/admin",
     icon: LayoutDashboard,
   },
+  {
+  label: "Homepage",
+  href: "/admin/homepage",
+  icon: Home,
+},
   {
     label: "Artifacts",
     href: "/admin/artifacts",
@@ -37,9 +44,9 @@ const navigationItems = [
     icon: Users,
   },
   {
-    label: "Brands",
-    href: "/admin/brands",
-    icon: Tags,
+    label: "ATP Ranking",
+    href: "/admin/atp-ranking",
+    icon: ListOrdered,
   },
   {
     label: "Collections",
@@ -93,12 +100,13 @@ export default function AdminSidebar() {
         className="flex-1 overflow-y-auto px-4 py-6"
       >
         <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-white/35">
-          Content Management
+          Museum Archive
         </p>
 
         <ul className="space-y-1.5">
           {navigationItems.map((item) => {
             const Icon = item.icon;
+
             const active = isRouteActive(
               pathname,
               item.href,
@@ -109,7 +117,9 @@ export default function AdminSidebar() {
                 <Link
                   href={item.href}
                   aria-current={
-                    active ? "page" : undefined
+                    active
+                      ? "page"
+                      : undefined
                   }
                   className={[
                     "group flex min-h-12 items-center gap-3 rounded-2xl border px-3.5 py-3 transition-all duration-200",
@@ -151,6 +161,19 @@ export default function AdminSidebar() {
             );
           })}
         </ul>
+
+        <div className="mx-3 my-7 border-t border-white/10" />
+
+        <div className="px-3">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/35">
+            Museum Content
+          </p>
+
+          <p className="mt-3 text-xs leading-5 text-white/25">
+            Homepage, Results, Tennis History and Hall of Fame management
+            will live here.
+          </p>
+        </div>
       </nav>
 
       <div className="border-t border-white/10 p-4">

@@ -17,7 +17,7 @@ const museumRooms = [
       "Enter the permanent galleries dedicated to Roger Federer, Rafael Nadal, Novak Djokovic, Jannik Sinner and Carlos Alcaraz.",
     badge: "Permanent Gallery",
     status: "open" as const,
-    href: "#collections",
+    href: "/archives",
     accent: "#C8FF00",
     icon: (
       <Crown
@@ -31,7 +31,8 @@ const museumRooms = [
     description:
       "Explore the living archive of today's tour, with rankings, player profiles, careers, titles and museum connections.",
     badge: "Living Archive",
-    status: "coming-soon" as const,
+    status: "open" as const,
+    href: "/atp-ranking",
     accent: "#4F8CFF",
     icon: (
       <LibraryBig
@@ -45,7 +46,8 @@ const museumRooms = [
     description:
       "Travel through the Open Era, defining rivalries, legendary champions and the evolution of tennis culture.",
     badge: "Historical Wing",
-    status: "coming-soon" as const,
+    status: "open" as const,
+    href: "/tennis-history",
     accent: "#D4AF37",
     icon: (
       <BookOpen
@@ -59,7 +61,8 @@ const museumRooms = [
     description:
       "Discover the history, champions and iconic moments of the Australian Open, Roland Garros, Wimbledon and US Open.",
     badge: "Major Championships",
-    status: "coming-soon" as const,
+    status: "open" as const,
+    href: "/results",
     accent: "#E85D75",
     icon: (
       <Trophy
@@ -73,7 +76,8 @@ const museumRooms = [
     description:
       "A permanent tribute to the players, identities and achievements that shaped the history of the game.",
     badge: "Legacy Gallery",
-    status: "coming-soon" as const,
+    status: "open" as const,
+    href: "/hall-of-fame",
     accent: "#FFFFFF",
     icon: (
       <Landmark
@@ -110,7 +114,7 @@ export default function ExploreTheMuseum() {
           <SectionTitle
             eyebrow="Museum Directory"
             title="Explore the Museum"
-            description="Choose your next destination inside AGE202. Permanent galleries live alongside new museum wings that are currently being prepared."
+            description="Choose your next destination inside AGE202. Explore the permanent galleries and the growing archives of the Digital Tennis Museum."
             align="left"
           />
         </Reveal>
@@ -125,9 +129,7 @@ export default function ExploreTheMuseum() {
               return (
                 <Reveal
                   key={room.title}
-                  delay={
-                    index * 0.08
-                  }
+                  delay={index * 0.08}
                 >
                   <Card
                     title={room.title}
@@ -170,13 +172,13 @@ export default function ExploreTheMuseum() {
           <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-2xl text-sm leading-7 text-white/40">
               AGE202 is a living museum.
-              New galleries will open as
-              the archive grows.
+              Every wing connects to a
+              growing part of the tennis
+              archive.
             </p>
 
             <span className="font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-[#C8FF00]">
-              01 permanent · 04 in
-              preparation
+              05 museum destinations
             </span>
           </div>
         </Reveal>

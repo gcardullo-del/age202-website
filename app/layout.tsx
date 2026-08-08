@@ -11,10 +11,10 @@ const siteUrl = "https://www.age202.com";
 const siteName = "AGE202";
 
 const defaultTitle =
-  "AGE202 | The Digital Museum of Tennis Apparel";
+  "AGE202 | The Digital Tennis Museum";
 
 const defaultDescription =
-  "AGE202 è il museo digitale dell’abbigliamento da tennis: collezioni autentiche, capi iconici e storie dedicate ai più grandi campioni.";
+  "AGE202 is a digital tennis museum preserving authentic apparel, iconic champions, historic tournaments and the stories behind every artifact.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -34,19 +34,29 @@ export const metadata: Metadata = {
 
   keywords: [
     "AGE202",
-    "museo digitale tennis",
-    "abbigliamento tennis vintage",
+    "digital tennis museum",
+    "tennis museum",
+    "tennis history",
     "tennis apparel archive",
+    "vintage tennis apparel",
     "tennis heritage",
+    "tennis memorabilia",
     "tennis collectibles",
     "Roger Federer",
     "Rafael Nadal",
     "Novak Djokovic",
     "Jannik Sinner",
     "Carlos Alcaraz",
+    "ATP Tour",
+    "Grand Slam",
+    "Wimbledon",
+    "Australian Open",
+    "Roland Garros",
+    "US Open",
     "Nike Tennis",
     "Adidas Tennis",
     "On Running Tennis",
+    "Lacoste Tennis",
   ],
 
   authors: [
@@ -55,10 +65,6 @@ export const metadata: Metadata = {
       url: siteUrl,
     },
   ],
-
-  alternates: {
-    canonical: "/",
-  },
 
   formatDetection: {
     address: false,
@@ -81,8 +87,7 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    locale: "it_IT",
-    url: siteUrl,
+    locale: "en_US",
     siteName,
     title: defaultTitle,
     description: defaultDescription,
@@ -92,7 +97,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "AGE202 — The Digital Museum of Tennis Apparel",
+        alt: "AGE202 — The Digital Tennis Museum",
       },
     ],
   },
@@ -143,12 +148,14 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     <html
-      lang="it"
+      lang="en"
       className="scroll-smooth"
       suppressHydrationWarning
     >
       <body className="min-h-screen overflow-x-hidden bg-[#050B18] text-white antialiased">
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome>
+          {children}
+        </SiteChrome>
 
         <Toaster
           position="top-right"
