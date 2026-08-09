@@ -927,25 +927,18 @@ type ArchivePreviewProps = {
 function ArchivePreview({ tournament }: ArchivePreviewProps) {
   const archiveItems = [
     {
-      icon: Crown,
-      title: "Hall of Champions",
-      description:
-        "A complete record of tournament winners across every edition.",
-      status: "Planned",
-    },
-    {
       icon: CalendarDays,
       title: "Tournament Editions",
       description:
         "Season-by-season pages containing finals, dates and historical context.",
-      status: "Planned",
+      status: "Next phase",
     },
     {
       icon: Medal,
       title: "Iconic Finals",
       description:
         "The championship matches that became part of tennis history.",
-      status: "Planned",
+      status: "Next phase",
     },
     {
       icon: Trophy,
@@ -985,19 +978,20 @@ function ArchivePreview({ tournament }: ArchivePreviewProps) {
               </div>
 
               <p className="text-sm leading-7 text-white/42 lg:text-right">
-                The architecture is ready to receive champions, editions,
-                finals and memorabilia during the final data-enrichment phase.
+                The Hall of Champions is now part of the live archive. The next
+                phase expands {tournament.name} with editions, iconic finals and
+                the AGE202 Collection.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-4 md:grid-cols-2">
+            <div className="mt-12 grid gap-4 md:grid-cols-3">
               {archiveItems.map((item) => {
                 const Icon = item.icon;
 
                 return (
                   <article
                     key={item.title}
-                    className="flex items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6"
+                    className="group flex min-h-[190px] items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6 transition duration-300 hover:border-[var(--tournament-primary)]/40 hover:bg-white/[0.025]"
                   >
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[var(--tournament-primary)]">
                       <Icon
@@ -1007,7 +1001,7 @@ function ArchivePreview({ tournament }: ArchivePreviewProps) {
                       />
                     </span>
 
-                    <div className="flex-1">
+                    <div className="flex h-full flex-1 flex-col">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <h3 className="text-base font-black uppercase tracking-[-0.02em]">
                           {item.title}
@@ -1018,9 +1012,15 @@ function ArchivePreview({ tournament }: ArchivePreviewProps) {
                         </span>
                       </div>
 
-                      <p className="mt-3 text-xs leading-6 text-white/35">
+                      <p className="mt-4 text-xs leading-6 text-white/35">
                         {item.description}
                       </p>
+
+                      <div className="mt-auto pt-6">
+                        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-[var(--tournament-primary)]/55">
+                          Archive expansion
+                        </span>
+                      </div>
                     </div>
                   </article>
                 );

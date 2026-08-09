@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   useState,
   type ReactNode,
 } from "react";
@@ -31,7 +30,10 @@ import type { ExistingMediaImage } from "@/components/media/MediaUploader";
 
 import {
   ArtifactStudioProvider,
+  useArtifactStudio,
 } from "./ArtifactStudioContext";
+
+import useArtifactStudioState from "../hooks/useArtifactStudioState";
 
 import type {
   ArtifactPreviewData,
@@ -46,6 +48,8 @@ import MarketplaceCard from "./MarketplaceCard";
 import MediaCard from "./MediaCard";
 import PublicationCard from "./PublicationCard";
 import StoryCard from "./StoryCard";
+import ArtifactSaveStatus from "./ArtifactSaveStatus";
+import ArtifactDraftRecoveryBanner from "./ArtifactDraftRecoveryBanner";
 
 type ArtifactFormMode = "create" | "edit";
 
@@ -161,6 +165,26 @@ function SectionPanel({
   );
 }
 
+
+function ArtifactResetButton({
+  label,
+}: {
+  label: string;
+}) {
+  const { resetPreview } =
+    useArtifactStudio();
+
+  return (
+    <button
+      type="reset"
+      onClick={() => resetPreview()}
+      className="rounded-2xl border border-white/10 px-5 py-3 text-sm text-white/60 transition hover:bg-white/5 hover:text-white"
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function ArtifactForm({
   players,
   brands,
@@ -193,10 +217,7 @@ export default function ArtifactForm({
     initialValues?.images?.[0]?.url ??
     null;
 
-  const [
-    preview,
-    setPreview,
-  ] = useState<ArtifactPreviewData>({
+  const initialPreview: ArtifactPreviewData = {
     title:
       initialValues?.title ?? "",
 
@@ -253,23 +274,20 @@ export default function ArtifactForm({
 
     coverImage:
       initialCoverImage,
-  });
+  };
 
-  const updatePreview =
-    useCallback(
-      (
-        values:
-          Partial<ArtifactPreviewData>,
-      ) => {
-        setPreview(
-          (current) => ({
-            ...current,
-            ...values,
-          }),
-        );
-      },
-      [],
-    );
+  const studio =
+    useArtifactStudioState({
+      initialPreview,
+      mode,
+      draftKey: artifactId
+        ? `age202-artifact-studio-draft:${artifactId}`
+        : "age202-artifact-studio-draft:new",
+    });
+
+  const {
+    preview,
+  } = studio;
 
   const isEditing = mode === "edit";
 
@@ -304,11 +322,7 @@ export default function ArtifactForm({
 
   return (
     <ArtifactStudioProvider
-      value={{
-        preview,
-        setPreview,
-        updatePreview,
-      }}
+      value={studio}
     >
       <form
         action={formAction}
@@ -321,6 +335,8 @@ export default function ArtifactForm({
           value={artifactId}
         />
       )}
+
+      <ArtifactDraftRecoveryBanner />
 
       <div className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
         <div className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
@@ -337,6 +353,8 @@ export default function ArtifactForm({
                   {initialValues.status}
                 </span>
               )}
+
+              <ArtifactSaveStatus />
             </div>
 
             <h2 className="mt-4 text-2xl font-semibold text-white">
@@ -634,14 +652,13 @@ export default function ArtifactForm({
         </p>
 
         <div className="flex items-center justify-end gap-3">
-          <button
-            type="reset"
-            className="rounded-2xl border border-white/10 px-5 py-3 text-sm text-white/60 transition hover:bg-white/5 hover:text-white"
-          >
-            {isEditing
-              ? "Reset changes"
-              : "Reset"}
-          </button>
+          <ArtifactResetButton
+            label={
+              isEditing
+                ? "Reset changes"
+                : "Reset"
+            }
+          />
 
           <button
             type="submit"

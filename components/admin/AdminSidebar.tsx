@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Archive,
   ChevronRight,
+  Home,
   Image,
   Layers3,
   LayoutDashboard,
@@ -13,8 +14,8 @@ import {
   LogOut,
   Settings,
   ShoppingBag,
+  Trophy,
   Users,
-  Home,
 } from "lucide-react";
 
 const navigationItems = [
@@ -24,10 +25,10 @@ const navigationItems = [
     icon: LayoutDashboard,
   },
   {
-  label: "Homepage",
-  href: "/admin/homepage",
-  icon: Home,
-},
+    label: "Homepage",
+    href: "/admin/homepage",
+    icon: Home,
+  },
   {
     label: "Artifacts",
     href: "/admin/artifacts",
@@ -47,6 +48,11 @@ const navigationItems = [
     label: "ATP Ranking",
     href: "/admin/atp-ranking",
     icon: ListOrdered,
+  },
+  {
+    label: "Tournaments",
+    href: "/admin/tournaments",
+    icon: Trophy,
   },
   {
     label: "Collections",
@@ -170,8 +176,8 @@ export default function AdminSidebar() {
           </p>
 
           <p className="mt-3 text-xs leading-5 text-white/25">
-            Homepage, Results, Tennis History and Hall of Fame management
-            will live here.
+            Grand Slams, Masters 1000, ATP 500 and ATP 250 are managed
+            centrally from Tournament Studio.
           </p>
         </div>
       </nav>

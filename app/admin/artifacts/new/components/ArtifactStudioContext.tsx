@@ -3,26 +3,15 @@
 import {
   createContext,
   useContext,
-  type Dispatch,
   type ReactNode,
-  type SetStateAction,
 } from "react";
 
 import type {
-  ArtifactPreviewData,
-} from "./ArtifactPreviewCard";
+  ArtifactStudioState,
+} from "../hooks/useArtifactStudioState";
 
-type ArtifactStudioContextValue = {
-  preview: ArtifactPreviewData;
-
-  setPreview: Dispatch<
-    SetStateAction<ArtifactPreviewData>
-  >;
-
-  updatePreview: (
-    values: Partial<ArtifactPreviewData>,
-  ) => void;
-};
+type ArtifactStudioContextValue =
+  ArtifactStudioState;
 
 const ArtifactStudioContext =
   createContext<

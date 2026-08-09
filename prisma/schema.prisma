@@ -36,12 +36,15 @@ model Player {
   nickname     String?
   quote        String?
 
-  artifacts         Artifact[]
-  atpPlayer         AtpPlayer?
-  playerProfile     PlayerProfile?
-  careerEvents      PlayerCareerEvent[]
-  museumCollections MuseumCollectionPlayer[]
-  equipment         PlayerEquipment[]
+  artifacts           Artifact[]
+  atpPlayer           AtpPlayer?
+  playerProfile       PlayerProfile?
+  careerEvents        PlayerCareerEvent[]
+  museumCollections   MuseumCollectionPlayer[]
+  equipment           PlayerEquipment[]
+  tournamentWins      TournamentEdition[]      @relation("TournamentEditionChampion")
+  tournamentRunnerUps TournamentEdition[]      @relation("TournamentEditionRunnerUp")
+  tournamentChampions TournamentChampion[]
 
   @@index([name])
   @@index([collectionType])
@@ -527,6 +530,232 @@ model MuseumPage {
   @@index([updatedAt])
 }
 
+model Tournament {
+  id          String             @id @default(cuid())
+  name        String
+  slug        String             @unique
+  shortName   String?
+  category    TournamentCategory
+  surface     CourtSurface
+  city        String?
+  country     String
+  countryCode String?
+  venue       String?
+
+  foundedYear Int?
+  description String?
+  history     String?
+
+  logoUrl    String?
+  heroImage  String?
+  websiteUrl String?
+
+  active       Boolean @default(true)
+  featured     Boolean @default(false)
+  displayOrder Int?
+
+  metaTitle       String?
+  metaDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  editions      TournamentEdition[]
+  champions     TournamentChampion[]
+  galleryItems  TournamentGalleryItem[]
+  milestones    TournamentMilestone[]
+  chapters      TournamentChapter[]
+  iconicMoments TournamentIconicMoment[]
+
+  @@index([name])
+  @@index([category])
+  @@index([surface])
+  @@index([country])
+  @@index([active])
+  @@index([featured])
+  @@index([displayOrder])
+}
+
+model TournamentEdition {
+  id           String @id @default(cuid())
+  tournamentId String
+  year         Int
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  drawSize Int?
+
+  championName String?
+  runnerUpName String?
+
+  championPlayerId String?
+  runnerUpPlayerId String?
+
+  championCountryCode String?
+  runnerUpCountryCode String?
+
+  score String?
+
+  cancelled Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament     Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  championPlayer Player?    @relation("TournamentEditionChampion", fields: [championPlayerId], references: [id], onDelete: SetNull)
+  runnerUpPlayer Player?    @relation("TournamentEditionRunnerUp", fields: [runnerUpPlayerId], references: [id], onDelete: SetNull)
+
+  @@unique([tournamentId, year])
+  @@index([tournamentId])
+  @@index([year])
+  @@index([championPlayerId])
+  @@index([runnerUpPlayerId])
+  @@index([cancelled])
+}
+
+model TournamentChampion {
+  id           String @id @default(cuid())
+  tournamentId String
+
+  playerId String?
+
+  name        String?
+  country     String?
+  countryCode String?
+
+  titles Int @default(1)
+
+  firstTitleYear Int?
+  lastTitleYear  Int?
+  titleYears     Int[] @default([])
+
+  finals Int?
+  wins   Int?
+
+  legend    Boolean @default(false)
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  recordLabel String?
+  quote       String?
+  imageUrl    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  player     Player?    @relation(fields: [playerId], references: [id], onDelete: SetNull)
+
+  @@unique([tournamentId, playerId])
+  @@index([tournamentId])
+  @@index([playerId])
+  @@index([titles])
+  @@index([legend])
+  @@index([featured])
+  @@index([sortOrder])
+  @@index([name])
+}
+
+model TournamentGalleryItem {
+  id           String @id @default(cuid())
+  tournamentId String
+
+  title   String?
+  eyebrow String?
+  caption String?
+
+  imageUrl String
+  alt      String?
+
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId])
+  @@index([tournamentId, sortOrder])
+  @@index([featured])
+}
+
+model TournamentMilestone {
+  id           String @id @default(cuid())
+  tournamentId String
+
+  year Int?
+
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String?
+
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId])
+  @@index([tournamentId, year])
+  @@index([tournamentId, sortOrder])
+  @@index([featured])
+}
+
+model TournamentChapter {
+  id           String @id @default(cuid())
+  tournamentId String
+
+  eyebrow     String?
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String?
+  yearLabel   String?
+
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId])
+  @@index([tournamentId, sortOrder])
+  @@index([featured])
+}
+
+model TournamentIconicMoment {
+  id           String @id @default(cuid())
+  tournamentId String
+
+  year       Int?
+  momentDate DateTime?
+
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String?
+
+  featured  Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId])
+  @@index([tournamentId, year])
+  @@index([tournamentId, sortOrder])
+  @@index([featured])
+}
+
 enum MuseumPageStatus {
   DRAFT
   PUBLISHED
@@ -642,5 +871,25 @@ enum PlayerEquipmentCategory {
   APPAREL
   BAG
   ACCESSORY
+  OTHER
+}
+
+enum TournamentCategory {
+  GRAND_SLAM
+  ATP_FINALS
+  MASTERS_1000
+  ATP_500
+  ATP_250
+  OLYMPICS
+  DAVIS_CUP
+  OTHER
+}
+
+enum CourtSurface {
+  HARD
+  CLAY
+  GRASS
+  CARPET
+  INDOOR_HARD
   OTHER
 }

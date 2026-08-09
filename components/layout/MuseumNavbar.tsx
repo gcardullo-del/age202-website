@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   ChevronDown,
   Menu,
@@ -13,6 +17,7 @@ import {
 } from "lucide-react";
 
 import GlobalMuseumSearch from "@/components/public/GlobalMuseumSearch";
+import MuseumSearchShortcut from "@/components/public/MuseumSearchShortcut";
 
 const playerLinks = [
   ["Roger Federer", "/archives/federer"],
@@ -32,57 +37,110 @@ const primaryLinks = [
   ["Originals", "/age202-originals"],
 ] as const;
 
-function isCurrent(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
+function isCurrent(
+  pathname: string,
+  href: string,
+): boolean {
+  return (
+    pathname === href ||
+    pathname.startsWith(
+      `${href}/`,
+    )
+  );
 }
 
 export default function MuseumNavbar() {
   const pathname = usePathname();
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [playersOpen, setPlayersOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [
+    menuOpen,
+    setMenuOpen,
+  ] = useState(false);
 
-  const closeSearch = useCallback(() => {
-    setSearchOpen(false);
-  }, []);
+  const [
+    playersOpen,
+    setPlayersOpen,
+  ] = useState(false);
+
+  const [
+    searchOpen,
+    setSearchOpen,
+  ] = useState(false);
+
+  const [
+    scrolled,
+    setScrolled,
+  ] = useState(false);
+
+  const openSearch =
+    useCallback(() => {
+      setSearchOpen(true);
+    }, []);
+
+  const closeSearch =
+    useCallback(() => {
+      setSearchOpen(false);
+    }, []);
 
   useEffect(() => {
     const updateNavbar = () => {
-      setScrolled(window.scrollY > 24);
+      setScrolled(
+        window.scrollY > 24,
+      );
     };
 
     updateNavbar();
 
-    window.addEventListener("scroll", updateNavbar, {
-      passive: true,
-    });
+    window.addEventListener(
+      "scroll",
+      updateNavbar,
+      {
+        passive: true,
+      },
+    );
 
     return () => {
-      window.removeEventListener("scroll", updateNavbar);
+      window.removeEventListener(
+        "scroll",
+        updateNavbar,
+      );
     };
   }, []);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      setMenuOpen(false);
-      setPlayersOpen(false);
-      setSearchOpen(false);
-    });
+    const frame =
+      window.requestAnimationFrame(
+        () => {
+          setMenuOpen(false);
+          setPlayersOpen(false);
+          setSearchOpen(false);
+        },
+      );
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(
+        frame,
+      );
     };
-  }, [pathname]);
+  }, [
+    pathname,
+  ]);
 
   const playersActive =
     pathname === "/players" ||
-    pathname.startsWith("/players/") ||
-    pathname.startsWith("/archives/");
+    pathname.startsWith(
+      "/players/",
+    ) ||
+    pathname.startsWith(
+      "/archives/",
+    );
 
   return (
     <>
+      <MuseumSearchShortcut
+        onOpen={openSearch}
+      />
+
       <header
         className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 ${
           scrolled
@@ -131,13 +189,23 @@ export default function MuseumNavbar() {
 
             <div
               className="relative flex h-full items-center"
-              onMouseEnter={() => setPlayersOpen(true)}
-              onMouseLeave={() => setPlayersOpen(false)}
+              onMouseEnter={() =>
+                setPlayersOpen(
+                  true,
+                )
+              }
+              onMouseLeave={() =>
+                setPlayersOpen(
+                  false,
+                )
+              }
             >
               <Link
                 href="/players"
                 aria-haspopup="menu"
-                aria-expanded={playersOpen}
+                aria-expanded={
+                  playersOpen
+                }
                 className={`group relative flex h-full items-center gap-1.5 text-[10px] font-bold uppercase tracking-[.18em] transition ${
                   playersActive
                     ? "text-[#d7ff00]"
@@ -150,13 +218,16 @@ export default function MuseumNavbar() {
                   size={13}
                   strokeWidth={1.8}
                   className={`transition-transform duration-200 ${
-                    playersOpen ? "rotate-180" : ""
+                    playersOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
 
                 <span
                   className={`absolute inset-x-0 bottom-[20px] h-px origin-left bg-[#d7ff00] transition-transform duration-300 ${
-                    playersActive || playersOpen
+                    playersActive ||
+                    playersOpen
                       ? "scale-x-100"
                       : "scale-x-0 group-hover:scale-x-100"
                   }`}
@@ -174,54 +245,85 @@ export default function MuseumNavbar() {
                   role="menu"
                   className="overflow-hidden rounded-2xl border border-white/10 bg-[#07101f]/98 p-2 shadow-2xl shadow-black/50 backdrop-blur-2xl"
                 >
-                  {playerLinks.map(([label, href]) => {
-                    const active = isCurrent(pathname, href);
+                  {playerLinks.map(
+                    ([
+                      label,
+                      href,
+                    ]) => {
+                      const active =
+                        isCurrent(
+                          pathname,
+                          href,
+                        );
 
-                    return (
-                      <Link
-                        key={label}
-                        href={href}
-                        role="menuitem"
-                        className={`flex items-center justify-between rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-[.16em] transition ${
-                          active
-                            ? "bg-white/[.06] text-[#d7ff00]"
-                            : "text-white/65 hover:bg-white/[.06] hover:text-[#d7ff00]"
-                        }`}
-                      >
-                        <span>{label}</span>
-                        <span aria-hidden="true">↗</span>
-                      </Link>
-                    );
-                  })}
+                      return (
+                        <Link
+                          key={
+                            label
+                          }
+                          href={
+                            href
+                          }
+                          role="menuitem"
+                          className={`flex items-center justify-between rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-[.16em] transition ${
+                            active
+                              ? "bg-white/[.06] text-[#d7ff00]"
+                              : "text-white/65 hover:bg-white/[.06] hover:text-[#d7ff00]"
+                          }`}
+                        >
+                          <span>
+                            {
+                              label
+                            }
+                          </span>
+
+                          <span
+                            aria-hidden="true"
+                          >
+                            ↗
+                          </span>
+                        </Link>
+                      );
+                    },
+                  )}
                 </div>
               </div>
             </div>
 
-            {primaryLinks.map(([label, href]) => {
-              const active = isCurrent(pathname, href);
+            {primaryLinks.map(
+              ([
+                label,
+                href,
+              ]) => {
+                const active =
+                  isCurrent(
+                    pathname,
+                    href,
+                  );
 
-              return (
-                <Link
-                  key={label}
-                  href={href}
-                  className={`group relative flex h-full items-center whitespace-nowrap text-[10px] font-bold uppercase tracking-[.18em] transition ${
-                    active
-                      ? "text-[#d7ff00]"
-                      : "text-white/72 hover:text-white"
-                  }`}
-                >
-                  {label}
-
-                  <span
-                    className={`absolute inset-x-0 bottom-[20px] h-px origin-left bg-[#d7ff00] transition-transform duration-300 ${
+                return (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={`group relative flex h-full items-center whitespace-nowrap text-[10px] font-bold uppercase tracking-[.18em] transition ${
                       active
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-100"
+                        ? "text-[#d7ff00]"
+                        : "text-white/72 hover:text-white"
                     }`}
-                  />
-                </Link>
-              );
-            })}
+                  >
+                    {label}
+
+                    <span
+                      className={`absolute inset-x-0 bottom-[20px] h-px origin-left bg-[#d7ff00] transition-transform duration-300 ${
+                        active
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                );
+              },
+            )}
           </nav>
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
@@ -230,29 +332,53 @@ export default function MuseumNavbar() {
               aria-label="Open shop"
               className="grid h-11 w-11 place-items-center text-white/85 transition hover:text-[#d7ff00]"
             >
-              <ShoppingBag size={19} strokeWidth={1.7} />
+              <ShoppingBag
+                size={19}
+                strokeWidth={1.7}
+              />
             </Link>
 
             <button
               type="button"
-              onClick={() => setSearchOpen(true)}
+              onClick={openSearch}
               aria-label="Search museum"
+              title="Search museum (Ctrl+K / ⌘+K)"
               className="grid h-11 w-11 place-items-center text-white/85 transition hover:text-[#d7ff00]"
             >
-              <Search size={20} strokeWidth={1.7} />
+              <Search
+                size={20}
+                strokeWidth={1.7}
+              />
             </button>
 
             <span className="hidden h-8 w-px bg-white/15 sm:block" />
 
             <button
               type="button"
-              onClick={() => setMenuOpen((value) => !value)}
-              aria-expanded={menuOpen}
+              onClick={() =>
+                setMenuOpen(
+                  (value) =>
+                    !value,
+                )
+              }
+              aria-expanded={
+                menuOpen
+              }
               aria-controls="mobile-navigation"
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-label={
+                menuOpen
+                  ? "Close menu"
+                  : "Open menu"
+              }
               className="grid h-11 w-11 place-items-center text-white transition hover:text-[#d7ff00] 2xl:hidden"
             >
-              {menuOpen ? <X size={23} /> : <Menu size={23} />}
+              {menuOpen ? (
+                <X size={23} />
+              ) : (
+                <Menu
+                  size={23}
+                />
+              )}
             </button>
           </div>
         </div>
@@ -269,13 +395,22 @@ export default function MuseumNavbar() {
                 className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
               >
                 Home
-                <span className="text-sm text-[#d7ff00]">↗</span>
+                <span className="text-sm text-[#d7ff00]">
+                  ↗
+                </span>
               </Link>
 
               <button
                 type="button"
-                onClick={() => setPlayersOpen((value) => !value)}
-                aria-expanded={playersOpen}
+                onClick={() =>
+                  setPlayersOpen(
+                    (value) =>
+                      !value,
+                  )
+                }
+                aria-expanded={
+                  playersOpen
+                }
                 className="flex w-full items-center justify-between border-b border-white/10 py-4 text-left text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
               >
                 Players
@@ -283,7 +418,9 @@ export default function MuseumNavbar() {
                 <ChevronDown
                   size={18}
                   className={`transition-transform duration-200 ${
-                    playersOpen ? "rotate-180" : ""
+                    playersOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
               </button>
@@ -295,46 +432,81 @@ export default function MuseumNavbar() {
                     className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
                   >
                     All Players
-                    <span aria-hidden="true">↗</span>
+
+                    <span
+                      aria-hidden="true"
+                    >
+                      ↗
+                    </span>
                   </Link>
 
-                  {playerLinks.map(([label, href]) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
-                    >
-                      {label}
-                      <span aria-hidden="true">↗</span>
-                    </Link>
-                  ))}
+                  {playerLinks.map(
+                    ([
+                      label,
+                      href,
+                    ]) => (
+                      <Link
+                        key={
+                          label
+                        }
+                        href={
+                          href
+                        }
+                        className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
+                      >
+                        {
+                          label
+                        }
+
+                        <span
+                          aria-hidden="true"
+                        >
+                          ↗
+                        </span>
+                      </Link>
+                    ),
+                  )}
                 </div>
               )}
 
-              {primaryLinks.map(([label, href]) => (
-                <Link
-                  key={label}
-                  href={href}
-                  className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
-                >
-                  {label}
-                  <span className="text-sm text-[#d7ff00]">↗</span>
-                </Link>
-              ))}
+              {primaryLinks.map(
+                ([
+                  label,
+                  href,
+                ]) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
+                  >
+                    {label}
+
+                    <span className="text-sm text-[#d7ff00]">
+                      ↗
+                    </span>
+                  </Link>
+                ),
+              )}
 
               <Link
                 href="/shop"
                 className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
               >
                 Shop
-                <span className="text-sm text-[#d7ff00]">↗</span>
+
+                <span className="text-sm text-[#d7ff00]">
+                  ↗
+                </span>
               </Link>
             </div>
           </nav>
         )}
       </header>
 
-      <GlobalMuseumSearch open={searchOpen} onClose={closeSearch} />
+      <GlobalMuseumSearch
+        open={searchOpen}
+        onClose={closeSearch}
+      />
     </>
   );
 }
