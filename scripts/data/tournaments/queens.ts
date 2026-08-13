@@ -1,0 +1,287 @@
+import type {
+  TournamentHistoryDataset,
+  TournamentHistoryPlayerRef,
+} from "../../tournament-history/types";
+
+const player = (...slugCandidates: string[]): TournamentHistoryPlayerRef => ({
+  slugCandidates,
+});
+
+const dataset = {
+  tournamentSlug: "queens",
+
+  tournament: {
+    name: "HSBC Championships",
+    shortName: "Queen's",
+    category: "ATP_500",
+    surface: "GRASS",
+    city: "London",
+    country: "United Kingdom",
+    countryCode: "GBR",
+    venue: "The Queen's Club",
+    foundedYear: 1969,
+    description:
+      "Queen's is one of the defining grass-court championships of the ATP Tour, combining London tradition, fast lawns and an elite pre-Wimbledon field.",
+    history:
+      "The modern Open Era tournament at The Queen's Club dates to 1969 and has become one of the most prestigious grass-court events outside Wimbledon. Its champions span generations, including Jimmy Connors, John McEnroe, Boris Becker, Pete Sampras, Lleyton Hewitt, Rafael Nadal, Andy Murray, Carlos Alcaraz and Tommy Paul. Murray owns the Open Era singles record with five titles. In 2026 Francisco Cerundolo became the first Argentine singles champion at Queen's and won his first ATP 500 crown.",
+    active: true,
+    metaTitle:
+      "Queen's ATP 500 | History, Legends & Recent Finals | AGE202",
+    metaDescription:
+      "Explore the HSBC Championships at The Queen's Club: history, iconic moments, legends and the five most recent completed ATP finals.",
+  },
+
+  iconicMoments: [
+    {
+      year: 1969,
+      title: "The modern Queen's era begins",
+      subtitle: "London's grass-court classic enters the Open Era",
+      description:
+        "The modern tournament begins in 1969 and establishes Queen's as one of the central championships of the pre-Wimbledon grass season.",
+      sortOrder: 10,
+    },
+    {
+      year: 2008,
+      title: "Nadal completes the Queen's-Wimbledon double",
+      subtitle: "A historic grass-court summer",
+      description:
+        "Rafael Nadal wins Queen's and then Wimbledon, becoming the first man since Lleyton Hewitt in 2002 to complete the prestigious double.",
+      featured: true,
+      sortOrder: 20,
+    },
+    {
+      year: 2016,
+      title: "Murray reaches five",
+      subtitle: "The Open Era title record",
+      description:
+        "Andy Murray captures his fifth Queen's singles title, establishing the Open Era tournament record.",
+      featured: true,
+      sortOrder: 30,
+    },
+    {
+      year: 2023,
+      title: "Alcaraz conquers the grass",
+      subtitle: "A first grass-court title",
+      description:
+        "Carlos Alcaraz wins Queen's on his tournament debut and immediately follows the title by winning Wimbledon.",
+      featured: true,
+      sortOrder: 40,
+    },
+    {
+      year: 2026,
+      title: "Cerundolo makes Argentine history",
+      subtitle: "The longest Queen's final",
+      description:
+        "Francisco Cerundolo rallies past Tommy Paul 6-7(4), 6-4, 6-3 in three hours and two minutes to become the first Argentine singles champion at Queen's.",
+      featured: true,
+      sortOrder: 50,
+    },
+  ],
+
+  legends: [
+    {
+      player: player("andy-murray", "murray"),
+      name: "Andy Murray",
+      country: "Great Britain",
+      countryCode: "GBR",
+      recordLabel: "Open Era record five-time champion",
+      quote:
+        "Murray won Queen's five times, making the London grass tournament one of the defining championships of his career.",
+      legend: true,
+      featured: true,
+      sortOrder: 10,
+    },
+    {
+      name: "Lleyton Hewitt",
+      country: "Australia",
+      countryCode: "AUS",
+      recordLabel: "Four-time champion",
+      quote:
+        "Hewitt won four Queen's titles and became one of the tournament's dominant grass-court champions of the early 2000s.",
+      legend: true,
+      featured: true,
+      sortOrder: 20,
+    },
+    {
+      name: "Boris Becker",
+      country: "Germany",
+      countryCode: "GER",
+      recordLabel: "Four-time champion",
+      quote:
+        "Becker captured four Queen's crowns and built one of the great championship records of the tournament's 1980s and 1990s era.",
+      legend: true,
+      featured: true,
+      sortOrder: 30,
+    },
+    {
+      name: "John McEnroe",
+      country: "United States",
+      countryCode: "USA",
+      recordLabel: "Four-time champion",
+      quote:
+        "McEnroe won Queen's four times during a period in which his serve-and-volley tennis defined the grass-court game.",
+      legend: true,
+      featured: false,
+      sortOrder: 40,
+    },
+    {
+      player: player("rafael-nadal", "nadal"),
+      name: "Rafael Nadal",
+      country: "Spain",
+      countryCode: "ESP",
+      recordLabel: "2008 champion",
+      quote:
+        "Nadal's 2008 Queen's title became the launch point for his first Wimbledon championship weeks later.",
+      legend: true,
+      featured: false,
+      sortOrder: 50,
+    },
+    {
+      player: player("carlos-alcaraz", "alcaraz"),
+      name: "Carlos Alcaraz",
+      country: "Spain",
+      countryCode: "ESP",
+      recordLabel: "Two-time champion",
+      quote:
+        "Alcaraz won Queen's in 2023 and 2025, using both championship runs as part of exceptional grass-court seasons.",
+      legend: true,
+      featured: true,
+      sortOrder: 60,
+    },
+  ],
+
+  editions: [
+    { year: 1969, championName: "Fred Stolle", championCountryCode: "AUS" },
+    { year: 1970, championName: "Rod Laver", championCountryCode: "AUS" },
+    { year: 1971, championName: "Stan Smith", championCountryCode: "USA" },
+    { year: 1972, championName: "Jimmy Connors", championCountryCode: "USA" },
+    { year: 1973, championName: "Ilie Nastase", championCountryCode: "ROU" },
+    { year: 1974, championName: "Jimmy Connors", championCountryCode: "USA" },
+    { year: 1975, championName: "Raul Ramirez", championCountryCode: "MEX" },
+    { year: 1976, championName: "Jimmy Connors", championCountryCode: "USA" },
+    { year: 1977, championName: "Raul Ramirez", championCountryCode: "MEX" },
+    { year: 1978, championName: "Tony Roche", championCountryCode: "AUS" },
+    { year: 1979, championName: "John McEnroe", championCountryCode: "USA" },
+    { year: 1980, championName: "John McEnroe", championCountryCode: "USA" },
+    { year: 1981, championName: "John McEnroe", championCountryCode: "USA" },
+    { year: 1982, championName: "Jimmy Connors", championCountryCode: "USA" },
+    { year: 1983, championName: "Jimmy Connors", championCountryCode: "USA" },
+    { year: 1984, championName: "John McEnroe", championCountryCode: "USA" },
+    { year: 1985, championName: "Boris Becker", championCountryCode: "GER" },
+    { year: 1986, championName: "Tim Mayotte", championCountryCode: "USA" },
+    { year: 1987, championName: "Boris Becker", championCountryCode: "GER" },
+    { year: 1988, championName: "Boris Becker", championCountryCode: "GER" },
+    { year: 1989, championName: "Ivan Lendl", championCountryCode: "TCH" },
+    { year: 1990, championName: "Ivan Lendl", championCountryCode: "TCH" },
+    { year: 1991, championName: "Stefan Edberg", championCountryCode: "SWE" },
+    { year: 1992, championName: "Wayne Ferreira", championCountryCode: "RSA" },
+    { year: 1993, championName: "Michael Stich", championCountryCode: "GER" },
+    { year: 1994, championName: "Todd Martin", championCountryCode: "USA" },
+    { year: 1995, championName: "Pete Sampras", championCountryCode: "USA" },
+    { year: 1996, championName: "Boris Becker", championCountryCode: "GER" },
+    { year: 1997, championName: "Mark Philippoussis", championCountryCode: "AUS" },
+    { year: 1998, championName: "Scott Draper", championCountryCode: "AUS" },
+    { year: 1999, championName: "Pete Sampras", championCountryCode: "USA" },
+    { year: 2000, championName: "Lleyton Hewitt", championCountryCode: "AUS" },
+    { year: 2001, championName: "Lleyton Hewitt", championCountryCode: "AUS" },
+    { year: 2002, championName: "Lleyton Hewitt", championCountryCode: "AUS" },
+    { year: 2003, championName: "Andy Roddick", championCountryCode: "USA" },
+    { year: 2004, championName: "Andy Roddick", championCountryCode: "USA" },
+    { year: 2005, championName: "Andy Roddick", championCountryCode: "USA" },
+    { year: 2006, championName: "Lleyton Hewitt", championCountryCode: "AUS" },
+    { year: 2007, championName: "Andy Roddick", championCountryCode: "USA" },
+    {
+      year: 2008,
+      championName: "Rafael Nadal",
+      championCountryCode: "ESP",
+      championPlayer: player("rafael-nadal", "nadal"),
+    },
+    {
+      year: 2009,
+      championName: "Andy Murray",
+      championCountryCode: "GBR",
+      championPlayer: player("andy-murray", "murray"),
+    },
+    { year: 2010, championName: "Sam Querrey", championCountryCode: "USA" },
+    {
+      year: 2011,
+      championName: "Andy Murray",
+      championCountryCode: "GBR",
+      championPlayer: player("andy-murray", "murray"),
+    },
+    { year: 2012, championName: "Marin Cilic", championCountryCode: "CRO" },
+    {
+      year: 2013,
+      championName: "Andy Murray",
+      championCountryCode: "GBR",
+      championPlayer: player("andy-murray", "murray"),
+    },
+    { year: 2014, championName: "Grigor Dimitrov", championCountryCode: "BUL" },
+    {
+      year: 2015,
+      championName: "Andy Murray",
+      championCountryCode: "GBR",
+      championPlayer: player("andy-murray", "murray"),
+    },
+    {
+      year: 2016,
+      championName: "Andy Murray",
+      championCountryCode: "GBR",
+      championPlayer: player("andy-murray", "murray"),
+    },
+    { year: 2017, championName: "Feliciano Lopez", championCountryCode: "ESP" },
+    { year: 2018, championName: "Marin Cilic", championCountryCode: "CRO" },
+    { year: 2019, championName: "Feliciano Lopez", championCountryCode: "ESP" },
+    { year: 2020, cancelled: true },
+    {
+      year: 2021,
+      championName: "Matteo Berrettini",
+      championCountryCode: "ITA",
+    },
+    {
+      year: 2022,
+      championName: "Matteo Berrettini",
+      runnerUpName: "Filip Krajinovic",
+      championCountryCode: "ITA",
+      runnerUpCountryCode: "SRB",
+      score: "7-5, 6-4",
+    },
+    {
+      year: 2023,
+      championName: "Carlos Alcaraz",
+      runnerUpName: "Alex de Minaur",
+      championCountryCode: "ESP",
+      runnerUpCountryCode: "AUS",
+      championPlayer: player("carlos-alcaraz", "alcaraz"),
+      runnerUpPlayer: player("alex-de-minaur", "de-minaur"),
+      score: "6-4, 6-4",
+    },
+    {
+      year: 2024,
+      championName: "Tommy Paul",
+      runnerUpName: "Lorenzo Musetti",
+      championCountryCode: "USA",
+      runnerUpCountryCode: "ITA",
+      score: "6-1, 7-6(8)",
+    },
+    {
+      year: 2025,
+      championName: "Carlos Alcaraz",
+      runnerUpName: "Jiri Lehecka",
+      championCountryCode: "ESP",
+      runnerUpCountryCode: "CZE",
+      championPlayer: player("carlos-alcaraz", "alcaraz"),
+      score: "7-5, 6-7(5), 6-2",
+    },
+    {
+      year: 2026,
+      championName: "Francisco Cerundolo",
+      runnerUpName: "Tommy Paul",
+      championCountryCode: "ARG",
+      runnerUpCountryCode: "USA",
+      score: "6-7(4), 6-4, 6-3",
+    },
+  ],
+} satisfies TournamentHistoryDataset;
+
+export default dataset;

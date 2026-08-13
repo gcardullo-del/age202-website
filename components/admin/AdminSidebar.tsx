@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import {
   Archive,
+  BookOpen,
   ChevronRight,
   Home,
   Image,
@@ -53,6 +54,11 @@ const navigationItems = [
     label: "Tournaments",
     href: "/admin/tournaments",
     icon: Trophy,
+  },
+  {
+    label: "Tennis History",
+    href: "/admin/tennis-history",
+    icon: BookOpen,
   },
   {
     label: "Collections",

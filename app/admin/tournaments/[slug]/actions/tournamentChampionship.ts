@@ -87,6 +87,20 @@ function normalizeCountryCode(value: string | null): string | null {
   return value.trim().toUpperCase().slice(0, 3);
 }
 
+function normalizeEditionKey(value: string | null): string {
+  if (!value) {
+    return "main";
+  }
+
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return normalized || "main";
+}
+
 function integerList(
   formData: FormData,
   key: string,
@@ -168,6 +182,11 @@ function revalidateTournamentPaths(slug: string, category: string) {
   revalidatePath("/admin/tournaments");
   revalidatePath(`/admin/tournaments/${slug}`);
 
+  if (category === "GRAND_SLAM") {
+    revalidatePath(`/results/grand-slams/${slug}`);
+    return;
+  }
+
   if (category === "MASTERS_1000") {
     revalidatePath(`/results/masters-1000/${slug}`);
   }
@@ -201,6 +220,14 @@ export async function createTournamentEdition(
   const year = requiredInteger(formData, "year");
   validateYear(year);
 
+  const editionKey = normalizeEditionKey(
+    optionalText(formData, "editionKey"),
+  );
+  const editionLabel = optionalText(
+    formData,
+    "editionLabel",
+  );
+
   const startDate = optionalDate(formData, "startDate");
   const endDate = optionalDate(formData, "endDate");
   validateDateRange(startDate, endDate);
@@ -213,12 +240,11 @@ export async function createTournamentEdition(
     validateOptionalPlayer(runnerUpPlayerId),
   ]);
 
-  const existingEdition = await prisma.tournamentEdition.findUnique({
+  const existingEdition = await prisma.tournamentEdition.findFirst({
     where: {
-      tournamentId_year: {
-        tournamentId,
-        year,
-      },
+      tournamentId,
+      year,
+      editionKey,
     },
     select: {
       id: true,
@@ -226,13 +252,17 @@ export async function createTournamentEdition(
   });
 
   if (existingEdition) {
-    throw new Error(`An edition for ${year} already exists.`);
+    throw new Error(
+      `An edition for ${year} with key "${editionKey}" already exists.`,
+    );
   }
 
   await prisma.tournamentEdition.create({
     data: {
       tournamentId,
       year,
+      editionKey,
+      editionLabel,
       startDate,
       endDate,
       drawSize: optionalInteger(formData, "drawSize"),
@@ -280,6 +310,14 @@ export async function updateTournamentEdition(
   const year = requiredInteger(formData, "year");
   validateYear(year);
 
+  const editionKey = normalizeEditionKey(
+    optionalText(formData, "editionKey"),
+  );
+  const editionLabel = optionalText(
+    formData,
+    "editionLabel",
+  );
+
   const startDate = optionalDate(formData, "startDate");
   const endDate = optionalDate(formData, "endDate");
   validateDateRange(startDate, endDate);
@@ -296,6 +334,7 @@ export async function updateTournamentEdition(
     where: {
       tournamentId,
       year,
+      editionKey,
       id: {
         not: edition.id,
       },
@@ -306,7 +345,9 @@ export async function updateTournamentEdition(
   });
 
   if (duplicateEdition) {
-    throw new Error(`Another edition for ${year} already exists.`);
+    throw new Error(
+      `Another edition for ${year} with key "${editionKey}" already exists.`,
+    );
   }
 
   await prisma.tournamentEdition.update({
@@ -315,6 +356,8 @@ export async function updateTournamentEdition(
     },
     data: {
       year,
+      editionKey,
+      editionLabel,
       startDate,
       endDate,
       drawSize: optionalInteger(formData, "drawSize"),

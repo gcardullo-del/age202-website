@@ -120,10 +120,20 @@ export default function Masters1000HallOfChampionsSection({
       flag: "",
     };
 
-  const latestHref =
+  const latestChampionSlug =
+    latestFinal?.championSlug ??
+    staticArchive?.latestChampionSlug;
+
+  const latestArchiveHref =
     getPlayerArchiveHref(
       latestChampion,
     );
+
+  const latestHref =
+    latestArchiveHref ??
+    (latestChampionSlug
+      ? `/players/${latestChampionSlug}`
+      : null);
 
   return (
     <section
@@ -132,7 +142,7 @@ export default function Masters1000HallOfChampionsSection({
     >
       <div className="pointer-events-none absolute -right-56 top-10 h-[34rem] w-[34rem] rounded-full bg-[var(--tournament-glow)] opacity-30 blur-3xl" />
 
-      <div className="relative mx-auto max-w-[1440px]">
+      <div className="relative mx-auto w-full max-w-[1920px]">
         <div className="grid gap-7 xl:grid-cols-[minmax(0,1fr)_400px] xl:items-end">
           <div>
             <div className="inline-flex items-center gap-3">
@@ -225,7 +235,7 @@ export default function Masters1000HallOfChampionsSection({
           />
         </div>
 
-        <div className="mt-12 grid gap-7 xl:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.65fr)]">
+        <div className="mt-12 grid gap-7 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:items-start">
           <div>
             <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--tournament-primary)]">
               Championship matches
@@ -266,16 +276,14 @@ export default function Masters1000HallOfChampionsSection({
               Title leaders
             </h3>
 
-            <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
+            <div className="mt-7 grid gap-4 sm:grid-cols-2 2xl:grid-cols-3">
               {titleLeaders.map(
                 (
                   leader,
                   index,
                 ) => (
                   <TitleLeaderCard
-                    key={
-                      leader.player
-                    }
+                    key={`${leader.player}-${leader.titles}-${leader.years.join("-")}-${index}`}
                     leader={
                       leader
                     }
@@ -345,13 +353,21 @@ function ArchiveFact({
 
 function PlayerName({
   name,
+  playerSlug,
 }: {
   name: string;
+  playerSlug?: string;
 }) {
-  const href =
+  const archiveHref =
     getPlayerArchiveHref(
       name,
     );
+
+  const href =
+    archiveHref ??
+    (playerSlug
+      ? `/players/${playerSlug}`
+      : null);
 
   return href ? (
     <Link
@@ -371,6 +387,7 @@ function PlayerName({
     </span>
   );
 }
+
 
 function FinalRow({
   final,
@@ -407,6 +424,9 @@ function FinalRow({
             name={
               final.champion
             }
+            playerSlug={
+              final.championSlug
+            }
           />
         </p>
 
@@ -431,6 +451,9 @@ function FinalRow({
           <PlayerName
             name={
               final.runnerUp
+            }
+            playerSlug={
+              final.runnerUpSlug
             }
           />
         </p>
@@ -469,10 +492,16 @@ function TitleLeaderCard({
   leader: Masters1000TitleLeader;
   rank: number;
 }) {
-  const href =
+  const archiveHref =
     getPlayerArchiveHref(
       leader.player,
     );
+
+  const href =
+    archiveHref ??
+    (leader.playerSlug
+      ? `/players/${leader.playerSlug}`
+      : null);
 
   const body = (
     <article className="group rounded-[1.6rem] border border-white/10 bg-[#07101D] p-6 transition hover:-translate-y-0.5 hover:border-[var(--tournament-primary)]">

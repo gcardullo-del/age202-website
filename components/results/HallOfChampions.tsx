@@ -1,6 +1,10 @@
 import Link from "next/link";
 
 import {
+  getPlayerArchiveHref,
+} from "@/lib/player-links";
+
+import {
   ArrowUpRight,
   CalendarDays,
   Crown,
@@ -61,12 +65,15 @@ export default function HallOfChampions({
   return (
     <section
       id="champions"
-      className="scroll-mt-16 border-t border-white/10 px-5 py-20 sm:px-8 lg:px-12 lg:py-28"
+      className="relative isolate scroll-mt-16 overflow-hidden border-t border-white/10 px-5 py-20 sm:px-8 lg:px-12 lg:py-28"
       style={{
         "--hall-accent": accentColor,
       } as React.CSSProperties}
     >
-      <div className="mx-auto max-w-[1440px]">
+      <div className="pointer-events-none absolute -left-48 top-32 h-[34rem] w-[34rem] rounded-full bg-[var(--hall-accent)] opacity-[0.055] blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+
+      <div className="relative mx-auto max-w-[1440px]">
         <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_470px] lg:items-end">
           <div>
             <div className="inline-flex items-center gap-3">
@@ -100,7 +107,7 @@ export default function HallOfChampions({
         </header>
 
         {latestChampion ? (
-          <div className="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]">
+          <div className="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
             <LatestChampionCard
               tournamentName={tournamentName}
               entry={latestChampion}
@@ -131,18 +138,19 @@ export default function HallOfChampions({
         )}
 
         {leaders.length > 0 ? (
-          <TitleLeaders
-            tournamentName={tournamentName}
-            leaders={leaders}
-          />
+          <>
+            <RecordHolderSpotlight
+              tournamentName={tournamentName}
+              leader={leaders[0]}
+            />
+
+            <TitleLeaders
+              tournamentName={tournamentName}
+              leaders={leaders}
+            />
+          </>
         ) : null}
 
-        {sortedEntries.length > 0 ? (
-          <ChampionsTable
-            tournamentName={tournamentName}
-            entries={sortedEntries}
-          />
-        ) : null}
       </div>
     </section>
   );
@@ -158,7 +166,7 @@ function LatestChampionCard({
   entry,
 }: LatestChampionCardProps) {
   return (
-    <article className="group relative min-h-[420px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D] p-7 sm:p-9 lg:p-11">
+    <article className="group relative min-h-[500px] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[linear-gradient(135deg,#081423_0%,#07101D_58%,#050B18_100%)] p-7 shadow-[0_28px_90px_rgba(0,0,0,0.28)] sm:p-9 lg:p-11">
       <div className="pointer-events-none absolute -right-10 -top-14 text-[12rem] font-black leading-none tracking-[-0.08em] text-white/[0.025]">
         {entry.year}
       </div>
@@ -190,7 +198,7 @@ function LatestChampionCard({
           <ChampionName
             name={entry.champion}
             playerSlug={entry.playerSlug}
-            className="mt-4 max-w-4xl text-4xl sm:text-5xl lg:text-6xl"
+            className="mt-4 max-w-4xl text-5xl sm:text-6xl lg:text-7xl"
           />
 
           <CountryLabel
@@ -258,6 +266,98 @@ function ArchiveStat({
   );
 }
 
+type RecordHolderSpotlightProps = {
+  tournamentName: string;
+  leader: HallOfChampionsLeader;
+};
+
+function RecordHolderSpotlight({
+  tournamentName,
+  leader,
+}: RecordHolderSpotlightProps) {
+  return (
+    <section className="relative mt-14 overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(120deg,#07101D_0%,#091625_58%,#050B18_100%)] shadow-[0_28px_90px_rgba(0,0,0,0.24)]">
+      <div className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-[var(--hall-accent)] opacity-[0.12] blur-3xl" />
+
+      <div className="pointer-events-none absolute -bottom-16 right-6 select-none text-[12rem] font-black leading-none tracking-[-0.09em] text-white/[0.025] sm:text-[16rem]">
+        {leader.titles}
+      </div>
+
+      <div className="relative grid gap-8 p-7 sm:p-9 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-center lg:p-10">
+        <div>
+          <div className="inline-flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-[var(--hall-accent)]">
+              <Crown
+                size={18}
+                strokeWidth={1.4}
+                aria-hidden="true"
+              />
+            </span>
+
+            <div>
+              <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--hall-accent)]">
+                Legend of the tournament
+              </p>
+
+              <p className="mt-1 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/25">
+                {tournamentName} · Men&apos;s singles
+              </p>
+            </div>
+          </div>
+
+          <ChampionName
+            name={leader.player}
+            playerSlug={leader.playerSlug}
+            className="mt-8 max-w-4xl text-5xl sm:text-6xl lg:text-7xl"
+          />
+
+          <CountryLabel
+            countryCode={leader.countryCode}
+            country={leader.country}
+            className="mt-4"
+          />
+        </div>
+
+        <div className="relative flex min-h-[250px] flex-col rounded-[1.7rem] border border-white/10 bg-white/[0.025] p-7">
+          <div className="flex items-start justify-between gap-5">
+            <div>
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-white/28">
+                Championship legacy
+              </p>
+              <p className="mt-3 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-[var(--hall-accent)]">
+                All-time benchmark
+              </p>
+            </div>
+
+            <Medal
+              size={18}
+              strokeWidth={1.35}
+              className="text-[var(--hall-accent)]"
+              aria-hidden="true"
+            />
+          </div>
+
+          <div className="mt-6 flex items-end gap-3">
+            <span className="text-7xl font-black leading-none tracking-[-0.08em] text-[var(--hall-accent)] sm:text-8xl">
+              {leader.titles}
+            </span>
+            <span className="pb-1 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/38">
+              titles
+            </span>
+          </div>
+
+          <div className="mt-auto border-t border-white/10 pt-5">
+            <p className="text-xs leading-6 text-white/40">
+              The men&apos;s singles record at {tournamentName}, preserved in
+              the AGE202 championship archive.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 type TitleLeadersProps = {
   tournamentName: string;
   leaders: HallOfChampionsLeader[];
@@ -267,18 +367,22 @@ function TitleLeaders({
   tournamentName,
   leaders,
 }: TitleLeadersProps) {
-  const displayedLeaders = leaders.slice(0, 4);
+  const displayedLeaders = leaders.slice(1, 5);
+
+  if (displayedLeaders.length === 0) {
+    return null;
+  }
 
   return (
-    <section className="mt-16">
+    <section className="mt-14 border-t border-white/10 pt-12">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--hall-accent)]">
-            Tournament leaders
+            All-time ranking
           </p>
 
           <h3 className="mt-4 text-3xl font-black uppercase leading-[0.95] tracking-[-0.045em] sm:text-4xl">
-            Most titles at {tournamentName}
+            Chasing the record
           </h3>
         </div>
 
@@ -288,16 +392,16 @@ function TitleLeaders({
             className="text-[var(--hall-accent)]"
             aria-hidden="true"
           />
-          Open Era ranking
+          Positions 02–05
         </span>
       </div>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {displayedLeaders.map((leader, index) => (
           <LeaderCard
             key={`${leader.player}-${leader.titles}`}
             leader={leader}
-            position={index + 1}
+            position={index + 2}
           />
         ))}
       </div>
@@ -315,7 +419,7 @@ function LeaderCard({
   position,
 }: LeaderCardProps) {
   return (
-    <article className="group relative min-h-[250px] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#07101D] p-6 transition hover:-translate-y-1 hover:border-[var(--hall-accent)]">
+    <article className="group relative min-h-[220px] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#07101D] p-6 transition hover:-translate-y-1 hover:border-[var(--hall-accent)]">
       <div className="pointer-events-none absolute -right-5 -top-8 text-[7rem] font-black leading-none text-white/[0.025]">
         0{position}
       </div>
@@ -361,147 +465,6 @@ function LeaderCard({
   );
 }
 
-type ChampionsTableProps = {
-  tournamentName: string;
-  entries: HallOfChampionsEntry[];
-};
-
-function ChampionsTable({
-  tournamentName,
-  entries,
-}: ChampionsTableProps) {
-  return (
-    <section className="mt-16">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--hall-accent)]">
-            Year-by-year archive
-          </p>
-
-          <h3 className="mt-4 text-3xl font-black uppercase leading-[0.95] tracking-[-0.045em] sm:text-4xl">
-            Men&apos;s singles champions
-          </h3>
-        </div>
-
-        <span className="rounded-full border border-white/10 bg-white/[0.025] px-4 py-2.5 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/30">
-          {entries.length} editions
-        </span>
-      </div>
-
-      <div className="mt-8 overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D]">
-        <div className="hidden grid-cols-[100px_minmax(220px,1fr)_minmax(200px,0.8fr)_minmax(210px,1fr)_48px] gap-5 border-b border-white/10 bg-white/[0.018] px-7 py-5 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/25 lg:grid">
-          <span>Year</span>
-          <span>Champion</span>
-          <span>Runner-up</span>
-          <span>Score</span>
-          <span aria-hidden="true" />
-        </div>
-
-        <div>
-          {entries.map((entry, index) => (
-            <ChampionRow
-              key={`${entry.year}-${entry.champion}`}
-              entry={entry}
-              tournamentName={tournamentName}
-              isLast={index === entries.length - 1}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-type ChampionRowProps = {
-  entry: HallOfChampionsEntry;
-  tournamentName: string;
-  isLast: boolean;
-};
-
-function ChampionRow({
-  entry,
-  tournamentName,
-  isLast,
-}: ChampionRowProps) {
-  const rowContent = (
-    <>
-      <div>
-        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/24 lg:hidden">
-          Edition
-        </span>
-
-        <span className="mt-2 block text-2xl font-black tracking-[-0.045em] text-[var(--hall-accent)] lg:mt-0">
-          {entry.year}
-        </span>
-      </div>
-
-      <div>
-        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/24 lg:hidden">
-          Champion
-        </span>
-
-        <ChampionName
-          name={entry.champion}
-          playerSlug={entry.playerSlug}
-          className="mt-2 text-base lg:mt-0"
-        />
-
-        <CountryLabel
-          countryCode={entry.championCountryCode}
-          country={entry.championCountry}
-          className="mt-2"
-        />
-      </div>
-
-      <div>
-        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/24 lg:hidden">
-          Runner-up
-        </span>
-
-        <p className="mt-2 text-sm font-black uppercase tracking-[-0.015em] text-white/55 lg:mt-0">
-          {entry.runnerUp ?? "To be added"}
-        </p>
-      </div>
-
-      <div>
-        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/24 lg:hidden">
-          Final score
-        </span>
-
-        <p className="mt-2 font-mono text-[9px] leading-6 text-white/38 lg:mt-0">
-          {entry.score ?? "To be added"}
-        </p>
-      </div>
-
-      <span className="hidden h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.025] text-white/20 transition group-hover:border-[var(--hall-accent)] group-hover:text-[var(--hall-accent)] lg:grid">
-        {entry.editionHref ? (
-          <ArrowUpRight size={14} aria-hidden="true" />
-        ) : (
-          <Trophy size={14} strokeWidth={1.4} aria-hidden="true" />
-        )}
-      </span>
-    </>
-  );
-
-  const className = `group grid gap-6 p-7 transition hover:bg-white/[0.02] lg:grid-cols-[100px_minmax(220px,1fr)_minmax(200px,0.8fr)_minmax(210px,1fr)_48px] lg:items-center ${
-    isLast ? "" : "border-b border-white/10"
-  }`;
-
-  if (entry.editionHref) {
-    return (
-      <Link
-        href={entry.editionHref}
-        aria-label={`Open ${tournamentName} ${entry.year} edition`}
-        className={className}
-      >
-        {rowContent}
-      </Link>
-    );
-  }
-
-  return <article className={className}>{rowContent}</article>;
-}
-
 type ChampionNameProps = {
   name: string;
   playerSlug?: string;
@@ -515,14 +478,27 @@ function ChampionName({
 }: ChampionNameProps) {
   const textClassName = `block font-black uppercase leading-[0.95] tracking-[-0.045em] ${className}`;
 
-  if (!playerSlug) {
-    return <h3 className={textClassName}>{name}</h3>;
+  const archiveHref =
+    getPlayerArchiveHref(name);
+
+  const playerHref =
+    archiveHref ??
+    (playerSlug
+      ? `/players/${playerSlug}`
+      : null);
+
+  if (!playerHref) {
+    return (
+      <h3 className={textClassName}>
+        {name}
+      </h3>
+    );
   }
 
   return (
     <h3>
       <Link
-        href={`/players/${playerSlug}`}
+        href={playerHref}
         className={`${textClassName} transition hover:text-[var(--hall-accent)]`}
       >
         {name}

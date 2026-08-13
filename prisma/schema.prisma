@@ -361,9 +361,10 @@ model MediaAsset {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  folder             MediaFolder?            @relation(fields: [folderId], references: [id], onDelete: SetNull)
-  heroForCollections MuseumCollection[]      @relation("MuseumCollectionHeroMedia")
-  museumCollections  MuseumCollectionMedia[]
+  folder               MediaFolder?            @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  heroForCollections   MuseumCollection[]      @relation("MuseumCollectionHeroMedia")
+  museumCollections    MuseumCollectionMedia[]
+  tennisHistoryEntries TennisHistoryEntry[]
 
   @@index([title])
   @@index([originalName])
@@ -372,6 +373,54 @@ model MediaAsset {
   @@index([folderId])
   @@index([isUsed])
   @@index([createdAt])
+}
+
+model TennisHistoryEntry {
+  id        String                 @id @default(cuid())
+  type      TennisHistoryEntryType
+  slug      String                 @unique
+  year      Int
+  sortOrder Int                    @default(0)
+  era       TennisHistoryEra
+  gender    TennisHistoryGender?
+
+  eyebrow     String?
+  title       String
+  subtitle    String?
+  description String?
+  quote       String?
+  achievement String?
+  period      String?
+
+  country     String?
+  countryCode String?
+
+  playerOne String?
+  playerTwo String?
+  players   String[] @default([])
+
+  href String?
+
+  imageUrl String?
+  mediaId  String?
+  media    MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+
+  featured    Boolean          @default(false)
+  status      MuseumPageStatus @default(DRAFT)
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([year])
+  @@index([era])
+  @@index([status])
+  @@index([featured])
+  @@index([sortOrder])
+  @@index([mediaId])
+  @@index([publishedAt])
+  @@index([year, sortOrder])
 }
 
 model MuseumCollection {
@@ -581,6 +630,9 @@ model TournamentEdition {
   tournamentId String
   year         Int
 
+  editionKey   String  @default("main")
+  editionLabel String?
+
   startDate DateTime?
   endDate   DateTime?
 
@@ -606,9 +658,10 @@ model TournamentEdition {
   championPlayer Player?    @relation("TournamentEditionChampion", fields: [championPlayerId], references: [id], onDelete: SetNull)
   runnerUpPlayer Player?    @relation("TournamentEditionRunnerUp", fields: [runnerUpPlayerId], references: [id], onDelete: SetNull)
 
-  @@unique([tournamentId, year])
+  @@unique([tournamentId, year, editionKey])
   @@index([tournamentId])
   @@index([year])
+  @@index([editionKey])
   @@index([championPlayerId])
   @@index([runnerUpPlayerId])
   @@index([cancelled])
@@ -754,6 +807,26 @@ model TournamentIconicMoment {
   @@index([tournamentId, year])
   @@index([tournamentId, sortOrder])
   @@index([featured])
+}
+
+enum TennisHistoryEntryType {
+  MILESTONE
+  LEGEND
+  RIVALRY
+  GENERATION
+}
+
+enum TennisHistoryEra {
+  ORIGINS
+  CLASSIC_ERA
+  OPEN_ERA
+  MODERN_ERA
+}
+
+enum TennisHistoryGender {
+  MEN
+  WOMEN
+  MIXED
 }
 
 enum MuseumPageStatus {

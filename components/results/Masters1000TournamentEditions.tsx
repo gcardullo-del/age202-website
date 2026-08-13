@@ -1,12 +1,18 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 import Link from "next/link";
 
 import {
   ArrowUpRight,
   CalendarDays,
+  ChevronDown,
   CircleDot,
   Crown,
   MapPin,
   Medal,
+  RotateCcw,
   Sparkles,
   Trophy,
 } from "lucide-react";
@@ -27,6 +33,11 @@ type Masters1000TournamentEditionsProps = {
   cmsEditions?: Masters1000Edition[];
 };
 
+const INITIAL_VISIBLE_EDITIONS = 6;
+const LOAD_MORE_EDITIONS = 10;
+
+type DecadeFilter = "all" | number;
+
 export default function Masters1000TournamentEditions({
   slug,
   tournamentName,
@@ -37,24 +48,18 @@ export default function Masters1000TournamentEditions({
       slug,
     );
 
-  if (
-    !staticData &&
-    cmsEditions.length === 0
-  ) {
-    return null;
-  }
-
   const featuredEditions =
-    cmsEditions.length > 0
-      ? cmsEditions
-      : staticData?.featuredEditions ??
-        [];
-
-  if (
-    featuredEditions.length === 0
-  ) {
-    return null;
-  }
+    useMemo(
+      () =>
+        cmsEditions.length > 0
+          ? cmsEditions
+          : staticData?.featuredEditions ??
+            [],
+      [
+        cmsEditions,
+        staticData,
+      ],
+    );
 
   const firstEditionYear =
     staticData?.firstEditionYear ??
@@ -62,7 +67,136 @@ export default function Masters1000TournamentEditions({
       featuredEditions.length -
         1
     ]?.year ??
-    featuredEditions[0].year;
+    featuredEditions[0]?.year ??
+    new Date().getFullYear();
+
+  const [
+    selectedDecade,
+    setSelectedDecade,
+  ] = useState<DecadeFilter>(
+    "all",
+  );
+
+  const [
+    visibleCount,
+    setVisibleCount,
+  ] = useState(
+    INITIAL_VISIBLE_EDITIONS,
+  );
+
+  const decades =
+    useMemo(
+      () =>
+        Array.from(
+          new Set(
+            featuredEditions.map(
+              (edition) =>
+                Math.floor(
+                  edition.year /
+                    10,
+                ) * 10,
+            ),
+          ),
+        ).sort(
+          (a, b) =>
+            b - a,
+        ),
+      [featuredEditions],
+    );
+
+  const filteredEditions =
+    useMemo(
+      () =>
+        selectedDecade ===
+        "all"
+          ? featuredEditions
+          : featuredEditions.filter(
+              (edition) =>
+                Math.floor(
+                  edition.year /
+                    10,
+                ) *
+                  10 ===
+                selectedDecade,
+            ),
+      [
+        featuredEditions,
+        selectedDecade,
+      ],
+    );
+
+  const visibleEditions =
+    filteredEditions.slice(
+      0,
+      visibleCount,
+    );
+
+  const hasMoreEditions =
+    visibleCount <
+    filteredEditions.length;
+
+  const isArchiveExpanded =
+    selectedDecade !==
+      "all" ||
+    visibleCount >
+      INITIAL_VISIBLE_EDITIONS;
+
+  const archiveFrom =
+    featuredEditions[
+      featuredEditions.length -
+        1
+    ]?.year ??
+    firstEditionYear;
+
+  const archiveTo =
+    featuredEditions[0]?.year ??
+    firstEditionYear;
+
+  const selectDecade = (
+    decade: DecadeFilter,
+  ) => {
+    setSelectedDecade(
+      decade,
+    );
+
+    setVisibleCount(
+      decade === "all"
+        ? INITIAL_VISIBLE_EDITIONS
+        : LOAD_MORE_EDITIONS,
+    );
+  };
+
+  const showMoreEditions =
+    () => {
+      setVisibleCount(
+        (current) =>
+          current +
+          LOAD_MORE_EDITIONS,
+      );
+    };
+
+  const collapseArchive =
+    () => {
+      setSelectedDecade(
+        "all",
+      );
+      setVisibleCount(
+        INITIAL_VISIBLE_EDITIONS,
+      );
+    };
+
+  if (
+    !staticData &&
+    cmsEditions.length === 0
+  ) {
+    return null;
+  }
+
+  if (
+    featuredEditions.length === 0
+  ) {
+    return null;
+  }
 
   return (
     <section
@@ -102,7 +236,7 @@ export default function Masters1000TournamentEditions({
                   {
                     featuredEditions.length
                   }{" "}
-                  featured editions
+                  recorded editions
                 </p>
               </div>
             </div>
@@ -118,7 +252,7 @@ export default function Masters1000TournamentEditions({
           <div className="pointer-events-none absolute bottom-8 left-[31px] top-8 hidden w-px bg-gradient-to-b from-[var(--tournament-primary)] via-white/15 to-transparent md:block" />
 
           <div className="space-y-5">
-            {featuredEditions.map(
+            {visibleEditions.map(
               (
                 edition,
                 index,
@@ -139,6 +273,101 @@ export default function Masters1000TournamentEditions({
           </div>
         </div>
 
+        <div className="mt-8 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#07101D]">
+          <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div>
+              <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--tournament-primary)]">
+                Explore the complete archive
+              </p>
+
+              <h3 className="mt-4 text-2xl font-black uppercase tracking-[-0.04em] sm:text-3xl">
+                {featuredEditions.length} recorded editions · {archiveFrom}—{archiveTo}
+              </h3>
+
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-white/40">
+                Start with the latest six editions, then explore the archive by decade or reveal ten more records at a time.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 lg:justify-end">
+              {isArchiveExpanded ? (
+                <button
+                  type="button"
+                  onClick={
+                    collapseArchive
+                  }
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-5 py-3 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/45 transition hover:border-[var(--tournament-primary)] hover:text-[var(--tournament-primary)]"
+                >
+                  <RotateCcw
+                    size={13}
+                    aria-hidden="true"
+                  />
+                  Collapse archive
+                </button>
+              ) : null}
+
+              {hasMoreEditions ? (
+                <button
+                  type="button"
+                  onClick={
+                    showMoreEditions
+                  }
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--tournament-primary)]/45 bg-[var(--tournament-primary)]/10 px-5 py-3 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-[var(--tournament-primary)] transition hover:bg-[var(--tournament-primary)]/15"
+                >
+                  View more editions
+                  <ChevronDown
+                    size={13}
+                    aria-hidden="true"
+                  />
+                </button>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 p-5 sm:p-6">
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  selectDecade(
+                    "all",
+                  )
+                }
+                className={`rounded-full border px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.16em] transition ${
+                  selectedDecade ===
+                  "all"
+                    ? "border-[var(--tournament-primary)] bg-[var(--tournament-primary)]/10 text-[var(--tournament-primary)]"
+                    : "border-white/10 bg-white/[0.02] text-white/35 hover:border-white/20 hover:text-white/60"
+                }`}
+              >
+                Latest
+              </button>
+
+              {decades.map(
+                (decade) => (
+                  <button
+                    key={decade}
+                    type="button"
+                    onClick={() =>
+                      selectDecade(
+                        decade,
+                      )
+                    }
+                    className={`rounded-full border px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.16em] transition ${
+                      selectedDecade ===
+                      decade
+                        ? "border-[var(--tournament-primary)] bg-[var(--tournament-primary)]/10 text-[var(--tournament-primary)]"
+                        : "border-white/10 bg-white/[0.02] text-white/35 hover:border-white/20 hover:text-white/60"
+                    }`}
+                  >
+                    {decade}s
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="mt-6 grid gap-px overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/10 sm:grid-cols-3">
           <ArchiveStat
             value={`${featuredEditions[0]?.year ?? "—"}`}
@@ -147,7 +376,7 @@ export default function Masters1000TournamentEditions({
           />
 
           <ArchiveStat
-            value={`${firstEditionYear}`}
+            value={`${archiveFrom}`}
             label="Archive origin"
             icon={
               CalendarDays
@@ -311,6 +540,12 @@ function PlayerCard({
       player.name,
     );
 
+  const playerHref =
+    archiveHref ??
+    (player.slug
+      ? `/players/${player.slug}`
+      : null);
+
   const content = (
     <div className="relative h-full rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-6 transition hover:bg-white/[0.045]">
       <div className="flex items-start justify-between gap-5">
@@ -334,7 +569,7 @@ function PlayerCard({
           )}
         </span>
 
-        {archiveHref ? (
+        {playerHref ? (
           <ArrowUpRight
             size={16}
             className="text-white/24 transition group-hover:text-[var(--tournament-primary)]"
@@ -372,21 +607,23 @@ function PlayerCard({
         ) : null}
       </div>
 
-      {archiveHref ? (
+      {playerHref ? (
         <p className="mt-6 font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/24">
-          Open AGE202 player archive
+          {archiveHref
+            ? "Open AGE202 player archive"
+            : "Open AGE202 player profile"}
         </p>
       ) : null}
     </div>
   );
 
-  if (!archiveHref) {
+  if (!playerHref) {
     return content;
   }
 
   return (
     <Link
-      href={archiveHref}
+      href={playerHref}
       className="group block h-full"
     >
       {content}

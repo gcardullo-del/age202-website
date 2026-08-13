@@ -15,51 +15,64 @@ type Masters1000ArchivePreviewProps = {
   tournament: TournamentConfig;
 };
 
+type ArchiveItem = {
+  icon: typeof Crown;
+  title: string;
+  description: string;
+  status: string;
+  href: string;
+};
+
 export default function Masters1000ArchivePreview({
   tournament,
 }: Masters1000ArchivePreviewProps) {
-  const archiveItems = [
+  const archiveItems: ArchiveItem[] = [
     {
       icon: Crown,
       title: "Hall of Champions",
       description:
         "A complete record of tournament winners across every edition.",
-      status: "Next phase",
+      status: "Open section",
+      href: "#champions",
     },
     {
       icon: CalendarDays,
       title: "Tournament Editions",
       description:
         "Season-by-season finals, champions, runners-up and results.",
-      status: "Next phase",
+      status: "Explore archive",
+      href: "#editions",
     },
     {
       icon: Medal,
       title: "Greatest Finals",
       description:
         "Championship matches that became part of Masters history.",
-      status: "Planned",
+      status: "View finals",
+      href: "#champions",
     },
     {
       icon: Trophy,
       title: "AGE202 Collection",
       description:
         "Apparel and memorabilia connected to the tournament and its champions.",
-      status: "Planned",
+      status: "Explore collection",
+      href: "/memorabilia",
     },
   ];
 
   return (
     <section
       id="archive"
-      className="scroll-mt-16 border-t border-white/10 px-5 py-16 sm:px-8 lg:px-12 lg:py-20"
+      className="relative overflow-hidden border-t border-white/10 px-5 py-16 sm:px-8 lg:px-12 lg:py-20"
     >
       <div className="mx-auto max-w-[1440px]">
-        <div className="relative overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#07101D] p-7 sm:p-10 lg:p-14">
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D] p-6 sm:p-8 lg:p-10">
           <div
             className="pointer-events-none absolute -right-32 -top-32 h-[26rem] w-[26rem] rounded-full opacity-50 blur-3xl"
             style={{
-              backgroundColor: tournament.colors.glow,
+              backgroundColor:
+                tournament.colors.glow,
             }}
           />
 
@@ -78,8 +91,8 @@ export default function Masters1000ArchivePreview({
               </div>
 
               <p className="text-sm leading-7 text-white/42 lg:text-right">
-                The architecture is ready to receive champions, editions,
-                finals, detailed records and memorabilia.
+                Continue exploring the tournament through its champions,
+                editions, defining finals and connected AGE202 memorabilia.
               </p>
             </div>
 
@@ -88,34 +101,46 @@ export default function Masters1000ArchivePreview({
                 const Icon = item.icon;
 
                 return (
-                  <article
+                  <Link
                     key={item.title}
-                    className="flex items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6"
+                    href={item.href}
+                    className="group block rounded-[1.5rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tournament-primary)]"
                   >
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[var(--tournament-primary)]">
-                      <Icon
-                        size={18}
-                        strokeWidth={1.4}
-                        aria-hidden="true"
-                      />
-                    </span>
+                    <article className="flex h-full items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6 transition duration-300 group-hover:-translate-y-0.5 group-hover:border-[var(--tournament-primary)]/55 group-hover:bg-white/[0.035]">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[var(--tournament-primary)]">
+                        <Icon
+                          size={18}
+                          strokeWidth={1.4}
+                          aria-hidden="true"
+                        />
+                      </span>
 
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <h3 className="text-base font-black uppercase tracking-[-0.02em]">
-                          {item.title}
-                        </h3>
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <h3 className="text-base font-black uppercase tracking-[-0.02em] transition group-hover:text-[var(--tournament-primary)]">
+                            {item.title}
+                          </h3>
 
-                        <span className="rounded-full border border-white/10 bg-white/[0.025] px-3 py-1.5 font-mono text-[6px] font-black uppercase tracking-[0.16em] text-white/28">
-                          {item.status}
+                          <span className="rounded-full border border-white/10 bg-white/[0.025] px-3 py-1.5 font-mono text-[6px] font-black uppercase tracking-[0.16em] text-white/28 transition group-hover:border-[var(--tournament-primary)]/30 group-hover:text-[var(--tournament-primary)]">
+                            {item.status}
+                          </span>
+                        </div>
+
+                        <p className="mt-3 text-xs leading-6 text-white/35">
+                          {item.description}
+                        </p>
+
+                        <span className="mt-5 inline-flex items-center gap-2 font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/25 transition group-hover:text-[var(--tournament-primary)]">
+                          Explore
+                          <ArrowRight
+                            size={12}
+                            className="transition-transform group-hover:translate-x-1"
+                            aria-hidden="true"
+                          />
                         </span>
                       </div>
-
-                      <p className="mt-3 text-xs leading-6 text-white/35">
-                        {item.description}
-                      </p>
-                    </div>
-                  </article>
+                    </article>
+                  </Link>
                 );
               })}
             </div>

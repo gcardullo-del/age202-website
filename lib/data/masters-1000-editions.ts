@@ -1,5 +1,6 @@
 export type Masters1000EditionPlayer = {
   name: string;
+  slug?: string;
   countryCode: string;
   flag: string;
   seed?: string;

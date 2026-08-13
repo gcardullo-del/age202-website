@@ -496,10 +496,12 @@ type CmsTournamentEditionInput = {
   score: string | null;
   championPlayer: {
     name: string;
+    slug?: string;
     country: string | null;
   } | null;
   runnerUpPlayer: {
     name: string;
+    slug?: string;
     country: string | null;
   } | null;
 };
@@ -542,6 +544,9 @@ export function mapCmsTournamentEditions(
             champion: {
               name:
                 championName,
+              slug:
+                edition.championPlayer?.slug ??
+                undefined,
               countryCode:
                 championCode,
               flag:
@@ -553,6 +558,9 @@ export function mapCmsTournamentEditions(
             runnerUp: {
               name:
                 runnerUpName,
+              slug:
+                edition.runnerUpPlayer?.slug ??
+                undefined,
               countryCode:
                 runnerUpCode,
               flag:
@@ -612,6 +620,10 @@ export function mapCmsRecentFinals(
               edition.championName ||
               "Champion not recorded",
 
+            championSlug:
+              edition.championPlayer?.slug ??
+              undefined,
+
             championNation: {
               code:
                 championCode,
@@ -629,6 +641,10 @@ export function mapCmsRecentFinals(
               edition.runnerUpPlayer?.name ||
               edition.runnerUpName ||
               "Runner-up not recorded",
+
+            runnerUpSlug:
+              edition.runnerUpPlayer?.slug ??
+              undefined,
 
             runnerUpNation: {
               code:
@@ -671,6 +687,7 @@ type CmsTournamentChampionInput = {
   countryCode: string | null;
   player: {
     name: string;
+    slug?: string;
     country: string | null;
   } | null;
 };
@@ -708,6 +725,10 @@ export function mapCmsTitleLeaders(
             champion.player?.name ||
             champion.name ||
             "Historical champion",
+
+          playerSlug:
+            champion.player?.slug ??
+            undefined,
 
           nation: {
             code:
@@ -803,6 +824,11 @@ export function mapCmsLegends(
           return {
             name:
               playerName,
+
+            playerHref:
+              champion.player?.slug
+                ? `/players/${champion.player.slug}`
+                : undefined,
 
             initials:
               getInitials(

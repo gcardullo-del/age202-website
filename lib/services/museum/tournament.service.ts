@@ -30,6 +30,8 @@ export type TournamentMuseumSummary = {
 export type TournamentEditionMuseumData = {
   id: string;
   year: number;
+  editionKey: string;
+editionLabel: string | null;
   startDate: Date | null;
   endDate: Date | null;
   drawSize: number | null;
@@ -62,10 +64,21 @@ export type TournamentChampionMuseumData = {
   titles: number;
   firstTitleYear: number | null;
   lastTitleYear: number | null;
+  titleYears: number[];
+  finals: number | null;
+  wins: number | null;
 
   name: string | null;
   country: string | null;
   countryCode: string | null;
+
+  legend: boolean;
+  featured: boolean;
+  sortOrder: number;
+
+  recordLabel: string | null;
+  quote: string | null;
+  imageUrl: string | null;
 
   player: {
     id: string;
@@ -75,6 +88,52 @@ export type TournamentChampionMuseumData = {
     portraitImage: string | null;
     heroImage: string | null;
   } | null;
+};
+
+export type TournamentGalleryMuseumData = {
+  id: string;
+  title: string | null;
+  eyebrow: string | null;
+  caption: string | null;
+  imageUrl: string;
+  alt: string | null;
+  featured: boolean;
+  sortOrder: number;
+};
+
+export type TournamentMilestoneMuseumData = {
+  id: string;
+  year: number | null;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  imageUrl: string | null;
+  featured: boolean;
+  sortOrder: number;
+};
+
+export type TournamentChapterMuseumData = {
+  id: string;
+  eyebrow: string | null;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  imageUrl: string | null;
+  yearLabel: string | null;
+  featured: boolean;
+  sortOrder: number;
+};
+
+export type TournamentIconicMomentMuseumData = {
+  id: string;
+  year: number | null;
+  momentDate: Date | null;
+  title: string;
+  subtitle: string | null;
+  description: string | null;
+  imageUrl: string | null;
+  featured: boolean;
+  sortOrder: number;
 };
 
 export type TournamentMuseumData = {
@@ -99,8 +158,14 @@ export type TournamentMuseumData = {
   metaTitle: string | null;
   metaDescription: string | null;
   updatedAt: Date;
+
   editions: TournamentEditionMuseumData[];
   champions: TournamentChampionMuseumData[];
+  galleryItems: TournamentGalleryMuseumData[];
+  milestones: TournamentMilestoneMuseumData[];
+  chapters: TournamentChapterMuseumData[];
+  iconicMoments: TournamentIconicMomentMuseumData[];
+
   statistics: {
     totalEditions: number;
     completedEditions: number;
@@ -108,6 +173,11 @@ export type TournamentMuseumData = {
     firstRecordedYear: number | null;
     latestRecordedYear: number | null;
     recordTitles: number;
+    uniqueChampions: number;
+    galleryItems: number;
+    milestones: number;
+    chapters: number;
+    iconicMoments: number;
   };
 };
 
@@ -146,6 +216,8 @@ function mapEdition(
   return {
     id: edition.id,
     year: edition.year,
+    editionKey: edition.editionKey,
+editionLabel: edition.editionLabel,
     startDate: edition.startDate,
     endDate: edition.endDate,
     drawSize: edition.drawSize,
@@ -206,6 +278,12 @@ function mapChampion(
       champion.firstTitleYear,
     lastTitleYear:
       champion.lastTitleYear,
+    titleYears:
+      champion.titleYears,
+    finals:
+      champion.finals,
+    wins:
+      champion.wins,
 
     name:
       champion.name,
@@ -213,6 +291,20 @@ function mapChampion(
       champion.country,
     countryCode:
       champion.countryCode,
+
+    legend:
+      champion.legend,
+    featured:
+      champion.featured,
+    sortOrder:
+      champion.sortOrder,
+
+    recordLabel:
+      champion.recordLabel,
+    quote:
+      champion.quote,
+    imageUrl:
+      champion.imageUrl,
 
     player:
       champion.player
@@ -231,6 +323,84 @@ function mapChampion(
               champion.player.heroImage,
           }
         : null,
+  };
+}
+
+function mapGalleryItem(
+  item: NonNullable<
+    Awaited<
+      ReturnType<typeof getTournamentBySlug>
+    >
+  >["galleryItems"][number],
+): TournamentGalleryMuseumData {
+  return {
+    id: item.id,
+    title: item.title,
+    eyebrow: item.eyebrow,
+    caption: item.caption,
+    imageUrl: item.imageUrl,
+    alt: item.alt,
+    featured: item.featured,
+    sortOrder: item.sortOrder,
+  };
+}
+
+function mapMilestone(
+  milestone: NonNullable<
+    Awaited<
+      ReturnType<typeof getTournamentBySlug>
+    >
+  >["milestones"][number],
+): TournamentMilestoneMuseumData {
+  return {
+    id: milestone.id,
+    year: milestone.year,
+    title: milestone.title,
+    subtitle: milestone.subtitle,
+    description: milestone.description,
+    imageUrl: milestone.imageUrl,
+    featured: milestone.featured,
+    sortOrder: milestone.sortOrder,
+  };
+}
+
+function mapChapter(
+  chapter: NonNullable<
+    Awaited<
+      ReturnType<typeof getTournamentBySlug>
+    >
+  >["chapters"][number],
+): TournamentChapterMuseumData {
+  return {
+    id: chapter.id,
+    eyebrow: chapter.eyebrow,
+    title: chapter.title,
+    subtitle: chapter.subtitle,
+    description: chapter.description,
+    imageUrl: chapter.imageUrl,
+    yearLabel: chapter.yearLabel,
+    featured: chapter.featured,
+    sortOrder: chapter.sortOrder,
+  };
+}
+
+function mapIconicMoment(
+  moment: NonNullable<
+    Awaited<
+      ReturnType<typeof getTournamentBySlug>
+    >
+  >["iconicMoments"][number],
+): TournamentIconicMomentMuseumData {
+  return {
+    id: moment.id,
+    year: moment.year,
+    momentDate: moment.momentDate,
+    title: moment.title,
+    subtitle: moment.subtitle,
+    description: moment.description,
+    imageUrl: moment.imageUrl,
+    featured: moment.featured,
+    sortOrder: moment.sortOrder,
   };
 }
 
@@ -276,6 +446,26 @@ export async function getMuseumTournamentBySlug(
   const champions =
     tournament.champions.map(
       mapChampion,
+    );
+
+  const galleryItems =
+    tournament.galleryItems.map(
+      mapGalleryItem,
+    );
+
+  const milestones =
+    tournament.milestones.map(
+      mapMilestone,
+    );
+
+  const chapters =
+    tournament.chapters.map(
+      mapChapter,
+    );
+
+  const iconicMoments =
+    tournament.iconicMoments.map(
+      mapIconicMoment,
     );
 
   const completedEditions =
@@ -337,8 +527,13 @@ export async function getMuseumTournamentBySlug(
       tournament.metaDescription,
     updatedAt:
       tournament.updatedAt,
+
     editions,
     champions,
+    galleryItems,
+    milestones,
+    chapters,
+    iconicMoments,
 
     statistics: {
       totalEditions:
@@ -366,6 +561,21 @@ export async function getMuseumTournamentBySlug(
           : null,
 
       recordTitles,
+
+      uniqueChampions:
+        champions.length,
+
+      galleryItems:
+        galleryItems.length,
+
+      milestones:
+        milestones.length,
+
+      chapters:
+        chapters.length,
+
+      iconicMoments:
+        iconicMoments.length,
     },
   };
 }

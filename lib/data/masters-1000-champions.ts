@@ -9,8 +9,10 @@ export type ChampionNation = {
 export type Masters1000Final = {
   year: number;
   champion: string;
+  championSlug?: string;
   championNation: ChampionNation;
   runnerUp: string;
+  runnerUpSlug?: string;
   runnerUpNation: ChampionNation;
   score: string;
   note?: string;
@@ -18,6 +20,7 @@ export type Masters1000Final = {
 
 export type Masters1000TitleLeader = {
   player: string;
+  playerSlug?: string;
   nation: ChampionNation;
   titles: number;
   years: number[];
@@ -31,6 +34,7 @@ export type Masters1000ChampionsArchive = {
   editionsPlayed: number;
   uniqueChampions: number;
   latestChampion: string;
+  latestChampionSlug?: string;
   latestChampionNation: ChampionNation;
   recordTitles: number;
   recordHolders: string[];
@@ -59,6 +63,7 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
   editionsPlayed: 51,
   uniqueChampions: 31,
   latestChampion: "Jannik Sinner",
+  latestChampionSlug: "jannik-sinner",
   latestChampionNation: nations.italy,
   recordTitles: 5,
   recordHolders: ["Roger Federer", "Novak Djokovic"],
@@ -66,8 +71,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2026,
       champion: "Jannik Sinner",
+      championSlug: "jannik-sinner",
       championNation: nations.italy,
       runnerUp: "Daniil Medvedev",
+      runnerUpSlug: "daniil-medvedev",
       runnerUpNation: nations.russia,
       score: "7–6(6), 7–6(4)",
       note: "First Indian Wells title",
@@ -75,8 +82,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2025,
       champion: "Jack Draper",
+      championSlug: "jack-draper",
       championNation: nations.britain,
       runnerUp: "Holger Rune",
+      runnerUpSlug: "holger-rune",
       runnerUpNation: { code: "DEN", name: "Denmark", flag: "🇩🇰" },
       score: "6–2, 6–2",
       note: "First ATP Masters 1000 title",
@@ -84,8 +93,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2024,
       champion: "Carlos Alcaraz",
+      championSlug: "carlos-alcaraz",
       championNation: nations.spain,
       runnerUp: "Daniil Medvedev",
+      runnerUpSlug: "daniil-medvedev",
       runnerUpNation: nations.russia,
       score: "7–6(5), 6–1",
       note: "Second consecutive title",
@@ -93,8 +104,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2023,
       champion: "Carlos Alcaraz",
+      championSlug: "carlos-alcaraz",
       championNation: nations.spain,
       runnerUp: "Daniil Medvedev",
+      runnerUpSlug: "daniil-medvedev",
       runnerUpNation: nations.russia,
       score: "6–3, 6–2",
       note: "First Indian Wells title",
@@ -102,8 +115,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2022,
       champion: "Taylor Fritz",
+      championSlug: "taylor-fritz",
       championNation: nations.unitedStates,
       runnerUp: "Rafael Nadal",
+      runnerUpSlug: "rafael-nadal",
       runnerUpNation: nations.spain,
       score: "6–3, 7–6(5)",
       note: "First American champion since 2001",
@@ -111,8 +126,10 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     {
       year: 2021,
       champion: "Cameron Norrie",
+      championSlug: "cameron-norrie",
       championNation: nations.britain,
       runnerUp: "Nikoloz Basilashvili",
+      runnerUpSlug: "nikoloz-basilashvili",
       runnerUpNation: nations.georgia,
       score: "3–6, 6–4, 6–1",
       note: "Tournament returned after the 2020 cancellation",
@@ -121,12 +138,14 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
   titleLeaders: [
     {
       player: "Roger Federer",
+      playerSlug: "roger-federer",
       nation: nations.switzerland,
       titles: 5,
       years: [2004, 2005, 2006, 2012, 2017],
     },
     {
       player: "Novak Djokovic",
+      playerSlug: "novak-djokovic",
       nation: nations.serbia,
       titles: 5,
       years: [2008, 2011, 2014, 2015, 2016],
@@ -145,12 +164,14 @@ const indianWellsArchive: Masters1000ChampionsArchive = {
     },
     {
       player: "Rafael Nadal",
+      playerSlug: "rafael-nadal",
       nation: nations.spain,
       titles: 3,
       years: [2007, 2009, 2013],
     },
     {
       player: "Carlos Alcaraz",
+      playerSlug: "carlos-alcaraz",
       nation: nations.spain,
       titles: 2,
       years: [2023, 2024],

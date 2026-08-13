@@ -1,0 +1,257 @@
+import type {
+  TournamentHistoryDataset,
+  TournamentHistoryPlayerRef,
+} from "../../tournament-history/types";
+
+const player = (...slugCandidates: string[]): TournamentHistoryPlayerRef => ({
+  slugCandidates,
+});
+
+const dataset = {
+  tournamentSlug: "munich",
+
+  tournament: {
+    name: "BMW Open by Bitpanda",
+    shortName: "Munich",
+    category: "ATP_500",
+    surface: "CLAY",
+    city: "Munich",
+    country: "Germany",
+    countryCode: "GER",
+    venue: "MTTC Iphitos",
+    foundedYear: 1900,
+    description:
+      "Munich combines a century-old Bavarian tennis tradition with outdoor clay courts and a new ATP 500 era at the historic MTTC Iphitos.",
+    history:
+      "The International Tennis Championships of Bavaria trace their roots to 1900. In the Open Era, Munich developed into one of Germany's established clay-court events at MTTC Iphitos. Champions have included Guillermo Vilas, Ivan Lendl, Michael Stich, Roger Federer, Tommy Haas, Andy Murray, Alexander Zverev and Holger Rune. The BMW Open was upgraded from ATP 250 to ATP 500 status in 2025, when Zverev won his third title to equal Philipp Kohlschreiber's tournament record. Ben Shelton then captured the 2026 crown.",
+    active: true,
+    metaTitle:
+      "Munich ATP 500 | History, Legends & Recent Finals | AGE202",
+    metaDescription:
+      "Explore the BMW Open by Bitpanda in Munich: tournament history, iconic moments, legends and the five most recent finals.",
+  },
+
+  iconicMoments: [
+    {
+      year: 1900,
+      title: "A Bavarian tennis tradition begins",
+      subtitle: "More than a century of championship history",
+      description:
+        "Munich's tournament tradition begins at the start of the twentieth century and develops into one of Germany's historic clay-court championships.",
+      sortOrder: 10,
+    },
+    {
+      year: 1980,
+      title: "Vilas completes a Munich hat-trick",
+      subtitle: "Three titles for a clay-court great",
+      description:
+        "Guillermo Vilas wins Munich for the third time, completing one of the tournament's defining championship runs.",
+      featured: true,
+      sortOrder: 20,
+    },
+    {
+      year: 2003,
+      title: "Federer wins Munich",
+      subtitle: "A future World No. 1 takes the Bavarian crown",
+      description:
+        "Roger Federer captures the Munich title during the season in which he wins his first Grand Slam championship.",
+      featured: true,
+      sortOrder: 30,
+    },
+    {
+      year: 2025,
+      title: "The ATP 500 era begins",
+      subtitle: "Zverev wins the upgraded tournament",
+      description:
+        "Munich steps up to ATP 500 status and Alexander Zverev celebrates by winning his third title at the event, matching the modern tournament record.",
+      featured: true,
+      sortOrder: 40,
+    },
+    {
+      year: 2026,
+      title: "Shelton conquers Munich",
+      subtitle: "An American champion on Bavarian clay",
+      description:
+        "Ben Shelton defeats Flavio Cobolli 6-2, 7-5 to win his first Munich title and his second ATP 500 trophy of the 2026 season.",
+      sortOrder: 50,
+    },
+  ],
+
+  legends: [
+    {
+      name: "Philipp Kohlschreiber",
+      country: "Germany",
+      countryCode: "GER",
+      recordLabel: "Three titles · record 35 match wins",
+      quote:
+        "Kohlschreiber won Munich three times and owns the tournament record for singles match victories.",
+      legend: true,
+      featured: true,
+      sortOrder: 10,
+    },
+    {
+      player: player("alexander-zverev", "zverev"),
+      name: "Alexander Zverev",
+      country: "Germany",
+      countryCode: "GER",
+      recordLabel: "Three-time champion",
+      quote:
+        "Zverev won Munich in 2017, 2018 and 2025, becoming the first champion of the tournament's ATP 500 era.",
+      legend: true,
+      featured: true,
+      sortOrder: 20,
+    },
+    {
+      name: "Guillermo Vilas",
+      country: "Argentina",
+      countryCode: "ARG",
+      recordLabel: "Three-time champion",
+      quote:
+        "Vilas captured three Munich crowns during the 1970s and 1980, building one of the great clay-court records in tournament history.",
+      legend: true,
+      featured: true,
+      sortOrder: 30,
+    },
+    {
+      name: "Tommy Haas",
+      country: "Germany",
+      countryCode: "GER",
+      recordLabel: "2013 champion",
+      quote:
+        "Haas won Munich in 2013 at age 35, becoming the tournament's oldest singles champion.",
+      legend: true,
+      featured: false,
+      sortOrder: 40,
+    },
+    {
+      player: player("roger-federer", "federer"),
+      name: "Roger Federer",
+      country: "Switzerland",
+      countryCode: "SUI",
+      recordLabel: "2003 champion",
+      quote:
+        "Federer lifted the Munich trophy in 2003, adding the Bavarian clay title during his breakthrough season.",
+      legend: true,
+      featured: false,
+      sortOrder: 50,
+    },
+    {
+      name: "Holger Rune",
+      country: "Denmark",
+      countryCode: "DEN",
+      recordLabel: "Back-to-back champion",
+      quote:
+        "Rune won consecutive Munich titles in 2022 and 2023, becoming one of the tournament's defining champions of the current generation.",
+      legend: true,
+      featured: false,
+      sortOrder: 60,
+    },
+  ],
+
+  editions: [
+    { year: 1968, championName: "Bud Collins", championCountryCode: "USA" },
+    { year: 1969, championName: "Tom Okker", championCountryCode: "NED" },
+    { year: 1970, championName: "Ilie Nastase", championCountryCode: "ROU" },
+    { year: 1971, championName: "Zeljko Franulovic", championCountryCode: "YUG" },
+    { year: 1972, championName: "Manuel Orantes", championCountryCode: "ESP" },
+    { year: 1973, championName: "Manuel Orantes", championCountryCode: "ESP" },
+    { year: 1974, championName: "Jiri Hrebec", championCountryCode: "TCH" },
+    { year: 1975, championName: "Guillermo Vilas", championCountryCode: "ARG" },
+    { year: 1976, championName: "Manuel Orantes", championCountryCode: "ESP" },
+    { year: 1977, championName: "Guillermo Vilas", championCountryCode: "ARG" },
+    { year: 1978, championName: "Guillermo Vilas", championCountryCode: "ARG" },
+    { year: 1979, championName: "Wojtek Fibak", championCountryCode: "POL" },
+    { year: 1980, championName: "Guillermo Vilas", championCountryCode: "ARG" },
+    { year: 1981, championName: "Chris Lewis", championCountryCode: "NZL" },
+    { year: 1982, championName: "Gene Mayer", championCountryCode: "USA" },
+    { year: 1983, championName: "Tomas Smid", championCountryCode: "TCH" },
+    { year: 1984, championName: "Gene Mayer", championCountryCode: "USA" },
+    { year: 1985, championName: "Joakim Nystrom", championCountryCode: "SWE" },
+    { year: 1986, championName: "Emilio Sanchez", championCountryCode: "ESP" },
+    { year: 1987, championName: "Guillermo Perez-Roldan", championCountryCode: "ARG" },
+    { year: 1988, championName: "Guillermo Perez-Roldan", championCountryCode: "ARG" },
+    { year: 1989, championName: "Andrei Chesnokov", championCountryCode: "URS" },
+    { year: 1990, championName: "Karel Novacek", championCountryCode: "TCH" },
+    { year: 1991, championName: "Magnus Gustafsson", championCountryCode: "SWE" },
+    { year: 1992, championName: "Magnus Larsson", championCountryCode: "SWE" },
+    { year: 1993, championName: "Ivan Lendl", championCountryCode: "USA" },
+    { year: 1994, championName: "Michael Stich", championCountryCode: "GER" },
+    { year: 1995, championName: "Wayne Ferreira", championCountryCode: "RSA" },
+    { year: 1996, championName: "Slava Dosedel", championCountryCode: "CZE" },
+    { year: 1997, championName: "Mark Philippoussis", championCountryCode: "AUS" },
+    { year: 1998, championName: "Thomas Enqvist", championCountryCode: "SWE" },
+    { year: 1999, championName: "Franco Squillari", championCountryCode: "ARG" },
+    { year: 2000, championName: "Franco Squillari", championCountryCode: "ARG" },
+    { year: 2001, championName: "Jiri Novak", championCountryCode: "CZE" },
+    { year: 2002, championName: "Younes El Aynaoui", championCountryCode: "MAR" },
+    {
+      year: 2003,
+      championName: "Roger Federer",
+      championCountryCode: "SUI",
+      championPlayer: player("roger-federer", "federer"),
+    },
+    { year: 2004, championName: "Nikolay Davydenko", championCountryCode: "RUS" },
+    { year: 2005, championName: "David Nalbandian", championCountryCode: "ARG" },
+    { year: 2006, championName: "Olivier Rochus", championCountryCode: "BEL" },
+    { year: 2007, championName: "Philipp Kohlschreiber", championCountryCode: "GER" },
+    { year: 2008, championName: "Fernando Gonzalez", championCountryCode: "CHI" },
+    { year: 2009, championName: "Tomas Berdych", championCountryCode: "CZE" },
+    { year: 2010, championName: "Mikhail Youzhny", championCountryCode: "RUS" },
+    { year: 2011, championName: "Nikolay Davydenko", championCountryCode: "RUS" },
+    { year: 2012, championName: "Philipp Kohlschreiber", championCountryCode: "GER" },
+    { year: 2013, championName: "Tommy Haas", championCountryCode: "GER" },
+    { year: 2014, championName: "Martin Klizan", championCountryCode: "SVK" },
+    { year: 2015, championName: "Andy Murray", championCountryCode: "GBR", championPlayer: player("andy-murray", "murray") },
+    { year: 2016, championName: "Philipp Kohlschreiber", championCountryCode: "GER" },
+    { year: 2017, championName: "Alexander Zverev", championCountryCode: "GER", championPlayer: player("alexander-zverev", "zverev") },
+    { year: 2018, championName: "Alexander Zverev", championCountryCode: "GER", championPlayer: player("alexander-zverev", "zverev") },
+    { year: 2019, championName: "Cristian Garin", championCountryCode: "CHI" },
+    { year: 2020, cancelled: true },
+    { year: 2021, championName: "Nikoloz Basilashvili", championCountryCode: "GEO" },
+    {
+      year: 2022,
+      championName: "Holger Rune",
+      runnerUpName: "Botic van de Zandschulp",
+      championCountryCode: "DEN",
+      runnerUpCountryCode: "NED",
+      score: "3-4 RET",
+    },
+    {
+      year: 2023,
+      championName: "Holger Rune",
+      runnerUpName: "Botic van de Zandschulp",
+      championCountryCode: "DEN",
+      runnerUpCountryCode: "NED",
+      score: "6-4, 1-6, 7-6(3)",
+    },
+    {
+      year: 2024,
+      championName: "Jan-Lennard Struff",
+      runnerUpName: "Taylor Fritz",
+      championCountryCode: "GER",
+      runnerUpCountryCode: "USA",
+      score: "7-5, 6-3",
+    },
+    {
+      year: 2025,
+      championName: "Alexander Zverev",
+      runnerUpName: "Ben Shelton",
+      championCountryCode: "GER",
+      runnerUpCountryCode: "USA",
+      championPlayer: player("alexander-zverev", "zverev"),
+      runnerUpPlayer: player("ben-shelton", "shelton"),
+      score: "6-2, 6-4",
+    },
+    {
+      year: 2026,
+      championName: "Ben Shelton",
+      runnerUpName: "Flavio Cobolli",
+      championCountryCode: "USA",
+      runnerUpCountryCode: "ITA",
+      championPlayer: player("ben-shelton", "shelton"),
+      score: "6-2, 7-5",
+    },
+  ],
+} satisfies TournamentHistoryDataset;
+
+export default dataset;

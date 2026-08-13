@@ -263,12 +263,12 @@ async function upsertEditions(
 
     await prisma.tournamentEdition.upsert({
       where: {
-        tournamentId_year: {
-          tournamentId,
-          year:
-            edition.year,
-        },
-      },
+  tournamentId_year_editionKey: {
+    tournamentId,
+    year: edition.year,
+    editionKey: "main",
+  },
+},
 
       create: {
         tournamentId,

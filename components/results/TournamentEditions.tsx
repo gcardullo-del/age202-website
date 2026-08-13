@@ -1,8 +1,17 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 import Link from "next/link";
+
+import {
+  getPlayerArchiveHref,
+} from "@/lib/player-links";
 
 import {
   ArrowUpRight,
   CalendarDays,
+  ChevronDown,
   CircleDot,
   Clock3,
   Crown,
@@ -10,6 +19,7 @@ import {
   Landmark,
   Layers3,
   Medal,
+  RotateCcw,
   Sparkles,
   Trophy,
   Users,
@@ -17,6 +27,8 @@ import {
 
 export type TournamentEdition = {
   year: number;
+  editionKey?: string;
+  editionLabel?: string;
   champion: string;
   championCountry?: string;
   championCountryCode?: string;
@@ -32,6 +44,8 @@ export type TournamentEdition = {
   prizeMoney?: string;
   editionNumber?: number;
   summary?: string;
+  championPlayerSlug?: string;
+  runnerUpPlayerSlug?: string;
   playerSlug?: string;
   href?: string;
   status?: "complete" | "upcoming" | "cancelled";
@@ -45,6 +59,11 @@ type TournamentEditionsProps = {
   initialLimit?: number;
 };
 
+const DEFAULT_INITIAL_VISIBLE_EDITIONS = 6;
+const LOAD_MORE_EDITIONS = 10;
+
+type DecadeFilter = "all" | number;
+
 export default function TournamentEditions({
   tournamentName,
   tournamentCode,
@@ -52,17 +71,156 @@ export default function TournamentEditions({
   updatedAt,
   initialLimit,
 }: TournamentEditionsProps) {
-  const orderedEditions = [...editions].sort(
-    (firstEdition, secondEdition) =>
-      secondEdition.year - firstEdition.year,
+  const orderedEditions = useMemo(
+    () =>
+      [...editions].sort(
+        (firstEdition, secondEdition) => {
+          const yearDifference =
+            secondEdition.year -
+            firstEdition.year;
+
+          if (yearDifference !== 0) {
+            return yearDifference;
+          }
+
+          return (
+            secondEdition.editionKey ?? "main"
+          ).localeCompare(
+            firstEdition.editionKey ?? "main",
+          );
+        },
+      ),
+    [editions],
   );
 
-  const visibleEditions =
-    initialLimit && initialLimit > 0
-      ? orderedEditions.slice(0, initialLimit)
-      : orderedEditions;
+  const latestEdition =
+    orderedEditions[0];
 
-  const latestEdition = visibleEditions[0];
+  const archiveEditions =
+    useMemo(
+      () =>
+        orderedEditions.slice(1),
+      [orderedEditions],
+    );
+
+  const defaultVisibleArchiveCount =
+    Math.max(
+      1,
+      (
+        initialLimit &&
+        initialLimit > 0
+          ? initialLimit
+          : DEFAULT_INITIAL_VISIBLE_EDITIONS
+      ) - 1,
+    );
+
+  const [
+    selectedDecade,
+    setSelectedDecade,
+  ] = useState<DecadeFilter>(
+    "all",
+  );
+
+  const [
+    visibleCount,
+    setVisibleCount,
+  ] = useState(
+    defaultVisibleArchiveCount,
+  );
+
+  const decades = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          orderedEditions.map(
+            (edition) =>
+              Math.floor(
+                edition.year / 10,
+              ) * 10,
+          ),
+        ),
+      ).sort(
+        (first, second) =>
+          second - first,
+      ),
+    [orderedEditions],
+  );
+
+  const filteredEditions =
+    useMemo(
+      () =>
+        selectedDecade === "all"
+          ? archiveEditions
+          : archiveEditions.filter(
+              (edition) =>
+                Math.floor(
+                  edition.year / 10,
+                ) *
+                  10 ===
+                selectedDecade,
+            ),
+      [
+        archiveEditions,
+        selectedDecade,
+      ],
+    );
+
+  const visibleEditions =
+    filteredEditions.slice(
+      0,
+      visibleCount,
+    );
+
+  const hasMoreEditions =
+    visibleCount <
+    filteredEditions.length;
+
+  const isArchiveExpanded =
+    selectedDecade !== "all" ||
+    visibleCount >
+      defaultVisibleArchiveCount;
+
+  const archiveFrom =
+    orderedEditions[
+      orderedEditions.length - 1
+    ]?.year;
+
+  const archiveTo =
+    orderedEditions[0]?.year;
+
+  const selectDecade = (
+    decade: DecadeFilter,
+  ) => {
+    setSelectedDecade(
+      decade,
+    );
+
+    setVisibleCount(
+      decade === "all"
+        ? defaultVisibleArchiveCount
+        : LOAD_MORE_EDITIONS,
+    );
+  };
+
+  const showMoreEditions =
+    () => {
+      setVisibleCount(
+        (current) =>
+          current +
+          LOAD_MORE_EDITIONS,
+      );
+    };
+
+  const collapseArchive =
+    () => {
+      setSelectedDecade(
+        "all",
+      );
+
+      setVisibleCount(
+        defaultVisibleArchiveCount,
+      );
+    };
 
   return (
     <section
@@ -101,48 +259,167 @@ export default function TournamentEditions({
           </div>
         </header>
 
-        {visibleEditions.length > 0 ? (
+        {orderedEditions.length > 0 ? (
           <>
             {latestEdition ? (
               <LatestEditionCard
-                tournamentName={tournamentName}
-                tournamentCode={tournamentCode}
-                edition={latestEdition}
+                tournamentName={
+                  tournamentName
+                }
+                tournamentCode={
+                  tournamentCode
+                }
+                edition={
+                  latestEdition
+                }
               />
             ) : null}
 
-            <div className="mt-6 overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D]">
-              <div className="hidden grid-cols-[100px_minmax(190px,1fr)_minmax(190px,1fr)_minmax(170px,0.8fr)_70px] gap-5 border-b border-white/10 bg-white/[0.025] px-7 py-5 lg:grid">
-                <TableHeading label="Edition" />
-                <TableHeading label="Champion" />
-                <TableHeading label="Final" />
-                <TableHeading label="Tournament profile" />
-                <span />
-              </div>
+            {archiveEditions.length > 0 ? (
+              <>
+                <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D]">
+                  <div className="hidden grid-cols-[100px_minmax(190px,1fr)_minmax(190px,1fr)_minmax(170px,0.8fr)_70px] gap-5 border-b border-white/10 bg-white/[0.025] px-7 py-5 lg:grid">
+                    <TableHeading label="Edition" />
+                    <TableHeading label="Champion" />
+                    <TableHeading label="Final" />
+                    <TableHeading label="Tournament profile" />
+                    <span />
+                  </div>
 
-              <div>
-                {visibleEditions.map((edition, index) => (
-                  <EditionRow
-                    key={`${tournamentCode}-${edition.year}`}
-                    edition={edition}
-                    index={index}
-                    isLast={index === visibleEditions.length - 1}
-                  />
-                ))}
-              </div>
-            </div>
+                  <div>
+                    {visibleEditions.map(
+                      (
+                        edition,
+                        index,
+                      ) => (
+                        <EditionRow
+                          key={`${tournamentCode}-${edition.year}-${edition.editionKey ?? "main"}`}
+                          edition={
+                            edition
+                          }
+                          index={
+                            index
+                          }
+                          isLast={
+                            index ===
+                            visibleEditions.length -
+                              1
+                          }
+                        />
+                      ),
+                    )}
+                  </div>
+                </div>
 
-            {initialLimit && orderedEditions.length > initialLimit ? (
-              <div className="mt-6 rounded-[1.6rem] border border-dashed border-white/12 bg-white/[0.018] px-6 py-5 text-center">
-                <p className="font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/30">
-                  Showing the latest {initialLimit} of{" "}
-                  {orderedEditions.length} editions
-                </p>
-              </div>
+                <div className="mt-6 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#07101D]">
+                  <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                    <div>
+                      <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--tournament-primary)]">
+                        Explore the complete archive
+                      </p>
+
+                      <h3 className="mt-4 text-2xl font-black uppercase tracking-[-0.04em] sm:text-3xl">
+                        {orderedEditions.length} recorded editions
+                        {archiveFrom &&
+                        archiveTo
+                          ? ` · ${archiveFrom}—${archiveTo}`
+                          : ""}
+                      </h3>
+
+                      <p className="mt-4 max-w-3xl text-sm leading-7 text-white/40">
+                        Start with the latest six editions, then explore the archive by decade or reveal ten more records at a time.
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 lg:justify-end">
+                      {isArchiveExpanded ? (
+                        <button
+                          type="button"
+                          onClick={
+                            collapseArchive
+                          }
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-5 py-3 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/45 transition hover:border-[var(--tournament-primary)] hover:text-[var(--tournament-primary)]"
+                        >
+                          <RotateCcw
+                            size={13}
+                            aria-hidden="true"
+                          />
+                          Collapse archive
+                        </button>
+                      ) : null}
+
+                      {hasMoreEditions ? (
+                        <button
+                          type="button"
+                          onClick={
+                            showMoreEditions
+                          }
+                          className="inline-flex items-center gap-2 rounded-full border border-[var(--tournament-primary)]/45 bg-[var(--tournament-primary)]/10 px-5 py-3 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-[var(--tournament-primary)] transition hover:bg-[var(--tournament-primary)]/15"
+                        >
+                          View more editions
+                          <ChevronDown
+                            size={13}
+                            aria-hidden="true"
+                          />
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 p-5 sm:p-6">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          selectDecade(
+                            "all",
+                          )
+                        }
+                        className={`rounded-full border px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.16em] transition ${
+                          selectedDecade ===
+                          "all"
+                            ? "border-[var(--tournament-primary)] bg-[var(--tournament-primary)]/10 text-[var(--tournament-primary)]"
+                            : "border-white/10 bg-white/[0.02] text-white/35 hover:border-white/20 hover:text-white/60"
+                        }`}
+                      >
+                        Latest
+                      </button>
+
+                      {decades.map(
+                        (decade) => (
+                          <button
+                            key={
+                              decade
+                            }
+                            type="button"
+                            onClick={() =>
+                              selectDecade(
+                                decade,
+                              )
+                            }
+                            className={`rounded-full border px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.16em] transition ${
+                              selectedDecade ===
+                              decade
+                                ? "border-[var(--tournament-primary)] bg-[var(--tournament-primary)]/10 text-[var(--tournament-primary)]"
+                                : "border-white/10 bg-white/[0.02] text-white/35 hover:border-white/20 hover:text-white/60"
+                            }`}
+                          >
+                            {decade}s
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </>
             ) : null}
           </>
         ) : (
-          <EmptyEditionsState tournamentName={tournamentName} />
+          <EmptyEditionsState
+            tournamentName={
+              tournamentName
+            }
+          />
         )}
       </div>
     </section>
@@ -163,15 +440,15 @@ function LatestEditionCard({
   const status = edition.status ?? "complete";
 
   return (
-    <article className="relative mt-12 overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#07101D] p-7 sm:p-9 lg:p-12">
+    <article className="relative mt-12 mb-12 min-h-[460px] overflow-hidden rounded-[2.2rem] border border-white/10 bg-[#07101D] p-7 pb-12 sm:p-9 sm:pb-14 lg:p-12 lg:pb-16">
       <div className="pointer-events-none absolute -right-16 -top-24 text-[13rem] font-black uppercase leading-none tracking-[-0.1em] text-white/[0.025]">
         {edition.year}
       </div>
 
       <div className="pointer-events-none absolute -bottom-32 -right-24 h-[28rem] w-[28rem] rounded-full bg-[var(--tournament-glow)] opacity-35 blur-3xl" />
 
-      <div className="relative grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end">
-        <div>
+      <div className="relative grid gap-10 lg:min-h-[360px] lg:grid-cols-[minmax(0,1fr)_390px] lg:items-stretch">
+        <div className="flex min-w-0 flex-col justify-between pb-4">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-[var(--tournament-primary)]/30 bg-[var(--tournament-primary)]/10 px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-[var(--tournament-primary)]">
               <Sparkles size={12} aria-hidden="true" />
@@ -185,9 +462,17 @@ function LatestEditionCard({
             {tournamentCode} · {tournamentName}
           </p>
 
-          <p className="mt-3 text-6xl font-black tracking-[-0.065em] text-[var(--tournament-primary)] sm:text-7xl">
-            {edition.year}
-          </p>
+          <div className="mt-3">
+            <p className="text-6xl font-black tracking-[-0.065em] text-[var(--tournament-primary)] sm:text-7xl">
+              {edition.year}
+            </p>
+
+            {edition.editionLabel ? (
+              <p className="mt-3 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/30">
+                {edition.editionLabel}
+              </p>
+            ) : null}
+          </div>
 
           <div className="mt-8 flex items-start gap-5">
             <span className="grid h-13 w-13 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] p-3 text-[var(--tournament-primary)]">
@@ -211,10 +496,13 @@ function LatestEditionCard({
         </div>
 
         <div className="overflow-hidden rounded-[1.7rem] border border-white/10 bg-black/15">
-          <EditionDetail
+          <EditionPlayerDetail
             icon={Medal}
             label="Runner-up"
-            value={edition.runnerUp}
+            name={edition.runnerUp}
+            playerSlug={
+              edition.runnerUpPlayerSlug
+            }
           />
 
           <EditionDetail
@@ -285,6 +573,12 @@ function EditionRow({
         <p className="mt-2 text-3xl font-black tracking-[-0.05em] text-[var(--tournament-primary)]">
           {edition.year}
         </p>
+
+        {edition.editionLabel ? (
+          <p className="mt-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/30">
+            {edition.editionLabel}
+          </p>
+        ) : null}
       </div>
 
       <div>
@@ -296,9 +590,14 @@ function EditionRow({
           </span>
 
           <div>
-            <p className="text-sm font-black uppercase tracking-[-0.02em] text-white/76">
-              {edition.champion}
-            </p>
+            <PlayerNameLink
+              name={edition.champion}
+              playerSlug={
+                edition.championPlayerSlug ??
+                edition.playerSlug
+              }
+              className="text-sm font-black uppercase tracking-[-0.02em] text-white/76 transition hover:text-[var(--tournament-primary)]"
+            />
 
             <CountryLabel
               country={edition.championCountry}
@@ -311,9 +610,19 @@ function EditionRow({
       <div>
         <MobileLabel label="Final" />
 
-        <p className="text-sm font-black uppercase tracking-[-0.02em] text-white/62">
-          {edition.runnerUp ?? "Final data unavailable"}
-        </p>
+        {edition.runnerUp ? (
+          <PlayerNameLink
+            name={edition.runnerUp}
+            playerSlug={
+              edition.runnerUpPlayerSlug
+            }
+            className="text-sm font-black uppercase tracking-[-0.02em] text-white/62 transition hover:text-[var(--tournament-primary)]"
+          />
+        ) : (
+          <p className="text-sm font-black uppercase tracking-[-0.02em] text-white/62">
+            Final data unavailable
+          </p>
+        )}
 
         {edition.finalScore ? (
           <p className="mt-2 font-mono text-[8px] uppercase tracking-[0.12em] text-white/30">
@@ -362,10 +671,57 @@ function EditionRow({
   return (
     <Link
       href={edition.href}
-      aria-label={`View ${edition.year} edition`}
+      aria-label={`View ${edition.year}${edition.editionLabel ? ` ${edition.editionLabel}` : ""} edition`}
       className="block"
     >
       {content}
+    </Link>
+  );
+}
+
+type PlayerNameLinkProps = {
+  name: string;
+  playerSlug?: string;
+  className: string;
+  showArrow?: boolean;
+};
+
+function PlayerNameLink({
+  name,
+  playerSlug,
+  className,
+  showArrow = false,
+}: PlayerNameLinkProps) {
+  const archiveHref =
+    getPlayerArchiveHref(name);
+
+  const href =
+    archiveHref ??
+    (playerSlug
+      ? `/players/${playerSlug}`
+      : null);
+
+  if (!href) {
+    return (
+      <span className={className}>
+        {name}
+      </span>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className={className}
+    >
+      {name}
+
+      {showArrow ? (
+        <ArrowUpRight
+          size={17}
+          aria-hidden="true"
+        />
+      ) : null}
     </Link>
   );
 }
@@ -374,22 +730,65 @@ type ChampionLinkProps = {
   edition: TournamentEdition;
 };
 
-function ChampionLink({ edition }: ChampionLinkProps) {
+function ChampionLink({
+  edition,
+}: ChampionLinkProps) {
   const className =
-    "mt-3 inline-flex items-center gap-2 text-3xl font-black uppercase leading-none tracking-[-0.045em] text-white transition sm:text-4xl";
+    "mt-3 inline-flex items-center gap-2 text-3xl font-black uppercase leading-none tracking-[-0.045em] text-white transition hover:text-[var(--tournament-primary)] sm:text-4xl";
 
-  if (!edition.playerSlug) {
-    return <h3 className={className}>{edition.champion}</h3>;
+  return (
+    <h3>
+      <PlayerNameLink
+        name={edition.champion}
+        playerSlug={
+          edition.championPlayerSlug ??
+          edition.playerSlug
+        }
+        className={className}
+        showArrow
+      />
+    </h3>
+  );
+}
+
+type EditionPlayerDetailProps = {
+  icon: typeof Trophy;
+  label: string;
+  name?: string;
+  playerSlug?: string;
+};
+
+function EditionPlayerDetail({
+  icon: Icon,
+  label,
+  name,
+  playerSlug,
+}: EditionPlayerDetailProps) {
+  if (!name) {
+    return null;
   }
 
   return (
-    <Link
-      href={`/players/${edition.playerSlug}`}
-      className={`${className} hover:text-[var(--tournament-primary)]`}
-    >
-      {edition.champion}
-      <ArrowUpRight size={17} aria-hidden="true" />
-    </Link>
+    <div className="flex items-center justify-between gap-5 border-b border-white/10 px-6 py-5 last:border-b-0">
+      <div className="inline-flex items-center gap-3">
+        <Icon
+          size={14}
+          className="text-[var(--tournament-primary)]"
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
+
+        <span className="font-mono text-[7px] font-black uppercase tracking-[0.17em] text-white/28">
+          {label}
+        </span>
+      </div>
+
+      <PlayerNameLink
+        name={name}
+        playerSlug={playerSlug}
+        className="max-w-[210px] text-right text-[10px] font-black uppercase leading-5 tracking-[0.035em] text-white/58 transition hover:text-[var(--tournament-primary)]"
+      />
+    </div>
   );
 }
 

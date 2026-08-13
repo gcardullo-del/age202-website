@@ -175,6 +175,13 @@ function getPublicTournamentHref(
     return `/results/masters-1000/${slug}`;
   }
 
+  if (
+    category ===
+    "ATP_250"
+  ) {
+    return "/results/atp-250";
+  }
+
   return null;
 }
 
@@ -431,6 +438,476 @@ export default async function TournamentEditorPage({
       null,
       tournament.id,
     );
+
+  const isATP250 =
+    tournament.category ===
+    "ATP_250";
+
+  const leader =
+    tournament.champions[0] ??
+    null;
+
+  if (isATP250) {
+    const saveLatestWinner =
+      latestEdition
+        ? updateTournamentEdition.bind(
+            null,
+            tournament.id,
+            latestEdition.id,
+          )
+        : createEdition;
+
+    const saveLeader =
+      leader
+        ? updateTournamentChampion.bind(
+            null,
+            tournament.id,
+            leader.id,
+          )
+        : createChampion;
+
+    return (
+      <AdminShell
+        title={
+          tournament.shortName ??
+          tournament.name
+        }
+        description="ATP 250 · Tournament Studio Lite"
+      >
+        <div className="space-y-7">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Link
+              href="/admin/tournaments"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white/45 transition hover:text-white"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Tournament Studio
+            </Link>
+
+            {publicPageHref ? (
+              <Link
+                href={publicPageHref}
+                target="_blank"
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-4 text-sm font-semibold text-white/60 transition hover:border-lime-300/30 hover:bg-lime-300/10 hover:text-lime-200"
+              >
+                <Eye className="h-4 w-4" />
+                View ATP 250 table
+              </Link>
+            ) : null}
+          </div>
+
+          <AdminPageHeader
+            eyebrow="ATP 250 · Tournament Studio Lite"
+            title={
+              tournament.shortName ??
+              tournament.name
+            }
+            description="Only the two values used by the ATP 250 public table are managed here: Latest Winner and Leader."
+            icon={Trophy}
+          />
+
+          {editionSaved ? (
+            <div
+              role="status"
+              className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-4 text-sm font-semibold text-emerald-100"
+            >
+              Latest winner saved successfully.
+            </div>
+          ) : null}
+
+          {championSaved ? (
+            <div
+              role="status"
+              className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-4 text-sm font-semibold text-emerald-100"
+            >
+              Tournament leader saved successfully.
+            </div>
+          ) : null}
+
+          <div className="grid gap-5 xl:grid-cols-2">
+            <AdminPanel className="overflow-hidden">
+              <div className="border-b border-white/10 px-5 py-5 sm:px-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-lime-300/70">
+                      ATP 250 · Result
+                    </p>
+
+                    <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">
+                      Latest Winner
+                    </h2>
+
+                    <p className="mt-2 text-sm leading-6 text-white/40">
+                      Update only the latest completed final shown in the ATP 250 table.
+                    </p>
+                  </div>
+
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-lime-300/20 bg-lime-300/10 text-lime-300">
+                    <Trophy className="h-5 w-5" />
+                  </span>
+                </div>
+              </div>
+
+              <form
+                action={saveLatestWinner}
+                className="space-y-5 p-5 sm:p-6"
+              >
+                {latestEdition ? (
+                  <>
+                    <input
+                      type="hidden"
+                      name="editionKey"
+                      value={
+                        latestEdition.editionKey
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="editionLabel"
+                      value={
+                        latestEdition.editionLabel ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="drawSize"
+                      value={
+                        latestEdition.drawSize ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="startDate"
+                      value={
+                        latestEdition.startDate
+                          ? latestEdition.startDate
+                              .toISOString()
+                              .slice(0, 10)
+                          : ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="endDate"
+                      value={
+                        latestEdition.endDate
+                          ? latestEdition.endDate
+                              .toISOString()
+                              .slice(0, 10)
+                          : ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="championPlayerId"
+                      value={
+                        latestEdition.championPlayerId ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="championCountryCode"
+                      value={
+                        latestEdition.championCountryCode ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="runnerUpPlayerId"
+                      value={
+                        latestEdition.runnerUpPlayerId ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="runnerUpCountryCode"
+                      value={
+                        latestEdition.runnerUpCountryCode ??
+                        ""
+                      }
+                    />
+                    {latestEdition.cancelled ? (
+                      <input
+                        type="hidden"
+                        name="cancelled"
+                        value="on"
+                      />
+                    ) : null}
+                  </>
+                ) : null}
+
+                <Field
+                  label="Year"
+                  name="year"
+                  type="number"
+                  defaultValue={
+                    latestEdition?.year ??
+                    new Date().getFullYear()
+                  }
+                  min="1800"
+                  max="2200"
+                  required
+                />
+
+                <Field
+                  label="Winner"
+                  name="championName"
+                  defaultValue={
+                    latestEdition?.championName ??
+                    latestEdition?.championPlayer?.name ??
+                    ""
+                  }
+                  required
+                />
+
+                <Field
+                  label="Runner-up"
+                  name="runnerUpName"
+                  defaultValue={
+                    latestEdition?.runnerUpName ??
+                    latestEdition?.runnerUpPlayer?.name ??
+                    ""
+                  }
+                  required
+                />
+
+                <Field
+                  label="Final score"
+                  name="score"
+                  defaultValue={
+                    latestEdition?.score ??
+                    ""
+                  }
+                  hint="Example: 7-6(4), 6-4"
+                  required
+                />
+
+                <button
+                  type="submit"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 px-5 text-sm font-black text-[#050B18] transition hover:bg-lime-200"
+                >
+                  <Save className="h-4 w-4" />
+                  Save latest winner
+                </button>
+              </form>
+            </AdminPanel>
+
+            <AdminPanel className="overflow-hidden">
+              <div className="border-b border-white/10 px-5 py-5 sm:px-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-amber-300/70">
+                      ATP 250 · Record
+                    </p>
+
+                    <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">
+                      Leader
+                    </h2>
+
+                    <p className="mt-2 text-sm leading-6 text-white/40">
+                      Player with the most tournament titles. The public table renders the total with the trophy symbol.
+                    </p>
+                  </div>
+
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-amber-300/20 bg-amber-300/10 text-amber-300">
+                    <Crown className="h-5 w-5" />
+                  </span>
+                </div>
+              </div>
+
+              <form
+                action={saveLeader}
+                className="space-y-5 p-5 sm:p-6"
+              >
+                {leader ? (
+                  <>
+                    <input
+                      type="hidden"
+                      name="playerId"
+                      value={
+                        leader.playerId ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="country"
+                      value={
+                        leader.country ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="countryCode"
+                      value={
+                        leader.countryCode ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="firstTitleYear"
+                      value={
+                        leader.firstTitleYear ??
+                        ""
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name="lastTitleYear"
+                      value={
+                        leader.lastTitleYear ??
+                        ""
+                      }
+                    />
+                   <input
+  type="hidden"
+  name="titleYears"
+  value={
+    leader.titleYears.join(", ")
+  }
+/>
+
+<input
+  type="hidden"
+  name="finals"
+  value={
+    leader.finals?.toString() ??
+    ""
+  }
+/>
+
+<input
+  type="hidden"
+  name="wins"
+  value={
+    leader.wins?.toString() ??
+    ""
+  }
+/>
+
+<input
+  type="hidden"
+  name="sortOrder"
+  value={
+    leader.sortOrder.toString()
+  }
+/>
+
+<input
+  type="hidden"
+  name="recordLabel"
+  value={
+    leader.recordLabel ??
+    ""
+  }
+/>
+
+<input
+  type="hidden"
+  name="quote"
+  value={
+    leader.quote ??
+    ""
+  }
+/>
+
+<input
+  type="hidden"
+  name="imageUrl"
+  value={
+    leader.imageUrl ??
+    ""
+  }
+/>
+
+{leader.legend ? (
+  <input
+    type="hidden"
+    name="legend"
+    value="on"
+  />
+) : null}
+
+{leader.featured ? (
+  <input
+    type="hidden"
+    name="featured"
+    value="on"
+  />
+) : null}
+                  </>
+                ) : null}
+
+                <Field
+                  label="Player"
+                  name="name"
+                  defaultValue={
+                    leader?.name ??
+                    leader?.player?.name ??
+                    ""
+                  }
+                  hint="Example: Roger Federer"
+                  required
+                />
+
+                <Field
+                  label="Titles"
+                  name="titles"
+                  type="number"
+                  defaultValue={
+                    leader?.titles ??
+                    1
+                  }
+                  min="1"
+                  required
+                  hint="The public table will display this value as trophies."
+                />
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
+                  <p className="text-[8px] font-black uppercase tracking-[0.16em] text-white/25">
+                    Public preview
+                  </p>
+
+                  <div className="mt-3 flex items-center justify-between gap-4">
+                    <span className="text-base font-black uppercase text-white/75">
+                      {leader?.name ??
+                        leader?.player?.name ??
+                        "Leader"}
+                    </span>
+
+                    <span className="text-sm font-black text-amber-300">
+                      {leader?.titles ??
+                        1}{" "}
+                      🏆
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lime-300 px-5 text-sm font-black text-[#050B18] transition hover:bg-lime-200"
+                >
+                  <Save className="h-4 w-4" />
+                  Save leader
+                </button>
+              </form>
+            </AdminPanel>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-4 text-sm leading-6 text-white/35">
+            ATP 250 Studio Lite intentionally hides Identity, Hero & Media, Gallery, Story, Milestones, Chapters, Iconic Moments, SEO and the full historical Championship managers. Those modules remain available to the richer tournament categories.
+          </div>
+        </div>
+      </AdminShell>
+    );
+  }
 
   return (
     <AdminShell
@@ -2048,6 +2525,23 @@ export default async function TournamentEditorPage({
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field
+                    label="Edition key"
+                    name="editionKey"
+                    defaultValue="main"
+                    required
+                    hint='Use "main" normally. Historical exceptions can use keys such as "january" or "december".'
+                  />
+
+                  <Field
+                    label="Edition label"
+                    name="editionLabel"
+                    defaultValue=""
+                    hint='Optional public label, for example "January edition".'
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field
                     label="Start date"
                     name="startDate"
                     type="date"
@@ -2155,9 +2649,17 @@ export default async function TournamentEditorPage({
                           <div className="border-b border-white/10 px-5 py-4">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                               <div>
-                                <p className="text-2xl font-black tracking-[-0.04em] text-lime-300">
-                                  {edition.year}
-                                </p>
+                                <div className="flex flex-wrap items-baseline gap-3">
+                                  <p className="text-2xl font-black tracking-[-0.04em] text-lime-300">
+                                    {edition.year}
+                                  </p>
+
+                                  {edition.editionLabel ? (
+                                    <span className="font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/32">
+                                      {edition.editionLabel}
+                                    </span>
+                                  ) : null}
+                                </div>
 
                                 <p className="mt-1 text-xs text-white/35">
                                   {edition.championPlayer?.name ??
@@ -2188,7 +2690,7 @@ export default async function TournamentEditorPage({
                             action={updateEdition}
                             className="space-y-4 p-5"
                           >
-                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                               <Field
                                 label="Year"
                                 name="year"
@@ -2197,6 +2699,20 @@ export default async function TournamentEditorPage({
                                 min="1800"
                                 max="2200"
                                 required
+                              />
+
+                              <Field
+                                label="Edition key"
+                                name="editionKey"
+                                defaultValue={edition.editionKey}
+                                required
+                                hint='Use "main" normally.'
+                              />
+
+                              <Field
+                                label="Edition label"
+                                name="editionLabel"
+                                defaultValue={edition.editionLabel ?? ""}
                               />
 
                               <Field

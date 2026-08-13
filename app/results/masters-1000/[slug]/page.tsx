@@ -302,6 +302,7 @@ export default async function Masters1000TournamentPage({
             championPlayer: {
               select: {
                 name: true,
+                slug: true,
                 country: true,
               },
             },
@@ -309,6 +310,7 @@ export default async function Masters1000TournamentPage({
             runnerUpPlayer: {
               select: {
                 name: true,
+                slug: true,
                 country: true,
               },
             },
@@ -346,6 +348,7 @@ export default async function Masters1000TournamentPage({
             player: {
               select: {
                 name: true,
+                slug: true,
                 country: true,
               },
             },

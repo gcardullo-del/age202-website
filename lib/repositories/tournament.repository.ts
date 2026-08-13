@@ -14,6 +14,101 @@ const tournamentEditionInclude = {
   runnerUpPlayer: true,
 };
 
+const tournamentPublicInclude = {
+  editions: {
+    include: tournamentEditionInclude,
+
+    orderBy: [
+      {
+        year: "desc" as const,
+      },
+      {
+        editionKey: "asc" as const,
+      },
+    ],
+  },
+
+  champions: {
+    include: {
+      player: true,
+    },
+
+    orderBy: [
+      {
+        titles: "desc" as const,
+      },
+      {
+        lastTitleYear: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+    ],
+  },
+
+  galleryItems: {
+    orderBy: [
+      {
+        featured: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+      {
+        createdAt: "asc" as const,
+      },
+    ],
+  },
+
+  milestones: {
+    orderBy: [
+      {
+        featured: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+      {
+        year: "asc" as const,
+      },
+      {
+        createdAt: "asc" as const,
+      },
+    ],
+  },
+
+  chapters: {
+    orderBy: [
+      {
+        featured: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+      {
+        createdAt: "asc" as const,
+      },
+    ],
+  },
+
+  iconicMoments: {
+    orderBy: [
+      {
+        featured: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+      {
+        year: "asc" as const,
+      },
+      {
+        createdAt: "asc" as const,
+      },
+    ],
+  },
+};
+
 export async function getAllTournaments() {
   return prisma.tournament.findMany({
     where: {
@@ -51,31 +146,7 @@ export async function getTournamentBySlug(
       active: true,
     },
 
-    include: {
-      editions: {
-        include:
-          tournamentEditionInclude,
-
-        orderBy: {
-          year: "desc",
-        },
-      },
-
-      champions: {
-        include: {
-          player: true,
-        },
-
-        orderBy: [
-          {
-            titles: "desc",
-          },
-          {
-            lastTitleYear: "desc",
-          },
-        ],
-      },
-    },
+    include: tournamentPublicInclude,
   });
 }
 
@@ -90,21 +161,28 @@ export async function getTournamentEditions(
     include:
       tournamentEditionInclude,
 
-    orderBy: {
-      year: "desc",
-    },
+    orderBy: [
+      {
+        year: "desc",
+      },
+      {
+        editionKey: "asc",
+      },
+    ],
   });
 }
 
 export async function getTournamentEditionByYear(
   tournamentId: string,
   year: number,
+  editionKey = "main",
 ) {
   return prisma.tournamentEdition.findUnique({
     where: {
-      tournamentId_year: {
+      tournamentId_year_editionKey: {
         tournamentId,
         year,
+        editionKey,
       },
     },
 
