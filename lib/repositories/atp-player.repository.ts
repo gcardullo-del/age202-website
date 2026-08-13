@@ -29,7 +29,7 @@ const playerCollectionInclude = {
 
       /*
        * Mantenuto temporaneamente per garantire la compatibilità
-       * con il service attuale, che controlla artifacts.length.
+       * con il service attuale.
        */
       artifacts: {
         where: availableArtifactFilter,
@@ -43,7 +43,6 @@ const playerCollectionInclude = {
 
       /*
        * Conteggio reale degli articoli pubblicati e disponibili.
-       * Sarà utilizzato dal service nel prossimo passaggio.
        */
       _count: {
         select: {
@@ -164,6 +163,12 @@ export async function getStoredAtpPlayers() {
 export async function replaceAtpRanking(
   players: AtpPlayerImportData[],
 ) {
+  /*
+   * PROTEZIONE 1
+   *
+   * Non sostituiamo mai la classifica con un
+   * dataset incompleto.
+   */
   if (players.length !== MAX_ATP_PLAYERS) {
     throw new Error(
       `La classifica non può essere sostituita: attesi ${MAX_ATP_PLAYERS} giocatori, ricevuti ${players.length}.`,
@@ -172,9 +177,16 @@ export async function replaceAtpRanking(
 
   const orderedPlayers = [...players].sort(
     (firstPlayer, secondPlayer) =>
-      firstPlayer.rank - secondPlayer.rank,
+      firstPlayer.rank -
+      secondPlayer.rank,
   );
 
+  /*
+   * PROTEZIONE 2
+   *
+   * La classifica deve essere perfettamente
+   * sequenziale: 1, 2, 3 ... MAX_ATP_PLAYERS.
+   */
   orderedPlayers.forEach((player, index) => {
     const expectedRank = index + 1;
 
@@ -187,13 +199,37 @@ export async function replaceAtpRanking(
 
   return prisma.$transaction(
     async (transaction) => {
+      /*
+       * SNAPSHOT ATP ESISTENTE
+       *
+       * Conserviamo:
+       *
+       * - id AtpPlayer
+       * - playerId
+       *
+       * indicizzati per slug.
+       *
+       * In questo modo:
+       *
+       * - un giocatore già esistente mantiene il suo ID;
+       * - un nuovo ingresso riceve un nuovo UUID;
+       * - i collegamenti con Player vengono preservati.
+       */
       const storedAtpPlayers =
         await transaction.atpPlayer.findMany({
           select: {
+            id: true,
             slug: true,
             playerId: true,
           },
         });
+
+      const storedAtpIdBySlug = new Map(
+        storedAtpPlayers.map((player) => [
+          player.slug,
+          player.id,
+        ]),
+      );
 
       const storedPlayerIdBySlug = new Map(
         storedAtpPlayers.map((player) => [
@@ -202,11 +238,23 @@ export async function replaceAtpRanking(
         ]),
       );
 
+      /*
+       * Mappa dei Player dell'ATP Archive Top 50
+       * creati o aggiornati durante questa stessa
+       * transazione.
+       */
       const archivePlayerIdBySlug = new Map<
         string,
         string
       >();
 
+      /*
+       * ATP ARCHIVE TOP 50
+       *
+       * Prima della sostituzione della classifica
+       * aggiorniamo o creiamo i Player necessari
+       * all'Archive.
+       */
       for (const atpPlayer of orderedPlayers) {
         if (
           atpPlayer.rank < ATP_ARCHIVE_FIRST_RANK ||
@@ -230,17 +278,28 @@ export async function replaceAtpRanking(
 
               data: {
                 name: atpPlayer.name,
+
                 firstName:
                   atpPlayer.firstName ?? null,
+
                 lastName:
                   atpPlayer.lastName ?? null,
+
                 country: atpPlayer.country,
 
+                /*
+                 * Non sovrascriviamo mai una portrait
+                 * AGE202 esistente con null.
+                 */
                 portraitImage:
                   existingPlayer.portraitImage ??
                   atpPlayer.imageUrl ??
                   null,
 
+                /*
+                 * Le FEATURED collection rimangono
+                 * FEATURED.
+                 */
                 collectionType:
                   existingPlayer.collectionType ===
                   "FEATURED"
@@ -279,7 +338,9 @@ export async function replaceAtpRanking(
                     atpPlayer.age,
                   ),
 
-                displayOrder: atpPlayer.rank,
+                displayOrder:
+                  atpPlayer.rank,
+
                 active: true,
               },
             });
@@ -290,16 +351,46 @@ export async function replaceAtpRanking(
         );
       }
 
+      /*
+       * SOSTITUZIONE ATP RANKING
+       *
+       * Siamo dentro una singola transazione.
+       *
+       * Se qualsiasi operazione successiva fallisce,
+       * Prisma/PostgreSQL esegue rollback.
+       */
       await transaction.atpPlayer.deleteMany();
 
       await transaction.atpPlayer.createMany({
         data: orderedPlayers.map((player) => ({
-          id: randomUUID(),
+          /*
+           * DIFFERENZA IMPORTANTE:
+           *
+           * prima:
+           *
+           * id: randomUUID()
+           *
+           * ad ogni sincronizzazione.
+           *
+           * adesso:
+           *
+           * - slug già esistente → stesso ID;
+           * - nuovo slug → nuovo UUID.
+           */
+          id:
+            storedAtpIdBySlug.get(
+              player.slug,
+            ) ??
+            randomUUID(),
 
-          rank: player.rank,
-          previousRank: player.previousRank,
+          rank:
+            player.rank,
 
-          name: player.name,
+          previousRank:
+            player.previousRank,
+
+          name:
+            player.name,
 
           firstName:
             player.firstName ?? null,
@@ -307,12 +398,17 @@ export async function replaceAtpRanking(
           lastName:
             player.lastName ?? null,
 
-          slug: player.slug,
+          slug:
+            player.slug,
 
-          country: player.country,
-          countryCode: player.countryCode,
+          country:
+            player.country,
 
-          points: player.points,
+          countryCode:
+            player.countryCode,
+
+          points:
+            player.points,
 
           age:
             player.age ?? null,
@@ -320,6 +416,13 @@ export async function replaceAtpRanking(
           imageUrl:
             player.imageUrl ?? null,
 
+          /*
+           * Per i primi 50 preferiamo il Player
+           * appena verificato/creato.
+           *
+           * Per gli altri conserviamo l'eventuale
+           * collegamento AGE202 precedente.
+           */
           playerId:
             archivePlayerIdBySlug.get(
               player.slug,
@@ -329,13 +432,23 @@ export async function replaceAtpRanking(
             ) ??
             null,
 
-          rankingDate: player.rankingDate,
-          source: player.source,
+          rankingDate:
+            player.rankingDate,
 
-          active: true,
+          source:
+            player.source,
+
+          active:
+            true,
         })),
       });
 
+      /*
+       * POST-CONDITION 1
+       *
+       * Devono esistere esattamente
+       * MAX_ATP_PLAYERS giocatori attivi.
+       */
       const activePlayers =
         await transaction.atpPlayer.findMany({
           where: {
@@ -356,6 +469,12 @@ export async function replaceAtpRanking(
         );
       }
 
+      /*
+       * POST-CONDITION 2
+       *
+       * Tutti i giocatori 1-50 devono essere
+       * collegati al relativo Player Archive.
+       */
       const linkedArchivePlayers =
         activePlayers.filter(
           (player) =>
@@ -379,6 +498,28 @@ export async function replaceAtpRanking(
           `Transazione annullata: collegati ${linkedArchivePlayers.length}/${expectedArchivePlayers} giocatori dell'ATP Archive.`,
         );
       }
+
+      /*
+       * POST-CONDITION 3
+       *
+       * Ricontrolliamo anche la sequenza rank
+       * direttamente sui record appena scritti.
+       */
+      activePlayers.forEach(
+        (player, index) => {
+          const expectedRank =
+            index + 1;
+
+          if (
+            player.rank !==
+            expectedRank
+          ) {
+            throw new Error(
+              `Transazione annullata: ranking persistito non sequenziale alla posizione ${expectedRank}.`,
+            );
+          }
+        },
+      );
 
       return activePlayers;
     },
