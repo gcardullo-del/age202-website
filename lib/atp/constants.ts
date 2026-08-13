@@ -1,19 +1,31 @@
-export const MAX_ATP_PLAYERS = 150;
+export const MAX_ATP_PLAYERS = 100;
 
-export const ATP_SOURCE = "AGE202";
+
+export const ATP_SOURCE =
+  "AGE202";
+
+
+export const ATP_LIVE_SOURCE =
+  "ATP Live Rankings";
+
 
 export const ATP_RANKING_FILE_PATH = [
   "data",
   "atp-ranking.json",
 ] as const;
 
-export const COUNTRY_CODES: Record<string, string> = {
+
+export const COUNTRY_CODES: Record<
+  string,
+  string
+> = {
   Argentina: "ARG",
   Australia: "AUS",
   Austria: "AUT",
   Belgium: "BEL",
   Bolivia: "BOL",
-  "Bosnia and Herzegovina": "BIH",
+  "Bosnia and Herzegovina":
+    "BIH",
   Brazil: "BRA",
   Bulgaria: "BUL",
   Canada: "CAN",
