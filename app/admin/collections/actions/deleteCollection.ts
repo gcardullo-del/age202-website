@@ -3,11 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 export async function deleteCollection(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const value =
     formData.get("collectionId");
 

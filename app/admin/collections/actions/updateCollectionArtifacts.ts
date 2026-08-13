@@ -4,6 +4,10 @@ import {
   revalidatePath,
 } from "next/cache";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredString(
@@ -52,6 +56,8 @@ function stringArray(
 export async function updateCollectionArtifacts(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const collectionId =
     requiredString(
       formData,

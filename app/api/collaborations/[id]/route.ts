@@ -1,12 +1,12 @@
+
 import {
   NextResponse,
 } from "next/server";
 
 import {
+  CollaborationPartnerType,
+  CollaborationProjectType,
   MuseumPageStatus,
-  TennisHistoryEntryType,
-  TennisHistoryEra,
-  TennisHistoryGender,
 } from "@/generated/prisma/client";
 
 import {
@@ -15,12 +15,10 @@ import {
 } from "@/lib/auth/admin-auth";
 
 import {
-  deleteTennisHistory,
-  findTennisHistoryEntryById,
-  publishTennisHistory,
-  unpublishTennisHistory,
-  updateTennisHistory,
-} from "@/lib/services/tennis-history.service";
+  deleteCollaborationEntry,
+  findCollaborationById,
+  updateCollaborationEntry,
+} from "@/lib/services/collaboration.service";
 
 
 type RouteContext = {
@@ -30,29 +28,27 @@ type RouteContext = {
 };
 
 
-type UpdateTennisHistoryBody = {
-  type?: unknown;
+type UpdateCollaborationBody = {
   slug?: unknown;
-  year?: unknown;
   sortOrder?: unknown;
-  era?: unknown;
-  gender?: unknown;
 
   eyebrow?: unknown;
   title?: unknown;
   subtitle?: unknown;
   description?: unknown;
-  quote?: unknown;
-  achievement?: unknown;
+  story?: unknown;
+
+  partnerName?: unknown;
+  partnerType?: unknown;
+  location?: unknown;
+  year?: unknown;
   period?: unknown;
 
-  country?: unknown;
-  countryCode?: unknown;
+  projectTitle?: unknown;
+  projectType?: unknown;
+  outcome?: unknown;
 
-  playerOne?: unknown;
-  playerTwo?: unknown;
-  players?: unknown;
-
+  websiteUrl?: unknown;
   href?: unknown;
 
   imageUrl?: unknown;
@@ -61,31 +57,24 @@ type UpdateTennisHistoryBody = {
   featured?: unknown;
   status?: unknown;
   publishedAt?: unknown;
-
-  action?: unknown;
 };
 
 
 function optionalString(
   value: unknown,
+  field: string,
 ): string | null | undefined {
-  if (
-    value === undefined
-  ) {
+  if (value === undefined) {
     return undefined;
   }
 
-  if (
-    value === null
-  ) {
+  if (value === null) {
     return null;
   }
 
-  if (
-    typeof value !== "string"
-  ) {
+  if (typeof value !== "string") {
     throw new Error(
-      "Expected a string value.",
+      `${field} must be a string.`,
     );
   }
 
@@ -96,13 +85,54 @@ function optionalString(
 }
 
 
+function optionalRequiredString(
+  value: unknown,
+  field: string,
+): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof value !== "string" ||
+    !value.trim()
+  ) {
+    throw new Error(
+      `${field} is required.`,
+    );
+  }
+
+  return value.trim();
+}
+
+
+function requiredInteger(
+  value: unknown,
+  field: string,
+): number {
+  const parsed =
+    typeof value === "number"
+      ? value
+      : Number.parseInt(
+          String(value),
+          10,
+        );
+
+  if (!Number.isInteger(parsed)) {
+    throw new Error(
+      `${field} must be an integer.`,
+    );
+  }
+
+  return parsed;
+}
+
+
 function optionalInteger(
   value: unknown,
   field: string,
 ): number | undefined {
-  if (
-    value === undefined
-  ) {
+  if (value === undefined) {
     return undefined;
   }
 
@@ -115,43 +145,46 @@ function optionalInteger(
     );
   }
 
-  const parsed =
-    typeof value === "number"
-      ? value
-      : Number.parseInt(
-          String(value),
-          10,
-        );
+  return requiredInteger(
+    value,
+    field,
+  );
+}
 
-  if (
-    !Number.isInteger(
-      parsed,
-    )
-  ) {
-    throw new Error(
-      `${field} must be an integer.`,
-    );
+
+function optionalNullableInteger(
+  value: unknown,
+  field: string,
+): number | null | undefined {
+  if (value === undefined) {
+    return undefined;
   }
 
-  return parsed;
+  if (
+    value === null ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  return requiredInteger(
+    value,
+    field,
+  );
 }
 
 
 function optionalBoolean(
   value: unknown,
+  field: string,
 ): boolean | undefined {
-  if (
-    value === undefined
-  ) {
+  if (value === undefined) {
     return undefined;
   }
 
-  if (
-    typeof value !==
-    "boolean"
-  ) {
+  if (typeof value !== "boolean") {
     throw new Error(
-      "Expected a boolean value.",
+      `${field} must be a boolean.`,
     );
   }
 
@@ -165,16 +198,18 @@ function parseOptionalEnumValue<
   value: unknown,
   values: readonly T[],
   field: string,
+  nullable = false,
 ): T | null | undefined {
-  if (
-    value === undefined
-  ) {
+  if (value === undefined) {
     return undefined;
   }
 
   if (
-    value === null ||
-    value === ""
+    nullable &&
+    (
+      value === null ||
+      value === ""
+    )
   ) {
     return null;
   }
@@ -194,51 +229,10 @@ function parseOptionalEnumValue<
 }
 
 
-function parsePlayers(
-  value: unknown,
-): string[] | undefined {
-  if (
-    value === undefined
-  ) {
-    return undefined;
-  }
-
-  if (
-    !Array.isArray(value)
-  ) {
-    throw new Error(
-      "Players must be an array.",
-    );
-  }
-
-  return value
-    .map(
-      (
-        player,
-        index,
-      ) => {
-        if (
-          typeof player !==
-          "string"
-        ) {
-          throw new Error(
-            `Player ${index + 1} must be a string.`,
-          );
-        }
-
-        return player.trim();
-      },
-    )
-    .filter(Boolean);
-}
-
-
 function parseOptionalDate(
   value: unknown,
 ): Date | null | undefined {
-  if (
-    value === undefined
-  ) {
+  if (value === undefined) {
     return undefined;
   }
 
@@ -249,9 +243,7 @@ function parseOptionalDate(
     return null;
   }
 
-  if (
-    typeof value !== "string"
-  ) {
+  if (typeof value !== "string") {
     throw new Error(
       "Published at must be a valid date.",
     );
@@ -274,6 +266,44 @@ function parseOptionalDate(
 }
 
 
+function errorStatus(
+  message: string,
+): number {
+  const normalized =
+    message.toLowerCase();
+
+  if (
+    normalized.includes(
+      "record to update not found",
+    ) ||
+    normalized.includes(
+      "record to delete does not exist",
+    ) ||
+    normalized.includes(
+      "not found",
+    )
+  ) {
+    return 404;
+  }
+
+  if (
+    normalized.includes(
+      "unique constraint",
+    ) ||
+    normalized.includes(
+      "already exists",
+    )
+  ) {
+    return 409;
+  }
+
+  return 400;
+}
+
+
+/**
+ * Returns one Collaboration CMS entry by id.
+ */
 export async function GET(
   _request: Request,
   context: RouteContext,
@@ -281,19 +311,18 @@ export async function GET(
   try {
     const {
       id,
-    } =
-      await context.params;
+    } = await context.params;
 
-    const entry =
-      await findTennisHistoryEntryById(
+    const collaboration =
+      await findCollaborationById(
         id,
       );
 
-    if (!entry) {
+    if (!collaboration) {
       return NextResponse.json(
         {
           error:
-            "Tennis History entry not found.",
+            "Collaboration not found.",
         },
         {
           status: 404,
@@ -303,7 +332,7 @@ export async function GET(
 
     return NextResponse.json(
       {
-        entry,
+        collaboration,
       },
       {
         status: 200,
@@ -313,20 +342,25 @@ export async function GET(
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to load Tennis History entry.";
+        : "Unable to load collaboration.";
 
     return NextResponse.json(
       {
         error: message,
       },
       {
-        status: 400,
+        status: errorStatus(
+          message,
+        ),
       },
     );
   }
 }
 
 
+/**
+ * Updates one Collaboration CMS entry.
+ */
 export async function PATCH(
   request: Request,
   context: RouteContext,
@@ -336,75 +370,20 @@ export async function PATCH(
 
     const {
       id,
-    } =
-      await context.params;
+    } = await context.params;
 
     const body =
       (await request.json()) as
-        UpdateTennisHistoryBody;
+        UpdateCollaborationBody;
 
-    if (
-      body.action ===
-      "publish"
-    ) {
-      const entry =
-        await publishTennisHistory(
-          id,
-        );
-
-      return NextResponse.json(
-        {
-          entry,
-        },
-        {
-          status: 200,
-        },
-      );
-    }
-
-    if (
-      body.action ===
-      "unpublish"
-    ) {
-      const entry =
-        await unpublishTennisHistory(
-          id,
-        );
-
-      return NextResponse.json(
-        {
-          entry,
-        },
-        {
-          status: 200,
-        },
-      );
-    }
-
-    const entry =
-      await updateTennisHistory(
+    const collaboration =
+      await updateCollaborationEntry(
         id,
         {
-          type:
-            parseOptionalEnumValue(
-              body.type,
-              Object.values(
-                TennisHistoryEntryType,
-              ),
-              "Tennis History type",
-            ) ??
-            undefined,
-
           slug:
-            optionalString(
+            optionalRequiredString(
               body.slug,
-            ) ??
-            undefined,
-
-          year:
-            optionalInteger(
-              body.year,
-              "Year",
+              "Slug",
             ),
 
           sortOrder:
@@ -413,104 +392,119 @@ export async function PATCH(
               "Sort order",
             ),
 
-          era:
-            parseOptionalEnumValue(
-              body.era,
-              Object.values(
-                TennisHistoryEra,
-              ),
-              "Tennis History era",
-            ) ??
-            undefined,
-
-          gender:
-            parseOptionalEnumValue(
-              body.gender,
-              Object.values(
-                TennisHistoryGender,
-              ),
-              "Tennis History gender",
-            ),
-
           eyebrow:
             optionalString(
               body.eyebrow,
+              "Eyebrow",
             ),
 
           title:
-            optionalString(
+            optionalRequiredString(
               body.title,
-            ) ??
-            undefined,
+              "Title",
+            ),
 
           subtitle:
             optionalString(
               body.subtitle,
+              "Subtitle",
             ),
 
           description:
             optionalString(
               body.description,
+              "Description",
             ),
 
-          quote:
+          story:
             optionalString(
-              body.quote,
+              body.story,
+              "Story",
             ),
 
-          achievement:
+          partnerName:
+            optionalRequiredString(
+              body.partnerName,
+              "Partner name",
+            ),
+
+          partnerType:
+            parseOptionalEnumValue(
+              body.partnerType,
+              Object.values(
+                CollaborationPartnerType,
+              ),
+              "collaboration partner type",
+            ) ?? undefined,
+
+          location:
             optionalString(
-              body.achievement,
+              body.location,
+              "Location",
+            ),
+
+          year:
+            optionalNullableInteger(
+              body.year,
+              "Year",
             ),
 
           period:
             optionalString(
               body.period,
+              "Period",
             ),
 
-          country:
+          projectTitle:
             optionalString(
-              body.country,
+              body.projectTitle,
+              "Project title",
             ),
 
-          countryCode:
+          projectType:
+            parseOptionalEnumValue(
+              body.projectType,
+              Object.values(
+                CollaborationProjectType,
+              ),
+              "collaboration project type",
+              true,
+            ),
+
+          outcome:
             optionalString(
-              body.countryCode,
+              body.outcome,
+              "Outcome",
             ),
 
-          playerOne:
+          websiteUrl:
             optionalString(
-              body.playerOne,
-            ),
-
-          playerTwo:
-            optionalString(
-              body.playerTwo,
-            ),
-
-          players:
-            parsePlayers(
-              body.players,
+              body.websiteUrl,
+              "Website URL",
             ),
 
           href:
             optionalString(
               body.href,
+              "Href",
             ),
 
           imageUrl:
             optionalString(
               body.imageUrl,
+              "Image URL",
             ),
 
           mediaId:
             optionalString(
               body.mediaId,
+              "Media id",
             ),
 
           featured:
             optionalBoolean(
               body.featured,
+              "Featured",
             ),
 
           status:
@@ -520,8 +514,7 @@ export async function PATCH(
                 MuseumPageStatus,
               ),
               "publication status",
-            ) ??
-            undefined,
+            ) ?? undefined,
 
           publishedAt:
             parseOptionalDate(
@@ -532,7 +525,7 @@ export async function PATCH(
 
     return NextResponse.json(
       {
-        entry,
+        collaboration,
       },
       {
         status: 200,
@@ -558,35 +551,27 @@ export async function PATCH(
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to update Tennis History entry.";
-
-    const status =
-      message
-        .toLowerCase()
-        .includes(
-          "not found",
-        )
-        ? 404
-        : message
-            .toLowerCase()
-            .includes(
-              "already exists",
-            )
-          ? 409
-          : 400;
+        : "Unable to update collaboration.";
 
     return NextResponse.json(
       {
         error: message,
       },
       {
-        status,
+        status: errorStatus(
+          message,
+        ),
       },
     );
   }
 }
 
 
+/**
+ * Deletes one Collaboration CMS entry.
+ *
+ * Any linked MediaAsset remains in the Media Library.
+ */
 export async function DELETE(
   _request: Request,
   context: RouteContext,
@@ -596,17 +581,15 @@ export async function DELETE(
 
     const {
       id,
-    } =
-      await context.params;
+    } = await context.params;
 
-    const entry =
-      await deleteTennisHistory(
-        id,
-      );
+    await deleteCollaborationEntry(
+      id,
+    );
 
     return NextResponse.json(
       {
-        entry,
+        success: true,
       },
       {
         status: 200,
@@ -632,23 +615,16 @@ export async function DELETE(
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to delete Tennis History entry.";
-
-    const status =
-      message
-        .toLowerCase()
-        .includes(
-          "not found",
-        )
-        ? 404
-        : 400;
+        : "Unable to delete collaboration.";
 
     return NextResponse.json(
       {
         error: message,
       },
       {
-        status,
+        status: errorStatus(
+          message,
+        ),
       },
     );
   }

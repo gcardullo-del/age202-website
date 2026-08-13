@@ -1,6 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import {
   createMedia,
   createMediaFolder,
@@ -8,6 +13,7 @@ import {
   getMediaById,
   updateMedia,
 } from "@/lib/repositories/media.repository";
+
 import {
   deleteArtifactImage,
   uploadArtifactImage,
@@ -57,6 +63,8 @@ function slugify(value: string): string {
 }
 
 export async function uploadMediaAssets(formData: FormData): Promise<void> {
+  await requireAdmin();
+
   const files = formData
     .getAll("files")
     .filter((entry): entry is File => entry instanceof File && entry.size > 0)
@@ -107,6 +115,8 @@ export async function uploadMediaAssets(formData: FormData): Promise<void> {
 }
 
 export async function updateMediaAssetAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+
   const id = requiredString(formData, "id");
 
   await updateMedia(id, {
@@ -121,6 +131,8 @@ export async function updateMediaAssetAction(formData: FormData): Promise<void> 
 }
 
 export async function deleteMediaAssetAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+
   const id = requiredString(formData, "id");
   const asset = await getMediaById(id);
   if (!asset) return;
@@ -131,6 +143,8 @@ export async function deleteMediaAssetAction(formData: FormData): Promise<void> 
 }
 
 export async function createMediaFolderAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+
   const name = requiredString(formData, "name");
   const slug = slugify(optionalString(formData, "slug") ?? name);
 

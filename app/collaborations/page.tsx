@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+
 import CollaborationsExperience from "@/components/collaborations/CollaborationsExperience";
+
+
+export const dynamic =
+  "force-dynamic";
+
 
 export const metadata: Metadata = {
   title: "Collaborations | AGE202",
@@ -7,6 +13,9 @@ export const metadata: Metadata = {
     "Discover AGE202 partnerships across tennis, design, photography, collecting and culture.",
 };
 
+
 export default function CollaborationsPage() {
-  return <CollaborationsExperience />;
+  return (
+    <CollaborationsExperience />
+  );
 }

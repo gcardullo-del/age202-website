@@ -3,11 +3,18 @@
 import {
   revalidatePath,
 } from "next/cache";
+
 import {
   redirect,
 } from "next/navigation";
 
-import { prisma } from "@/lib/prisma";
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
+import {
+  prisma,
+} from "@/lib/prisma";
 
 function optionalText(
   formData: FormData,
@@ -30,6 +37,8 @@ export async function updateTournamentMedia(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament =
     await prisma.tournament.findUnique({
       where: {

@@ -8,6 +8,10 @@ import type {
   CollectionType,
 } from "@/generated/prisma/client";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 const COLLECTION_STATUSES =
@@ -178,6 +182,8 @@ async function availableSlug(
 export async function updateCollection(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const collectionId =
     requiredString(
       formData,

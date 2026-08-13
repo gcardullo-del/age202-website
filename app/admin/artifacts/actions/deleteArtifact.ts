@@ -2,6 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 import { deleteArtifact as deleteArtifactRepository } from "@/lib/repositories/artifact.repository";
 import { deleteArtifactImage as deleteStoredArtifactImage } from "@/lib/services/artifactStorage.service";
@@ -13,16 +17,18 @@ export type DeleteArtifactResult =
 export async function deleteArtifactAction(
   artifactId: string,
 ): Promise<DeleteArtifactResult> {
-  const normalizedArtifactId = artifactId.trim();
-
-  if (!normalizedArtifactId) {
-    return {
-      ok: false,
-      message: "Artifact identifier is missing.",
-    };
-  }
-
   try {
+    await requireAdmin();
+
+    const normalizedArtifactId = artifactId.trim();
+
+    if (!normalizedArtifactId) {
+      return {
+        ok: false,
+        message: "Artifact identifier is missing.",
+      };
+    }
+
     const artifact = await prisma.artifact.findUnique({
       where: { id: normalizedArtifactId },
       select: {

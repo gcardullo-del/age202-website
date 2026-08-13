@@ -7,6 +7,10 @@ import {
   redirect,
 } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredText(
@@ -125,6 +129,8 @@ export async function createTournamentGalleryItem(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(
       tournamentId,
@@ -192,6 +198,8 @@ export async function updateTournamentGalleryItem(
   galleryItemId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(
       tournamentId,
@@ -278,6 +286,8 @@ export async function deleteTournamentGalleryItem(
   tournamentId: string,
   galleryItemId: string,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(
       tournamentId,

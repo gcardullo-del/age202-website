@@ -18,7 +18,7 @@ export const museum = {
 
   website: "https://www.age202.com",
 
-  contactEmail: "info@age202.com",
+  contactEmail: "postmaster@age202.com",
 
   social: {
     instagram: "",

@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredText(
@@ -95,6 +99,8 @@ export async function createTournamentChapter(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(tournamentId);
 
@@ -127,6 +133,8 @@ export async function updateTournamentChapter(
   chapterId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(tournamentId);
 
@@ -175,6 +183,8 @@ export async function deleteTournamentChapter(
   tournamentId: string,
   chapterId: string,
 ) {
+  await requireAdmin();
+
   const tournament =
     await getTournamentContext(tournamentId);
 

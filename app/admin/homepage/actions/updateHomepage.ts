@@ -9,6 +9,10 @@ import {
 } from "next/navigation";
 
 import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
+import {
   type HomepageSettings,
   updateAdminHomepageSettings,
 } from "@/lib/repositories/admin/admin-homepage.repository";
@@ -85,6 +89,8 @@ function getStringArray(
 export async function updateHomepage(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const settings:
     HomepageSettings = {
     heroEyebrow:

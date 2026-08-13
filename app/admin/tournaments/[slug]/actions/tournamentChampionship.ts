@@ -2,6 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredText(formData: FormData, key: string): string {
@@ -215,6 +220,8 @@ export async function createTournamentEdition(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const year = requiredInteger(formData, "year");
@@ -291,6 +298,8 @@ export async function updateTournamentEdition(
   editionId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const edition = await prisma.tournamentEdition.findFirst({
@@ -385,6 +394,8 @@ export async function deleteTournamentEdition(
   tournamentId: string,
   editionId: string,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const edition = await prisma.tournamentEdition.findFirst({
@@ -416,6 +427,8 @@ export async function createTournamentChampion(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const playerId = optionalText(formData, "playerId");
@@ -552,6 +565,8 @@ export async function updateTournamentChampion(
   championId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const champion = await prisma.tournamentChampion.findFirst({
@@ -709,6 +724,8 @@ export async function deleteTournamentChampion(
   tournamentId: string,
   championId: string,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const champion = await prisma.tournamentChampion.findFirst({

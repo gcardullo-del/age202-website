@@ -3,10 +3,9 @@ import {
 } from "next/server";
 
 import {
+  CollaborationPartnerType,
+  CollaborationProjectType,
   MuseumPageStatus,
-  TennisHistoryEntryType,
-  TennisHistoryEra,
-  TennisHistoryGender,
 } from "@/generated/prisma/client";
 
 import {
@@ -15,34 +14,32 @@ import {
 } from "@/lib/auth/admin-auth";
 
 import {
-  createTennisHistory,
-  listPublishedTennisHistoryEntries,
-} from "@/lib/services/tennis-history.service";
+  createCollaborationEntry,
+  listPublishedCollaborations,
+} from "@/lib/services/collaboration.service";
 
 
-type CreateTennisHistoryBody = {
-  type?: unknown;
+type CreateCollaborationBody = {
   slug?: unknown;
-  year?: unknown;
   sortOrder?: unknown;
-  era?: unknown;
-  gender?: unknown;
 
   eyebrow?: unknown;
   title?: unknown;
   subtitle?: unknown;
   description?: unknown;
-  quote?: unknown;
-  achievement?: unknown;
+  story?: unknown;
+
+  partnerName?: unknown;
+  partnerType?: unknown;
+  location?: unknown;
+  year?: unknown;
   period?: unknown;
 
-  country?: unknown;
-  countryCode?: unknown;
+  projectTitle?: unknown;
+  projectType?: unknown;
+  outcome?: unknown;
 
-  playerOne?: unknown;
-  playerTwo?: unknown;
-  players?: unknown;
-
+  websiteUrl?: unknown;
   href?: unknown;
 
   imageUrl?: unknown;
@@ -132,6 +129,25 @@ function optionalInteger(
 }
 
 
+function optionalNullableInteger(
+  value: unknown,
+  field: string,
+): number | null {
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  return requiredInteger(
+    value,
+    field,
+  );
+}
+
+
 function optionalBoolean(
   value: unknown,
 ): boolean | undefined {
@@ -185,37 +201,6 @@ function parseOptionalEnumValue<
 }
 
 
-function parsePlayers(
-  value: unknown,
-): string[] {
-  if (
-    value === null ||
-    value === undefined
-  ) {
-    return [];
-  }
-
-  if (
-    !Array.isArray(value)
-  ) {
-    throw new Error(
-      "Players must be an array.",
-    );
-  }
-
-  return value.map(
-    (
-      player,
-      index,
-    ) =>
-      requiredString(
-        player,
-        `Player ${index + 1}`,
-      ),
-  );
-}
-
-
 function parseOptionalDate(
   value: unknown,
 ): Date | null {
@@ -253,19 +238,19 @@ function parseOptionalDate(
 
 
 /**
- * Public Tennis History timeline.
+ * Public Collaborations archive.
  *
- * Returns only PUBLISHED entries,
- * already ordered chronologically.
+ * Returns only PUBLISHED collaborations,
+ * already ordered for the public experience.
  */
 export async function GET() {
   try {
-    const entries =
-      await listPublishedTennisHistoryEntries();
+    const collaborations =
+      await listPublishedCollaborations();
 
     return NextResponse.json(
       {
-        entries,
+        collaborations,
       },
       {
         status: 200,
@@ -275,7 +260,7 @@ export async function GET() {
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to load Tennis History.";
+        : "Unable to load collaborations.";
 
     return NextResponse.json(
       {
@@ -290,7 +275,7 @@ export async function GET() {
 
 
 /**
- * Creates a Tennis History CMS entry.
+ * Creates a Collaboration CMS entry.
  *
  * Used by the Admin editor.
  */
@@ -302,54 +287,21 @@ export async function POST(
 
     const body =
       (await request.json()) as
-        CreateTennisHistoryBody;
+        CreateCollaborationBody;
 
-    const entry =
-      await createTennisHistory(
+    const collaboration =
+      await createCollaborationEntry(
         {
-          type:
-            parseEnumValue(
-              body.type,
-              Object.values(
-                TennisHistoryEntryType,
-              ),
-              "Tennis History type",
-            ),
-
           slug:
             requiredString(
               body.slug,
               "Slug",
             ),
 
-          year:
-            requiredInteger(
-              body.year,
-              "Year",
-            ),
-
           sortOrder:
             optionalInteger(
               body.sortOrder,
               "Sort order",
-            ),
-
-          era:
-            parseEnumValue(
-              body.era,
-              Object.values(
-                TennisHistoryEra,
-              ),
-              "Tennis History era",
-            ),
-
-          gender:
-            parseOptionalEnumValue(
-              body.gender,
-              Object.values(
-                TennisHistoryGender,
-              ),
-              "Tennis History gender",
             ),
 
           eyebrow:
@@ -373,14 +325,35 @@ export async function POST(
               body.description,
             ),
 
-          quote:
+          story:
             optionalString(
-              body.quote,
+              body.story,
             ),
 
-          achievement:
+          partnerName:
+            requiredString(
+              body.partnerName,
+              "Partner name",
+            ),
+
+          partnerType:
+            parseEnumValue(
+              body.partnerType,
+              Object.values(
+                CollaborationPartnerType,
+              ),
+              "collaboration partner type",
+            ),
+
+          location:
             optionalString(
-              body.achievement,
+              body.location,
+            ),
+
+          year:
+            optionalNullableInteger(
+              body.year,
+              "Year",
             ),
 
           period:
@@ -388,29 +361,28 @@ export async function POST(
               body.period,
             ),
 
-          country:
+          projectTitle:
             optionalString(
-              body.country,
+              body.projectTitle,
             ),
 
-          countryCode:
-            optionalString(
-              body.countryCode,
+          projectType:
+            parseOptionalEnumValue(
+              body.projectType,
+              Object.values(
+                CollaborationProjectType,
+              ),
+              "collaboration project type",
             ),
 
-          playerOne:
+          outcome:
             optionalString(
-              body.playerOne,
+              body.outcome,
             ),
 
-          playerTwo:
+          websiteUrl:
             optionalString(
-              body.playerTwo,
-            ),
-
-          players:
-            parsePlayers(
-              body.players,
+              body.websiteUrl,
             ),
 
           href:
@@ -458,7 +430,7 @@ export async function POST(
 
     return NextResponse.json(
       {
-        entry,
+        collaboration,
       },
       {
         status: 201,
@@ -484,14 +456,18 @@ export async function POST(
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to create Tennis History entry.";
+        : "Unable to create collaboration.";
+
+    const normalized =
+      message.toLowerCase();
 
     const status =
-      message
-        .toLowerCase()
-        .includes(
-          "already exists",
-        )
+      normalized.includes(
+        "already exists",
+      ) ||
+      normalized.includes(
+        "unique constraint",
+      )
         ? 409
         : 400;
 

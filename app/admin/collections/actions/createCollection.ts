@@ -10,6 +10,10 @@ import type {
   CollectionType,
 } from "@/generated/prisma/client";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 const COLLECTION_STATUSES =
@@ -191,6 +195,8 @@ async function availableSlug(
 export async function createCollection(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const name =
     requiredString(
       formData,

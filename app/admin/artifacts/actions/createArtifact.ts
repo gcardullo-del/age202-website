@@ -4,6 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
+import {
   createArtifact as createArtifactRepository,
   deleteArtifact as deleteArtifactRepository,
 } from "@/lib/repositories/artifact.repository";
@@ -41,6 +45,8 @@ import {
 export async function createArtifact(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const title = getRequiredString(
     formData,
     "title",

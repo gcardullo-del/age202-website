@@ -5,6 +5,10 @@ import {
 } from "next/cache";
 import { redirect } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 import {
@@ -120,6 +124,8 @@ function parseMediaOrder(
 export async function createOriginalProduct(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const title =
     getRequiredString(
       formData,

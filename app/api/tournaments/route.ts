@@ -8,6 +8,11 @@ import {
 } from "@/generated/prisma/client";
 
 import {
+  AdminAuthError,
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
+import {
   prisma,
 } from "@/lib/prisma";
 
@@ -178,6 +183,8 @@ export async function POST(
   request: Request,
 ) {
   try {
+    await requireAdmin();
+
     const body =
       (await request.json()) as
         CreateTournamentBody;
@@ -335,6 +342,22 @@ export async function POST(
       },
     );
   } catch (error) {
+    if (
+      error instanceof
+      AdminAuthError
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            error.message,
+        },
+        {
+          status:
+            error.status,
+        },
+      );
+    }
+
     const message =
       error instanceof Error
         ? error.message

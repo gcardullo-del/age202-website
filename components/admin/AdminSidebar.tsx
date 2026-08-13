@@ -7,6 +7,7 @@ import {
   Archive,
   BookOpen,
   ChevronRight,
+  Handshake,
   Home,
   Image,
   Layers3,
@@ -59,6 +60,11 @@ const navigationItems = [
     label: "Tennis History",
     href: "/admin/tennis-history",
     icon: BookOpen,
+  },
+  {
+    label: "Collaborations",
+    href: "/admin/collaborations",
+    icon: Handshake,
   },
   {
     label: "Collections",

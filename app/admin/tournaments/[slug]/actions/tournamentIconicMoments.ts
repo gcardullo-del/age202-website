@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredText(formData: FormData, key: string): string {
@@ -99,6 +103,8 @@ export async function createTournamentIconicMoment(
   tournamentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
   const year = optionalInteger(formData, "year");
 
@@ -130,6 +136,8 @@ export async function updateTournamentIconicMoment(
   iconicMomentId: string,
   formData: FormData,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const iconicMoment = await prisma.tournamentIconicMoment.findFirst({
@@ -176,6 +184,8 @@ export async function deleteTournamentIconicMoment(
   tournamentId: string,
   iconicMomentId: string,
 ) {
+  await requireAdmin();
+
   const tournament = await getTournamentContext(tournamentId);
 
   const iconicMoment = await prisma.tournamentIconicMoment.findFirst({

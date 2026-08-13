@@ -365,6 +365,7 @@ model MediaAsset {
   heroForCollections   MuseumCollection[]      @relation("MuseumCollectionHeroMedia")
   museumCollections    MuseumCollectionMedia[]
   tennisHistoryEntries TennisHistoryEntry[]
+  collaborations       Collaboration[]
 
   @@index([title])
   @@index([originalName])
@@ -421,6 +422,53 @@ model TennisHistoryEntry {
   @@index([mediaId])
   @@index([publishedAt])
   @@index([year, sortOrder])
+}
+
+model Collaboration {
+  id        String @id @default(cuid())
+  slug      String @unique
+  sortOrder Int    @default(0)
+
+  eyebrow     String?
+  title       String
+  subtitle    String?
+  description String?
+  story       String?
+
+  partnerName String
+  partnerType CollaborationPartnerType
+  location    String?
+  year        Int?
+  period      String?
+
+  projectTitle String?
+  projectType  CollaborationProjectType?
+  outcome      String?
+
+  websiteUrl String?
+  href       String?
+
+  imageUrl String?
+  mediaId  String?
+  media    MediaAsset? @relation(fields: [mediaId], references: [id], onDelete: SetNull)
+
+  featured    Boolean          @default(false)
+  status      MuseumPageStatus @default(DRAFT)
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([partnerName])
+  @@index([partnerType])
+  @@index([projectType])
+  @@index([year])
+  @@index([status])
+  @@index([featured])
+  @@index([sortOrder])
+  @@index([mediaId])
+  @@index([publishedAt])
+  @@index([createdAt])
 }
 
 model MuseumCollection {
@@ -827,6 +875,22 @@ enum TennisHistoryGender {
   MEN
   WOMEN
   MIXED
+}
+
+enum CollaborationPartnerType {
+  TENNIS_BRAND
+  CLUB_EVENT
+  CREATIVE_STUDIO
+  COLLECTOR
+  OTHER
+}
+
+enum CollaborationProjectType {
+  ARCHIVE_STORY
+  LIMITED_CAPSULE
+  EXHIBITION_POPUP
+  CAMPAIGN_CONTENT
+  OTHER
 }
 
 enum MuseumPageStatus {

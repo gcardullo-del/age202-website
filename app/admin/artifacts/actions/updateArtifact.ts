@@ -2,11 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
+
 import {
   deleteArtifactImage as deleteStoredArtifactImage,
   uploadArtifactImage,
 } from "@/lib/services/artifactStorage.service";
+
 import {
   MAX_ARTIFACT_IMAGES,
   getArtifactAvailability,
@@ -74,6 +81,8 @@ async function createAvailableSlug(requestedValue: string, artifactId: string): 
 }
 
 export async function updateArtifact(formData: FormData): Promise<never> {
+  await requireAdmin();
+
   const artifactId = getRequiredString(formData, "artifactId");
   const title = getRequiredString(formData, "title");
   const playerId = getRequiredString(formData, "playerId");

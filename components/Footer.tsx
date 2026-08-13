@@ -89,7 +89,7 @@ export default function Footer() {
               </Link>
 
               <a
-                href="mailto:info@age202.com"
+                href="mailto:postmaster@age202.com"
                 className="text-sm font-semibold text-white/70 transition hover:text-[#d7ff00]"
               >
                 Contact

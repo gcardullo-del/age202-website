@@ -1,6 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 function requiredString(formData: FormData, name: string): string {
@@ -28,6 +33,8 @@ function stringArray(formData: FormData, name: string): string[] {
 export async function updateCollectionOriginals(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const collectionId = requiredString(formData, "collectionId");
   const originalProductIds = stringArray(formData, "originalProductIds");
   const featuredOriginalIds = new Set(

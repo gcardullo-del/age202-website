@@ -2,6 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 import {
@@ -11,6 +15,8 @@ import {
 export async function deleteOriginalProduct(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const productId =
     formData.get("productId");
 
@@ -59,6 +65,7 @@ export async function deleteOriginalProduct(
   revalidatePath(
     "/admin/originals",
   );
+
   revalidatePath(
     "/age202-originals",
   );

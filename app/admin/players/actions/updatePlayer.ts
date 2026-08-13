@@ -6,6 +6,10 @@ import {
 
 import { redirect } from "next/navigation";
 
+import {
+  requireAdmin,
+} from "@/lib/auth/admin-auth";
+
 import { prisma } from "@/lib/prisma";
 
 import {
@@ -192,6 +196,8 @@ function getMuseumCollectionIds(
 export async function updatePlayer(
   formData: FormData,
 ): Promise<void> {
+  await requireAdmin();
+
   const playerId =
     getRequiredString(
       formData,
