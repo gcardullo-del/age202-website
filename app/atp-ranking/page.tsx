@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "ATP World Rankings | AGE202",
   description:
-    "La classifica ATP Top 150 con punti ufficiali, variazioni, nazionalità e collegamenti alle collezioni AGE202.",
+    "La classifica ATP Top 100 con punti ufficiali, variazioni, nazionalità e collegamenti alle collezioni AGE202.",
 };
 
 function formatDate(value: Date | null): string {
@@ -58,7 +58,7 @@ export default async function AtpRankingPage() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
-              Un archivio aggiornato dei migliori 150 giocatori
+              Un archivio aggiornato dei migliori 100 giocatori
               del circuito maschile, con punti ufficiali,
               variazioni e collegamenti alle collezioni AGE202.
             </p>
@@ -101,7 +101,7 @@ export default async function AtpRankingPage() {
         <div className="mx-auto grid w-full max-w-[1680px] border-t border-white/10 px-4 sm:grid-cols-4 sm:px-6 lg:px-10">
           {[
             ["Players", `${players.length}`],
-            ["Ranking range", "Top 150"],
+            ["Ranking range", "Top 100"],
             ["Updated", formatDate(latestDate)],
             ["Source", source],
           ].map(([label, value]) => (
