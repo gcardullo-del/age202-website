@@ -1371,6 +1371,40 @@ export default async function TournamentEditorPage({
           >
             <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
               <div className="grid gap-5 md:grid-cols-2">
+                <div className="md:col-span-2">
+                  <label className="block">
+                    <span className="text-xs font-semibold text-white/55">
+                      Upload hero image
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-white/30">
+                      Upload a new JPG, PNG, WEBP or AVIF directly to Supabase Storage.
+                      If a file is selected, its public URL replaces the manual Hero image URL below.
+                    </span>
+
+                    <div className="mt-3 flex min-h-40 cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-lime-300/25 bg-lime-300/[0.035] px-6 py-8 text-center transition hover:border-lime-300/40 hover:bg-lime-300/[0.055]">
+                      <span className="grid h-12 w-12 place-items-center rounded-2xl border border-lime-300/20 bg-lime-300/10 text-lime-200">
+                        <ImagePlus className="h-5 w-5" />
+                      </span>
+
+                      <span className="mt-4 text-sm font-semibold text-white">
+                        Choose hero image
+                      </span>
+
+                      <span className="mt-2 text-xs leading-5 text-white/35">
+                        The uploaded file is also registered in the AGE202 Media Library.
+                      </span>
+
+                      <input
+                        type="file"
+                        name="heroFile"
+                        accept="image/jpeg,image/png,image/webp,image/avif"
+                        className="mt-5 block w-full max-w-md cursor-pointer rounded-2xl border border-white/10 bg-[#050B18] px-4 py-3 text-xs text-white/55 file:mr-4 file:rounded-xl file:border-0 file:bg-lime-300 file:px-4 file:py-2 file:text-xs file:font-black file:text-[#050B18] hover:file:bg-lime-200"
+                      />
+                    </div>
+                  </label>
+                </div>
+
                 <Field
                   label="Hero image URL"
                   name="heroImage"
@@ -1379,7 +1413,7 @@ export default async function TournamentEditorPage({
                     ""
                   }
                   className="md:col-span-2"
-                  hint="Use the exact image path or URL that should feed the existing tournament hero."
+                  hint="Optional fallback/manual public URL. Leave the current value unchanged when uploading a new hero file."
                 />
 
                 <Field
@@ -1507,12 +1541,45 @@ export default async function TournamentEditorPage({
                 action={createGalleryItem}
                 className="mt-5 space-y-4"
               >
+                <div>
+                  <label className="block">
+                    <span className="text-xs font-semibold text-white/55">
+                      Upload gallery image
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-white/30">
+                      Upload a JPG, PNG, WEBP or AVIF directly to Supabase Storage.
+                      If a file is selected, its public URL replaces the manual Image URL below.
+                    </span>
+
+                    <div className="mt-3 flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-lime-300/25 bg-lime-300/[0.035] px-5 py-7 text-center transition hover:border-lime-300/40 hover:bg-lime-300/[0.055]">
+                      <span className="grid h-11 w-11 place-items-center rounded-2xl border border-lime-300/20 bg-lime-300/10 text-lime-200">
+                        <ImagePlus className="h-5 w-5" />
+                      </span>
+
+                      <span className="mt-3 text-sm font-semibold text-white">
+                        Choose gallery image
+                      </span>
+
+                      <span className="mt-2 text-xs leading-5 text-white/35">
+                        The uploaded file is also registered in the AGE202 Media Library.
+                      </span>
+
+                      <input
+                        type="file"
+                        name="imageFile"
+                        accept="image/jpeg,image/png,image/webp,image/avif"
+                        className="mt-4 block w-full cursor-pointer rounded-2xl border border-white/10 bg-[#050B18] px-3 py-3 text-xs text-white/55 file:mr-3 file:rounded-xl file:border-0 file:bg-lime-300 file:px-3 file:py-2 file:text-xs file:font-black file:text-[#050B18] hover:file:bg-lime-200"
+                      />
+                    </div>
+                  </label>
+                </div>
+
                 <Field
                   label="Image URL"
                   name="imageUrl"
                   defaultValue=""
-                  required
-                  hint="Public path or image URL used by the tournament gallery."
+                  hint="Optional fallback/manual public URL. Leave empty when uploading a file above."
                 />
 
                 <Field
@@ -1625,11 +1692,30 @@ export default async function TournamentEditorPage({
                             action={updateGalleryItem}
                             className="space-y-4 p-4"
                           >
+                            <div>
+                              <label className="block">
+                                <span className="text-xs font-semibold text-white/55">
+                                  Replace gallery image
+                                </span>
+
+                                <span className="mt-1 block text-xs leading-5 text-white/30">
+                                  Optional. Upload a new image to replace the current gallery asset.
+                                </span>
+
+                                <input
+                                  type="file"
+                                  name="imageFile"
+                                  accept="image/jpeg,image/png,image/webp,image/avif"
+                                  className="mt-3 block w-full cursor-pointer rounded-2xl border border-white/10 bg-[#050B18] px-3 py-3 text-xs text-white/55 file:mr-3 file:rounded-xl file:border-0 file:bg-lime-300 file:px-3 file:py-2 file:text-xs file:font-black file:text-[#050B18] hover:file:bg-lime-200"
+                                />
+                              </label>
+                            </div>
+
                             <Field
                               label="Image URL"
                               name="imageUrl"
                               defaultValue={item.imageUrl}
-                              required
+                              hint="Current public URL. Keep it unchanged unless you want to use a manual URL instead."
                             />
 
                             <div className="grid gap-4 sm:grid-cols-2">

@@ -3,6 +3,7 @@
 import {
   revalidatePath,
 } from "next/cache";
+
 import {
   redirect,
 } from "next/navigation";
@@ -11,7 +12,18 @@ import {
   requireAdmin,
 } from "@/lib/auth/admin-auth";
 
-import { prisma } from "@/lib/prisma";
+import {
+  createMedia,
+} from "@/lib/repositories/media.repository";
+
+import {
+  uploadArtifactImage,
+} from "@/lib/services/artifactStorage.service";
+
+import {
+  prisma,
+} from "@/lib/prisma";
+
 
 function requiredText(
   formData: FormData,
@@ -32,6 +44,7 @@ function requiredText(
   return value.trim();
 }
 
+
 function optionalText(
   formData: FormData,
   key: string,
@@ -39,7 +52,9 @@ function optionalText(
   const value =
     formData.get(key);
 
-  if (typeof value !== "string") {
+  if (
+    typeof value !== "string"
+  ) {
     return null;
   }
 
@@ -48,6 +63,25 @@ function optionalText(
 
   return normalized || null;
 }
+
+
+function optionalFile(
+  formData: FormData,
+  key: string,
+): File | null {
+  const value =
+    formData.get(key);
+
+  if (
+    !(value instanceof File) ||
+    value.size <= 0
+  ) {
+    return null;
+  }
+
+  return value;
+}
+
 
 function integerValue(
   formData: FormData,
@@ -60,7 +94,9 @@ function integerValue(
       key,
     );
 
-  if (value === null) {
+  if (
+    value === null
+  ) {
     return fallback;
   }
 
@@ -70,7 +106,11 @@ function integerValue(
       10,
     );
 
-  if (!Number.isInteger(parsed)) {
+  if (
+    !Number.isInteger(
+      parsed,
+    )
+  ) {
     throw new Error(
       `${key} must be an integer.`,
     );
@@ -79,22 +119,65 @@ function integerValue(
   return parsed;
 }
 
+
+function extensionFromFile(
+  file: File,
+): string {
+  return (
+    file.name
+      .split(".")
+      .pop()
+      ?.trim()
+      .toLowerCase() ||
+    "bin"
+  );
+}
+
+
+function titleFromFileName(
+  fileName: string,
+): string {
+  return (
+    fileName
+      .replace(
+        /\.[^/.]+$/,
+        "",
+      )
+      .replace(
+        /[-_]+/g,
+        " ",
+      )
+      .replace(
+        /\s+/g,
+        " ",
+      )
+      .trim() ||
+    "Tournament gallery image"
+  );
+}
+
+
 async function getTournamentContext(
   tournamentId: string,
 ) {
   const tournament =
     await prisma.tournament.findUnique({
       where: {
-        id: tournamentId,
+        id:
+          tournamentId,
       },
 
       select: {
+        id: true,
         slug: true,
+        name: true,
         category: true,
       },
     });
 
-  if (!tournament) {
+  if (
+    !tournament
+  ) {
     throw new Error(
       "Tournament not found.",
     );
@@ -102,6 +185,7 @@ async function getTournamentContext(
 
   return tournament;
 }
+
 
 function revalidateTournamentPaths(
   slug: string,
@@ -125,6 +209,82 @@ function revalidateTournamentPaths(
   }
 }
 
+
+async function uploadGalleryImage(
+  tournament: {
+    slug: string;
+    name: string;
+  },
+  file: File,
+): Promise<string> {
+  if (
+    !file.type.startsWith(
+      "image/",
+    )
+  ) {
+    throw new Error(
+      "Tournament gallery file must be an image.",
+    );
+  }
+
+  const uploadedUrl =
+    await uploadArtifactImage(
+      `tournaments/${tournament.slug}/gallery`,
+      file,
+    );
+
+  await createMedia({
+    title:
+      `${tournament.name} · ${titleFromFileName(
+        file.name,
+      )}`,
+
+    alt:
+      titleFromFileName(
+        file.name,
+      ),
+
+    originalName:
+      file.name,
+
+    url:
+      uploadedUrl,
+
+    mimeType:
+      file.type ||
+      "application/octet-stream",
+
+    extension:
+      extensionFromFile(
+        file,
+      ),
+
+    size:
+      file.size,
+
+    width:
+      null,
+
+    height:
+      null,
+
+    tags: [
+      "Tournament",
+      tournament.slug,
+      "Gallery",
+    ],
+
+    folderId:
+      null,
+
+    isUsed:
+      true,
+  });
+
+  return uploadedUrl;
+}
+
+
 export async function createTournamentGalleryItem(
   tournamentId: string,
   formData: FormData,
@@ -136,15 +296,41 @@ export async function createTournamentGalleryItem(
       tournamentId,
     );
 
+  const imageFile =
+    optionalFile(
+      formData,
+      "imageFile",
+    );
+
+  let imageUrl =
+    optionalText(
+      formData,
+      "imageUrl",
+    );
+
+  if (
+    imageFile
+  ) {
+    imageUrl =
+      await uploadGalleryImage(
+        tournament,
+        imageFile,
+      );
+  }
+
+  if (
+    !imageUrl
+  ) {
+    throw new Error(
+      "Gallery image is required.",
+    );
+  }
+
   await prisma.tournamentGalleryItem.create({
     data: {
       tournamentId,
 
-      imageUrl:
-        requiredText(
-          formData,
-          "imageUrl",
-        ),
+      imageUrl,
 
       title:
         optionalText(
@@ -192,6 +378,7 @@ export async function createTournamentGalleryItem(
     `/admin/tournaments/${tournament.slug}?saved=gallery`,
   );
 }
+
 
 export async function updateTournamentGalleryItem(
   tournamentId: string,
@@ -208,32 +395,57 @@ export async function updateTournamentGalleryItem(
   const galleryItem =
     await prisma.tournamentGalleryItem.findFirst({
       where: {
-        id: galleryItemId,
+        id:
+          galleryItemId,
+
         tournamentId,
       },
 
       select: {
         id: true,
+        imageUrl: true,
       },
     });
 
-  if (!galleryItem) {
+  if (
+    !galleryItem
+  ) {
     throw new Error(
       "Gallery item not found.",
     );
   }
 
+  const imageFile =
+    optionalFile(
+      formData,
+      "imageFile",
+    );
+
+  let imageUrl =
+    optionalText(
+      formData,
+      "imageUrl",
+    ) ??
+    galleryItem.imageUrl;
+
+  if (
+    imageFile
+  ) {
+    imageUrl =
+      await uploadGalleryImage(
+        tournament,
+        imageFile,
+      );
+  }
+
   await prisma.tournamentGalleryItem.update({
     where: {
-      id: galleryItem.id,
+      id:
+        galleryItem.id,
     },
 
     data: {
-      imageUrl:
-        requiredText(
-          formData,
-          "imageUrl",
-        ),
+      imageUrl,
 
       title:
         optionalText(
@@ -282,6 +494,7 @@ export async function updateTournamentGalleryItem(
   );
 }
 
+
 export async function deleteTournamentGalleryItem(
   tournamentId: string,
   galleryItemId: string,
@@ -296,7 +509,9 @@ export async function deleteTournamentGalleryItem(
   const galleryItem =
     await prisma.tournamentGalleryItem.findFirst({
       where: {
-        id: galleryItemId,
+        id:
+          galleryItemId,
+
         tournamentId,
       },
 
@@ -305,7 +520,9 @@ export async function deleteTournamentGalleryItem(
       },
     });
 
-  if (!galleryItem) {
+  if (
+    !galleryItem
+  ) {
     throw new Error(
       "Gallery item not found.",
     );
@@ -313,7 +530,8 @@ export async function deleteTournamentGalleryItem(
 
   await prisma.tournamentGalleryItem.delete({
     where: {
-      id: galleryItem.id,
+      id:
+        galleryItem.id,
     },
   });
 
