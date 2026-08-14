@@ -399,13 +399,11 @@ export default async function PlayersPage({
           <div className="grid gap-5 lg:grid-cols-2 2xl:grid-cols-3">
             {players.map(
               (player) => {
-                const image =
-                  player.heroImage ??
-                  player.portraitImage ??
-                  player.atpPlayer
-                    ?.imageUrl ??
-                  null;
-
+              const image =
+  player.heroImage?.trim() ||
+  player.portraitImage?.trim() ||
+  player.atpPlayer?.imageUrl?.trim() ||
+  `/players/other-players/top-50/${player.slug}.webp`;
                 const ranking =
                   player.atpPlayer;
 
