@@ -9,6 +9,14 @@ import {
 
 import { prisma } from "@/lib/prisma";
 
+import {
+  createMedia,
+} from "@/lib/repositories/media.repository";
+
+import {
+  uploadArtifactImage,
+} from "@/lib/services/artifactStorage.service";
+
 function requiredText(formData: FormData, key: string): string {
   const value = formData.get(key);
 
@@ -28,6 +36,49 @@ function optionalText(formData: FormData, key: string): string | null {
 
   const normalized = value.trim();
   return normalized || null;
+}
+
+
+function optionalFile(
+  formData: FormData,
+  key: string,
+): File | null {
+  const value = formData.get(key);
+
+  if (
+    !(value instanceof File) ||
+    value.size <= 0
+  ) {
+    return null;
+  }
+
+  return value;
+}
+
+function extensionFromFile(
+  file: File,
+): string {
+  return (
+    file.name
+      .split(".")
+      .pop()
+      ?.trim()
+      .toLowerCase() ||
+    "bin"
+  );
+}
+
+function titleFromFileName(
+  fileName: string,
+): string {
+  return (
+    fileName
+      .replace(/\.[^/.]+$/, "")
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim() ||
+    "Tournament legend"
+  );
 }
 
 function optionalInteger(formData: FormData, key: string): number | null {
@@ -172,6 +223,7 @@ async function getTournamentContext(tournamentId: string) {
     },
     select: {
       slug: true,
+      name: true,
       category: true,
     },
   });
@@ -195,6 +247,77 @@ function revalidateTournamentPaths(slug: string, category: string) {
   if (category === "MASTERS_1000") {
     revalidatePath(`/results/masters-1000/${slug}`);
   }
+}
+
+async function uploadChampionImage(
+  tournament: {
+    slug: string;
+    name: string;
+  },
+  file: File,
+): Promise<string> {
+  if (!file.type.startsWith("image/")) {
+    throw new Error(
+      "Tournament legend file must be an image.",
+    );
+  }
+
+  const uploadedUrl =
+    await uploadArtifactImage(
+      `tournaments/${tournament.slug}/champions`,
+      file,
+    );
+
+  await createMedia({
+    title:
+      `${tournament.name} · ${titleFromFileName(
+        file.name,
+      )}`,
+
+    alt:
+      titleFromFileName(
+        file.name,
+      ),
+
+    originalName:
+      file.name,
+
+    url:
+      uploadedUrl,
+
+    mimeType:
+      file.type ||
+      "application/octet-stream",
+
+    extension:
+      extensionFromFile(
+        file,
+      ),
+
+    size:
+      file.size,
+
+    width:
+      null,
+
+    height:
+      null,
+
+    tags: [
+      "Tournament",
+      tournament.slug,
+      "Champion",
+      "Legend",
+    ],
+
+    folderId:
+      null,
+
+    isUsed:
+      true,
+  });
+
+  return uploadedUrl;
 }
 
 async function validateOptionalPlayer(playerId: string | null) {
@@ -457,6 +580,27 @@ export async function createTournamentChampion(
 
   validateTitleYears(firstTitleYear, lastTitleYear);
 
+
+  const imageFile =
+    optionalFile(
+      formData,
+      "imageFile",
+    );
+
+  let imageUrl =
+    optionalText(
+      formData,
+      "imageUrl",
+    );
+
+  if (imageFile) {
+    imageUrl =
+      await uploadChampionImage(
+        tournament,
+        imageFile,
+      );
+  }
+
   const existingChampion =
     playerId
       ? await prisma.tournamentChampion.findFirst({
@@ -547,11 +691,7 @@ export async function createTournamentChampion(
           "quote",
         ),
 
-      imageUrl:
-        optionalText(
-          formData,
-          "imageUrl",
-        ),
+      imageUrl,
     },
   });
 
@@ -576,6 +716,7 @@ export async function updateTournamentChampion(
     },
     select: {
       id: true,
+      imageUrl: true,
     },
   });
 
@@ -608,6 +749,28 @@ export async function updateTournamentChampion(
   const lastTitleYear = optionalInteger(formData, "lastTitleYear");
 
   validateTitleYears(firstTitleYear, lastTitleYear);
+
+
+  const imageFile =
+    optionalFile(
+      formData,
+      "imageFile",
+    );
+
+  let imageUrl =
+    optionalText(
+      formData,
+      "imageUrl",
+    ) ??
+    champion.imageUrl;
+
+  if (imageFile) {
+    imageUrl =
+      await uploadChampionImage(
+        tournament,
+        imageFile,
+      );
+  }
 
   const duplicateChampion =
     playerId
@@ -707,11 +870,7 @@ export async function updateTournamentChampion(
           "quote",
         ),
 
-      imageUrl:
-        optionalText(
-          formData,
-          "imageUrl",
-        ),
+      imageUrl,
     },
   });
 

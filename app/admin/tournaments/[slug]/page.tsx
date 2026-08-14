@@ -3101,11 +3101,45 @@ export default async function TournamentEditorPage({
                   rows={3}
                 />
 
+                <div>
+                  <label className="block">
+                    <span className="text-xs font-semibold text-white/55">
+                      Upload legend image
+                    </span>
+
+                    <span className="mt-1 block text-xs leading-5 text-white/30">
+                      Upload a JPG, PNG, WEBP or AVIF directly to Supabase Storage.
+                      If a file is selected, its public URL replaces the manual Legend image URL below.
+                    </span>
+
+                    <div className="mt-3 flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed border-lime-300/25 bg-lime-300/[0.035] px-5 py-7 text-center transition hover:border-lime-300/40 hover:bg-lime-300/[0.055]">
+                      <span className="grid h-11 w-11 place-items-center rounded-2xl border border-lime-300/20 bg-lime-300/10 text-lime-200">
+                        <ImagePlus className="h-5 w-5" />
+                      </span>
+
+                      <span className="mt-3 text-sm font-semibold text-white">
+                        Choose legend image
+                      </span>
+
+                      <span className="mt-2 text-xs leading-5 text-white/35">
+                        The uploaded image is also registered in the AGE202 Media Library.
+                      </span>
+
+                      <input
+                        type="file"
+                        name="imageFile"
+                        accept="image/jpeg,image/png,image/webp,image/avif"
+                        className="mt-4 block w-full cursor-pointer rounded-2xl border border-white/10 bg-[#050B18] px-3 py-3 text-xs text-white/55 file:mr-3 file:rounded-xl file:border-0 file:bg-lime-300 file:px-3 file:py-2 file:text-xs file:font-black file:text-[#050B18] hover:file:bg-lime-200"
+                      />
+                    </div>
+                  </label>
+                </div>
+
                 <Field
                   label="Legend image URL"
                   name="imageUrl"
                   defaultValue=""
-                  hint="Example: /tournaments/miami/legends/djokovic.jpg"
+                  hint="Optional fallback/manual public URL. Leave empty when uploading a file above."
                 />
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -3320,10 +3354,30 @@ export default async function TournamentEditorPage({
                             rows={3}
                           />
 
+                          <div>
+                            <label className="block">
+                              <span className="text-xs font-semibold text-white/55">
+                                Replace legend image
+                              </span>
+
+                              <span className="mt-1 block text-xs leading-5 text-white/30">
+                                Optional. Upload a new player image to replace the current tournament legend image.
+                              </span>
+
+                              <input
+                                type="file"
+                                name="imageFile"
+                                accept="image/jpeg,image/png,image/webp,image/avif"
+                                className="mt-3 block w-full cursor-pointer rounded-2xl border border-white/10 bg-[#050B18] px-3 py-3 text-xs text-white/55 file:mr-3 file:rounded-xl file:border-0 file:bg-lime-300 file:px-3 file:py-2 file:text-xs file:font-black file:text-[#050B18] hover:file:bg-lime-200"
+                              />
+                            </label>
+                          </div>
+
                           <Field
                             label="Legend image URL"
                             name="imageUrl"
                             defaultValue={champion.imageUrl ?? ""}
+                            hint="Current public URL. Keep it unchanged unless you want to use a manual URL instead."
                           />
 
                           <div className="grid gap-4 sm:grid-cols-2">
