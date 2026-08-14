@@ -25,6 +25,8 @@ export type TennisHistoryFilters = {
   status?: MuseumPageStatus;
   featured?: boolean;
   year?: number;
+  month?: number;
+  day?: number;
   mediaId?: string | null;
 };
 
@@ -33,6 +35,8 @@ export type CreateTennisHistoryEntryInput = {
   type: TennisHistoryEntryType;
   slug: string;
   year: number;
+  month?: number | null;
+  day?: number | null;
   sortOrder?: number;
   era: TennisHistoryEra;
   gender?: TennisHistoryGender | null;
@@ -67,6 +71,8 @@ export type UpdateTennisHistoryEntryInput = {
   type?: TennisHistoryEntryType;
   slug?: string;
   year?: number;
+  month?: number | null;
+  day?: number | null;
   sortOrder?: number;
   era?: TennisHistoryEra;
   gender?: TennisHistoryGender | null;
@@ -105,6 +111,12 @@ const tennisHistoryInclude = {
 const tennisHistoryOrder = [
   {
     year: "asc" as const,
+  },
+  {
+    month: "asc" as const,
+  },
+  {
+    day: "asc" as const,
   },
   {
     sortOrder: "asc" as const,
@@ -181,6 +193,58 @@ function normalizeYear(
   year: number,
 ): number {
   return Math.trunc(year);
+}
+
+
+function normalizeMonth(
+  month: number | null | undefined,
+): number | null {
+  if (
+    month === null ||
+    month === undefined
+  ) {
+    return null;
+  }
+
+  const normalized =
+    Math.trunc(month);
+
+  if (
+    normalized < 1 ||
+    normalized > 12
+  ) {
+    throw new Error(
+      "Tennis History month must be between 1 and 12.",
+    );
+  }
+
+  return normalized;
+}
+
+
+function normalizeDay(
+  day: number | null | undefined,
+): number | null {
+  if (
+    day === null ||
+    day === undefined
+  ) {
+    return null;
+  }
+
+  const normalized =
+    Math.trunc(day);
+
+  if (
+    normalized < 1 ||
+    normalized > 31
+  ) {
+    throw new Error(
+      "Tennis History day must be between 1 and 31.",
+    );
+  }
+
+  return normalized;
 }
 
 
@@ -329,6 +393,26 @@ function buildTennisHistoryWhere(
           year:
             normalizeYear(
               filters.year,
+            ),
+        }
+      : {}),
+
+    ...(typeof filters.month ===
+    "number"
+      ? {
+          month:
+            normalizeMonth(
+              filters.month,
+            ),
+        }
+      : {}),
+
+    ...(typeof filters.day ===
+    "number"
+      ? {
+          day:
+            normalizeDay(
+              filters.day,
             ),
         }
       : {}),
@@ -498,6 +582,14 @@ export async function createTennisHistoryEntry(
           normalizeYear(
             input.year,
           ),
+        month:
+          normalizeMonth(
+            input.month,
+          ),
+        day:
+          normalizeDay(
+            input.day,
+          ),
         sortOrder:
           normalizeSortOrder(
             input.sortOrder,
@@ -629,6 +721,26 @@ export async function updateTennisHistoryEntry(
               year:
                 normalizeYear(
                   input.year,
+                ),
+            }
+          : {}),
+
+        ...(input.month !==
+        undefined
+          ? {
+              month:
+                normalizeMonth(
+                  input.month,
+                ),
+            }
+          : {}),
+
+        ...(input.day !==
+        undefined
+          ? {
+              day:
+                normalizeDay(
+                  input.day,
                 ),
             }
           : {}),

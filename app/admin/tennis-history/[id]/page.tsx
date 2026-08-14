@@ -67,6 +67,8 @@ type TennisHistoryEntryResponse = {
   type: EntryType;
   slug: string;
   year: number;
+  month: number | null;
+  day: number | null;
   sortOrder: number;
   era: EntryEra;
   gender:
@@ -112,6 +114,8 @@ type FormState = {
   type: EntryType;
   slug: string;
   year: string;
+  month: string;
+  day: string;
   sortOrder: string;
   era: EntryEra;
   gender: EntryGender;
@@ -145,6 +149,8 @@ const emptyForm: FormState = {
   type: "LEGEND",
   slug: "",
   year: "",
+  month: "",
+  day: "",
   sortOrder: "0",
   era: "OPEN_ERA",
   gender: "",
@@ -189,6 +195,16 @@ function entryToForm(
       String(
         entry.year,
       ),
+
+    month:
+      entry.month === null
+        ? ""
+        : String(entry.month),
+
+    day:
+      entry.day === null
+        ? ""
+        : String(entry.day),
 
     sortOrder:
       String(
@@ -681,6 +697,8 @@ export default function TennisHistoryEntryEditorPage() {
     key:
       | "slug"
       | "year"
+      | "month"
+      | "day"
       | "sortOrder"
       | "eyebrow"
       | "title"
@@ -755,6 +773,12 @@ export default function TennisHistoryEntryEditorPage() {
 
                 year:
                   form.year,
+
+                month:
+                  form.month || null,
+
+                day:
+                  form.day || null,
 
                 sortOrder:
                   form.sortOrder,
@@ -1390,23 +1414,61 @@ export default function TennisHistoryEntryEditorPage() {
               }
             />
 
-            <Field
-              label="Year"
-              value={
-                form.year
-              }
-              required
-              type="number"
-              onChange={
-                (
-                  value,
-                ) =>
-                  updateText(
-                    "year",
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Field
+                label="Year"
+                value={
+                  form.year
+                }
+                required
+                type="number"
+                onChange={
+                  (
                     value,
-                  )
-              }
-            />
+                  ) =>
+                    updateText(
+                      "year",
+                      value,
+                    )
+                }
+              />
+
+              <Field
+                label="Month"
+                value={
+                  form.month
+                }
+                type="number"
+                placeholder="1–12"
+                onChange={
+                  (
+                    value,
+                  ) =>
+                    updateText(
+                      "month",
+                      value,
+                    )
+                }
+              />
+
+              <Field
+                label="Day"
+                value={
+                  form.day
+                }
+                type="number"
+                placeholder="1–31"
+                onChange={
+                  (
+                    value,
+                  ) =>
+                    updateText(
+                      "day",
+                      value,
+                    )
+                }
+              />
+            </div>
 
             <Field
               label="Sort order"

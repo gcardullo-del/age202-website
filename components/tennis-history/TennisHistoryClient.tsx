@@ -37,8 +37,11 @@ type Era =
   | "Modern Era";
 
 
-type Milestone = {
-  year: string;
+export type TennisHistoryMilestone = {
+  year: number;
+  month: number | null;
+  day: number | null;
+  sortOrder: number;
 
   era: Era;
 
@@ -55,238 +58,36 @@ type Milestone = {
 type TimelineItem =
   | {
       type: "milestone";
-
       year: number;
-
-      order: number;
-
-      data: Milestone;
+      month: number | null;
+      day: number | null;
+      sortOrder: number;
+      data: TennisHistoryMilestone;
     }
   | {
       type: "legend";
-
       year: number;
-
-      order: number;
-
+      month: number | null;
+      day: number | null;
+      sortOrder: number;
       data: TennisHistoryLegend;
     }
   | {
       type: "rivalry";
-
       year: number;
-
-      order: number;
-
+      month: number | null;
+      day: number | null;
+      sortOrder: number;
       data: TennisHistoryRivalry;
     }
   | {
       type: "generation";
-
       year: number;
-
-      order: number;
-
+      month: number | null;
+      day: number | null;
+      sortOrder: number;
       data: TennisHistoryGeneration;
     };
-
-
-const milestones:
-  Milestone[] = [
-    {
-      year:
-        "1877",
-
-      era:
-        "Origins",
-
-      title:
-        "The first Wimbledon Championship",
-
-      description:
-        "The All England Club stages the first gentlemen’s singles championship and establishes the foundation of modern competitive tennis.",
-
-      accent:
-        "London · Grass",
-
-      href:
-        "/results/grand-slams/wimbledon",
-    },
-
-    {
-      year:
-        "1891",
-
-      era:
-        "Origins",
-
-      title:
-        "The French Championships begin",
-
-      description:
-        "A national championship is created in France, beginning the story that would later become Roland Garros.",
-
-      accent:
-        "Paris · Clay",
-
-      href:
-        "/results/grand-slams/roland-garros",
-    },
-
-    {
-      year:
-        "1905",
-
-      era:
-        "Origins",
-
-      title:
-        "Australia joins the major stage",
-
-      description:
-        "The Australasian Championships are first contested, opening a new chapter for tennis in the Southern Hemisphere.",
-
-      accent:
-        "Melbourne · Hard",
-
-      href:
-        "/results/grand-slams/australian-open",
-    },
-
-    {
-      year:
-        "1927",
-
-      era:
-        "Classic Era",
-
-      title:
-        "The era of the radio champion",
-
-      description:
-        "Major finals become shared cultural events as broadcasting brings tennis beyond the club gates and into homes.",
-
-      accent:
-        "Tennis enters mass culture",
-    },
-
-    {
-      year:
-        "1968",
-
-      era:
-        "Open Era",
-
-      title:
-        "The Open Era begins",
-
-      description:
-        "Professionals and amateurs are allowed to compete together, transforming the sport and creating the modern tour.",
-
-      accent:
-        "A new professional age",
-    },
-
-    {
-      year:
-        "1973",
-
-      era:
-        "Open Era",
-
-      title:
-        "The ATP ranking is introduced",
-
-      description:
-        "A unified computer ranking system gives the men’s tour a transparent global order and a new competitive language.",
-
-      accent:
-        "World ranking system",
-
-      href:
-        "/atp-ranking",
-    },
-
-    {
-      year:
-        "2003",
-
-      era:
-        "Modern Era",
-
-      title:
-        "Federer opens a golden chapter",
-
-      description:
-        "A first Wimbledon title begins one of the most influential careers in tennis history and changes the visual language of the sport.",
-
-      accent:
-        "Elegance becomes an era",
-
-      href:
-        "/archives/federer",
-    },
-
-    {
-      year:
-        "2005",
-
-      era:
-        "Modern Era",
-
-      title:
-        "Nadal conquers Paris",
-
-      description:
-        "A teenage Rafael Nadal wins Roland Garros on debut and starts an unprecedented relationship with clay-court history.",
-
-      accent:
-        "The king of clay arrives",
-
-      href:
-        "/archives/nadal",
-    },
-
-    {
-      year:
-        "2011",
-
-      era:
-        "Modern Era",
-
-      title:
-        "Djokovic changes the balance",
-
-      description:
-        "Novak Djokovic produces a defining season and establishes a new standard of return, movement and resilience.",
-
-      accent:
-        "A new competitive benchmark",
-
-      href:
-        "/archives/djokovic",
-    },
-
-    {
-      year:
-        "2024",
-
-      era:
-        "Modern Era",
-
-      title:
-        "Sinner leads a new generation",
-
-      description:
-        "Jannik Sinner reaches the summit of men’s tennis as a new generation begins to reshape the sport’s biggest stages.",
-
-      accent:
-        "The next chapter begins",
-
-      href:
-        "/archives/sinner",
-    },
-  ];
 
 
 const eras = [
@@ -544,6 +345,7 @@ function GenerationOfHistoryCard({
 
 
 type TennisHistoryClientProps = {
+  milestones: TennisHistoryMilestone[];
   legends: TennisHistoryLegend[];
   rivalries: TennisHistoryRivalry[];
   generations: TennisHistoryGeneration[];
@@ -551,6 +353,7 @@ type TennisHistoryClientProps = {
 
 
 export default function TennisHistoryClient({
+  milestones,
   legends,
   rivalries,
   generations,
@@ -601,12 +404,16 @@ export default function TennisHistoryClient({
                   "milestone",
 
                 year:
-                  Number(
-                    milestone.year,
-                  ),
+                  milestone.year,
 
-                order:
-                  0,
+                month:
+                  milestone.month,
+
+                day:
+                  milestone.day,
+
+                sortOrder:
+                  milestone.sortOrder,
 
                 data:
                   milestone,
@@ -626,8 +433,14 @@ export default function TennisHistoryClient({
                 year:
                   legend.year,
 
-                order:
-                  1,
+                month:
+                  null,
+
+                day:
+                  null,
+
+                sortOrder:
+                  0,
 
                 data:
                   legend,
@@ -647,8 +460,14 @@ export default function TennisHistoryClient({
                 year:
                   rivalry.year,
 
-                order:
-                  2,
+                month:
+                  null,
+
+                day:
+                  null,
+
+                sortOrder:
+                  0,
 
                 data:
                   rivalry,
@@ -668,8 +487,14 @@ export default function TennisHistoryClient({
                 year:
                   generation.year,
 
-                order:
-                  3,
+                month:
+                  null,
+
+                day:
+                  null,
+
+                sortOrder:
+                  0,
 
                 data:
                   generation,
@@ -697,9 +522,41 @@ export default function TennisHistoryClient({
               );
             }
 
+            const firstMonth =
+              first.month ?? 0;
+
+            const secondMonth =
+              second.month ?? 0;
+
+            if (
+              firstMonth !==
+              secondMonth
+            ) {
+              return (
+                firstMonth -
+                secondMonth
+              );
+            }
+
+            const firstDay =
+              first.day ?? 0;
+
+            const secondDay =
+              second.day ?? 0;
+
+            if (
+              firstDay !==
+              secondDay
+            ) {
+              return (
+                firstDay -
+                secondDay
+              );
+            }
+
             return (
-              first.order -
-              second.order
+              first.sortOrder -
+              second.sortOrder
             );
           },
         );
@@ -707,6 +564,7 @@ export default function TennisHistoryClient({
       [
         generations,
         legends,
+        milestones,
         rivalries,
       ],
     );
@@ -1179,7 +1037,20 @@ export default function TennisHistoryClient({
                       <article className="group relative grid grid-cols-[86px_minmax(0,1fr)] gap-4 rounded-[1.55rem] border border-white/10 bg-white/[.022] p-4 transition hover:border-[#d7ff00]/25 hover:bg-white/[.035] sm:grid-cols-[110px_minmax(0,1fr)] sm:gap-6 sm:p-6">
                         <div className="relative z-10">
                           <div className="grid h-[54px] w-[54px] place-items-center rounded-full border border-[#d7ff00]/35 bg-[#071020] text-[11px] font-black text-[#d7ff00] shadow-[0_0_30px_rgba(215,255,0,.08)] sm:h-[62px] sm:w-[62px]">
-                            {milestone.year}
+                            {milestone.day &&
+                            milestone.month
+                              ? `${String(
+                                  milestone.day,
+                                ).padStart(
+                                  2,
+                                  "0",
+                                )}/${String(
+                                  milestone.month,
+                                ).padStart(
+                                  2,
+                                  "0",
+                                )}`
+                              : milestone.year}
                           </div>
 
                           <p className="mt-4 hidden text-[8px] font-black uppercase tracking-[.18em] text-white/28 sm:block">

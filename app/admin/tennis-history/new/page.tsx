@@ -62,6 +62,8 @@ type FormState = {
   type: EntryType;
   slug: string;
   year: string;
+  month: string;
+  day: string;
   sortOrder: string;
   era: EntryEra;
   gender: EntryGender;
@@ -95,6 +97,8 @@ const initialState: FormState = {
   type: "LEGEND",
   slug: "",
   year: "",
+  month: "",
+  day: "",
   sortOrder: "0",
   era: "OPEN_ERA",
   gender: "",
@@ -395,6 +399,8 @@ export default function NewTennisHistoryEntryPage() {
     key:
       | "slug"
       | "year"
+      | "month"
+      | "day"
       | "sortOrder"
       | "eyebrow"
       | "title"
@@ -496,6 +502,14 @@ export default function NewTennisHistoryEntryPage() {
 
                 year:
                   form.year,
+
+                month:
+                  form.month ||
+                  null,
+
+                day:
+                  form.day ||
+                  null,
 
                 sortOrder:
                   form.sortOrder ||
@@ -885,6 +899,7 @@ export default function NewTennisHistoryEntryPage() {
                 required
                 type="number"
                 placeholder="1969"
+                hint="Required. The historical year used by the main Tennis History timeline."
                 onChange={
                   (
                     value,
@@ -897,6 +912,47 @@ export default function NewTennisHistoryEntryPage() {
               />
 
 
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field
+                  label="Month"
+                  value={
+                    form.month
+                  }
+                  type="number"
+                  placeholder="8"
+                  hint="Optional · 1–12. Used by Today in Tennis History."
+                  onChange={
+                    (
+                      value,
+                    ) =>
+                      updateText(
+                        "month",
+                        value,
+                      )
+                  }
+                />
+
+                <Field
+                  label="Day"
+                  value={
+                    form.day
+                  }
+                  type="number"
+                  placeholder="14"
+                  hint="Optional · 1–31. Used together with Month for daily history."
+                  onChange={
+                    (
+                      value,
+                    ) =>
+                      updateText(
+                        "day",
+                        value,
+                      )
+                  }
+                />
+              </div>
+
+
               <Field
                 label="Sort order"
                 value={
@@ -904,7 +960,7 @@ export default function NewTennisHistoryEntryPage() {
                 }
                 type="number"
                 placeholder="0"
-                hint="Controls ordering when several entries share the same year."
+                hint="Controls ordering when several entries share the same historical date."
                 onChange={
                   (
                     value,
@@ -1616,8 +1672,13 @@ export default function NewTennisHistoryEntryPage() {
                 </p>
 
                 <p className="mt-1 text-xs leading-5 text-white/30">
-                  {form.year ||
-                    "No year"}{" "}
+                  {form.day &&
+                  form.month
+                    ? `${form.day}/${form.month}/${form.year || "—"}`
+                    : form.month
+                      ? `${form.month}/${form.year || "—"}`
+                      : form.year ||
+                        "No year"}{" "}
                   ·{" "}
                   {form.status}
                 </p>

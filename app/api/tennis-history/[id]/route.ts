@@ -34,6 +34,8 @@ type UpdateTennisHistoryBody = {
   type?: unknown;
   slug?: unknown;
   year?: unknown;
+  month?: unknown;
+  day?: unknown;
   sortOrder?: unknown;
   era?: unknown;
   gender?: unknown;
@@ -134,6 +136,30 @@ function optionalInteger(
   }
 
   return parsed;
+}
+
+
+function optionalNullableInteger(
+  value: unknown,
+  field: string,
+): number | null | undefined {
+  if (
+    value === undefined
+  ) {
+    return undefined;
+  }
+
+  if (
+    value === null ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  return optionalInteger(
+    value,
+    field,
+  );
 }
 
 
@@ -405,6 +431,18 @@ export async function PATCH(
             optionalInteger(
               body.year,
               "Year",
+            ),
+
+          month:
+            optionalNullableInteger(
+              body.month,
+              "Month",
+            ),
+
+          day:
+            optionalNullableInteger(
+              body.day,
+              "Day",
             ),
 
           sortOrder:

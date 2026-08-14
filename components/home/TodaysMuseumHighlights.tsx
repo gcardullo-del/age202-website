@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
@@ -18,9 +17,6 @@ import {
 import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import SectionTitle from "@/components/ui/SectionTitle";
-import {
-  getTodayInTennisHistory,
-} from "@/data/todayInHistory";
 
 type HighlightArtifact = {
   id: string;
@@ -44,6 +40,23 @@ type HighlightArtifact = {
 type HighlightResponse = {
   latest: HighlightArtifact | null;
   featured: HighlightArtifact | null;
+};
+
+type TodayHistoryEntry = {
+  id: string;
+  slug: string;
+  year: number;
+  month: number | null;
+  day: number | null;
+  sortOrder: number;
+  title: string;
+  description: string | null;
+  featured: boolean;
+};
+
+type TennisHistoryResponse = {
+  entries?: TodayHistoryEntry[];
+  error?: string;
 };
 
 function ArtifactPreview({
@@ -100,6 +113,57 @@ function ArtifactPreview({
   );
 }
 
+function selectTodayHistoryEntry(
+  entries: TodayHistoryEntry[],
+  today: Date,
+): TodayHistoryEntry | null {
+  const month =
+    today.getMonth() + 1;
+
+  const day =
+    today.getDate();
+
+  const matches =
+    entries
+      .filter(
+        (entry) =>
+          entry.month === month &&
+          entry.day === day,
+      )
+      .sort(
+        (
+          first,
+          second,
+        ) => {
+          if (
+            first.featured !==
+            second.featured
+          ) {
+            return first.featured
+              ? -1
+              : 1;
+          }
+
+          if (
+            first.sortOrder !==
+            second.sortOrder
+          ) {
+            return (
+              first.sortOrder -
+              second.sortOrder
+            );
+          }
+
+          return (
+            second.year -
+            first.year
+          );
+        },
+      );
+
+  return matches[0] ?? null;
+}
+
 export default function TodaysMuseumHighlights() {
   const [
     highlights,
@@ -110,18 +174,25 @@ export default function TodaysMuseumHighlights() {
   });
 
   const [
+    historyEntry,
+    setHistoryEntry,
+  ] =
+    useState<TodayHistoryEntry | null>(
+      null,
+    );
+
+  const [
     isLoading,
     setIsLoading,
   ] = useState(true);
 
-  const historyEntry =
-    useMemo(
-      () =>
-        getTodayInTennisHistory(
-          new Date(),
-        ),
-      [],
-    );
+  const [
+    isHistoryLoading,
+    setIsHistoryLoading,
+  ] = useState(true);
+
+  const today =
+    new Date();
 
   useEffect(() => {
     let active = true;
@@ -154,6 +225,53 @@ export default function TodaysMuseumHighlights() {
     }
 
     void loadHighlights();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadTodayHistory() {
+      try {
+        const response =
+          await fetch(
+            "/api/tennis-history",
+            {
+              cache: "no-store",
+            },
+          );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data =
+          (await response.json()) as
+            TennisHistoryResponse;
+
+        if (!active) {
+          return;
+        }
+
+        setHistoryEntry(
+          selectTodayHistoryEntry(
+            data.entries ?? [],
+            new Date(),
+          ),
+        );
+      } finally {
+        if (active) {
+          setIsHistoryLoading(
+            false,
+          );
+        }
+      }
+    }
+
+    void loadTodayHistory();
 
     return () => {
       active = false;
@@ -229,15 +347,24 @@ export default function TodaysMuseumHighlights() {
             <Reveal delay={0.12}>
               <Card
                 title={
-                  historyEntry?.title ??
-                  "Archive entry in preparation"
+                  isHistoryLoading
+                    ? "Searching the archive..."
+                    : historyEntry?.title ??
+                      "Archive entry in preparation"
                 }
                 description={
-                  historyEntry?.description ??
-                  "This date has not yet been catalogued in the AGE202 daily tennis history archive."
+                  isHistoryLoading
+                    ? "Checking today's published Tennis History records."
+                    : historyEntry?.description ??
+                      "This date has not yet been catalogued in the AGE202 daily tennis history archive."
                 }
+                href="/tennis-history"
                 badge="Today in Tennis History"
-                status="open"
+                status={
+                  historyEntry
+                    ? "open"
+                    : "coming-soon"
+                }
                 accent="#D4AF37"
                 icon={
                   <CalendarDays
@@ -256,11 +383,13 @@ export default function TodaysMuseumHighlights() {
                         month: "long",
                       },
                     ).format(
-                      new Date(),
+                      today,
                     )}
                   </p>
 
-                  {historyEntry ? (
+                  {isHistoryLoading ? (
+                    <div className="mt-5 h-16 w-28 animate-pulse rounded-xl bg-white/[0.035]" />
+                  ) : historyEntry ? (
                     <p className="mt-4 text-6xl font-black tracking-[-0.07em] text-[#D4AF37]">
                       {historyEntry.year}
                     </p>

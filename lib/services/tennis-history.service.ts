@@ -34,6 +34,8 @@ export type TennisHistoryListInput = {
   status?: MuseumPageStatus;
   featured?: boolean;
   year?: number;
+  month?: number;
+  day?: number;
   mediaId?: string | null;
 };
 
@@ -109,6 +111,12 @@ function normalizeListInput(
 
     year:
       input.year,
+
+    month:
+      input.month,
+
+    day:
+      input.day,
 
     mediaId:
       input.mediaId,

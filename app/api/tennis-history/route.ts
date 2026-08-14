@@ -24,6 +24,8 @@ type CreateTennisHistoryBody = {
   type?: unknown;
   slug?: unknown;
   year?: unknown;
+  month?: unknown;
+  day?: unknown;
   sortOrder?: unknown;
   era?: unknown;
   gender?: unknown;
@@ -326,6 +328,18 @@ export async function POST(
             requiredInteger(
               body.year,
               "Year",
+            ),
+
+          month:
+            optionalInteger(
+              body.month,
+              "Month",
+            ),
+
+          day:
+            optionalInteger(
+              body.day,
+              "Day",
             ),
 
           sortOrder:

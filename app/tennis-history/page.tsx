@@ -4,7 +4,9 @@ import {
   TennisHistoryGender,
 } from "@/generated/prisma/client";
 
-import TennisHistoryClient from "@/components/tennis-history/TennisHistoryClient";
+import TennisHistoryClient, {
+  type TennisHistoryMilestone,
+} from "@/components/tennis-history/TennisHistoryClient";
 
 import type {
   TennisHistoryGeneration,
@@ -39,6 +41,26 @@ function mapEra(
 }
 
 
+function mapMilestoneEra(
+  era: TennisHistoryEra,
+): TennisHistoryMilestone["era"] {
+  switch (era) {
+    case TennisHistoryEra.ORIGINS:
+      return "Origins";
+
+    case TennisHistoryEra.CLASSIC_ERA:
+      return "Classic Era";
+
+    case TennisHistoryEra.OPEN_ERA:
+      return "Open Era";
+
+    case TennisHistoryEra.MODERN_ERA:
+    default:
+      return "Modern Era";
+  }
+}
+
+
 function mapGender(
   gender: TennisHistoryGender | null,
 ): TennisHistoryLegend["gender"] {
@@ -52,6 +74,57 @@ function mapGender(
 export default async function TennisHistoryPage() {
   const entries =
     await listPublishedTennisHistoryEntries();
+
+
+  const milestones:
+    TennisHistoryMilestone[] =
+    entries
+      .filter(
+        (
+          entry,
+        ) =>
+          entry.type ===
+          TennisHistoryEntryType.MILESTONE,
+      )
+      .map(
+        (
+          entry,
+        ) => ({
+          year:
+            entry.year,
+
+          month:
+            entry.month,
+
+          day:
+            entry.day,
+
+          sortOrder:
+            entry.sortOrder,
+
+          era:
+            mapMilestoneEra(
+              entry.era,
+            ),
+
+          title:
+            entry.title,
+
+          description:
+            entry.description ??
+            "",
+
+          accent:
+            entry.achievement ??
+            entry.subtitle ??
+            entry.period ??
+            "Historical milestone",
+
+          href:
+            entry.href ??
+            undefined,
+        }),
+      );
 
 
   const legends:
@@ -239,6 +312,9 @@ export default async function TennisHistoryPage() {
 
   return (
     <TennisHistoryClient
+      milestones={
+        milestones
+      }
       legends={
         legends
       }
