@@ -40,6 +40,9 @@ import {
   mapGrandSlamMuseumData,
 } from "@/lib/mappers/museum/grand-slam-museum.mapper";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type GrandSlamPageProps = {
   params: Promise<{
     slug: string;

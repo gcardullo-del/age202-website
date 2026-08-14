@@ -32,7 +32,9 @@ function optionalText(
   const value =
     formData.get(key);
 
-  if (typeof value !== "string") {
+  if (
+    typeof value !== "string"
+  ) {
     return null;
   }
 
@@ -71,29 +73,6 @@ function extensionFromFile(
       ?.trim()
       .toLowerCase() ||
     "bin"
-  );
-}
-
-
-function titleFromFileName(
-  fileName: string,
-): string {
-  return (
-    fileName
-      .replace(
-        /\.[^/.]+$/,
-        "",
-      )
-      .replace(
-        /[-_]+/g,
-        " ",
-      )
-      .replace(
-        /\s+/g,
-        " ",
-      )
-      .trim() ||
-    "Tournament hero"
   );
 }
 
@@ -248,6 +227,16 @@ export async function updateTournamentMedia(
   revalidatePath(
     `/admin/tournaments/${tournament.slug}`,
   );
+
+
+  if (
+    tournament.category ===
+    "GRAND_SLAM"
+  ) {
+    revalidatePath(
+      `/results/grand-slams/${tournament.slug}`,
+    );
+  }
 
 
   if (
