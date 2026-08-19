@@ -27,10 +27,23 @@ export const federer: Champion = {
 
   trophies: {
     grandSlams: 20,
+
+    australianOpen: 6,
+    rolandGarros: 1,
+    wimbledon: 8,
+    usOpen: 5,
+
     atpTitles: 103,
     weeksAtNo1: 310,
+
     masters1000: 28,
+    atp500: 24,
+    atp250: 25,
+    atpFinals: 6,
+
     olympicGold: 1,
+    olympicSinglesGold: 0,
+    olympicDoublesGold: 1,
   },
 
   careerTimeline: [

@@ -30,10 +30,23 @@ export const nadal: Champion = {
 
   trophies: {
     grandSlams: 22,
+
+    australianOpen: 2,
+    rolandGarros: 14,
+    wimbledon: 2,
+    usOpen: 4,
+
     atpTitles: 92,
     weeksAtNo1: 209,
+
     masters1000: 36,
+    atp500: 23,
+    atp250: 10,
+    atpFinals: 0,
+
     olympicGold: 2,
+    olympicSinglesGold: 1,
+    olympicDoublesGold: 1,
   },
 
   careerTimeline: [

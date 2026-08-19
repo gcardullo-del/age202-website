@@ -8,6 +8,10 @@ import type {
   Champion,
 } from "@/data/champions";
 
+import type {
+  PlayerTrophyStats,
+} from "@/lib/services/players/player-trophy-stats.service";
+
 import ChapterTransition from "../ui/ChapterTransition";
 import FeaturedTrophy from "./FeaturedTrophy";
 import TrophyGrid from "./TrophyGrid";
@@ -18,57 +22,306 @@ import type {
 
 type TrophyRoomProps = {
   champion: Champion;
+  liveStats?:
+    | PlayerTrophyStats
+    | null;
 };
 
 export default function TrophyRoom({
   champion,
+  liveStats = null,
 }: TrophyRoomProps) {
   const shouldReduceMotion =
     useReducedMotion();
 
+  /*
+   * SOURCE STRATEGY
+   * -------------------------------------------------------
+   * Active / synchronized players:
+   *   Tournament Engine -> liveStats
+   *
+   * Historical retired champions:
+   *   champion.trophies -> verified static archive
+   *
+   * The visual Trophy Room remains identical regardless
+   * of the underlying source.
+   */
+
+  const grandSlamTitles =
+    liveStats?.recordedGrandSlams ??
+    champion.trophies.grandSlams;
+
+  const australianOpen =
+    liveStats?.recordedAustralianOpen ??
+    champion.trophies.australianOpen ??
+    0;
+
+  const rolandGarros =
+    liveStats?.recordedRolandGarros ??
+    champion.trophies.rolandGarros ??
+    0;
+
+  const wimbledon =
+    liveStats?.recordedWimbledon ??
+    champion.trophies.wimbledon ??
+    0;
+
+  const usOpen =
+    liveStats?.recordedUsOpen ??
+    champion.trophies.usOpen ??
+    0;
+
+  const atpTitles =
+    liveStats?.recordedTitles ??
+    champion.trophies.atpTitles;
+
+  const masters1000 =
+    liveStats?.recordedMasters1000 ??
+    champion.trophies.masters1000;
+
+  const atp500 =
+    liveStats?.recordedAtp500 ??
+    champion.trophies.atp500 ??
+    0;
+
+  const atp250 =
+    liveStats?.recordedAtp250 ??
+    champion.trophies.atp250 ??
+    0;
+
+  const atpFinals =
+    liveStats?.recordedAtpFinals ??
+    champion.trophies.atpFinals ??
+    0;
+
+  const olympicSinglesGold =
+    liveStats?.recordedOlympicGold ??
+    champion.trophies
+      .olympicSinglesGold ??
+    champion.trophies
+      .olympicGold ??
+    0;
+
+  const olympicDoublesGold =
+    liveStats
+      ? 0
+      : champion.trophies
+          .olympicDoublesGold ??
+        0;
+
+  const davisCupTitles =
+    liveStats?.davisCupTitles ??
+    0;
+
+  const hasHistoricalDetailedStats =
+    !liveStats &&
+    (
+      champion.trophies
+        .australianOpen !== undefined ||
+      champion.trophies
+        .rolandGarros !== undefined ||
+      champion.trophies
+        .wimbledon !== undefined ||
+      champion.trophies
+        .usOpen !== undefined ||
+      champion.trophies
+        .atp500 !== undefined ||
+      champion.trophies
+        .atp250 !== undefined ||
+      champion.trophies
+        .atpFinals !== undefined ||
+      champion.trophies
+        .olympicSinglesGold !== undefined ||
+      champion.trophies
+        .olympicDoublesGold !== undefined
+    );
+
+  const showDetailedSlamBreakdown =
+    Boolean(
+      liveStats ||
+      hasHistoricalDetailedStats,
+    );
+
   const trophyItems: TrophyItem[] = [
     {
-      label: "Grand Slam Titles",
+      label:
+        "Grand Slam Titles",
       value:
-        champion.trophies.grandSlams,
+        grandSlamTitles,
       description:
         "Major championships won across the four Grand Slam tournaments.",
     },
+
+    ...(showDetailedSlamBreakdown
+      ? [
+          {
+            label:
+              "Australian Open",
+            value:
+              australianOpen,
+            description:
+              "Titles won at the Australian Open in Melbourne.",
+          },
+          {
+            label:
+              "Roland Garros",
+            value:
+              rolandGarros,
+            description:
+              "Titles won on the clay of Roland Garros in Paris.",
+          },
+          {
+            label:
+              "Wimbledon",
+            value:
+              wimbledon,
+            description:
+              "Titles won on the grass courts of Wimbledon.",
+          },
+          {
+            label:
+              "US Open",
+            value:
+              usOpen,
+            description:
+              "Titles won at the US Open in New York.",
+          },
+        ]
+      : []),
+
     {
-      label: "ATP Titles",
+      label:
+        "ATP Titles",
       value:
-        champion.trophies.atpTitles,
+        atpTitles,
       description:
         "Official tour-level singles titles collected throughout the career.",
     },
+
     {
-      label: "Weeks at No. 1",
+      label:
+        "Weeks at No. 1",
       value:
-        champion.trophies.weeksAtNo1,
+        champion.trophies
+          .weeksAtNo1,
       description:
         "Total weeks spent at the summit of the ATP world rankings.",
     },
+
     {
-      label: "Masters 1000",
+      label:
+        "Masters 1000",
       value:
-        champion.trophies.masters1000,
+        masters1000,
       description:
         "Victories achieved at the highest tier below the Grand Slams.",
     },
+
+    ...(atp500 > 0
+      ? [
+          {
+            label:
+              "ATP 500",
+            value:
+              atp500,
+            description:
+              "Titles won at ATP 500 events across the tour calendar.",
+          },
+        ]
+      : []),
+
+    ...(atp250 > 0
+      ? [
+          {
+            label:
+              "ATP 250",
+            value:
+              atp250,
+            description:
+              "Titles won at ATP 250 events across the tour calendar.",
+          },
+        ]
+      : []),
+
+    ...(atpFinals > 0
+      ? [
+          {
+            label:
+              "ATP Finals",
+            value:
+              atpFinals,
+            description:
+              "Season-ending championship titles won against the elite ATP field.",
+          },
+        ]
+      : []),
+
+    ...(olympicSinglesGold > 0
+      ? [
+          {
+            label:
+              "Olympic Singles Gold",
+            value:
+              olympicSinglesGold,
+            description:
+              "Singles gold medals won on the Olympic stage.",
+          },
+        ]
+      : []),
+
+    ...(olympicDoublesGold > 0
+      ? [
+          {
+            label:
+              "Olympic Doubles Gold",
+            value:
+              olympicDoublesGold,
+            description:
+              "Doubles gold medals won on the Olympic stage.",
+          },
+        ]
+      : []),
+
+    ...(liveStats &&
+    davisCupTitles > 0
+      ? [
+          {
+            label:
+              "Davis Cup",
+            value:
+              davisCupTitles,
+            description:
+              "Team titles won representing the national side in Davis Cup competition.",
+          },
+        ]
+      : []),
   ];
 
-  if (
-    champion.trophies
-      .olympicGold !== undefined
-  ) {
-    trophyItems.push({
-      label: "Olympic Gold",
-      value:
-        champion.trophies.olympicGold,
-      description:
-        "Gold medals earned on the Olympic stage during the champion's career.",
-    });
-  }
+  const recordedPeriod =
+    liveStats &&
+    liveStats.firstRecordedYear &&
+    liveStats.lastRecordedYear
+      ? liveStats.firstRecordedYear ===
+        liveStats.lastRecordedYear
+        ? String(
+            liveStats.firstRecordedYear,
+          )
+        : `${liveStats.firstRecordedYear}–${liveStats.lastRecordedYear}`
+      : null;
+
+  const sourceLabel =
+    liveStats
+      ? "Live tournament record"
+      : hasHistoricalDetailedStats
+        ? "Historical career record"
+        : "Career achievements";
+
+  const statusLabel =
+    liveStats
+      ? "AGE202 Verified"
+      : hasHistoricalDetailedStats
+        ? "Historical Verified"
+        : "Verified";
 
   return (
     <section
@@ -133,7 +386,6 @@ export default function TrophyRoom({
 
             <h2 className="mt-6 max-w-3xl text-5xl font-black leading-[0.92] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">
               The numbers behind
-
               <span className="block text-white/30">
                 a historic legacy.
               </span>
@@ -154,7 +406,9 @@ export default function TrophyRoom({
             <div className="mt-8 flex flex-wrap gap-3">
               <TrophyMeta
                 label="Archive classification"
-                value="Career achievements"
+                value={
+                  sourceLabel
+                }
               />
 
               <TrophyMeta
@@ -166,7 +420,9 @@ export default function TrophyRoom({
 
               <TrophyMeta
                 label="Status"
-                value="Verified"
+                value={
+                  statusLabel
+                }
                 accent={
                   champion.accent
                 }
@@ -177,8 +433,7 @@ export default function TrophyRoom({
 
         <FeaturedTrophy
           value={
-            champion.trophies
-              .grandSlams
+            grandSlamTitles
           }
           accent={
             champion.accent
@@ -189,7 +444,9 @@ export default function TrophyRoom({
         />
 
         <TrophyGrid
-          items={trophyItems.slice(1)}
+          items={
+            trophyItems.slice(1)
+          }
           accent={
             champion.accent
           }
@@ -197,6 +454,184 @@ export default function TrophyRoom({
             shouldReduceMotion
           }
         />
+
+        {liveStats &&
+        liveStats.recordedFinals >
+          0 ? (
+          <div className="mt-10 rounded-[28px] border border-white/10 bg-white/[0.025] p-5 sm:p-6">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p
+                  className="text-[9px] font-black uppercase tracking-[0.26em]"
+                  style={{
+                    color:
+                      champion.accent,
+                  }}
+                >
+                  AGE202 synced career record
+                </p>
+
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-white/42">
+                  Verified tournament results linked to the AGE202 Tournament Engine, with team achievements supplied by the career archive.
+                </p>
+              </div>
+
+              {recordedPeriod ? (
+                <TrophyMeta
+                  label="Recorded period"
+                  value={
+                    recordedPeriod
+                  }
+                  accent={
+                    champion.accent
+                  }
+                />
+              ) : null}
+            </div>
+
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+              <SyncedStat
+                label="ATP Titles"
+                value={
+                  liveStats.recordedTitles
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Runner-up"
+                value={
+                  liveStats.recordedRunnerUps
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Finals"
+                value={
+                  liveStats.recordedFinals
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Grand Slams"
+                value={
+                  liveStats.recordedGrandSlams
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Australian Open"
+                value={
+                  liveStats.recordedAustralianOpen
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Roland Garros"
+                value={
+                  liveStats.recordedRolandGarros
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Wimbledon"
+                value={
+                  liveStats.recordedWimbledon
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="US Open"
+                value={
+                  liveStats.recordedUsOpen
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Masters 1000"
+                value={
+                  liveStats.recordedMasters1000
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="ATP 500"
+                value={
+                  liveStats.recordedAtp500
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="ATP 250"
+                value={
+                  liveStats.recordedAtp250
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="ATP Finals"
+                value={
+                  liveStats.recordedAtpFinals
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Olympic Gold"
+                value={
+                  liveStats.recordedOlympicGold
+                }
+                accent={
+                  champion.accent
+                }
+              />
+
+              <SyncedStat
+                label="Davis Cup"
+                value={
+                  liveStats.davisCupTitles
+                }
+                accent={
+                  champion.accent
+                }
+              />
+            </div>
+          </div>
+        ) : null}
 
         <ChapterTransition
           chapterLabel="End of Chapter V"
@@ -208,5 +643,33 @@ export default function TrophyRoom({
         />
       </div>
     </section>
+  );
+}
+
+function SyncedStat({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: number;
+  accent: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[#050b18]/70 p-4">
+      <p className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/30">
+        {label}
+      </p>
+
+      <p
+        className="mt-2 text-2xl font-black tracking-[-0.045em]"
+        style={{
+          color:
+            accent,
+        }}
+      >
+        {value}
+      </p>
+    </div>
   );
 }

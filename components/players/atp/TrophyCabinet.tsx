@@ -8,6 +8,10 @@ import {
   Trophy,
 } from "lucide-react";
 
+import type {
+  PlayerTrophyStats,
+} from "@/lib/services/players/player-trophy-stats.service";
+
 type TrophyCabinetProfile = {
   atpTitles: number;
   australianOpen: number;
@@ -25,6 +29,9 @@ type TrophyCabinetProps = {
   playerName: string;
   profile: TrophyCabinetProfile | null;
   profileCompletionLabel: string;
+  liveStats?:
+    | PlayerTrophyStats
+    | null;
 };
 
 type TrophyFactProps = {
@@ -42,8 +49,9 @@ export default function TrophyCabinet({
   playerName,
   profile,
   profileCompletionLabel,
+  liveStats = null,
 }: TrophyCabinetProps) {
-  const grandSlamTotal =
+  const profileGrandSlamTotal =
     profile?.grandSlams ??
     (
       (profile?.australianOpen ?? 0) +
@@ -52,45 +60,112 @@ export default function TrophyCabinet({
       (profile?.usOpen ?? 0)
     );
 
+  const atpTitles =
+    liveStats?.recordedTitles ??
+    profile?.atpTitles ??
+    0;
+
+  const australianOpen =
+    liveStats?.recordedAustralianOpen ??
+    profile?.australianOpen ??
+    0;
+
+  const rolandGarros =
+    liveStats?.recordedRolandGarros ??
+    profile?.rolandGarros ??
+    0;
+
+  const wimbledon =
+    liveStats?.recordedWimbledon ??
+    profile?.wimbledon ??
+    0;
+
+  const usOpen =
+    liveStats?.recordedUsOpen ??
+    profile?.usOpen ??
+    0;
+
+  const grandSlamTotal =
+    liveStats?.recordedGrandSlams ??
+    profileGrandSlamTotal;
+
+  const masters1000 =
+    liveStats?.recordedMasters1000 ??
+    profile?.masters1000 ??
+    0;
+
+  const atp500 =
+    liveStats?.recordedAtp500 ??
+    0;
+
+  const atp250 =
+    liveStats?.recordedAtp250 ??
+    0;
+
+  const atpFinals =
+    liveStats?.recordedAtpFinals ??
+    profile?.atpFinals ??
+    0;
+
+  const olympicGold =
+    liveStats?.recordedOlympicGold ??
+    profile?.olympicGold ??
+    0;
+
+  const davisCup =
+    liveStats?.davisCupTitles ??
+    profile?.davisCup ??
+    0;
+
   const trophyFacts: TrophyFactProps[] = [
     {
       label: "Australian Open",
-      value: profile?.australianOpen ?? 0,
+      value: australianOpen,
       icon: Trophy,
     },
     {
       label: "Roland Garros",
-      value: profile?.rolandGarros ?? 0,
+      value: rolandGarros,
       icon: Trophy,
     },
     {
       label: "Wimbledon",
-      value: profile?.wimbledon ?? 0,
+      value: wimbledon,
       icon: Crown,
     },
     {
       label: "US Open",
-      value: profile?.usOpen ?? 0,
+      value: usOpen,
       icon: Trophy,
     },
     {
       label: "ATP Finals",
-      value: profile?.atpFinals ?? 0,
+      value: atpFinals,
       icon: Sparkles,
     },
     {
       label: "Masters 1000",
-      value: profile?.masters1000 ?? 0,
+      value: masters1000,
       icon: Award,
     },
     {
+      label: "ATP 500",
+      value: atp500,
+      icon: Trophy,
+    },
+    {
+      label: "ATP 250",
+      value: atp250,
+      icon: Trophy,
+    },
+    {
       label: "Olympic Gold",
-      value: profile?.olympicGold ?? 0,
+      value: olympicGold,
       icon: Medal,
     },
     {
       label: "Davis Cup",
-      value: profile?.davisCup ?? 0,
+      value: davisCup,
       icon: ShieldCheck,
     },
   ];
@@ -120,7 +195,7 @@ export default function TrophyCabinet({
 
         <div className="mt-10 grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
           <div className="grid gap-px overflow-hidden rounded-[1.9rem] border border-white/10 bg-white/10 sm:grid-cols-2 xl:grid-cols-3">
-            {trophyFacts.slice(0, 6).map((fact) => (
+            {trophyFacts.slice(0, 8).map((fact) => (
               <TrophyFact
                 key={fact.label}
                 {...fact}
@@ -143,7 +218,7 @@ export default function TrophyCabinet({
               <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/10">
                 <CareerTotal
                   label="ATP titles"
-                  value={profile?.atpTitles ?? 0}
+                  value={atpTitles}
                 />
 
                 <CareerTotal
@@ -152,26 +227,47 @@ export default function TrophyCabinet({
                 />
 
                 <CareerTotal
+                  label="ATP Finals"
+                  value={atpFinals}
+                />
+
+                <CareerTotal
+                  label="Masters 1000"
+                  value={masters1000}
+                />
+
+                <CareerTotal
+                  label="ATP 500"
+                  value={atp500}
+                />
+
+                <CareerTotal
+                  label="ATP 250"
+                  value={atp250}
+                />
+
+                <CareerTotal
                   label="Olympic gold"
-                  value={profile?.olympicGold ?? 0}
+                  value={olympicGold}
                 />
 
                 <CareerTotal
                   label="Davis Cup"
-                  value={profile?.davisCup ?? 0}
+                  value={davisCup}
                 />
               </div>
 
               <p className="mt-6 text-xs leading-6 text-white/38">
-                Totals are displayed only from records stored in the AGE202
-                player profile.
+                {liveStats
+                  ? "Tournament honours are synchronized from AGE202 TournamentEdition records. Team honours are read from the player career archive."
+                  : "Totals are displayed from records stored in the AGE202 player profile until synchronized tournament history is available."}
               </p>
             </div>
           </aside>
         </div>
 
         <div className="mt-5 grid gap-px overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/10 sm:grid-cols-2">
-          {trophyFacts.slice(6).map((fact) => (
+          {trophyFacts.slice(8).map((fact) => (
             <TrophyFact
               key={fact.label}
               {...fact}
@@ -179,6 +275,34 @@ export default function TrophyCabinet({
             />
           ))}
         </div>
+
+        {liveStats ? (
+          <div className="mt-5 grid gap-px overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/10 sm:grid-cols-3">
+            <CareerTotal
+              label="Finals"
+              value={liveStats.recordedFinals}
+            />
+
+            <CareerTotal
+              label="Runner-up"
+              value={liveStats.recordedRunnerUps}
+            />
+
+            <CareerTotal
+              label="Recorded period"
+              value={0}
+              textValue={
+                liveStats.firstRecordedYear &&
+                liveStats.lastRecordedYear
+                  ? liveStats.firstRecordedYear ===
+                    liveStats.lastRecordedYear
+                    ? String(liveStats.firstRecordedYear)
+                    : `${liveStats.firstRecordedYear}–${liveStats.lastRecordedYear}`
+                  : "—"
+              }
+            />
+          </div>
+        ) : null}
 
         <div className="mt-6 flex flex-col gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.025] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -249,16 +373,18 @@ function TrophyFact({
 type CareerTotalProps = {
   label: string;
   value: number;
+  textValue?: string;
 };
 
 function CareerTotal({
   label,
   value,
+  textValue,
 }: CareerTotalProps) {
   return (
     <div className="bg-[#07101D]/92 p-4">
       <span className="block text-2xl font-black tracking-[-0.045em] text-white">
-        {formatTitleCount(value)}
+        {textValue ?? formatTitleCount(value)}
       </span>
 
       <span className="mt-2 block font-mono text-[7px] uppercase tracking-[0.15em] text-white/30">

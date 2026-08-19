@@ -5,11 +5,38 @@ export type CareerEvent = {
 };
 
 export type TrophyStats = {
+  /*
+   * Core career records
+   */
   grandSlams: number;
   atpTitles: number;
   weeksAtNo1: number;
   masters1000: number;
+
+  /*
+   * Grand Slam breakdown
+   */
+  australianOpen?: number;
+  rolandGarros?: number;
+  wimbledon?: number;
+  usOpen?: number;
+
+  /*
+   * ATP Tour breakdown
+   */
+  atp500?: number;
+  atp250?: number;
+  atpFinals?: number;
+
+  /*
+   * Olympic record
+   *
+   * olympicGold is retained for backwards compatibility
+   * with existing Champion data.
+   */
   olympicGold?: number;
+  olympicSinglesGold?: number;
+  olympicDoublesGold?: number;
 };
 
 export type Champion = {

@@ -607,3 +607,65 @@ export async function getPlayerRelatedCollections(
     ],
   });
 }
+
+export async function getPlayerTournamentEditions(
+  playerId: string,
+) {
+  return prisma.tournamentEdition.findMany({
+    where: {
+      cancelled: false,
+
+      OR: [
+        {
+          championPlayerId:
+            playerId,
+        },
+        {
+          runnerUpPlayerId:
+            playerId,
+        },
+      ],
+    },
+
+    include: {
+      tournament: {
+        select: {
+          id: true,
+          name: true,
+          shortName: true,
+          slug: true,
+          category: true,
+          surface: true,
+          city: true,
+          country: true,
+          countryCode: true,
+        },
+      },
+
+      championPlayer: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+
+      runnerUpPlayer: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+    },
+
+    orderBy: [
+      {
+        year: "desc",
+      },
+      {
+        startDate: "desc",
+      },
+    ],
+  });
+}

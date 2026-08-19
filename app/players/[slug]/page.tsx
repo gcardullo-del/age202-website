@@ -4,6 +4,10 @@ import { cache } from "react";
 
 import { ArrowDown, ListTree } from "lucide-react";
 
+import {
+  CareerEventCategory,
+} from "@/generated/prisma/client";
+
 import ArchivePassport from "@/components/players/atp/ArchivePassport";
 import PlayerArtifacts from "@/components/players/atp/PlayerArtifacts";
 import PlayerDossier from "@/components/players/atp/PlayerDossier";
@@ -13,12 +17,22 @@ import PlayerOverview from "@/components/players/atp/PlayerOverview";
 import RelatedCollections from "@/components/players/atp/RelatedCollections";
 import RelatedPlayers from "@/components/players/atp/RelatedPlayers";
 import TrophyCabinet from "@/components/players/atp/TrophyCabinet";
+import PlayerTournamentResults from "@/components/players/atp/PlayerTournamentResults";
 
 import {
   getAdjacentArchivePlayers,
   getPlayerBySlug,
   getPlayerRelatedCollections,
+  getPlayerTournamentEditions,
 } from "@/lib/repositories/player.repository";
+
+import {
+  prisma,
+} from "@/lib/prisma";
+
+import {
+  getPlayerTrophyStats,
+} from "@/lib/services/players/player-trophy-stats.service";
 
 const getCachedPlayerBySlug = cache((slug: string) =>
   getPlayerBySlug(slug),
@@ -169,6 +183,8 @@ export default async function PlayerPage({
   const [
     adjacentPlayers,
     relatedCollections,
+    tournamentEditions,
+    davisCupCareerEvents,
   ] = await Promise.all([
     ranking
       ? getAdjacentArchivePlayers(
@@ -183,7 +199,43 @@ export default async function PlayerPage({
     getPlayerRelatedCollections(
       player.id,
     ),
+
+    getPlayerTournamentEditions(
+      player.id,
+    ),
+
+    prisma.playerCareerEvent.findMany({
+      where: {
+        playerId:
+          player.id,
+
+        category:
+          CareerEventCategory.DAVIS_CUP,
+      },
+
+      select: {
+        year: true,
+      },
+    }),
   ]);
+
+  const davisCupTitles =
+    new Set(
+      davisCupCareerEvents.map(
+        (event) =>
+          event.year,
+      ),
+    ).size;
+
+  const liveTrophyStats =
+    getPlayerTrophyStats({
+      playerId:
+        player.id,
+
+      tournamentEditions,
+
+      davisCupTitles,
+    });
 
   /*
    * Le Hero dei Top 50 vivono in:
@@ -413,6 +465,13 @@ export default async function PlayerPage({
             label="Honours"
           />
 
+          {tournamentEditions.length > 0 ? (
+            <ProfileIndexLink
+              href="#tournament-results"
+              label="Results"
+            />
+          ) : null}
+
           <ProfileIndexLink
             href="#player-artifacts"
             label="Collection"
@@ -481,7 +540,18 @@ export default async function PlayerPage({
         profileCompletionLabel={
           profileCompletionLabel
         }
+        liveStats={
+          liveTrophyStats
+        }
       />
+
+      {tournamentEditions.length > 0 ? (
+        <PlayerTournamentResults
+          playerId={player.id}
+          playerName={player.name}
+          editions={tournamentEditions}
+        />
+      ) : null}
 
       <PlayerArtifacts
         player={player}
