@@ -46,32 +46,43 @@ import {
   getRequiredString,
 } from "./utils/artifactForm.utils";
 
+const CHECKOUT_ENABLED =
+  process.env.CHECKOUT_ENABLED ===
+  "true";
+
 export async function createArtifact(
   formData: FormData,
 ): Promise<void> {
   await requireAdmin();
 
-  const title = getRequiredString(
-    formData,
-    "title",
-  );
+  const title =
+    getRequiredString(
+      formData,
+      "title",
+    );
 
-  const playerId = getRequiredString(
-    formData,
-    "playerId",
-  );
+  const playerId =
+    getRequiredString(
+      formData,
+      "playerId",
+    );
 
-  const brandId = getRequiredString(
-    formData,
-    "brandId",
-  );
+  const brandId =
+    getRequiredString(
+      formData,
+      "brandId",
+    );
 
-  const authentic = getBoolean(
-    formData,
-    "authentic",
-  );
+  const authentic =
+    getBoolean(
+      formData,
+      "authentic",
+    );
 
-  const images = getImageFiles(formData);
+  const images =
+    getImageFiles(
+      formData,
+    );
 
   const coverImageIndex =
     getCoverImageIndex(
@@ -85,7 +96,8 @@ export async function createArtifact(
         getOptionalString(
           formData,
           "archiveNumber",
-        ) ?? `AGE202-${Date.now()}`,
+        ) ??
+        `AGE202-${Date.now()}`,
 
       title,
 
@@ -95,12 +107,14 @@ export async function createArtifact(
           "subtitle",
         ),
 
-      slug: createUniqueSlug(
-        getOptionalString(
-          formData,
-          "slug",
-        ) ?? title,
-      ),
+      slug:
+        createUniqueSlug(
+          getOptionalString(
+            formData,
+            "slug",
+          ) ??
+            title,
+        ),
 
       description:
         getOptionalString(
@@ -157,10 +171,14 @@ export async function createArtifact(
         ),
 
       category:
-        getArtifactCategory(formData),
+        getArtifactCategory(
+          formData,
+        ),
 
       rarity:
-        getArtifactRarity(formData),
+        getArtifactRarity(
+          formData,
+        ),
 
       size:
         getOptionalString(
@@ -181,7 +199,9 @@ export async function createArtifact(
         ),
 
       condition:
-        getArtifactCondition(formData),
+        getArtifactCondition(
+          formData,
+        ),
 
       availability:
         getArtifactAvailability(
@@ -198,7 +218,8 @@ export async function createArtifact(
         getOptionalString(
           formData,
           "currency",
-        ) ?? "EUR",
+        ) ??
+        "EUR",
 
       vintedUrl:
         getOptionalString(
@@ -221,10 +242,14 @@ export async function createArtifact(
         ),
 
       tags:
-        getArtifactTags(formData),
+        getArtifactTags(
+          formData,
+        ),
 
       status:
-        getArtifactStatus(formData),
+        getArtifactStatus(
+          formData,
+        ),
 
       featured:
         getBoolean(
@@ -236,27 +261,46 @@ export async function createArtifact(
       brandId,
     });
 
-  const uploadedUrls: string[] = [];
-  const createdImageIds: string[] = [];
+  const uploadedUrls:
+    string[] = [];
+
+  const createdImageIds:
+    string[] = [];
 
   try {
-    for (const [index, file] of images.entries()) {
+    for (
+      const [
+        index,
+        file,
+      ] of images.entries()
+    ) {
       const publicUrl =
         await uploadArtifactImage(
           artifact.id,
           file,
         );
 
-      uploadedUrls.push(publicUrl);
+      uploadedUrls.push(
+        publicUrl,
+      );
 
       const artifactImage =
         await createArtifactImage({
-          artifactId: artifact.id,
-          url: publicUrl,
-          alt: `${title} — image ${index + 1}`,
-          sortOrder: index,
+          artifactId:
+            artifact.id,
+
+          url:
+            publicUrl,
+
+          alt:
+            `${title} — image ${index + 1}`,
+
+          sortOrder:
+            index,
+
           isCover:
-            index === coverImageIndex,
+            index ===
+            coverImageIndex,
         });
 
       createdImageIds.push(
@@ -266,26 +310,39 @@ export async function createArtifact(
 
     if (authentic) {
       await createCertificate({
-        artifactId: artifact.id,
-        curator: "AGE202 Museum",
-        verified: true,
+        artifactId:
+          artifact.id,
+
+        curator:
+          "AGE202 Museum",
+
+        verified:
+          true,
+
         notes:
           getOptionalString(
             formData,
             "curatorNote",
-          ) ?? undefined,
+          ) ??
+          undefined,
       });
     }
   } catch (error) {
     await Promise.allSettled(
-      createdImageIds.map((id) =>
-        deleteArtifactImageRepository(id),
+      createdImageIds.map(
+        (id) =>
+          deleteArtifactImageRepository(
+            id,
+          ),
       ),
     );
 
     await Promise.allSettled(
-      uploadedUrls.map((url) =>
-        deleteStoredArtifactImage(url),
+      uploadedUrls.map(
+        (url) =>
+          deleteStoredArtifactImage(
+            url,
+          ),
       ),
     );
 
@@ -295,31 +352,66 @@ export async function createArtifact(
      */
     await deleteArtifactRepository(
       artifact.id,
-    ).catch(() => undefined);
+    ).catch(
+      () =>
+        undefined,
+    );
 
     throw error;
   }
 
-  try {
-    await syncArtifactWithStripe(
-      artifact.id,
-    );
-  } catch (error) {
-    console.error(
-      `Sincronizzazione Stripe automatica fallita per Artifact ${artifact.id}:`,
-      error,
+  if (CHECKOUT_ENABLED) {
+    try {
+      await syncArtifactWithStripe(
+        artifact.id,
+      );
+    } catch (error) {
+      console.error(
+        `Sincronizzazione Stripe automatica fallita per Artifact ${artifact.id}:`,
+        error,
+      );
+    }
+  } else {
+    console.info(
+      `Stripe sync saltata per Artifact ${artifact.id}: checkout temporaneamente disabilitato.`,
     );
   }
 
-  revalidatePath("/admin");
-  revalidatePath("/admin/artifacts");
-  revalidatePath("/admin/certificates");
+  revalidatePath(
+    "/admin",
+  );
 
-  revalidatePath("/archive");
-  revalidatePath(`/archive/${artifact.slug}`);
+  revalidatePath(
+    "/admin/artifacts",
+  );
 
-  revalidatePath(`/products/${artifact.id}`);
-  revalidatePath(`/products/${artifact.slug}`);
+  revalidatePath(
+    `/admin/artifacts/${artifact.id}`,
+  );
 
-  redirect("/admin/artifacts");
+  revalidatePath(
+    "/admin/certificates",
+  );
+
+  // Route pubbliche correnti.
+  revalidatePath(
+    "/artifacts",
+  );
+
+  revalidatePath(
+    `/artifacts/${artifact.slug}`,
+  );
+
+  // Route legacy, mantenute per sicurezza finché esistono riferimenti.
+  revalidatePath(
+    "/archive",
+  );
+
+  revalidatePath(
+    `/archive/${artifact.slug}`,
+  );
+
+  redirect(
+    "/admin/artifacts",
+  );
 }
