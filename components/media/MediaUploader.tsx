@@ -19,6 +19,12 @@ import type {
   MediaAssetWithFolder,
 } from "@/lib/repositories/media.repository";
 
+import {
+  createArtifactUploadSessionId,
+  deleteArtifactImageFromBrowser,
+  uploadArtifactImageFromBrowser,
+} from "@/lib/services/artifactBrowserUpload.service";
+
 import DropZone from "./DropZone";
 import ImageCard, {
   type ImageCardData,
@@ -46,7 +52,12 @@ type ExistingImage =
 type NewImage =
   ImageCardData & {
     type: "new";
-    file: File;
+    uploadId: string;
+    uploadedUrl: string;
+    uploadedPath: string;
+    originalName: string;
+    mimeType: string;
+    lastModified: number;
   };
 
 type LibraryImage =
@@ -123,16 +134,6 @@ function createExistingImages(
   return normalized;
 }
 
-function revokeNewPreview(
-  image: MediaImage,
-): void {
-  if (image.type === "new") {
-    URL.revokeObjectURL(
-      image.src,
-    );
-  }
-}
-
 function createLibraryImage(
   image: SelectedLibraryImage,
   isCover: boolean,
@@ -187,6 +188,23 @@ export default function MediaUploader({
     setLibraryOpen,
   ] = useState(false);
 
+  const [
+    isUploading,
+    setIsUploading,
+  ] = useState(false);
+
+  const [
+    uploadError,
+    setUploadError,
+  ] = useState<
+    string | null
+  >(null);
+
+  const uploadSessionIdRef =
+    useRef<string>(
+      createArtifactUploadSessionId(),
+    );
+
   const fileInputRef =
     useRef<HTMLInputElement>(
       null,
@@ -194,40 +212,6 @@ export default function MediaUploader({
 
   const imagesRef =
     useRef(images);
-
-  const syncFileInput =
-    useCallback(
-      (
-        nextImages: MediaImage[],
-      ) => {
-        const input =
-          fileInputRef.current;
-
-        if (!input) {
-          return;
-        }
-
-        const transfer =
-          new DataTransfer();
-
-        nextImages.forEach(
-          (image) => {
-            if (
-              image.type ===
-              "new"
-            ) {
-              transfer.items.add(
-                image.file,
-              );
-            }
-          },
-        );
-
-        input.files =
-          transfer.files;
-      },
-      [],
-    );
 
   const updateImages =
     useCallback(
@@ -244,116 +228,188 @@ export default function MediaUploader({
             imagesRef.current =
               next;
 
-            syncFileInput(next);
-
             return next;
           },
         );
       },
-      [syncFileInput],
+      [],
     );
 
   const addFiles =
     useCallback(
-      (files: File[]) => {
-        updateImages(
-          (current) => {
-            const keys =
-              new Set(
-                current
-                  .filter(
-                    (
-                      image,
-                    ): image is NewImage =>
-                      image.type ===
-                      "new",
-                  )
-                  .map((image) =>
-                    createFileKey(
-                      image.file,
-                    ),
-                  ),
-              );
+      async (
+        files: File[],
+      ) => {
+        if (
+          files.length === 0 ||
+          isUploading
+        ) {
+          return;
+        }
 
-            const slots =
-              MAX_IMAGES -
-              current.length;
+        const current =
+          imagesRef.current;
 
-            const accepted =
-              files
-                .filter(
-                  (file) =>
-                    !keys.has(
-                      createFileKey(
-                        file,
-                      ),
-                    ),
-                )
-                .slice(
-                  0,
-                  slots,
-                );
-
-            if (
-              accepted.length ===
-              0
-            ) {
-              if (slots <= 0) {
-                window.alert(
-                  `Puoi caricare al massimo ${MAX_IMAGES} immagini.`,
-                );
-              }
-
-              return current;
-            }
-
-            const alreadyHasCover =
-              current.some(
-                (image) =>
-                  image.isCover,
-              );
-
-            const additions:
-              NewImage[] =
-              accepted.map(
+        const keys =
+          new Set(
+            current
+              .filter(
                 (
-                  file,
-                  index,
-                ) => ({
-                  id:
-                    crypto.randomUUID(),
-                  type: "new",
-                  file,
-                  src:
-                    URL.createObjectURL(
-                      file,
-                    ),
-                  name: file.name,
-                  size: file.size,
-                  isCover:
-                    !alreadyHasCover &&
-                    index === 0,
-                  isExisting: false,
-                }),
-              );
+                  image,
+                ): image is NewImage =>
+                  image.type ===
+                  "new",
+              )
+              .map(
+                (image) =>
+                  [
+                    image.originalName,
+                    image.size ?? 0,
+                    image.lastModified,
+                    image.mimeType,
+                  ].join("-"),
+              ),
+          );
 
-            if (
-              files.length >
-              accepted.length
-            ) {
-              window.alert(
-                `Alcune immagini non sono state aggiunte. Il limite totale è ${MAX_IMAGES}.`,
-              );
-            }
+        const slots =
+          MAX_IMAGES -
+          current.length;
 
-            return [
-              ...current,
+        const accepted =
+          files
+            .filter(
+              (file) =>
+                !keys.has(
+                  createFileKey(
+                    file,
+                  ),
+                ),
+            )
+            .slice(
+              0,
+              slots,
+            );
+
+        if (
+          accepted.length ===
+          0
+        ) {
+          if (slots <= 0) {
+            window.alert(
+              `Puoi caricare al massimo ${MAX_IMAGES} immagini.`,
+            );
+          }
+
+          return;
+        }
+
+        if (
+          files.length >
+          accepted.length
+        ) {
+          window.alert(
+            `Alcune immagini non sono state aggiunte. Il limite totale è ${MAX_IMAGES}.`,
+          );
+        }
+
+        setUploadError(null);
+        setIsUploading(true);
+
+        try {
+          const alreadyHasCover =
+            current.some(
+              (image) =>
+                image.isCover,
+            );
+
+          const additions:
+            NewImage[] = [];
+
+          for (
+            const [
+              index,
+              file,
+            ] of accepted.entries()
+          ) {
+            const uploadId =
+              crypto.randomUUID();
+
+            const uploaded =
+              await uploadArtifactImageFromBrowser({
+                uploadSessionId:
+                  uploadSessionIdRef.current,
+                file,
+              });
+
+            additions.push({
+              id:
+                uploadId,
+
+              type:
+                "new",
+
+              uploadId,
+
+              uploadedUrl:
+                uploaded.url,
+
+              uploadedPath:
+                uploaded.path,
+
+              originalName:
+                file.name,
+
+              mimeType:
+                file.type,
+
+              lastModified:
+                file.lastModified,
+
+              src:
+                uploaded.url,
+
+              name:
+                file.name,
+
+              size:
+                file.size,
+
+              isCover:
+                !alreadyHasCover &&
+                index === 0,
+
+              isExisting:
+                false,
+            });
+          }
+
+          updateImages(
+            (latest) => [
+              ...latest,
               ...additions,
-            ];
-          },
-        );
+            ],
+          );
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : "Upload immagine non riuscito.";
+
+          setUploadError(
+            message,
+          );
+
+          window.alert(
+            message,
+          );
+        } finally {
+          setIsUploading(false);
+        }
       },
-      [updateImages],
+      [
+        isUploading,
+        updateImages,
+      ],
     );
 
   const addLibraryImages =
@@ -473,8 +529,15 @@ export default function MediaUploader({
               target.type ===
               "new"
             ) {
-              revokeNewPreview(
-                target,
+              void deleteArtifactImageFromBrowser(
+                target.uploadedPath,
+              ).catch(
+                (error) => {
+                  console.error(
+                    "Unable to remove temporary Artifact upload:",
+                    error,
+                  );
+                },
               );
             }
 
@@ -611,10 +674,6 @@ export default function MediaUploader({
 
     const handleReset =
       () => {
-        imagesRef.current.forEach(
-          revokeNewPreview,
-        );
-
         const reset =
           createExistingImages(
             existingImages,
@@ -652,14 +711,6 @@ export default function MediaUploader({
     existingImages,
   ]);
 
-  useEffect(
-    () => () =>
-      imagesRef.current.forEach(
-        revokeNewPreview,
-      ),
-    [],
-  );
-
   const selectedCover =
     images.find(
       (image) =>
@@ -693,15 +744,11 @@ export default function MediaUploader({
         "library",
     );
 
-  const newCoverIndex =
+  const browserUploadedCoverId =
     selectedCover?.type ===
     "new"
-      ? newImages.findIndex(
-          (image) =>
-            image.id ===
-            selectedCover.id,
-        )
-      : -1;
+      ? selectedCover.uploadId
+      : "";
 
   const existingCoverImageId =
     selectedCover?.type ===
@@ -714,6 +761,28 @@ export default function MediaUploader({
     "library"
       ? selectedCover.mediaAssetId
       : "";
+
+  const browserUploadedImagesJson =
+    JSON.stringify(
+      newImages.map(
+        (image) => ({
+          id:
+            image.uploadId,
+          url:
+            image.uploadedUrl,
+          path:
+            image.uploadedPath,
+          alt:
+            image.name,
+          size:
+            image.size ?? null,
+          mimeType:
+            image.mimeType,
+          originalName:
+            image.originalName,
+        }),
+      ),
+    );
 
   const mediaOrder =
     images
@@ -846,10 +915,11 @@ export default function MediaUploader({
       <input
         ref={fileInputRef}
         type="file"
-        name="images"
         accept="image/jpeg,image/png,image/webp,image/avif"
         multiple
         className="sr-only"
+        tabIndex={-1}
+        aria-hidden="true"
       />
 
       <input
@@ -862,13 +932,17 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="coverImageIndex"
+        name="browserUploadedCoverId"
         value={
-          newCoverIndex >= 0
-            ? String(
-                newCoverIndex,
-              )
-            : ""
+          browserUploadedCoverId
+        }
+      />
+
+      <input
+        type="hidden"
+        name="browserUploadedImages"
+        value={
+          browserUploadedImagesJson
         }
       />
 
@@ -912,13 +986,26 @@ export default function MediaUploader({
         ),
       )}
 
+      {isUploading ? (
+        <div className="rounded-2xl border border-lime-300/20 bg-lime-300/[0.05] px-5 py-4 text-sm text-lime-100/80">
+          Upload immagini in corso su Supabase Storage. Attendi il completamento prima di salvare l&apos;Artifact.
+        </div>
+      ) : null}
+
+      {uploadError ? (
+        <div className="rounded-2xl border border-red-300/20 bg-red-300/[0.05] px-5 py-4 text-sm text-red-100/80">
+          {uploadError}
+        </div>
+      ) : null}
+
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         <DropZone
           onFilesAccepted={
             addFiles
           }
           disabled={
-            remainingSlots <= 0
+            remainingSlots <= 0 ||
+            isUploading
           }
           remainingSlots={
             remainingSlots

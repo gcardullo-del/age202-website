@@ -50,6 +50,249 @@ const CHECKOUT_ENABLED =
   process.env.CHECKOUT_ENABLED ===
   "true";
 
+type BrowserUploadedImage = {
+  id: string;
+  url: string;
+  path: string;
+  alt: string;
+  size: number | null;
+  mimeType: string;
+  originalName: string;
+};
+
+function getBrowserUploadedImages(
+  formData: FormData,
+): BrowserUploadedImage[] {
+  const raw =
+    getOptionalString(
+      formData,
+      "browserUploadedImages",
+    );
+
+  if (!raw) {
+    return [];
+  }
+
+  let parsed: unknown;
+
+  try {
+    parsed =
+      JSON.parse(raw);
+  } catch {
+    throw new Error(
+      "I riferimenti delle immagini caricate non sono validi.",
+    );
+  }
+
+  if (!Array.isArray(parsed)) {
+    throw new Error(
+      "Il formato delle immagini caricate non è valido.",
+    );
+  }
+
+  const images =
+    parsed.map(
+      (
+        value,
+        index,
+      ): BrowserUploadedImage => {
+        if (
+          !value ||
+          typeof value !==
+            "object"
+        ) {
+          throw new Error(
+            `Immagine caricata ${index + 1} non valida.`,
+          );
+        }
+
+        const record =
+          value as Record<
+            string,
+            unknown
+          >;
+
+        const id =
+          typeof record.id ===
+          "string"
+            ? record.id.trim()
+            : "";
+
+        const url =
+          typeof record.url ===
+          "string"
+            ? record.url.trim()
+            : "";
+
+        const path =
+          typeof record.path ===
+          "string"
+            ? record.path.trim()
+            : "";
+
+        const alt =
+          typeof record.alt ===
+          "string"
+            ? record.alt.trim()
+            : "";
+
+        const mimeType =
+          typeof record.mimeType ===
+          "string"
+            ? record.mimeType.trim()
+            : "";
+
+        const originalName =
+          typeof record.originalName ===
+          "string"
+            ? record.originalName.trim()
+            : "";
+
+        const size =
+          typeof record.size ===
+            "number" &&
+          Number.isFinite(
+            record.size,
+          )
+            ? record.size
+            : null;
+
+        if (
+          !id ||
+          !url ||
+          !path
+        ) {
+          throw new Error(
+            `Immagine caricata ${index + 1} incompleta.`,
+          );
+        }
+
+        if (
+          !path.startsWith(
+            "pending/",
+          )
+        ) {
+          throw new Error(
+            `Percorso immagine ${index + 1} non valido.`,
+          );
+        }
+
+        return {
+          id,
+          url,
+          path,
+          alt,
+          size,
+          mimeType,
+          originalName,
+        };
+      },
+    );
+
+  const uniqueIds =
+    new Set(
+      images.map(
+        (image) =>
+          image.id,
+      ),
+    );
+
+  if (
+    uniqueIds.size !==
+    images.length
+  ) {
+    throw new Error(
+      "Sono presenti immagini duplicate nel caricamento.",
+    );
+  }
+
+  return images;
+}
+
+function getBrowserUploadedImageOrder(
+  formData: FormData,
+  images: BrowserUploadedImage[],
+): BrowserUploadedImage[] {
+  const rawOrder =
+    getOptionalString(
+      formData,
+      "mediaOrder",
+    );
+
+  if (!rawOrder) {
+    return images;
+  }
+
+  const byId =
+    new Map(
+      images.map(
+        (image) => [
+          image.id,
+          image,
+        ],
+      ),
+    );
+
+  const ordered:
+    BrowserUploadedImage[] = [];
+
+  const used =
+    new Set<string>();
+
+  for (
+    const token of rawOrder.split(
+      ",",
+    )
+  ) {
+    const [
+      type,
+      id,
+    ] = token.split(
+      ":",
+      2,
+    );
+
+    if (
+      type !== "new" ||
+      !id ||
+      used.has(id)
+    ) {
+      continue;
+    }
+
+    const image =
+      byId.get(id);
+
+    if (!image) {
+      continue;
+    }
+
+    ordered.push(
+      image,
+    );
+
+    used.add(
+      id,
+    );
+  }
+
+  for (
+    const image of images
+  ) {
+    if (
+      !used.has(
+        image.id,
+      )
+    ) {
+      ordered.push(
+        image,
+      );
+    }
+  }
+
+  return ordered;
+}
+
 export async function createArtifact(
   formData: FormData,
 ): Promise<void> {
@@ -79,16 +322,56 @@ export async function createArtifact(
       "authentic",
     );
 
-  const images =
+  /*
+   * Nuovo flusso:
+   * le immagini selezionate dal PC vengono caricate
+   * direttamente su Supabase dal browser.
+   *
+   * Manteniamo getImageFiles() solo come compatibilità
+   * con eventuali form legacy che inviano ancora File.
+   */
+  const legacyImages =
     getImageFiles(
       formData,
     );
 
-  const coverImageIndex =
-    getCoverImageIndex(
+  const browserUploadedImages =
+    getBrowserUploadedImages(
       formData,
-      images.length,
     );
+
+  const orderedBrowserImages =
+    getBrowserUploadedImageOrder(
+      formData,
+      browserUploadedImages,
+    );
+
+  const browserUploadedCoverId =
+    getOptionalString(
+      formData,
+      "browserUploadedCoverId",
+    );
+
+  if (
+    browserUploadedCoverId &&
+    !browserUploadedImages.some(
+      (image) =>
+        image.id ===
+        browserUploadedCoverId,
+    )
+  ) {
+    throw new Error(
+      "La copertina selezionata non appartiene alle immagini caricate.",
+    );
+  }
+
+  const legacyCoverImageIndex =
+    legacyImages.length > 0
+      ? getCoverImageIndex(
+          formData,
+          legacyImages.length,
+        )
+      : -1;
 
   const artifact =
     await createArtifactRepository({
@@ -268,11 +551,54 @@ export async function createArtifact(
     string[] = [];
 
   try {
+    /*
+     * 1. Registra nel database le immagini già caricate
+     *    direttamente dal browser su Supabase.
+     */
+    for (
+      const [
+        index,
+        image,
+      ] of orderedBrowserImages.entries()
+    ) {
+      const artifactImage =
+        await createArtifactImage({
+          artifactId:
+            artifact.id,
+
+          url:
+            image.url,
+
+          alt:
+            image.alt ||
+            image.originalName ||
+            `${title} — image ${index + 1}`,
+
+          sortOrder:
+            index,
+
+          isCover:
+            browserUploadedCoverId
+              ? image.id ===
+                browserUploadedCoverId
+              : index === 0,
+        });
+
+      createdImageIds.push(
+        artifactImage.id,
+      );
+    }
+
+    /*
+     * 2. Compatibilità legacy:
+     *    se qualche vecchio form invia ancora File reali,
+     *    continuiamo a supportarlo.
+     */
     for (
       const [
         index,
         file,
-      ] of images.entries()
+      ] of legacyImages.entries()
     ) {
       const publicUrl =
         await uploadArtifactImage(
@@ -284,6 +610,10 @@ export async function createArtifact(
         publicUrl,
       );
 
+      const sortOrder =
+        orderedBrowserImages.length +
+        index;
+
       const artifactImage =
         await createArtifactImage({
           artifactId:
@@ -293,14 +623,15 @@ export async function createArtifact(
             publicUrl,
 
           alt:
-            `${title} — image ${index + 1}`,
+            `${title} — image ${sortOrder + 1}`,
 
-          sortOrder:
-            index,
+          sortOrder,
 
           isCover:
+            orderedBrowserImages.length ===
+              0 &&
             index ===
-            coverImageIndex,
+              legacyCoverImageIndex,
         });
 
       createdImageIds.push(
@@ -337,11 +668,27 @@ export async function createArtifact(
       ),
     );
 
+    /*
+     * Elimina gli upload legacy effettuati dal server.
+     */
     await Promise.allSettled(
       uploadedUrls.map(
         (url) =>
           deleteStoredArtifactImage(
             url,
+          ),
+      ),
+    );
+
+    /*
+     * Elimina anche gli upload browser temporanei
+     * se la creazione dell'Artifact non viene completata.
+     */
+    await Promise.allSettled(
+      browserUploadedImages.map(
+        (image) =>
+          deleteStoredArtifactImage(
+            image.url,
           ),
       ),
     );
@@ -393,7 +740,6 @@ export async function createArtifact(
     "/admin/certificates",
   );
 
-  // Route pubbliche correnti.
   revalidatePath(
     "/artifacts",
   );
@@ -402,7 +748,6 @@ export async function createArtifact(
     `/artifacts/${artifact.slug}`,
   );
 
-  // Route legacy, mantenute per sicurezza finché esistono riferimenti.
   revalidatePath(
     "/archive",
   );
