@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
 
 type StripeCatalogType =
   | "ARTIFACT"
@@ -35,6 +34,17 @@ type CheckoutItem = {
 const SHIPPING_COUNTRIES_SETTING_KEY =
   "commerce.shipping.allowedCountries";
 
+/**
+ * IMPORTANT:
+ * Checkout is OFF unless CHECKOUT_ENABLED is explicitly set to "true".
+ *
+ * This makes production safe while InPost is not ready and also prevents
+ * Stripe configuration from being evaluated during build when checkout
+ * is intentionally disabled.
+ */
+const CHECKOUT_ENABLED =
+  process.env.CHECKOUT_ENABLED === "true";
+
 const SUPPORTED_CHECKOUT_COUNTRIES = [
   "IT",
   "FR",
@@ -67,8 +77,36 @@ const SUPPORTED_CHECKOUT_COUNTRIES = [
 type SupportedCheckoutCountry =
   (typeof SUPPORTED_CHECKOUT_COUNTRIES)[number];
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+) {
+  if (!CHECKOUT_ENABLED) {
+    return NextResponse.json(
+      {
+        error:
+          "Gli acquisti sono temporaneamente sospesi. Il checkout AGE202 tornerà disponibile a breve.",
+        code:
+          "CHECKOUT_TEMPORARILY_DISABLED",
+      },
+      {
+        status: 503,
+      },
+    );
+  }
+
   try {
+    /**
+     * Lazy import:
+     * Stripe is loaded only when checkout is actually enabled and a POST
+     * request reaches this route. This avoids evaluating @/lib/stripe
+     * during the production build while checkout is disabled.
+     */
+    const {
+      stripe,
+    } = await import(
+      "@/lib/stripe"
+    );
+
     const body =
       (await request.json()) as CheckoutRequestBody;
 
@@ -79,7 +117,8 @@ export async function POST(request: Request) {
       body.itemType;
 
     const size =
-      body.size?.trim() || null;
+      body.size?.trim() ||
+      null;
 
     if (!itemId) {
       return NextResponse.json(
@@ -94,9 +133,12 @@ export async function POST(request: Request) {
     }
 
     if (
-      itemType !== "ARTIFACT" &&
-      itemType !== "MEMORABILIA" &&
-      itemType !== "ORIGINAL_PRODUCT"
+      itemType !==
+        "ARTIFACT" &&
+      itemType !==
+        "MEMORABILIA" &&
+      itemType !==
+        "ORIGINAL_PRODUCT"
     ) {
       return NextResponse.json(
         {
@@ -191,14 +233,16 @@ export async function POST(request: Request) {
 
     const session =
       await stripe.checkout.sessions.create({
-        mode: "payment",
+        mode:
+          "payment",
 
         line_items: [
           {
             price:
               item.stripePriceId,
 
-            quantity: 1,
+            quantity:
+              1,
           },
         ],
 
@@ -214,7 +258,8 @@ export async function POST(request: Request) {
         },
 
         phone_number_collection: {
-          enabled: true,
+          enabled:
+            true,
         },
 
         success_url:
@@ -224,7 +269,8 @@ export async function POST(request: Request) {
           getCancelUrl({
             baseUrl,
             itemType,
-            slug: item.slug,
+            slug:
+              item.slug,
           }),
 
         metadata: {
@@ -241,7 +287,8 @@ export async function POST(request: Request) {
             item.title,
 
           size:
-            size ?? "",
+            size ??
+            "",
         },
 
         payment_intent_data: {
@@ -256,7 +303,8 @@ export async function POST(request: Request) {
               item.slug,
 
             size:
-              size ?? "",
+              size ??
+              "",
           },
         },
       });
@@ -276,14 +324,20 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
-      success: true,
+      success:
+        true,
+
       checkoutUrl:
         session.url,
+
       sessionId:
         session.id,
+
       itemType,
+
       itemId:
         item.id,
+
       allowedCountries,
     });
   } catch (error) {
@@ -315,7 +369,8 @@ async function getAllowedShippingCountries(): Promise<
       },
 
       select: {
-        value: true,
+        value:
+          true,
       },
     });
 
@@ -325,7 +380,9 @@ async function getAllowedShippingCountries(): Promise<
       setting.value,
     )
   ) {
-    return ["IT"];
+    return [
+      "IT",
+    ];
   }
 
   const supportedCountries =
@@ -356,7 +413,9 @@ async function getAllowedShippingCountries(): Promise<
     uniqueCountries.length ===
     0
   ) {
-    return ["IT"];
+    return [
+      "IT",
+    ];
   }
 
   return uniqueCountries;
@@ -367,61 +426,90 @@ async function getCheckoutItem(
   itemId: string,
 ): Promise<CheckoutItem | null> {
   if (
-    itemType === "ARTIFACT"
+    itemType ===
+    "ARTIFACT"
   ) {
     return prisma.artifact.findUnique({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
 
       select: {
-        id: true,
-        title: true,
-        slug: true,
-        price: true,
-        currency: true,
-        stripeActive: true,
-        stripePriceId: true,
-        stripeProductId: true,
+        id:
+          true,
+        title:
+          true,
+        slug:
+          true,
+        price:
+          true,
+        currency:
+          true,
+        stripeActive:
+          true,
+        stripePriceId:
+          true,
+        stripeProductId:
+          true,
       },
     });
   }
 
   if (
-    itemType === "MEMORABILIA"
+    itemType ===
+    "MEMORABILIA"
   ) {
     return prisma.memorabilia.findUnique({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
 
       select: {
-        id: true,
-        title: true,
-        slug: true,
-        price: true,
-        currency: true,
-        stripeActive: true,
-        stripePriceId: true,
-        stripeProductId: true,
+        id:
+          true,
+        title:
+          true,
+        slug:
+          true,
+        price:
+          true,
+        currency:
+          true,
+        stripeActive:
+          true,
+        stripePriceId:
+          true,
+        stripeProductId:
+          true,
       },
     });
   }
 
   return prisma.originalProduct.findUnique({
     where: {
-      id: itemId,
+      id:
+        itemId,
     },
 
     select: {
-      id: true,
-      title: true,
-      slug: true,
-      price: true,
-      currency: true,
-      stripeActive: true,
-      stripePriceId: true,
-      stripeProductId: true,
+      id:
+        true,
+      title:
+        true,
+      slug:
+        true,
+      price:
+        true,
+      currency:
+        true,
+      stripeActive:
+        true,
+      stripePriceId:
+        true,
+      stripeProductId:
+        true,
     },
   });
 }
@@ -436,13 +524,15 @@ function getCancelUrl({
   slug: string;
 }) {
   if (
-    itemType === "ARTIFACT"
+    itemType ===
+    "ARTIFACT"
   ) {
     return `${baseUrl}/artifacts/${slug}`;
   }
 
   if (
-    itemType === "MEMORABILIA"
+    itemType ===
+    "MEMORABILIA"
   ) {
     return `${baseUrl}/memorabilia/${slug}`;
   }

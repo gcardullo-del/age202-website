@@ -1,6 +1,5 @@
 import ArtifactGallery from "@/components/artifacts/ArtifactGallery";
 import ArtifactHero from "@/components/artifacts/ArtifactHero";
-import StripeCheckoutButton from "@/components/commerce/StripeCheckoutButton";
 import MuseumQrCode from "@/components/certificate/MuseumQrCode";
 
 import type { Metadata } from "next";
@@ -832,16 +831,18 @@ export default async function ArtifactPage({
               </h2>
 
               <p className="mt-7 max-w-2xl text-base leading-8 text-white/55 sm:text-lg">
-                Quando il reperto è disponibile, l’acquisto può essere completato direttamente tramite il checkout sicuro AGE202 gestito da Stripe.
+                Durante l’attivazione del nuovo sistema di spedizione AGE202,
+                il checkout diretto con Stripe è temporaneamente sospeso.
+                Se presente, puoi completare l’acquisto tramite Vinted.
               </p>
 
               <div className="mt-9 flex flex-wrap gap-3">
                 <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Pagamento sicuro
+                  Vinted disponibile
                 </span>
 
-                <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Stripe Checkout
+                <span className="rounded-full border border-amber-300/15 bg-amber-300/[0.05] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-100/55">
+                  Stripe temporaneamente sospeso
                 </span>
               </div>
             </div>
@@ -876,11 +877,33 @@ export default async function ArtifactPage({
               </div>
 
               {artifact.availability === "AVAILABLE" && formattedPrice ? (
-                <StripeCheckoutButton
-                  itemId={artifact.id}
-                  itemType="ARTIFACT"
-                  label="Acquista con Stripe"
-                />
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-white/35"
+                  >
+                    <LockKeyhole className="h-4 w-4" />
+                    Stripe temporaneamente sospeso
+                  </button>
+
+                  {artifact.vintedUrl ? (
+                    <Link
+                      href={artifact.vintedUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-lime-300/30 bg-lime-300 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#050b18] transition hover:bg-lime-200"
+                    >
+                      Acquista su Vinted
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  ) : (
+                    <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
+                      Il checkout AGE202 è temporaneamente sospeso e questo reperto non ha ancora un link Vinted associato.
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
                   {artifact.availability === "SOLD"
