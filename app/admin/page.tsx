@@ -4,6 +4,8 @@ import {
   Boxes,
   CheckCircle2,
   CircleAlert,
+  Clock3,
+  CreditCard,
   Gem,
   PackageCheck,
   Plus,
@@ -11,6 +13,7 @@ import {
   ShoppingBag,
   Sparkles,
   Tags,
+  Truck,
   Users,
 } from "lucide-react";
 import Link from "next/link";
@@ -18,6 +21,7 @@ import Link from "next/link";
 import AdminShell from "@/components/admin/AdminShell";
 import StatsCard from "@/components/admin/dashboard/StatsCard";
 import AdminPanel from "@/components/admin/ui/AdminPanel";
+import { prisma } from "@/lib/prisma";
 import { getMuseumStatistics } from "@/lib/services/museum.service";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +31,13 @@ function formatLabel(value: string): string {
     .replaceAll("_", " ")
     .toLowerCase()
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function formatCurrency(value: number, currency: string) {
+  return new Intl.NumberFormat("it-IT", {
+    style: "currency",
+    currency,
+  }).format(value);
 }
 
 function getCount(groups: Record<string, number>, keys: string[]): number {
@@ -54,6 +65,7 @@ function ProgressItem({ label, value, total }: ProgressItemProps) {
     <div>
       <div className="mb-2 flex items-center justify-between gap-4 text-sm">
         <span className="font-medium text-white/75">{label}</span>
+
         <span className="tabular-nums text-white/40">
           {value} · {percentage}%
         </span>
@@ -109,27 +121,98 @@ function StatusRow({ label, value, warning = false }: StatusRowProps) {
   );
 }
 
+type CommerceMetricProps = {
+  label: string;
+  value: string | number;
+  description: string;
+  icon: typeof ShoppingBag;
+  tone?: "lime" | "emerald" | "sky" | "amber";
+};
+
+function CommerceMetric({
+  label,
+  value,
+  description,
+  icon: Icon,
+  tone = "lime",
+}: CommerceMetricProps) {
+  const toneClasses = {
+    lime: "border-lime-300/20 bg-lime-300/[0.07] text-lime-300",
+    emerald:
+      "border-emerald-300/20 bg-emerald-300/[0.07] text-emerald-300",
+    sky: "border-sky-300/20 bg-sky-300/[0.07] text-sky-300",
+    amber: "border-amber-300/20 bg-amber-300/[0.07] text-amber-300",
+  };
+
+  return (
+    <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/35">
+            {label}
+          </p>
+
+          <p className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">
+            {value}
+          </p>
+        </div>
+
+        <span
+          className={[
+            "flex size-10 shrink-0 items-center justify-center rounded-xl border",
+            toneClasses[tone],
+          ].join(" ")}
+        >
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+      </div>
+
+      <p className="mt-3 text-xs leading-5 text-white/35">{description}</p>
+    </div>
+  );
+}
+
 export default async function AdminDashboardPage() {
-  const statistics = await getMuseumStatistics();
+  const [statistics, orders] = await Promise.all([
+    getMuseumStatistics(),
+
+    prisma.order.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        status: true,
+        paymentStatus: true,
+        shippingStatus: true,
+        total: true,
+        currency: true,
+      },
+    }),
+  ]);
 
   const availableArtifacts = getCount(statistics.artifactsByAvailability, [
     "AVAILABLE",
     "Available",
     "available",
   ]);
+
   const soldArtifacts = getCount(statistics.artifactsByAvailability, [
     "SOLD",
     "Sold",
     "sold",
   ]);
+
   const certifiedPercentage = getPercentage(
     statistics.certifiedArtifacts,
     statistics.artifacts,
   );
+
   const verifiedPercentage = getPercentage(
     statistics.verifiedCertificates,
     statistics.certificates,
   );
+
   const authenticPercentage = getPercentage(
     statistics.authenticArtifacts,
     statistics.artifacts,
@@ -138,9 +221,37 @@ export default async function AdminDashboardPage() {
   const categoryGroups = Object.entries(statistics.artifactsByCategory).sort(
     ([, first], [, second]) => second - first,
   );
+
   const rarityGroups = Object.entries(statistics.artifactsByRarity).sort(
     ([, first], [, second]) => second - first,
   );
+
+  const paidOrders = orders.filter(
+    (order) => order.paymentStatus === "PAID",
+  );
+
+  const paidOrdersCount = paidOrders.length;
+
+  const totalRevenue = paidOrders.reduce(
+    (total, order) => total + Number(order.total),
+    0,
+  );
+
+  const preparingOrders = orders.filter(
+    (order) =>
+      order.paymentStatus === "PAID" &&
+      order.status === "PROCESSING",
+  ).length;
+
+  const waitingShipment = orders.filter(
+    (order) =>
+      order.paymentStatus === "PAID" &&
+      order.shippingStatus !== "DELIVERED" &&
+      order.shippingStatus !== "CANCELLED",
+  ).length;
+
+  const commerceCurrency =
+    paidOrders.find((order) => order.currency)?.currency ?? "EUR";
 
   return (
     <AdminShell
@@ -153,6 +264,7 @@ export default async function AdminDashboardPage() {
             aria-hidden="true"
             className="absolute -right-24 -top-28 size-80 rounded-full bg-lime-300/10 blur-3xl"
           />
+
           <div
             aria-hidden="true"
             className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lime-200/80 to-transparent"
@@ -167,7 +279,9 @@ export default async function AdminDashboardPage() {
 
               <h2 className="mt-4 text-3xl font-semibold tracking-[-0.035em] text-white sm:text-5xl">
                 Preserve the story.
-                <span className="block text-white/45">Manage the archive.</span>
+                <span className="block text-white/45">
+                  Manage the archive.
+                </span>
               </h2>
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-white/50 sm:text-base">
@@ -200,7 +314,11 @@ export default async function AdminDashboardPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/35">
               Live overview
             </p>
-            <h2 id="overview-title" className="mt-2 text-2xl font-semibold text-white">
+
+            <h2
+              id="overview-title"
+              className="mt-2 text-2xl font-semibold text-white"
+            >
               Museum at a glance
             </h2>
           </div>
@@ -212,6 +330,7 @@ export default async function AdminDashboardPage() {
               description="Records in the archive"
               icon={Archive}
             />
+
             <StatsCard
               title="Players"
               value={statistics.players}
@@ -219,6 +338,7 @@ export default async function AdminDashboardPage() {
               icon={Users}
               tone="info"
             />
+
             <StatsCard
               title="Brands"
               value={statistics.brands}
@@ -226,6 +346,7 @@ export default async function AdminDashboardPage() {
               icon={Tags}
               tone="premium"
             />
+
             <StatsCard
               title="Certificates"
               value={statistics.certificates}
@@ -236,6 +357,103 @@ export default async function AdminDashboardPage() {
           </div>
         </section>
 
+        <section aria-labelledby="commerce-title">
+          <AdminPanel className="overflow-hidden p-0">
+            <div className="relative border-b border-white/[0.07] p-6 sm:p-7">
+              <div
+                aria-hidden="true"
+                className="absolute right-0 top-0 size-56 rounded-full bg-lime-300/[0.05] blur-3xl"
+              />
+
+              <div className="relative flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <ShoppingBag
+                      className="size-4 text-lime-300"
+                      aria-hidden="true"
+                    />
+
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-lime-300/70">
+                      Commerce operations
+                    </p>
+                  </div>
+
+                  <h2
+                    id="commerce-title"
+                    className="mt-2 text-2xl font-semibold text-white"
+                  >
+                    Order fulfillment
+                  </h2>
+
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
+                    Live Stripe orders and logistics status from the AGE202
+                    commerce workflow.
+                  </p>
+                </div>
+
+                <Link
+                  href="/admin/orders"
+                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-lime-300 px-5 py-3 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200"
+                >
+                  Open Orders
+                  <ShoppingBag className="size-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-4 p-6 sm:grid-cols-2 sm:p-7 xl:grid-cols-4">
+              <CommerceMetric
+                label="Paid orders"
+                value={paidOrdersCount}
+                description="Successfully confirmed payments"
+                icon={CheckCircle2}
+                tone="emerald"
+              />
+
+              <CommerceMetric
+                label="Revenue"
+                value={formatCurrency(totalRevenue, commerceCurrency)}
+                description="Revenue from paid AGE202 orders"
+                icon={CreditCard}
+                tone="lime"
+              />
+
+              <CommerceMetric
+                label="Preparing"
+                value={preparingOrders}
+                description="Orders currently being prepared"
+                icon={PackageCheck}
+                tone="amber"
+              />
+
+              <CommerceMetric
+                label="Waiting shipment"
+                value={waitingShipment}
+                description="Paid orders not yet delivered"
+                icon={Truck}
+                tone="sky"
+              />
+            </div>
+
+            {waitingShipment > 0 ? (
+              <div className="border-t border-white/[0.07] px-6 py-4 sm:px-7">
+                <div className="flex items-center gap-3 text-sm text-white/45">
+                  <Clock3
+                    className="size-4 shrink-0 text-sky-300"
+                    aria-hidden="true"
+                  />
+
+                  <span>
+                    {waitingShipment === 1
+                      ? "1 paid order requires logistics attention."
+                      : `${waitingShipment} paid orders require logistics attention.`}
+                  </span>
+                </div>
+              </div>
+            ) : null}
+          </AdminPanel>
+        </section>
+
         <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
           <AdminPanel className="p-6 sm:p-7">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
@@ -243,10 +461,12 @@ export default async function AdminDashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
                   Collection intelligence
                 </p>
+
                 <h2 className="mt-2 text-2xl font-semibold text-white">
                   Archive composition
                 </h2>
               </div>
+
               <span className="text-sm text-white/35">
                 {statistics.artifacts} total records
               </span>
@@ -274,26 +494,32 @@ export default async function AdminDashboardPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
               Museum health
             </p>
+
             <h2 className="mt-2 text-2xl font-semibold text-white">
               Archive integrity
             </h2>
 
             <div className="mt-6 space-y-3">
               <StatusRow label="Database" value="Operational" />
+
               <StatusRow
                 label="Certification coverage"
                 value={`${certifiedPercentage}%`}
                 warning={statistics.uncertifiedArtifacts > 0}
               />
+
               <StatusRow
                 label="Certificate verification"
                 value={`${verifiedPercentage}%`}
                 warning={statistics.unverifiedCertificates > 0}
               />
+
               <StatusRow
                 label="Authenticity records"
                 value={`${authenticPercentage}%`}
-                warning={statistics.authenticArtifacts < statistics.artifacts}
+                warning={
+                  statistics.authenticArtifacts < statistics.artifacts
+                }
               />
             </div>
 
@@ -302,14 +528,17 @@ export default async function AdminDashboardPage() {
                 <p className="text-xs uppercase tracking-[0.14em] text-white/30">
                   Available
                 </p>
+
                 <p className="mt-2 text-2xl font-semibold text-white">
                   {availableArtifacts}
                 </p>
               </div>
+
               <div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-white/30">
                   Sold
                 </p>
+
                 <p className="mt-2 text-2xl font-semibold text-white">
                   {soldArtifacts}
                 </p>
@@ -325,11 +554,16 @@ export default async function AdminDashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
                   Rarity profile
                 </p>
+
                 <h2 className="mt-2 text-2xl font-semibold text-white">
                   Collection value map
                 </h2>
               </div>
-              <Gem className="size-6 text-yellow-100/70" aria-hidden="true" />
+
+              <Gem
+                className="size-6 text-yellow-100/70"
+                aria-hidden="true"
+              />
             </div>
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
@@ -342,13 +576,16 @@ export default async function AdminDashboardPage() {
                     <span className="text-sm font-medium text-white/65">
                       {formatLabel(rarity)}
                     </span>
+
                     <span className="rounded-full bg-white/[0.06] px-3 py-1 text-sm font-semibold tabular-nums text-white">
                       {count}
                     </span>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-white/40">No rarity data available.</p>
+                <p className="text-sm text-white/40">
+                  No rarity data available.
+                </p>
               )}
             </div>
           </AdminPanel>
@@ -357,12 +594,18 @@ export default async function AdminDashboardPage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
               Quick actions
             </p>
+
             <h2 className="mt-2 text-2xl font-semibold text-white">
               Keep moving
             </h2>
 
             <div className="mt-6 space-y-3">
               {[
+                {
+                  href: "/admin/orders",
+                  label: "Manage orders",
+                  icon: ShoppingBag,
+                },
                 {
                   href: "/admin/artifacts",
                   label: "Manage artifacts",
@@ -390,6 +633,7 @@ export default async function AdminDashboardPage() {
                     <span className="flex size-9 items-center justify-center rounded-xl bg-white/[0.05] text-white/50 transition group-hover:bg-lime-300 group-hover:text-[#050B18]">
                       <Icon className="size-4" aria-hidden="true" />
                     </span>
+
                     {action.label}
                   </Link>
                 );
@@ -406,6 +650,7 @@ export default async function AdminDashboardPage() {
             icon={ShieldCheck}
             tone="success"
           />
+
           <StatsCard
             title="Vintage"
             value={statistics.vintageArtifacts}
@@ -413,6 +658,7 @@ export default async function AdminDashboardPage() {
             icon={Sparkles}
             tone="warning"
           />
+
           <StatsCard
             title="Certified"
             value={statistics.certifiedArtifacts}
@@ -420,12 +666,17 @@ export default async function AdminDashboardPage() {
             icon={PackageCheck}
             tone="info"
           />
+
           <StatsCard
             title="To certify"
             value={statistics.uncertifiedArtifacts}
             description="Records requiring attention"
             icon={CircleAlert}
-            tone={statistics.uncertifiedArtifacts > 0 ? "danger" : "success"}
+            tone={
+              statistics.uncertifiedArtifacts > 0
+                ? "danger"
+                : "success"
+            }
           />
         </section>
       </div>

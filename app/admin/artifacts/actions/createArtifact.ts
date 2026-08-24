@@ -27,6 +27,10 @@ import {
 } from "@/lib/services/artifactStorage.service";
 
 import {
+  syncArtifactWithStripe,
+} from "@/lib/services/stripeCatalog.service";
+
+import {
   createUniqueSlug,
   getArtifactAvailability,
   getArtifactCategory,
@@ -294,6 +298,17 @@ export async function createArtifact(
     ).catch(() => undefined);
 
     throw error;
+  }
+
+  try {
+    await syncArtifactWithStripe(
+      artifact.id,
+    );
+  } catch (error) {
+    console.error(
+      `Sincronizzazione Stripe automatica fallita per Artifact ${artifact.id}:`,
+      error,
+    );
   }
 
   revalidatePath("/admin");

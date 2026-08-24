@@ -37,6 +37,7 @@ model Player {
   quote        String?
 
   artifacts           Artifact[]
+  memorabilia         Memorabilia[]
   atpPlayer           AtpPlayer?
   playerProfile       PlayerProfile?
   careerEvents        PlayerCareerEvent[]
@@ -194,6 +195,11 @@ model Artifact {
   images            ArtifactImage[]
   certificate       Certificate?
   museumCollections MuseumCollectionArtifact[]
+  orderItems        OrderItem[]
+
+  stripeProductId String? @unique
+  stripePriceId   String? @unique
+  stripeActive    Boolean @default(false)
 
   @@index([playerId])
   @@index([brandId])
@@ -243,6 +249,101 @@ model Certificate {
   @@index([createdAt])
 }
 
+model Memorabilia {
+  id              String                  @id @default(cuid())
+  inventoryNumber String                  @unique
+  title           String
+  subtitle        String?
+  slug            String                  @unique
+  description     String?
+  type            MemorabiliaType
+  status          MemorabiliaStatus       @default(DRAFT)
+  availability    MemorabiliaAvailability @default(COMING_SOON)
+  condition       MemorabiliaCondition?
+  rarity          MemorabiliaRarity       @default(COMMON)
+  featured        Boolean                 @default(false)
+  displayOrder    Int?
+
+  playerId String?
+  player   Player? @relation(fields: [playerId], references: [id], onDelete: SetNull)
+
+  year         Int?
+  brand        String?
+  collection   String?
+  edition      String?
+  serialNumber String?
+
+  cardSet           String?
+  cardNumber        String?
+  gradingCompany    String?
+  grade             String?
+  gradingCertNumber String? @unique
+
+  signed            Boolean @default(false)
+  signedBy          String?
+  signatureLocation String?
+
+  authentic             Boolean @default(false)
+  authenticationCompany String?
+  authenticityCode      String? @unique
+  certificateUrl        String?
+
+  material String?
+  size     String?
+  colour   String?
+
+  price    Decimal? @db.Decimal(10, 2)
+  currency String   @default("EUR")
+
+  tags            String[]  @default([])
+  metaTitle       String?
+  metaDescription String?
+  publishedAt     DateTime?
+
+  stripeProductId String? @unique
+  stripePriceId   String? @unique
+  stripeActive    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images     MemorabiliaImage[]
+  orderItems OrderItem[]
+
+  @@index([type])
+  @@index([status])
+  @@index([availability])
+  @@index([condition])
+  @@index([rarity])
+  @@index([featured])
+  @@index([displayOrder])
+  @@index([playerId])
+  @@index([year])
+  @@index([brand])
+  @@index([collection])
+  @@index([signed])
+  @@index([authentic])
+  @@index([publishedAt])
+  @@index([createdAt])
+}
+
+model MemorabiliaImage {
+  id            String   @id @default(cuid())
+  url           String
+  alt           String?
+  sortOrder     Int      @default(0)
+  isCover       Boolean  @default(false)
+  memorabiliaId String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  memorabilia Memorabilia @relation(fields: [memorabiliaId], references: [id], onDelete: Cascade)
+
+  @@index([memorabiliaId])
+  @@index([sortOrder])
+  @@index([isCover])
+}
+
 model OriginalProduct {
   id                String                      @id @default(cuid())
   title             String
@@ -270,6 +371,11 @@ model OriginalProduct {
   updatedAt         DateTime                    @updatedAt
   images            OriginalProductImage[]
   museumCollections MuseumCollectionOriginal[]
+  orderItems        OrderItem[]
+
+  stripeProductId String? @unique
+  stripePriceId   String? @unique
+  stripeActive    Boolean @default(false)
 
   @@index([category])
   @@index([availability])
@@ -279,6 +385,112 @@ model OriginalProduct {
   @@index([publishedAt])
   @@index([collection])
   @@index([createdAt])
+}
+
+model Order {
+  id String @id @default(cuid())
+
+  orderNumber   String        @unique
+  status        OrderStatus   @default(PENDING)
+  paymentStatus PaymentStatus @default(UNPAID)
+  isTest        Boolean       @default(true)
+
+  currency String  @default("EUR")
+  subtotal Decimal @db.Decimal(10, 2)
+  shipping Decimal @default(0) @db.Decimal(10, 2)
+  total    Decimal @db.Decimal(10, 2)
+
+  customerEmail String
+  customerName  String?
+  customerPhone String?
+
+  shippingName       String?
+  shippingLine1      String?
+  shippingLine2      String?
+  shippingCity       String?
+  shippingPostalCode String?
+  shippingState      String?
+  shippingCountry    String?
+
+  shippingProvider ShippingProvider?
+  shippingMethod   ShippingMethod?
+  shippingStatus   ShippingStatus    @default(NOT_CREATED)
+
+  inpostPointId      String?
+  inpostPointName    String?
+  inpostPointAddress String?
+
+  inpostShipmentId     String? @unique
+  inpostTrackingNumber String? @unique
+  inpostStatus         String?
+  inpostLabelUrl       String?
+
+  shippingCreatedAt DateTime?
+  labelCreatedAt    DateTime?
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+
+  stripeCheckoutSessionId String? @unique
+  stripePaymentIntentId   String? @unique
+  stripeCustomerId        String?
+
+  paidAt      DateTime?
+  preparingAt DateTime?
+  cancelledAt DateTime?
+  fulfilledAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([isTest])
+  @@index([customerEmail])
+  @@index([createdAt])
+  @@index([stripeCustomerId])
+  @@index([shippingProvider])
+  @@index([shippingMethod])
+  @@index([shippingStatus])
+  @@index([inpostPointId])
+  @@index([inpostStatus])
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+
+  orderId           String
+  artifactId        String?
+  memorabiliaId     String?
+  originalProductId String?
+
+  itemType    OrderItemType
+  productName String
+  productSlug String?
+  quantity    Int           @default(1)
+  unitPrice   Decimal       @db.Decimal(10, 2)
+  totalPrice  Decimal       @db.Decimal(10, 2)
+  currency    String        @default("EUR")
+  size        String?
+
+  stripePriceId   String?
+  stripeProductId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  artifact        Artifact?        @relation(fields: [artifactId], references: [id], onDelete: SetNull)
+  memorabilia     Memorabilia?     @relation(fields: [memorabiliaId], references: [id], onDelete: SetNull)
+  originalProduct OriginalProduct? @relation(fields: [originalProductId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([artifactId])
+  @@index([memorabiliaId])
+  @@index([originalProductId])
+  @@index([itemType])
+  @@index([stripePriceId])
 }
 
 model OriginalProductImage {
@@ -962,6 +1174,99 @@ enum ArtifactAvailability {
   NOT_FOR_SALE
 }
 
+enum OrderItemType {
+  ARTIFACT
+  MEMORABILIA
+  ORIGINAL_PRODUCT
+}
+
+enum MemorabiliaType {
+  TRADING_CARD
+  SIGNED_JERSEY
+  SIGNED_RACQUET
+  SIGNED_BALL
+  SIGNED_PHOTO
+  SIGNED_ITEM
+  RACQUET
+  TROPHY
+  PROGRAMME
+  TICKET
+  OTHER
+}
+
+enum MemorabiliaStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MemorabiliaAvailability {
+  AVAILABLE
+  RESERVED
+  SOLD
+  COMING_SOON
+  NOT_FOR_SALE
+}
+
+enum MemorabiliaCondition {
+  MINT
+  NEAR_MINT
+  EXCELLENT
+  VERY_GOOD
+  GOOD
+  FAIR
+  POOR
+}
+
+enum MemorabiliaRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  VERY_RARE
+  ULTRA_RARE
+  ONE_OF_ONE
+}
+
+enum ShippingProvider {
+  INPOST
+}
+
+enum ShippingMethod {
+  INPOST_LOCKER
+  INPOST_POINT
+  HOME_DELIVERY
+}
+
+enum ShippingStatus {
+  NOT_CREATED
+  READY_TO_CREATE
+  CREATED
+  LABEL_READY
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+  ERROR
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PROCESSING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
 enum OriginalProductStatus {
   DRAFT
   PUBLISHED
@@ -1031,4 +1336,132 @@ enum CourtSurface {
   CARPET
   INDOOR_HARD
   OTHER
+}
+
+model Legend {
+  id     String       @id @default(cuid())
+  name   String
+  slug   String       @unique
+  gender LegendGender
+  status LegendStatus @default(DRAFT)
+
+  firstName   String?
+  lastName    String?
+  nickname    String?
+  nationality String?
+  countryCode String?
+  birthDate   DateTime?
+  birthPlace  String?
+  deathDate   DateTime?
+  era         String?
+  turnedPro   Int?
+  retiredYear Int?
+  plays       String?
+  backhand    String?
+
+  heroImage      String?
+  portraitImage  String?
+  quote          String?
+  biographyShort String?
+  biographyLong  String?
+  legacy         String?
+
+  careerHigh     Int?
+  careerTitles   Int  @default(0)
+  grandSlams     Int  @default(0)
+  australianOpen Int  @default(0)
+  rolandGarros   Int  @default(0)
+  wimbledon      Int  @default(0)
+  usOpen         Int  @default(0)
+  weeksAtNo1     Int  @default(0)
+  yearEndNo1     Int  @default(0)
+  olympicGold    Int  @default(0)
+
+  displayOrder Int       @default(0)
+  featured     Boolean   @default(false)
+  publishedAt  DateTime?
+
+  metaTitle       String?
+  metaDescription String?
+  canonicalUrl    String?
+  openGraphImage  String?
+  robotsIndex     Boolean @default(true)
+  robotsFollow    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  milestones LegendMilestone[]
+  images     LegendImage[]
+
+  @@index([gender])
+  @@index([status])
+  @@index([featured])
+  @@index([displayOrder])
+  @@index([name])
+}
+
+model LegendMilestone {
+  id          String   @id @default(cuid())
+  legendId    String
+  year        Int
+  title       String
+  subtitle    String?
+  description String?
+  imageUrl    String?
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  legend Legend @relation(fields: [legendId], references: [id], onDelete: Cascade)
+
+  @@index([legendId])
+  @@index([year])
+  @@index([sortOrder])
+  @@index([featured])
+}
+
+enum LegendGender {
+  MALE
+  FEMALE
+}
+
+enum LegendStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model LegendImage {
+  id        String   @id @default(cuid())
+  legendId  String
+  url       String   @db.Text
+  alt       String?
+  caption   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  legend Legend @relation(fields: [legendId], references: [id], onDelete: Cascade)
+
+  @@index([legendId])
+  @@index([sortOrder])
+}
+
+model PushSubscription {
+  id String @id @default(cuid())
+
+  endpoint String @unique @db.Text
+  p256dh   String @db.Text
+  auth     String @db.Text
+
+  userAgent String?
+  enabled   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([enabled])
+  @@index([createdAt])
 }

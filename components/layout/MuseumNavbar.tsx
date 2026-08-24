@@ -29,6 +29,7 @@ const playerLinks = [
 ] as const;
 
 const primaryLinks = [
+  ["Legends", "/legends"],
   ["ATP Ranking", "/atp-ranking"],
   ["Results", "/results"],
   ["Tennis History", "/tennis-history"],

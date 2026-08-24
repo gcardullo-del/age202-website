@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 
 import {
   Archive,
+  Bell,
   BookOpen,
   ChevronRight,
+  Crown,
   Handshake,
   Home,
   Image,
@@ -14,6 +16,7 @@ import {
   LayoutDashboard,
   ListOrdered,
   LogOut,
+  ReceiptText,
   Settings,
   ShoppingBag,
   Trophy,
@@ -42,9 +45,24 @@ const navigationItems = [
     icon: ShoppingBag,
   },
   {
+    label: "Orders",
+    href: "/admin/orders",
+    icon: ReceiptText,
+  },
+  {
+    label: "Notifications",
+    href: "/admin/notifications",
+    icon: Bell,
+  },
+  {
     label: "Players",
     href: "/admin/players",
     icon: Users,
+  },
+  {
+    label: "Legends",
+    href: "/admin/legends",
+    icon: Crown,
   },
   {
     label: "ATP Ranking",

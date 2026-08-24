@@ -15,6 +15,10 @@ import {
 } from "@/lib/services/artifactStorage.service";
 
 import {
+  syncArtifactWithStripe,
+} from "@/lib/services/stripeCatalog.service";
+
+import {
   MAX_ARTIFACT_IMAGES,
   getArtifactAvailability,
   getArtifactCategory,
@@ -223,7 +227,7 @@ export async function updateArtifact(formData: FormData): Promise<never> {
         coverImageId = createdImages.find((image) => image.index === submittedNewCoverIndex)?.id;
       } else {
         coverImageId = remainingImages.find((image) => image.isCover)?.id
-          ?? submittedOrder.map((item) => item.type === "existing" ? item.id : createdImages.find((image) => image.index === item.index)?.id).find(Boolean);
+          ?? submittedOrder.map((item) => item.type === "existing" ? item.id : createdImages.find((image) => image.index === item.index)?.id).find(Boolean) as string | undefined;
       }
 
       if (coverImageId) {
@@ -239,11 +243,33 @@ export async function updateArtifact(formData: FormData): Promise<never> {
   }
 
   await Promise.allSettled(removedImages.map((image) => deleteStoredArtifactImage(image.url)));
+  try {
+    await syncArtifactWithStripe(
+      artifactId,
+    );
+  } catch (error) {
+    console.error(
+      `Sincronizzazione Stripe automatica fallita per Artifact ${artifactId}:`,
+      error,
+    );
+  }
+
   revalidatePath("/admin");
   revalidatePath("/admin/artifacts");
   revalidatePath(`/admin/artifacts/${artifactId}`);
+
+  // Legacy routes still used by parts of AGE202.
   revalidatePath("/archive");
   revalidatePath(`/archive/${currentArtifact.slug}`);
   revalidatePath(`/archive/${slug}`);
+
+  // Actual public Artifact routes on age202.com.
+  revalidatePath("/artifacts");
+  revalidatePath(`/artifacts/${currentArtifact.slug}`);
+  revalidatePath(`/artifacts/${slug}`);
+
+  // Player pages can also surface Artifact availability.
+  revalidatePath(`/players/${currentArtifact.playerId}`);
+
   redirect("/admin/artifacts");
 }

@@ -1,5 +1,7 @@
 import ArtifactGallery from "@/components/artifacts/ArtifactGallery";
 import ArtifactHero from "@/components/artifacts/ArtifactHero";
+import StripeCheckoutButton from "@/components/commerce/StripeCheckoutButton";
+import MuseumQrCode from "@/components/certificate/MuseumQrCode";
 
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -14,11 +16,9 @@ import {
   CalendarDays,
   ChevronRight,
   CircleCheck,
-  ExternalLink,
   FileCheck2,
   Fingerprint,
   LockKeyhole,
-  QrCode,
   ScanLine,
   ShoppingBag,
   Sparkles,
@@ -780,9 +780,10 @@ export default async function ArtifactPage({
                           />
                         </div>
                       ) : (
-                        <div className="relative grid h-48 w-48 place-items-center rounded-[2rem] border border-amber-300/20 bg-amber-300/[0.06]">
-                          <QrCode className="h-24 w-24 text-amber-200/75" strokeWidth={1.1} />
-                        </div>
+                        <MuseumQrCode
+                          value={`${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/artifacts/${artifact.slug}`}
+                          title={`QR Code ${artifact.title}`}
+                        />
                       )}
                     </div>
 
@@ -831,16 +832,16 @@ export default async function ArtifactPage({
               </h2>
 
               <p className="mt-7 max-w-2xl text-base leading-8 text-white/55 sm:text-lg">
-                AGE202 non gestisce la vendita diretta. Quando disponibile, l’acquisto viene completato tramite l’annuncio ufficiale pubblicato su Vinted.
+                Quando il reperto è disponibile, l’acquisto può essere completato direttamente tramite il checkout sicuro AGE202 gestito da Stripe.
               </p>
 
               <div className="mt-9 flex flex-wrap gap-3">
                 <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Vendita esterna
+                  Pagamento sicuro
                 </span>
 
                 <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Annuncio verificato
+                  Stripe Checkout
                 </span>
               </div>
             </div>
@@ -874,19 +875,17 @@ export default async function ArtifactPage({
                 </div>
               </div>
 
-              {artifact.vintedUrl && artifact.availability === "AVAILABLE" ? (
-                <a
-                  href={artifact.vintedUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-lime-300 px-6 py-4 text-sm font-black uppercase tracking-[0.14em] text-[#050b18] transition hover:-translate-y-0.5 hover:bg-lime-200"
-                >
-                  Acquista su Vinted
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+              {artifact.availability === "AVAILABLE" && formattedPrice ? (
+                <StripeCheckoutButton
+                  itemId={artifact.id}
+                  itemType="ARTIFACT"
+                  label="Acquista con Stripe"
+                />
               ) : (
                 <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
-                  Questo reperto non è attualmente collegato a un annuncio di vendita attivo.
+                  {artifact.availability === "SOLD"
+                    ? "Questo reperto è stato venduto e non è più disponibile per l’acquisto."
+                    : "Questo reperto non è attualmente disponibile per l’acquisto online."}
                 </div>
               )}
             </div>
