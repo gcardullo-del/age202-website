@@ -1,20 +1,22 @@
 "use client";
 
-import { createClient } from "@/lib/supabase/client";
+import {
+  createClient,
+} from "@/lib/supabase/client";
 
 const BUCKET =
   process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET ??
-  "artifacts";
+  "artifact";
 
-const ALLOWED_IMAGE_TYPES = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/avif",
-]);
+const ALLOWED_IMAGE_TYPES =
+  new Set([
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ]);
 
 const MAX_IMAGE_SIZE =
-  20 * 1024 * 1024;
+  10 * 1024 * 1024;
 
 export type BrowserUploadedArtifactImage = {
   url: string;
@@ -38,15 +40,14 @@ function getFileExtension(
     return extension;
   }
 
-  switch (file.type) {
+  switch (
+    file.type
+  ) {
     case "image/png":
       return "png";
 
     case "image/webp":
       return "webp";
-
-    case "image/avif":
-      return "avif";
 
     case "image/jpeg":
     default:
@@ -63,11 +64,13 @@ function validateImage(
     )
   ) {
     throw new Error(
-      `Formato immagine non supportato: ${file.name}`,
+      `Formato immagine non supportato: ${file.name}. Usa JPG, PNG o WEBP.`,
     );
   }
 
-  if (file.size <= 0) {
+  if (
+    file.size <= 0
+  ) {
     throw new Error(
       `Il file ${file.name} è vuoto.`,
     );
@@ -78,7 +81,7 @@ function validateImage(
     MAX_IMAGE_SIZE
   ) {
     throw new Error(
-      `Il file ${file.name} supera il limite di 20 MB.`,
+      `Il file ${file.name} supera il limite di 10 MB.`,
     );
   }
 }
@@ -88,7 +91,9 @@ function createUploadPath(
   file: File,
 ) {
   const extension =
-    getFileExtension(file);
+    getFileExtension(
+      file,
+    );
 
   return [
     "pending",
@@ -108,7 +113,9 @@ export async function uploadArtifactImageFromBrowser({
   uploadSessionId: string;
   file: File;
 }): Promise<BrowserUploadedArtifactImage> {
-  validateImage(file);
+  validateImage(
+    file,
+  );
 
   const supabase =
     createClient();
@@ -135,7 +142,8 @@ export async function uploadArtifactImageFromBrowser({
           cacheControl:
             "3600",
 
-          upsert: false,
+          upsert:
+            false,
         },
       );
 
@@ -150,7 +158,9 @@ export async function uploadArtifactImageFromBrowser({
   } =
     supabase.storage
       .from(BUCKET)
-      .getPublicUrl(path);
+      .getPublicUrl(
+        path,
+      );
 
   return {
     url:

@@ -1,39 +1,64 @@
 import "server-only";
 
 import { randomUUID } from "crypto";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 const BUCKET =
-  process.env.SUPABASE_STORAGE_BUCKET ?? "artifacts";
+  process.env.SUPABASE_STORAGE_BUCKET ??
+  "artifact";
 
 export async function uploadArtifactImage(
   artifactId: string,
   file: File,
 ) {
   const extension =
-    file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+    file.name
+      .split(".")
+      .pop()
+      ?.toLowerCase() ??
+    "jpg";
 
   const fileName =
     `${artifactId}/${randomUUID()}.${extension}`;
 
-  const arrayBuffer = await file.arrayBuffer();
+  const arrayBuffer =
+    await file.arrayBuffer();
 
-  const { error } = await supabaseAdmin.storage
-    .from(BUCKET)
-    .upload(fileName, Buffer.from(arrayBuffer), {
-      contentType: file.type,
-      upsert: false,
-    });
+  const {
+    error,
+  } =
+    await supabaseAdmin.storage
+      .from(BUCKET)
+      .upload(
+        fileName,
+        Buffer.from(
+          arrayBuffer,
+        ),
+        {
+          contentType:
+            file.type,
+          upsert:
+            false,
+        },
+      );
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(
+      error.message,
+    );
   }
 
   const {
-    data: { publicUrl },
-  } = supabaseAdmin.storage
-    .from(BUCKET)
-    .getPublicUrl(fileName);
+    data: {
+      publicUrl,
+    },
+  } =
+    supabaseAdmin.storage
+      .from(BUCKET)
+      .getPublicUrl(
+        fileName,
+      );
 
   return publicUrl;
 }
@@ -41,23 +66,36 @@ export async function uploadArtifactImage(
 export async function deleteArtifactImage(
   publicUrl: string,
 ) {
-  const bucketIndex = publicUrl.indexOf(
-    `/${BUCKET}/`,
-  );
+  const bucketIndex =
+    publicUrl.indexOf(
+      `/${BUCKET}/`,
+    );
 
-  if (bucketIndex === -1) {
+  if (
+    bucketIndex === -1
+  ) {
     return;
   }
 
-  const path = publicUrl.substring(
-    bucketIndex + BUCKET.length + 2,
-  );
+  const path =
+    publicUrl.substring(
+      bucketIndex +
+        BUCKET.length +
+        2,
+    );
 
-  const { error } = await supabaseAdmin.storage
-    .from(BUCKET)
-    .remove([path]);
+  const {
+    error,
+  } =
+    await supabaseAdmin.storage
+      .from(BUCKET)
+      .remove([
+        path,
+      ]);
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error(
+      error.message,
+    );
   }
 }
