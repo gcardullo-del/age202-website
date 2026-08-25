@@ -19,6 +19,10 @@ import AvailableToCollect, {
   type AvailableArtifact,
 } from "@/components/home/AvailableToCollect";
 
+import RecentlyAcquired, {
+  type RecentlyAcquiredArtifact,
+} from "@/components/home/RecentlyAcquired";
+
 import ExploreTheMuseum from "@/components/home/ExploreTheMuseum";
 import LatestArrivals from "@/components/home/LatestArrivals";
 import OpeningFilm from "@/components/home/OpeningFilm";
@@ -49,11 +53,15 @@ type MuseumHomeProps = {
   settings: PublicHomepageSettings;
 
   availableArtifacts: AvailableArtifact[];
+
+  recentlyAcquiredArtifacts:
+    RecentlyAcquiredArtifact[];
 };
 
 export default function MuseumHome({
   settings,
   availableArtifacts,
+  recentlyAcquiredArtifacts,
 }: MuseumHomeProps) {
   return (
     <>
@@ -75,6 +83,12 @@ export default function MuseumHome({
         <AvailableToCollect
           artifacts={
             availableArtifacts
+          }
+        />
+
+        <RecentlyAcquired
+          artifacts={
+            recentlyAcquiredArtifacts
           }
         />
 

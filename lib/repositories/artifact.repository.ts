@@ -59,6 +59,7 @@ export async function getPublishedArtifacts() {
   return prisma.artifact.findMany({
     where: {
       status: "PUBLISHED",
+
       player: {
         active: true,
       },
@@ -175,6 +176,57 @@ export async function getAvailableArtifacts(
 }
 
 /**
+ * Restituisce i reperti recentemente acquisiti
+ * da collezioni private.
+ *
+ * Per la prima versione utilizziamo `updatedAt`
+ * come riferimento temporale, perché Artifact
+ * non possiede ancora un campo `soldAt`.
+ *
+ * Questa query alimenta la sezione
+ * "Recently Acquired" della homepage.
+ */
+export async function getRecentlyAcquiredArtifacts(
+  limit = 3,
+) {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+
+      availability:
+        "SOLD",
+
+      player: {
+        active: true,
+      },
+    },
+
+    include:
+      publicArtifactInclude,
+
+    orderBy: [
+      {
+        updatedAt: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+
+    take: Math.max(
+      1,
+      Math.min(
+        Math.trunc(limit),
+        12,
+      ),
+    ),
+  });
+}
+
+/**
  * Restituisce i reperti pubblicati e messi in evidenza.
  */
 export async function getFeaturedArtifacts(
@@ -183,6 +235,7 @@ export async function getFeaturedArtifacts(
   return prisma.artifact.findMany({
     where: {
       featured: true,
+
       status: "PUBLISHED",
 
       player: {
@@ -463,6 +516,7 @@ export async function getPublishedArtifactBySlug(
   return prisma.artifact.findFirst({
     where: {
       slug,
+
       status:
         "PUBLISHED",
 

@@ -4,6 +4,7 @@ import MuseumHome from "@/components/public/MuseumHome";
 
 import {
   getAvailableArtifacts,
+  getRecentlyAcquiredArtifacts,
 } from "@/lib/repositories/artifact.repository";
 
 import {
@@ -31,13 +32,74 @@ export default async function HomePage() {
   const [
     settings,
     availableArtifacts,
+    recentlyAcquiredArtifacts,
   ] = await Promise.all([
     getPublicHomepageSettings(),
     getAvailableArtifacts(3),
+    getRecentlyAcquiredArtifacts(3),
   ]);
 
   const serializedAvailableArtifacts =
     availableArtifacts.map(
+      (artifact) => ({
+        id:
+          artifact.id,
+
+        slug:
+          artifact.slug,
+
+        title:
+          artifact.title,
+
+        subtitle:
+          artifact.subtitle,
+
+        archiveNumber:
+          artifact.archiveNumber,
+
+        currency:
+          artifact.currency,
+
+        price:
+          artifact.price !== null &&
+          artifact.price !== undefined
+            ? artifact.price.toString()
+            : null,
+
+        tournament:
+          artifact.tournament,
+
+        year:
+          artifact.year,
+
+        player: {
+          name:
+            artifact.player.name,
+        },
+
+        brand: {
+          name:
+            artifact.brand.name,
+        },
+
+        images:
+          artifact.images.map(
+            (image) => ({
+              url:
+                image.url,
+
+              alt:
+                image.alt,
+
+              isCover:
+                image.isCover,
+            }),
+          ),
+      }),
+    );
+
+  const serializedRecentlyAcquiredArtifacts =
+    recentlyAcquiredArtifacts.map(
       (artifact) => ({
         id:
           artifact.id,
@@ -102,6 +164,9 @@ export default async function HomePage() {
       }
       availableArtifacts={
         serializedAvailableArtifacts
+      }
+      recentlyAcquiredArtifacts={
+        serializedRecentlyAcquiredArtifacts
       }
     />
   );
