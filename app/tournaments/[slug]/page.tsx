@@ -30,6 +30,17 @@ import {
   getMuseumTournamentBySlug,
 } from "@/lib/services/museum/tournament.service";
 
+/*
+ * Le pagine Tournament devono riflettere immediatamente
+ * risultati, Artifact e aggiornamenti provenienti dal database.
+ *
+ * Evitiamo quindi il prerender statico e qualsiasi cache ISR.
+ */
+export const dynamic =
+  "force-dynamic";
+
+export const revalidate = 0;
+
 const getCachedTournamentBySlug =
   cache(
     (slug: string) =>
@@ -192,8 +203,6 @@ export default async function TournamentPage({
 
   /*
    * Artifact collegati tramite relazione Prisma reale.
-   *
-   * Non utilizziamo più il nome testuale del torneo:
    *
    * Tournament.id
    *      ↓
