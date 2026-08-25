@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   ArrowUpRight,
   BadgeCheck,
-  ExternalLink,
   PackageSearch,
 } from "lucide-react";
 
@@ -40,12 +39,14 @@ export default function ArtifactCard({
   const artifactHref =
     `/artifacts/${artifact.slug}`;
 
-  const canBuyOnVinted =
-    Boolean(
-      artifact.vintedUrl,
-    ) &&
+  const isAvailable =
     artifact.availability ===
-      "AVAILABLE";
+    "AVAILABLE";
+
+  const ctaLabel =
+    isAvailable
+      ? "Explore & Collect"
+      : "Explore Artifact";
 
   return (
     <MuseumCard
@@ -173,51 +174,33 @@ export default function ArtifactCard({
             </div>
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5">
             <Link
               href={artifactHref}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-3 text-center text-[8px] font-black uppercase tracking-[0.16em] text-[#050b18] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 text-center text-[8px] font-black uppercase tracking-[0.18em] text-[#050b18] transition duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2"
               style={{
                 backgroundColor:
                   accent,
               }}
+              aria-label={`${ctaLabel}: ${artifact.title}`}
             >
-              Explore artifact
+              {ctaLabel}
 
               <ArrowUpRight
                 size={13}
                 aria-hidden="true"
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               />
             </Link>
 
-            {canBuyOnVinted &&
-            artifact.vintedUrl ? (
-              <a
-                href={
-                  artifact.vintedUrl
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 py-3 text-center text-[8px] font-black uppercase tracking-[0.16em] transition hover:brightness-125 focus-visible:outline-none focus-visible:ring-2"
-                style={{
-                  borderColor:
-                    `${accent}40`,
-                  backgroundColor:
-                    `${accent}12`,
-                  color: accent,
-                }}
-              >
-                Buy on Vinted
-
-                <ExternalLink
-                  size={12}
-                  aria-hidden="true"
-                />
-              </a>
+            {isAvailable ? (
+              <p className="mt-3 text-center font-mono text-[7px] uppercase tracking-[0.14em] text-white/25">
+                Available to collect
+              </p>
             ) : (
-              <span className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.025] px-4 py-3 text-center font-mono text-[7px] uppercase tracking-[0.14em] text-white/30">
-                Museum archive
-              </span>
+              <p className="mt-3 text-center font-mono text-[7px] uppercase tracking-[0.14em] text-white/25">
+                AGE202 museum archive
+              </p>
             )}
           </div>
         </div>
