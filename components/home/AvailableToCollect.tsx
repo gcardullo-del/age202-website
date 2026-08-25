@@ -8,12 +8,10 @@ import {
   BadgeCheck,
   CircleCheck,
   Fingerprint,
-  PackageSearch,
   Sparkles,
 } from "lucide-react";
 
 import Reveal from "@/components/ui/Reveal";
-import SectionTitle from "@/components/ui/SectionTitle";
 
 export type AvailableArtifact = {
   id: string;
@@ -53,80 +51,80 @@ function formatPrice(
     return null;
   }
 
-  const amount =
-    Number(value);
+  const amount = Number(value);
 
-  if (
-    Number.isNaN(
-      amount,
-    )
-  ) {
+  if (Number.isNaN(amount)) {
     return null;
   }
 
   return new Intl.NumberFormat(
     "it-IT",
     {
-      style:
-        "currency",
-
+      style: "currency",
       currency:
         currency || "EUR",
     },
-  ).format(
-    amount,
-  );
+  ).format(amount);
 }
 
 export default function AvailableToCollect({
   artifacts,
 }: AvailableToCollectProps) {
-  if (
-    artifacts.length === 0
-  ) {
+  if (artifacts.length === 0) {
     return null;
   }
 
   return (
     <section
       id="available-to-collect"
-      className="relative overflow-hidden border-b border-white/10 bg-[#050b18] px-5 py-20 sm:px-8 lg:px-12 lg:py-28"
+      className="relative overflow-hidden border-b border-white/10 bg-[#050b18] px-5 py-16 sm:px-8 lg:px-12 lg:py-20"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_15%,rgba(200,255,0,0.08),transparent_32%),radial-gradient(circle_at_12%_90%,rgba(255,255,255,0.025),transparent_30%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_15%,rgba(200,255,0,0.065),transparent_30%),radial-gradient(circle_at_8%_90%,rgba(255,255,255,0.025),transparent_28%)]"
       />
 
       <div className="relative mx-auto max-w-[1500px]">
         <Reveal>
-          <div className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
-            <SectionTitle
-              eyebrow="Available to Collect"
-              title="One Artifact. One Collector."
-              description="Selected museum pieces currently available to enter a private collection. Each listing represents one physical Artifact preserved in the AGE202 archive."
-              align="left"
-            />
+          <div className="grid gap-8 border-b border-white/10 pb-9 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-9 bg-[#C8FF00]" />
+
+                <p className="font-mono text-[8px] font-black uppercase tracking-[0.24em] text-[#C8FF00] sm:text-[9px]">
+                  Available to Collect
+                </p>
+              </div>
+
+              <h2 className="mt-5 max-w-4xl text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-5xl lg:text-6xl">
+                One Artifact.
+                <br />
+                One Collector.
+              </h2>
+            </div>
 
             <div className="lg:text-right">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.055] px-4 py-2 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-[#C8FF00]">
+              <p className="max-w-xl text-sm leading-7 text-white/42 sm:text-base lg:ml-auto">
+                Selected pieces from the AGE202
+                archive are currently available
+                to enter a private collection.
+                Each entry represents one
+                catalogued physical Artifact.
+              </p>
+
+              <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.055] px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.17em] text-[#C8FF00]">
                 <CircleCheck
-                  size={12}
+                  size={11}
                   aria-hidden="true"
                 />
 
-                Limited museum availability
+                {artifacts.length} currently available
               </div>
-
-              <p className="mt-5 max-w-md text-sm leading-7 text-white/35 lg:ml-auto">
-                These are not warehouse quantities.
-                Each card represents a single
-                catalogued physical piece.
-              </p>
             </div>
           </div>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 overflow-hidden rounded-[2rem] border border-white/10 bg-[#08101f] shadow-[0_25px_80px_rgba(0,0,0,0.22)]">
           {artifacts.map(
             (
               artifact,
@@ -146,104 +144,75 @@ export default function AvailableToCollect({
                   artifact.currency,
                 );
 
-              const context =
-                [
-                  artifact.tournament,
-                  artifact.year
-                    ? String(
-                        artifact.year,
-                      )
-                    : null,
-                ]
-                  .filter(
-                    Boolean,
-                  )
-                  .join(
-                    " · ",
-                  );
+              const context = [
+                artifact.tournament,
+                artifact.year
+                  ? String(
+                      artifact.year,
+                    )
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(" · ");
 
               return (
                 <Reveal
-                  key={
-                    artifact.id
-                  }
-                  delay={
-                    index *
-                    0.07
-                  }
+                  key={artifact.id}
+                  delay={index * 0.05}
                 >
-                  <article className="group relative h-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#09111f] shadow-[0_25px_80px_rgba(0,0,0,0.22)] transition duration-500 hover:-translate-y-1.5 hover:border-[#C8FF00]/35 hover:shadow-[0_30px_100px_rgba(0,0,0,0.32)]">
+                  <article
+                    className={[
+                      "group relative grid gap-0 transition duration-300 hover:bg-white/[0.025]",
+                      "md:grid-cols-[120px_minmax(0,1fr)_180px_165px]",
+                      index !==
+                      artifacts.length - 1
+                        ? "border-b border-white/10"
+                        : "",
+                    ].join(" ")}
+                  >
                     <Link
                       href={`/artifacts/${artifact.slug}`}
-                      className="block outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#C8FF00]"
-                      aria-label={`Explore and collect ${artifact.title}`}
+                      aria-label={`Explore ${artifact.title}`}
+                      className="relative block min-h-[150px] overflow-hidden bg-[#050b18] md:min-h-[126px]"
                     >
-                      <div className="relative aspect-[4/5] overflow-hidden bg-[#050b18]">
-                        {cover ? (
-                          <Image
-                            src={
-                              cover.url
-                            }
-                            alt={
-                              cover.alt ??
-                              artifact.title
-                            }
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                            className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                          />
-                        ) : (
-                          <div className="absolute inset-0 grid place-items-center">
-                            <PackageSearch
-                              size={52}
-                              className="text-white/10"
-                              aria-hidden="true"
-                            />
-                          </div>
-                        )}
+                      {cover ? (
+                        <Image
+                          src={cover.url}
+                          alt={
+                            cover.alt ??
+                            artifact.title
+                          }
+                          fill
+                          sizes="120px"
+                          className="object-cover transition duration-700 group-hover:scale-[1.06]"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-transparent" />
+                      )}
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#050b18]/75 via-transparent to-black/15" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#08101f]/20" />
 
-                        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-5">
-                          <span className="max-w-[65%] truncate rounded-full border border-white/15 bg-black/50 px-3 py-2 font-mono text-[7px] uppercase tracking-[0.14em] text-white/65 backdrop-blur-xl">
-                            {
-                              artifact.archiveNumber
-                            }
-                          </span>
-
-                          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[#C8FF00]/30 bg-[#C8FF00]/10 px-3 py-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-[#C8FF00] backdrop-blur-xl">
-                            <CircleCheck
-                              size={9}
-                              aria-hidden="true"
-                            />
-
-                            Available
-                          </span>
-                        </div>
-
-                        <div className="absolute bottom-5 left-5 right-5">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/50 px-3 py-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/70 backdrop-blur-xl">
-                            <Sparkles
-                              size={10}
-                              className="text-[#C8FF00]"
-                              aria-hidden="true"
-                            />
-
-                            1 specimen available
-                          </div>
-                        </div>
+                      <div className="absolute bottom-3 left-3">
+                        <span className="grid h-8 w-8 place-items-center rounded-full border border-white/15 bg-black/50 font-mono text-[8px] font-black text-white/70 backdrop-blur-md">
+                          {String(
+                            index + 1,
+                          ).padStart(
+                            2,
+                            "0",
+                          )}
+                        </span>
                       </div>
                     </Link>
 
-                    <div className="flex h-full flex-col p-6 sm:p-7">
-                      <div className="flex items-center justify-between gap-4">
-                        <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[#C8FF00]">
+                    <div className="flex min-w-0 flex-col justify-center px-5 py-5 sm:px-6 md:py-4">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-[#C8FF00]">
                           {
                             artifact.player.name
                           }
                         </p>
 
-                        <p className="font-mono text-[8px] uppercase tracking-[0.16em] text-white/30">
+                        <p className="font-mono text-[7px] uppercase tracking-[0.15em] text-white/28">
                           {
                             artifact.brand.name
                           }
@@ -252,92 +221,78 @@ export default function AvailableToCollect({
 
                       <Link
                         href={`/artifacts/${artifact.slug}`}
-                        className="block outline-none"
+                        className="mt-2 block min-w-0"
                       >
-                        <h3 className="mt-4 text-2xl font-black uppercase leading-[1.03] tracking-[-0.035em] text-white transition group-hover:text-[#C8FF00]">
+                        <h3 className="truncate text-xl font-black uppercase tracking-[-0.035em] text-white transition group-hover:text-[#C8FF00] sm:text-2xl">
                           {
                             artifact.title
                           }
                         </h3>
                       </Link>
 
-                      {artifact.subtitle ? (
-                        <p className="mt-3 text-sm leading-7 text-white/42">
-                          {
-                            artifact.subtitle
-                          }
-                        </p>
-                      ) : null}
+                      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                        {context ? (
+                          <p className="font-mono text-[7px] font-bold uppercase tracking-[0.14em] text-white/30">
+                            {context}
+                          </p>
+                        ) : null}
 
-                      {context ? (
-                        <p className="mt-4 font-mono text-[8px] font-bold uppercase tracking-[0.16em] text-white/30">
-                          {
-                            context
-                          }
-                        </p>
-                      ) : null}
-
-                      <div className="mt-6 border-t border-white/10 pt-5">
-                        <div className="flex items-end justify-between gap-5">
-                          <div>
-                            <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-white/30">
-                              Collection value
-                            </p>
-
-                            <p className="mt-2 text-2xl font-black tracking-[-0.04em] text-white">
-                              {price ??
-                                "Museum record"}
-                            </p>
-                          </div>
-
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#C8FF00]/20 bg-[#C8FF00]/[0.055] text-[#C8FF00]">
-                            <Fingerprint
-                              size={16}
-                              aria-hidden="true"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="mt-5 grid gap-2">
-                          <div className="flex items-center gap-2 text-[0.68rem] leading-5 text-white/40">
-                            <BadgeCheck
-                              size={13}
-                              className="shrink-0 text-[#C8FF00]"
-                              aria-hidden="true"
-                            />
-
-                            AGE202 archive record
-                          </div>
-
-                          <div className="flex items-center gap-2 text-[0.68rem] leading-5 text-white/40">
-                            <CircleCheck
-                              size={13}
-                              className="shrink-0 text-[#C8FF00]"
-                              aria-hidden="true"
-                            />
-
-                            One physical specimen
-                          </div>
-                        </div>
-
-                        <Link
-                          href={`/artifacts/${artifact.slug}`}
-                          className="group/cta mt-6 inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-2xl border border-[#C8FF00] bg-[#C8FF00] px-5 py-4 text-center text-[9px] font-black uppercase tracking-[0.18em] text-[#050b18] transition duration-300 hover:bg-[#dcff5a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C8FF00]"
-                        >
-                          Explore & Collect
-
-                          <ArrowRight
-                            size={14}
-                            className="transition-transform duration-300 group-hover/cta:translate-x-1"
+                        <span className="inline-flex items-center gap-1.5 font-mono text-[7px] uppercase tracking-[0.14em] text-white/28">
+                          <Fingerprint
+                            size={10}
+                            className="text-[#C8FF00]"
                             aria-hidden="true"
                           />
-                        </Link>
 
-                        <p className="mt-3 text-center font-mono text-[7px] uppercase tracking-[0.14em] text-white/22">
-                          One Artifact · One Collector
-                        </p>
+                          {
+                            artifact.archiveNumber
+                          }
+                        </span>
                       </div>
                     </div>
+
+                    <div className="flex items-center justify-between gap-5 border-t border-white/10 px-5 py-5 md:border-l md:border-t-0 md:px-6 md:py-4">
+                      <div>
+                        <p className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/28">
+                          Collection value
+                        </p>
+
+                        <p className="mt-2 text-xl font-black tracking-[-0.04em] text-white">
+                          {price ??
+                            "Museum record"}
+                        </p>
+                      </div>
+
+                      <BadgeCheck
+                        size={16}
+                        className="shrink-0 text-[#C8FF00]"
+                        aria-hidden="true"
+                      />
+                    </div>
+
+                    <div className="flex items-center border-t border-white/10 p-4 md:border-l md:border-t-0">
+                      <Link
+                        href={`/artifacts/${artifact.slug}`}
+                        className="group/cta inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-[#C8FF00]/45 px-4 py-3 text-center font-mono text-[7px] font-black uppercase tracking-[0.16em] text-[#C8FF00] transition duration-300 hover:border-[#C8FF00] hover:bg-[#C8FF00] hover:text-[#050b18]"
+                      >
+                        Explore & Collect
+
+                        <ArrowRight
+                          size={12}
+                          className="transition-transform group-hover/cta:translate-x-1"
+                          aria-hidden="true"
+                        />
+                      </Link>
+                    </div>
+
+                    <span className="pointer-events-none absolute right-3 top-3 hidden items-center gap-1.5 rounded-full border border-[#C8FF00]/20 bg-[#C8FF00]/[0.05] px-2.5 py-1 font-mono text-[6px] font-black uppercase tracking-[0.14em] text-[#C8FF00] xl:inline-flex">
+                      <Sparkles
+                        size={8}
+                        aria-hidden="true"
+                      />
+
+                      1 specimen
+                    </span>
                   </article>
                 </Reveal>
               );
@@ -345,22 +300,22 @@ export default function AvailableToCollect({
           )}
         </div>
 
-        <Reveal delay={0.18}>
-          <div className="mt-10 flex flex-col gap-5 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
-            <p className="max-w-xl text-sm leading-7 text-white/35">
+        <Reveal delay={0.15}>
+          <div className="mt-7 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl text-sm leading-7 text-white/32">
               Availability reflects the current
-              status of each physical Artifact in
-              the AGE202 museum archive.
+              status of the physical Artifact
+              preserved in the AGE202 archive.
             </p>
 
             <Link
               href="/shop"
-              className="group inline-flex w-fit items-center gap-3 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-white/55 transition hover:text-[#C8FF00]"
+              className="group inline-flex w-fit items-center gap-3 font-mono text-[8px] font-black uppercase tracking-[0.2em] text-white/50 transition hover:text-[#C8FF00]"
             >
               View all collectible artifacts
 
               <ArrowRight
-                size={14}
+                size={13}
                 className="transition-transform group-hover:translate-x-1"
                 aria-hidden="true"
               />
