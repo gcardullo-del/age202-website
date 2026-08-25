@@ -7,6 +7,8 @@ import {
   CircleCheck,
   FileCheck2,
   Fingerprint,
+  LockKeyhole,
+  ShieldCheck,
   ShoppingBag,
   Sparkles,
 } from "lucide-react";
@@ -27,54 +29,90 @@ function getCollectionStatus(
   switch (availability) {
     case "AVAILABLE":
       return {
-        eyebrow: "Available to Collect",
-        title: "Available to Collect",
-        badge: "1 specimen available",
+        eyebrow:
+          "Available to Collect",
+
+        title:
+          "One Artifact. One Collector.",
+
+        badge:
+          "1 specimen available",
+
         description:
-          "Questo Artifact è attualmente disponibile per entrare in una collezione privata. Un solo esemplare è registrato come disponibile nell’archivio AGE202.",
+          "Questo Artifact è attualmente disponibile per entrare in una collezione privata. Nell’archivio AGE202 è registrato un solo esemplare disponibile.",
       };
 
     case "SOLD":
       return {
-        eyebrow: "Private Collection",
-        title: "Collected",
-        badge: "Archive preserved",
+        eyebrow:
+          "Private Collection",
+
+        title:
+          "Collected",
+
+        badge:
+          "Archive preserved",
+
         description:
-          "Questo Artifact non è più disponibile per l’acquisizione. La sua identità, documentazione e storia rimangono preservate nell’archivio digitale AGE202.",
+          "Questo Artifact è entrato in una collezione privata. La sua identità, documentazione e storia rimangono preservate nell’archivio digitale AGE202.",
       };
 
     case "RESERVED":
       return {
-        eyebrow: "Collection Status",
-        title: "Reserved",
-        badge: "Acquisition pending",
+        eyebrow:
+          "Collection Status",
+
+        title:
+          "Reserved",
+
+        badge:
+          "Acquisition pending",
+
         description:
           "Questo Artifact è attualmente riservato. La scheda museale rimane consultabile mentre l’acquisizione è in corso.",
       };
 
     case "COMING_SOON":
       return {
-        eyebrow: "Collection Status",
-        title: "Coming Soon",
-        badge: "Archive preparation",
+        eyebrow:
+          "Collection Status",
+
+        title:
+          "Coming Soon",
+
+        badge:
+          "Archive preparation",
+
         description:
-          "Questo Artifact è in fase di preparazione e sarà presto disponibile per la consultazione o l’acquisizione.",
+          "Questo Artifact è in fase di catalogazione e sarà presto disponibile per la consultazione o l’acquisizione.",
       };
 
     case "NOT_FOR_SALE":
       return {
-        eyebrow: "Museum Collection",
-        title: "Archive Only",
-        badge: "Not for acquisition",
+        eyebrow:
+          "Museum Collection",
+
+        title:
+          "Archive Only",
+
+        badge:
+          "Not for acquisition",
+
         description:
           "Questo Artifact appartiene alla collezione museale AGE202 e non è attualmente disponibile per l’acquisizione.",
       };
 
     default:
       return {
-        eyebrow: "Collection Status",
-        title: "Archive Record",
-        badge: "AGE202 Museum",
+        eyebrow:
+          "Collection Status",
+
+        title:
+          "Archive Record",
+
+        badge:
+          "AGE202 Museum",
+
         description:
           "Questo Artifact è conservato e documentato nell’archivio digitale AGE202.",
       };
@@ -91,10 +129,13 @@ export default function ArtifactCollectingPanel({
   certificateVerified,
 }: ArtifactCollectingPanelProps) {
   const status =
-    getCollectionStatus(availability);
+    getCollectionStatus(
+      availability,
+    );
 
   const isAvailable =
-    availability === "AVAILABLE";
+    availability ===
+    "AVAILABLE";
 
   return (
     <section className="relative overflow-hidden border-b border-white/10 bg-[#050b18]">
@@ -119,19 +160,37 @@ export default function ArtifactCollectingPanel({
               {status.description}
             </p>
 
+            {isAvailable ? (
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/38">
+                Non è una disponibilità di magazzino:
+                rappresenta un singolo reperto fisico
+                catalogato nell’archivio AGE202.
+              </p>
+            ) : null}
+
             <div className="mt-10 flex flex-wrap gap-3">
               <span className="inline-flex items-center gap-2 rounded-full border border-lime-300/20 bg-lime-300/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-lime-200">
                 <CircleCheck className="h-3.5 w-3.5" />
+
                 {status.badge}
               </span>
 
               <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
                 <Sparkles className="h-3.5 w-3.5 text-lime-300" />
+
                 AGE202 Archive
               </span>
+
+              {isAvailable ? (
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
+                  <LockKeyhole className="h-3.5 w-3.5 text-lime-300" />
+
+                  Secure acquisition
+                </span>
+              ) : null}
             </div>
 
-            {isAvailable && (
+            {isAvailable ? (
               <div className="mt-12 grid max-w-3xl gap-px overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/10 sm:grid-cols-2">
                 <CollectingFact
                   icon={
@@ -141,7 +200,7 @@ export default function ArtifactCollectingPanel({
                   description="Scheda museale AGE202 registrata"
                 />
 
-                {archiveNumber && (
+                {archiveNumber ? (
                   <CollectingFact
                     icon={
                       <Fingerprint className="h-4 w-4" />
@@ -149,9 +208,9 @@ export default function ArtifactCollectingPanel({
                     title="Unique Identity"
                     description="Numero archivio univoco"
                   />
-                )}
+                ) : null}
 
-                {authentic && (
+                {authentic ? (
                   <CollectingFact
                     icon={
                       <BadgeCheck className="h-4 w-4" />
@@ -163,9 +222,9 @@ export default function ArtifactCollectingPanel({
                         : "Autenticità registrata"
                     }
                   />
-                )}
+                ) : null}
 
-                {authentic && (
+                {authentic ? (
                   <CollectingFact
                     icon={
                       <Sparkles className="h-4 w-4" />
@@ -173,9 +232,9 @@ export default function ArtifactCollectingPanel({
                     title="Digital Certificate"
                     description="Certificato digitale AGE202"
                   />
-                )}
+                ) : null}
               </div>
-            )}
+            ) : null}
           </div>
 
           <aside className="relative overflow-hidden rounded-[2.25rem] border border-white/10 bg-[#08101f] shadow-[0_30px_100px_rgba(0,0,0,0.35)]">
@@ -206,7 +265,7 @@ export default function ArtifactCollectingPanel({
                 </span>
               </div>
 
-              {archiveNumber && (
+              {archiveNumber ? (
                 <div className="border-b border-white/10 py-7">
                   <p className="text-[0.65rem] font-bold uppercase tracking-[0.26em] text-white/30">
                     Archive reference
@@ -216,7 +275,7 @@ export default function ArtifactCollectingPanel({
                     {archiveNumber}
                   </p>
                 </div>
-              )}
+              ) : null}
 
               <div className="py-8">
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.26em] text-white/35">
@@ -233,13 +292,61 @@ export default function ArtifactCollectingPanel({
                   </p>
                 )}
 
-                {isAvailable && (
-                  <p className="mt-4 text-sm leading-7 text-white/40">
-                    Un solo esemplare attualmente
-                    disponibile.
-                  </p>
-                )}
+                {isAvailable ? (
+                  <>
+                    <p className="mt-4 text-sm font-semibold text-lime-200/80">
+                      1 solo esemplare disponibile
+                    </p>
+
+                    <p className="mt-2 text-sm leading-7 text-white/40">
+                      Una volta acquisito, questo
+                      Artifact non sarà più disponibile
+                      nell’archivio pubblico come pezzo
+                      collezionabile.
+                    </p>
+                  </>
+                ) : null}
               </div>
+
+              {isAvailable ? (
+                <div className="mb-7 grid gap-3">
+                  <TrustRow
+                    icon={
+                      <ShieldCheck className="h-4 w-4" />
+                    }
+                  >
+                    Identità del reperto registrata
+                    nell’archivio AGE202
+                  </TrustRow>
+
+                  <TrustRow
+                    icon={
+                      <Fingerprint className="h-4 w-4" />
+                    }
+                  >
+                    Record univoco associato al pezzo
+                  </TrustRow>
+
+                  {authentic ? (
+                    <TrustRow
+                      icon={
+                        <BadgeCheck className="h-4 w-4" />
+                      }
+                    >
+                      Autenticità documentata
+                    </TrustRow>
+                  ) : null}
+
+                  <TrustRow
+                    icon={
+                      <LockKeyhole className="h-4 w-4" />
+                    }
+                  >
+                    Acquisizione completata tramite
+                    marketplace esterno
+                  </TrustRow>
+                </div>
+              ) : null}
 
               <div className="mt-auto">
                 {isAvailable &&
@@ -252,14 +359,14 @@ export default function ArtifactCollectingPanel({
                         rel="noopener noreferrer"
                         className="group inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-lime-300 bg-lime-300 px-6 py-5 text-sm font-black uppercase tracking-[0.17em] text-[#050b18] transition duration-300 hover:bg-lime-200"
                       >
-                        Collect this Artifact
+                        Explore & Collect
+
                         <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </Link>
 
                       <div className="mt-5 border-t border-white/10 pt-5 text-center">
-                        <p className="text-xs leading-6 text-white/35">
-                          L’acquisizione viene
-                          completata tramite Vinted.
+                        <p className="text-xs leading-6 text-white/40">
+                          Acquisizione tramite Vinted.
                         </p>
 
                         <p className="mt-1 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/25">
@@ -277,7 +384,8 @@ export default function ArtifactCollectingPanel({
                 ) : (
                   <div className="rounded-2xl border border-white/10 bg-black/20 px-6 py-6">
                     <p className="text-sm font-semibold text-white/65">
-                      {availability === "SOLD"
+                      {availability ===
+                      "SOLD"
                         ? "Artifact collected."
                         : "Acquisizione non disponibile."}
                     </p>
@@ -320,6 +428,26 @@ function CollectingFact({
       <p className="mt-3 text-sm leading-6 text-white/45">
         {description}
       </p>
+    </div>
+  );
+}
+
+function TrustRow({
+  icon,
+  children,
+}: {
+  icon: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex items-start gap-3 text-sm leading-6 text-white/45">
+      <span className="mt-0.5 shrink-0 text-lime-300">
+        {icon}
+      </span>
+
+      <span>
+        {children}
+      </span>
     </div>
   );
 }

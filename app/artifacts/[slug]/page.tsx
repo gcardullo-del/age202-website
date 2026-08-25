@@ -296,12 +296,40 @@ export default async function ArtifactPage({
       ),
   );
 
-  const hasStoryContent = Boolean(
-    artifact.description ||
-      artifact.museumStory ||
+  const storyLead =
+    artifact.description ??
+    artifact.subtitle ??
+    `${artifact.title} è un reperto catalogato nell’archivio AGE202 e associato a ${artifact.player.name} e ${artifact.brand.name}.`;
+
+  const storyContextFacts = [
+    artifact.year
+      ? { label: "Anno", value: String(artifact.year) }
+      : null,
+    artifact.season
+      ? { label: "Stagione", value: artifact.season }
+      : null,
+    artifact.tournament
+      ? { label: "Torneo", value: artifact.tournament }
+      : null,
+    artifact.collection
+      ? { label: "Collezione", value: artifact.collection }
+      : null,
+    artifact.edition
+      ? { label: "Edizione", value: artifact.edition }
+      : null,
+  ].filter(
+    (
+      fact,
+    ): fact is {
+      label: string;
+      value: string;
+    } => Boolean(fact),
+  );
+
+  const hasEditorialStory = Boolean(
+    artifact.museumStory ||
       artifact.historicalContext ||
-      artifact.curatorNote ||
-      artifact.tags.length > 0,
+      artifact.curatorNote,
   );
 
   const jsonLd = {
@@ -370,212 +398,265 @@ export default async function ArtifactPage({
         </div>
       </nav>
 
-      {hasStoryContent && (
-        <section
-          id="museum-story"
-          className="relative scroll-mt-20 overflow-hidden border-b border-white/10 bg-[#050b18]"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_86%_12%,rgba(190,242,100,0.08),transparent_30%),radial-gradient(circle_at_8%_80%,rgba(255,255,255,0.025),transparent_32%)]" />
+      <section
+        id="museum-story"
+        className="relative scroll-mt-20 overflow-hidden border-b border-white/10 bg-[#050b18]"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_86%_12%,rgba(190,242,100,0.08),transparent_30%),radial-gradient(circle_at_8%_80%,rgba(255,255,255,0.025),transparent_32%)]" />
 
-          <div className="relative mx-auto max-w-[1440px] px-6 py-20 sm:px-8 lg:px-12 lg:py-32">
-            <div className="grid gap-12 border-b border-white/10 pb-16 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-24 lg:pb-20">
-              <div className="flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="h-2 w-2 rounded-full bg-lime-300 shadow-[0_0_18px_rgba(190,242,100,0.65)]" />
+        <div className="relative mx-auto max-w-[1440px] px-6 py-20 sm:px-8 lg:px-12 lg:py-32">
+          <div className="grid gap-12 border-b border-white/10 pb-16 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-24 lg:pb-20">
+            <div className="flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="h-2 w-2 rounded-full bg-lime-300 shadow-[0_0_18px_rgba(190,242,100,0.65)]" />
 
-                    <p className="text-xs font-bold uppercase tracking-[0.34em] text-lime-300">
-                      Museum Story
-                    </p>
-                  </div>
-
-                  <h2 className="mt-6 max-w-xl text-4xl font-black leading-[0.95] tracking-[-0.05em] text-white sm:text-5xl lg:text-6xl xl:text-7xl">
-                    La storia
-                    <br />
-                    del reperto
-                  </h2>
-
-                  <p className="mt-8 max-w-lg text-base leading-8 text-white/45 sm:text-lg">
-                    Ogni Artifact AGE202 è
-                    conservato come testimonianza
-                    della cultura visiva e materiale
-                    del tennis.
+                  <p className="text-xs font-bold uppercase tracking-[0.34em] text-lime-300">
+                    Museum Story
                   </p>
                 </div>
 
-                <div className="mt-10 flex flex-wrap gap-3 lg:mt-16">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/55">
-                    <Sparkles className="h-3.5 w-3.5 text-lime-300" />
-                    AGE202 Archive
+                <h2 className="mt-6 max-w-xl text-4xl font-black leading-[0.95] tracking-[-0.05em] text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+                  La storia
+                  <br />
+                  del reperto
+                </h2>
+
+                <p className="mt-8 max-w-lg text-base leading-8 text-white/45 sm:text-lg">
+                  Prima dei dati tecnici viene la storia: il reperto viene letto attraverso le informazioni realmente registrate nel catalogo AGE202.
+                </p>
+              </div>
+
+              <div className="mt-10 flex flex-wrap gap-3 lg:mt-16">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/55">
+                  <Sparkles className="h-3.5 w-3.5 text-lime-300" />
+                  AGE202 Archive
+                </span>
+
+                {artifact.archiveNumber && (
+                  <span className="max-w-full rounded-full border border-lime-300/15 bg-lime-300/[0.045] px-4 py-2 font-mono text-[0.65rem] tracking-[0.12em] text-lime-200/70">
+                    {artifact.archiveNumber}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <article className="flex min-w-0 items-center border-l border-white/10 pl-6 sm:pl-10 lg:pl-14">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.28em] text-white/35">
+                  Why this piece matters
+                </p>
+
+                <p className="mt-7 max-w-5xl whitespace-pre-line text-2xl font-medium leading-[1.55] tracking-[-0.02em] text-white/82 sm:text-3xl sm:leading-[1.5] lg:text-[2rem]">
+                  {storyLead}
+                </p>
+
+                <div className="mt-9 flex flex-wrap gap-3">
+                  <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
+                    {artifact.player.name}
                   </span>
 
-                  {artifact.archiveNumber && (
-                    <span className="max-w-full rounded-full border border-lime-300/15 bg-lime-300/[0.045] px-4 py-2 font-mono text-[0.65rem] tracking-[0.12em] text-lime-200/70">
-                      {artifact.archiveNumber}
+                  <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
+                    {artifact.brand.name}
+                  </span>
+
+                  {artifact.year && (
+                    <span className="rounded-full border border-lime-300/15 bg-lime-300/[0.045] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-lime-200/75">
+                      {artifact.year}
                     </span>
                   )}
                 </div>
               </div>
+            </article>
+          </div>
 
-              {artifact.description && (
-                <article className="flex min-w-0 items-center border-l border-white/10 pl-6 sm:pl-10 lg:pl-14">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.28em] text-white/35">
-                      The Artifact
-                    </p>
+          {artifact.museumStory ? (
+            <div className="grid gap-8 border-b border-white/10 py-16 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-20 lg:py-20">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-lime-300">
+                  Narrative
+                </p>
 
-                    <p className="mt-7 max-w-5xl whitespace-pre-line text-2xl font-medium leading-[1.55] tracking-[-0.02em] text-white/82 sm:text-3xl sm:leading-[1.5] lg:text-[2rem]">
-                      {artifact.description}
-                    </p>
-                  </div>
-                </article>
-              )}
+                <h3 className="mt-5 text-3xl font-black tracking-[-0.035em] sm:text-4xl">
+                  Racconto
+                  <br className="hidden lg:block" />{" "}
+                  museale
+                </h3>
+
+                <div className="mt-7 h-px w-16 bg-lime-300/60" />
+
+                <p className="mt-6 max-w-xs text-sm leading-7 text-white/40">
+                  La narrazione curatoriale registrata per questo specifico Artifact.
+                </p>
+              </div>
+
+              <div className="relative overflow-hidden rounded-[2.25rem] border border-lime-300/20 bg-gradient-to-br from-lime-300/[0.08] via-white/[0.025] to-transparent p-7 sm:p-10 lg:p-12">
+                <div className="pointer-events-none absolute -right-6 -top-10 select-none font-serif text-[12rem] leading-none text-lime-300/[0.055]">
+                  “
+                </div>
+
+                <div className="absolute left-0 top-12 h-24 w-1 rounded-r-full bg-lime-300" />
+
+                <p className="relative max-w-5xl whitespace-pre-line pl-3 text-lg leading-9 text-white/72 sm:pl-5 sm:text-xl sm:leading-10 lg:text-[1.35rem]">
+                  {artifact.museumStory}
+                </p>
+              </div>
             </div>
+          ) : (
+            <div className="grid gap-8 border-b border-white/10 py-16 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-20 lg:py-20">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-lime-300">
+                  Archive Context
+                </p>
 
-            {artifact.museumStory && (
-              <div className="grid gap-8 border-b border-white/10 py-16 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-20 lg:py-20">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-lime-300">
-                    Narrative
-                  </p>
+                <h3 className="mt-5 text-3xl font-black tracking-[-0.035em] sm:text-4xl">
+                  Identità
+                  <br className="hidden lg:block" />{" "}
+                  documentata
+                </h3>
 
-                  <h3 className="mt-5 text-3xl font-black tracking-[-0.035em] sm:text-4xl">
-                    Racconto
-                    <br className="hidden lg:block" />
-                    {" "}museale
-                  </h3>
+                <div className="mt-7 h-px w-16 bg-lime-300/60" />
 
-                  <div className="mt-7 h-px w-16 bg-lime-300/60" />
+                <p className="mt-6 max-w-xs text-sm leading-7 text-white/40">
+                  In assenza di un racconto curatoriale esteso, AGE202 mostra soltanto i riferimenti già presenti nella scheda del reperto.
+                </p>
+              </div>
 
-                  <p className="mt-6 max-w-xs text-sm leading-7 text-white/40">
-                    Il significato culturale,
-                    estetico e collezionistico del
-                    pezzo all’interno dell’archivio.
-                  </p>
+              <div className="rounded-[2.25rem] border border-white/10 bg-[#08101f] p-7 sm:p-10 lg:p-12">
+                <div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-2">
+                  <StoryFact label="Campione" value={artifact.player.name} />
+                  <StoryFact label="Brand" value={artifact.brand.name} />
+
+                  {storyContextFacts.map((fact) => (
+                    <StoryFact
+                      key={fact.label}
+                      label={fact.label}
+                      value={fact.value}
+                    />
+                  ))}
                 </div>
 
-                <div className="relative overflow-hidden rounded-[2.25rem] border border-lime-300/20 bg-gradient-to-br from-lime-300/[0.08] via-white/[0.025] to-transparent p-7 sm:p-10 lg:p-12">
-                  <div className="pointer-events-none absolute -right-6 -top-10 select-none font-serif text-[12rem] leading-none text-lime-300/[0.055]">
-                    “
+                <p className="mt-6 text-sm leading-7 text-white/35">
+                  Nessuna provenienza, utilizzo in partita o associazione storica viene attribuita al reperto se non è documentata nel catalogo.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {artifact.historicalContext && (
+            <div className="grid gap-10 border-b border-white/10 py-16 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-20 lg:py-20">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/35">
+                  Historical Archive
+                </p>
+
+                <h3 className="mt-5 text-3xl font-black tracking-[-0.035em] sm:text-4xl">
+                  Contesto
+                  <br className="hidden lg:block" />{" "}
+                  storico
+                </h3>
+
+                <p className="mt-7 max-w-xs text-sm leading-7 text-white/40">
+                  Il periodo sportivo e storico documentato per questo Artifact.
+                </p>
+              </div>
+
+              <div className="grid gap-8 lg:grid-cols-[4px_minmax(0,1fr)] lg:gap-10">
+                <div className="hidden rounded-full bg-gradient-to-b from-lime-300 via-lime-300/30 to-transparent lg:block" />
+
+                <p className="max-w-5xl whitespace-pre-line text-lg leading-9 text-white/62 sm:text-xl sm:leading-10">
+                  {artifact.historicalContext}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {artifact.curatorNote && (
+            <div className="py-16 lg:py-20">
+              <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#08101f] shadow-2xl shadow-black/25">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_12%,rgba(190,242,100,0.09),transparent_30%)]" />
+
+                <div className="relative grid lg:grid-cols-[280px_minmax(0,1fr)]">
+                  <div className="border-b border-white/10 p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
+                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-lime-300">
+                      Curator&apos;s Note
+                    </p>
+
+                    <h3 className="mt-5 text-3xl font-black leading-tight tracking-[-0.035em]">
+                      Nota del
+                      <br />
+                      curatore
+                    </h3>
+
+                    <div className="mt-8 flex items-center gap-3">
+                      <span className="h-px w-10 bg-lime-300/60" />
+
+                      <p className="text-[0.62rem] font-bold uppercase tracking-[0.24em] text-white/35">
+                        AGE202
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="absolute left-0 top-12 h-24 w-1 rounded-r-full bg-lime-300" />
+                  <div className="relative p-7 sm:p-10 lg:p-12 xl:p-14">
+                    <span className="absolute right-8 top-4 select-none font-serif text-8xl leading-none text-white/[0.04] sm:text-9xl">
+                      “
+                    </span>
 
-                  <p className="relative max-w-5xl whitespace-pre-line pl-3 text-lg leading-9 text-white/72 sm:pl-5 sm:text-xl sm:leading-10 lg:text-[1.35rem]">
-                    {artifact.museumStory}
-                  </p>
-                </div>
-              </div>
-            )}
+                    <blockquote className="relative max-w-5xl whitespace-pre-line text-xl font-medium leading-9 tracking-[-0.015em] text-white/88 sm:text-2xl sm:leading-10 lg:text-[1.65rem] lg:leading-[1.55]">
+                      {artifact.curatorNote}
+                    </blockquote>
 
-            {artifact.historicalContext && (
-              <div className="grid gap-10 border-b border-white/10 py-16 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-20 lg:py-20">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/35">
-                    Historical Archive
-                  </p>
+                    <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border border-lime-300/20 bg-lime-300/[0.07]">
+                        <Fingerprint className="h-4 w-4 text-lime-300" />
+                      </div>
 
-                  <h3 className="mt-5 text-3xl font-black tracking-[-0.035em] sm:text-4xl">
-                    Contesto
-                    <br className="hidden lg:block" />
-                    {" "}storico
-                  </h3>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/70">
+                          AGE202 Digital Museum
+                        </p>
 
-                  <p className="mt-7 max-w-xs text-sm leading-7 text-white/40">
-                    Il periodo sportivo e storico a
-                    cui questo Artifact è collegato.
-                  </p>
-                </div>
-
-                <div className="grid gap-8 lg:grid-cols-[4px_minmax(0,1fr)] lg:gap-10">
-                  <div className="hidden rounded-full bg-gradient-to-b from-lime-300 via-lime-300/30 to-transparent lg:block" />
-
-                  <p className="max-w-5xl whitespace-pre-line text-lg leading-9 text-white/62 sm:text-xl sm:leading-10">
-                    {artifact.historicalContext}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {artifact.curatorNote && (
-              <div className="py-16 lg:py-20">
-                <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#08101f] shadow-2xl shadow-black/25">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_12%,rgba(190,242,100,0.09),transparent_30%)]" />
-
-                  <div className="relative grid lg:grid-cols-[280px_minmax(0,1fr)]">
-                    <div className="border-b border-white/10 p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
-                      <p className="text-xs font-bold uppercase tracking-[0.3em] text-lime-300">
-                        Curator&apos;s Note
-                      </p>
-
-                      <h3 className="mt-5 text-3xl font-black leading-tight tracking-[-0.035em]">
-                        Nota del
-                        <br />
-                        curatore
-                      </h3>
-
-                      <div className="mt-8 flex items-center gap-3">
-                        <span className="h-px w-10 bg-lime-300/60" />
-
-                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.24em] text-white/35">
-                          AGE202
+                        <p className="mt-1 text-xs text-white/30">
+                          Curatorial archive note
                         </p>
                       </div>
                     </div>
-
-                    <div className="relative p-7 sm:p-10 lg:p-12 xl:p-14">
-                      <span className="absolute right-8 top-4 select-none font-serif text-8xl leading-none text-white/[0.04] sm:text-9xl">
-                        “
-                      </span>
-
-                      <blockquote className="relative max-w-5xl whitespace-pre-line text-xl font-medium leading-9 tracking-[-0.015em] text-white/88 sm:text-2xl sm:leading-10 lg:text-[1.65rem] lg:leading-[1.55]">
-                        {artifact.curatorNote}
-                      </blockquote>
-
-                      <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-lime-300/20 bg-lime-300/[0.07]">
-                          <Fingerprint className="h-4 w-4 text-lime-300" />
-                        </div>
-
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/70">
-                            AGE202 Digital Museum
-                          </p>
-
-                          <p className="mt-1 text-xs text-white/30">
-                            Curatorial archive note
-                          </p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {artifact.tags.length > 0 && (
-              <div className="border-t border-white/10 pt-10">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                  <p className="text-xs font-bold uppercase tracking-[0.28em] text-white/35">
-                    Catalogazione archivio
-                  </p>
+          {!hasEditorialStory && (
+            <div className="border-t border-white/10 py-8">
+              <p className="text-xs leading-6 text-white/30">
+                La narrazione curatoriale estesa non è ancora presente per questo reperto. I dati mostrati provengono dalla sua scheda AGE202.
+              </p>
+            </div>
+          )}
 
-                  <div className="flex flex-wrap gap-3">
-                    {artifact.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition hover:border-lime-300/30 hover:text-lime-200"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
+          {artifact.tags.length > 0 && (
+            <div className="border-t border-white/10 pt-10">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <p className="text-xs font-bold uppercase tracking-[0.28em] text-white/35">
+                  Catalogazione archivio
+                </p>
+
+                <div className="flex flex-wrap gap-3">
+                  {artifact.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition hover:border-lime-300/30 hover:text-lime-200"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
                 </div>
               </div>
-            )}
-          </div>
-        </section>
-      )}
+            </div>
+          )}
+        </div>
+      </section>
 
       {artifact.images.length > 0 && (
         <section
@@ -1165,6 +1246,26 @@ export default async function ArtifactPage({
         </div>
       </footer>
     </main>
+  );
+}
+
+function StoryFact({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="bg-[#07101d] p-5 sm:p-6">
+      <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-white/30">
+        {label}
+      </p>
+
+      <p className="mt-3 text-base font-semibold leading-7 text-white/80">
+        {value}
+      </p>
+    </div>
   );
 }
 
