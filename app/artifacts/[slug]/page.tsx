@@ -1,6 +1,7 @@
 import ArtifactGallery from "@/components/artifacts/ArtifactGallery";
 import ArtifactHero from "@/components/artifacts/ArtifactHero";
 import MuseumQrCode from "@/components/certificate/MuseumQrCode";
+import ArtifactCollectingPanel from "@/components/artifacts/ArtifactCollectingPanel";
 
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -19,7 +20,6 @@ import {
   Fingerprint,
   LockKeyhole,
   ScanLine,
-  ShoppingBag,
   Sparkles,
   UserRound,
 } from "lucide-react";
@@ -962,121 +962,17 @@ export default async function ArtifactPage({
         </section>
       )}
 
-      <section className="relative overflow-hidden border-b border-white/10 bg-[#050b18]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(190,242,100,0.08),transparent_30%)]" />
-
-        <div className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_430px] lg:items-stretch">
-            <div className="flex flex-col justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-lime-300/25 bg-lime-300/[0.08]">
-                <ShoppingBag className="h-8 w-8 text-lime-300" />
-              </div>
-
-              <p className="mt-9 text-xs font-bold uppercase tracking-[0.32em] text-lime-300">
-                Marketplace
-              </p>
-
-              <h2 className="mt-4 max-w-3xl text-4xl font-black leading-[0.95] tracking-[-0.045em] sm:text-6xl">
-                {getAvailabilityLabel(
-                  artifact.availability,
-                )}
-              </h2>
-
-              <p className="mt-7 max-w-2xl text-base leading-8 text-white/55 sm:text-lg">
-                Durante l’attivazione del nuovo
-                sistema di spedizione AGE202, il
-                checkout diretto con Stripe è
-                temporaneamente sospeso. Se
-                presente, puoi completare l’acquisto
-                tramite Vinted.
-              </p>
-
-              <div className="mt-9 flex flex-wrap gap-3">
-                <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                  Vinted disponibile
-                </span>
-
-                <span className="rounded-full border border-amber-300/15 bg-amber-300/[0.05] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-100/55">
-                  Stripe temporaneamente sospeso
-                </span>
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-between rounded-[2rem] border border-white/10 bg-[#08101f] p-7 shadow-2xl shadow-black/25 sm:p-9">
-              <div>
-                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-6">
-                  <p className="text-xs font-bold uppercase tracking-[0.26em] text-white/35">
-                    Stato vendita
-                  </p>
-
-                  <span className="rounded-full border border-lime-300/25 bg-lime-300/[0.08] px-3 py-1.5 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-lime-300">
-                    {getAvailabilityLabel(
-                      artifact.availability,
-                    )}
-                  </span>
-                </div>
-
-                <div className="py-8">
-                  <p className="text-xs font-bold uppercase tracking-[0.26em] text-white/35">
-                    Prezzo
-                  </p>
-
-                  {formattedPrice ? (
-                    <p className="mt-4 text-5xl font-black tracking-[-0.05em] text-white">
-                      {formattedPrice}
-                    </p>
-                  ) : (
-                    <p className="mt-4 text-xl font-semibold text-white/65">
-                      Non ancora indicato
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {artifact.availability ===
-                "AVAILABLE" &&
-              formattedPrice ? (
-                <div className="space-y-3">
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.035] px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-white/35"
-                  >
-                    <LockKeyhole className="h-4 w-4" />
-                    Stripe temporaneamente sospeso
-                  </button>
-
-                  {artifact.vintedUrl ? (
-                    <Link
-                      href={artifact.vintedUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-lime-300/30 bg-lime-300 px-6 py-4 text-sm font-black uppercase tracking-[0.16em] text-[#050b18] transition hover:bg-lime-200"
-                    >
-                      Acquista su Vinted
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
-                  ) : (
-                    <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
-                      Il checkout AGE202 è
-                      temporaneamente sospeso e
-                      questo reperto non ha ancora
-                      un link Vinted associato.
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
-                  {artifact.availability === "SOLD"
-                    ? "Questo reperto è stato venduto e non è più disponibile per l’acquisto."
-                    : "Questo reperto non è attualmente disponibile per l’acquisto online."}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      <ArtifactCollectingPanel
+  title={artifact.title}
+  availability={artifact.availability}
+  formattedPrice={formattedPrice}
+  vintedUrl={artifact.vintedUrl}
+  archiveNumber={artifact.archiveNumber}
+  authentic={artifact.authentic}
+  certificateVerified={
+    artifact.certificate?.verified ?? null
+  }
+/>
 
       {relatedArtifacts.length > 0 && (
         <section className="relative overflow-hidden border-b border-white/10 bg-white/[0.018]">
