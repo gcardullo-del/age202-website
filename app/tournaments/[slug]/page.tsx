@@ -23,7 +23,7 @@ import {
 import TournamentHero from "@/components/tournaments/TournamentHero";
 
 import {
-  getArtifactsByTournamentNames,
+  getArtifactsByTournamentId,
 } from "@/lib/repositories/artifact.repository";
 
 import {
@@ -190,23 +190,18 @@ export default async function TournamentPage({
     notFound();
   }
 
-  const tournamentNames = [
-    tournament.name,
-  ];
-
-  if (
-    tournament.shortName &&
-    tournament.shortName !==
-      tournament.name
-  ) {
-    tournamentNames.push(
-      tournament.shortName,
-    );
-  }
-
+  /*
+   * Artifact collegati tramite relazione Prisma reale.
+   *
+   * Non utilizziamo più il nome testuale del torneo:
+   *
+   * Tournament.id
+   *      ↓
+   * Artifact.tournamentId
+   */
   const artifacts =
-    await getArtifactsByTournamentNames(
-      tournamentNames,
+    await getArtifactsByTournamentId(
+      tournament.id,
     );
 
   const categoryLabel =

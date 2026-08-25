@@ -182,13 +182,75 @@ export async function getArtifactsByPlayerSlug(
 
 /**
  * Restituisce i reperti pubblicati collegati
- * a uno specifico torneo.
+ * direttamente a uno specifico torneo tramite
+ * la relazione Prisma Artifact -> Tournament.
  *
- * Il collegamento utilizza il campo testuale `tournament`
- * già presente nella scheda Artifact del CMS.
+ * Questa è la query principale utilizzata
+ * dalle pagine pubbliche dei tornei.
+ */
+export async function getArtifactsByTournamentId(
+  tournamentId: string,
+  limit = 12,
+) {
+  const normalizedTournamentId =
+    tournamentId.trim();
+
+  if (!normalizedTournamentId) {
+    return [];
+  }
+
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+
+      player: {
+        active: true,
+      },
+
+      tournamentId:
+        normalizedTournamentId,
+    },
+
+    include:
+      publicArtifactInclude,
+
+    orderBy: [
+      {
+        availability: "asc",
+      },
+      {
+        featured: "desc",
+      },
+      {
+        year: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+
+    take: Math.max(
+      1,
+      Math.min(
+        Math.trunc(limit),
+        24,
+      ),
+    ),
+  });
+}
+
+/**
+ * Compatibilità con i reperti più vecchi.
  *
- * Possono essere forniti più nomi per supportare
- * name e shortName del torneo.
+ * Cerca i reperti utilizzando il vecchio campo
+ * testuale `tournament`.
+ *
+ * Questa funzione viene mantenuta durante
+ * la migrazione verso la relazione Prisma
+ * Artifact -> Tournament.
  */
 export async function getArtifactsByTournamentNames(
   tournamentNames: string[],
@@ -316,7 +378,7 @@ export async function getArtifactBySlug(
 /**
  * Restituisce un singolo reperto visibile pubblicamente.
  *
- * Le bozze e i reperti archiviati non vengono restituite.
+ * Le bozze e i reperti archiviati non vengono restituiti.
  * Anche il giocatore collegato deve essere attivo.
  */
 export async function getPublishedArtifactBySlug(
