@@ -303,19 +303,38 @@ export default async function ArtifactPage({
 
   const storyContextFacts = [
     artifact.year
-      ? { label: "Anno", value: String(artifact.year) }
+      ? {
+          label: "Anno",
+          value: String(artifact.year),
+        }
       : null,
+
     artifact.season
-      ? { label: "Stagione", value: artifact.season }
+      ? {
+          label: "Stagione",
+          value: artifact.season,
+        }
       : null,
+
     artifact.tournament
-      ? { label: "Torneo", value: artifact.tournament }
+      ? {
+          label: "Torneo",
+          value: artifact.tournament,
+        }
       : null,
+
     artifact.collection
-      ? { label: "Collezione", value: artifact.collection }
+      ? {
+          label: "Collezione",
+          value: artifact.collection,
+        }
       : null,
+
     artifact.edition
-      ? { label: "Edizione", value: artifact.edition }
+      ? {
+          label: "Edizione",
+          value: artifact.edition,
+        }
       : null,
   ].filter(
     (
@@ -335,27 +354,47 @@ export default async function ArtifactPage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    name: artifact.title,
+
+    name:
+      artifact.title,
+
     description:
       artifact.description ??
       artifact.subtitle ??
       `Reperto dell’archivio digitale AGE202 dedicato a ${artifact.player.name}.`,
+
     identifier:
-      artifact.archiveNumber ?? artifact.id,
-    image: artifact.images.map((image) => image.url),
+      artifact.archiveNumber ??
+      artifact.id,
+
+    image:
+      artifact.images.map(
+        (image) =>
+          image.url,
+      ),
+
     creator: {
       "@type": "Organization",
       name: "AGE202 Digital Museum",
     },
+
     about: [
       artifact.player.name,
       artifact.brand.name,
-      getCategoryLabel(artifact.category),
+      getCategoryLabel(
+        artifact.category,
+      ),
     ],
-    dateCreated: artifact.year
-      ? String(artifact.year)
-      : undefined,
-    url: `/artifacts/${artifact.slug}`,
+
+    dateCreated:
+      artifact.year
+        ? String(
+            artifact.year,
+          )
+        : undefined,
+
+    url:
+      `/artifacts/${artifact.slug}`,
   };
 
   return (
@@ -363,11 +402,18 @@ export default async function ArtifactPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd),
+          __html:
+            JSON.stringify(
+              jsonLd,
+            ),
         }}
       />
 
-      <ArtifactHero artifact={artifact} />
+      <ArtifactHero
+        artifact={
+          artifact
+        }
+      />
 
       <nav
         aria-label="Breadcrumb"
@@ -387,13 +433,18 @@ export default async function ArtifactPage({
             href={`/archives/${artifact.player.slug}`}
             className="whitespace-nowrap transition hover:text-lime-300"
           >
-            {artifact.player.name}
+            {
+              artifact.player
+                .name
+            }
           </Link>
 
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
 
           <span className="whitespace-nowrap text-white/65">
-            {artifact.title}
+            {
+              artifact.title
+            }
           </span>
         </div>
       </nav>
@@ -423,19 +474,28 @@ export default async function ArtifactPage({
                 </h2>
 
                 <p className="mt-8 max-w-lg text-base leading-8 text-white/45 sm:text-lg">
-                  Prima dei dati tecnici viene la storia: il reperto viene letto attraverso le informazioni realmente registrate nel catalogo AGE202.
+                  Prima dei dati tecnici
+                  viene la storia: il
+                  reperto viene letto
+                  attraverso le
+                  informazioni realmente
+                  registrate nel catalogo
+                  AGE202.
                 </p>
               </div>
 
               <div className="mt-10 flex flex-wrap gap-3 lg:mt-16">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/55">
                   <Sparkles className="h-3.5 w-3.5 text-lime-300" />
+
                   AGE202 Archive
                 </span>
 
                 {artifact.archiveNumber && (
                   <span className="max-w-full rounded-full border border-lime-300/15 bg-lime-300/[0.045] px-4 py-2 font-mono text-[0.65rem] tracking-[0.12em] text-lime-200/70">
-                    {artifact.archiveNumber}
+                    {
+                      artifact.archiveNumber
+                    }
                   </span>
                 )}
               </div>
@@ -444,7 +504,8 @@ export default async function ArtifactPage({
             <article className="flex min-w-0 items-center border-l border-white/10 pl-6 sm:pl-10 lg:pl-14">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.28em] text-white/35">
-                  Why this piece matters
+                  Why this piece
+                  matters
                 </p>
 
                 <p className="mt-7 max-w-5xl whitespace-pre-line text-2xl font-medium leading-[1.55] tracking-[-0.02em] text-white/82 sm:text-3xl sm:leading-[1.5] lg:text-[2rem]">
@@ -453,16 +514,24 @@ export default async function ArtifactPage({
 
                 <div className="mt-9 flex flex-wrap gap-3">
                   <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                    {artifact.player.name}
+                    {
+                      artifact.player
+                        .name
+                    }
                   </span>
 
                   <span className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-white/55">
-                    {artifact.brand.name}
+                    {
+                      artifact.brand
+                        .name
+                    }
                   </span>
 
                   {artifact.year && (
                     <span className="rounded-full border border-lime-300/15 bg-lime-300/[0.045] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-lime-200/75">
-                      {artifact.year}
+                      {
+                        artifact.year
+                      }
                     </span>
                   )}
                 </div>
@@ -486,7 +555,10 @@ export default async function ArtifactPage({
                 <div className="mt-7 h-px w-16 bg-lime-300/60" />
 
                 <p className="mt-6 max-w-xs text-sm leading-7 text-white/40">
-                  La narrazione curatoriale registrata per questo specifico Artifact.
+                  La narrazione
+                  curatoriale registrata
+                  per questo specifico
+                  Artifact.
                 </p>
               </div>
 
@@ -498,7 +570,9 @@ export default async function ArtifactPage({
                 <div className="absolute left-0 top-12 h-24 w-1 rounded-r-full bg-lime-300" />
 
                 <p className="relative max-w-5xl whitespace-pre-line pl-3 text-lg leading-9 text-white/72 sm:pl-5 sm:text-xl sm:leading-10 lg:text-[1.35rem]">
-                  {artifact.museumStory}
+                  {
+                    artifact.museumStory
+                  }
                 </p>
               </div>
             </div>
@@ -518,26 +592,58 @@ export default async function ArtifactPage({
                 <div className="mt-7 h-px w-16 bg-lime-300/60" />
 
                 <p className="mt-6 max-w-xs text-sm leading-7 text-white/40">
-                  In assenza di un racconto curatoriale esteso, AGE202 mostra soltanto i riferimenti già presenti nella scheda del reperto.
+                  In assenza di un
+                  racconto curatoriale
+                  esteso, AGE202 mostra
+                  soltanto i riferimenti
+                  già presenti nella
+                  scheda del reperto.
                 </p>
               </div>
 
               <div className="rounded-[2.25rem] border border-white/10 bg-[#08101f] p-7 sm:p-10 lg:p-12">
                 <div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-2">
-                  <StoryFact label="Campione" value={artifact.player.name} />
-                  <StoryFact label="Brand" value={artifact.brand.name} />
+                  <StoryFact
+                    label="Campione"
+                    value={
+                      artifact.player
+                        .name
+                    }
+                  />
 
-                  {storyContextFacts.map((fact) => (
-                    <StoryFact
-                      key={fact.label}
-                      label={fact.label}
-                      value={fact.value}
-                    />
-                  ))}
+                  <StoryFact
+                    label="Brand"
+                    value={
+                      artifact.brand
+                        .name
+                    }
+                  />
+
+                  {storyContextFacts.map(
+                    (fact) => (
+                      <StoryFact
+                        key={
+                          fact.label
+                        }
+                        label={
+                          fact.label
+                        }
+                        value={
+                          fact.value
+                        }
+                      />
+                    ),
+                  )}
                 </div>
 
                 <p className="mt-6 text-sm leading-7 text-white/35">
-                  Nessuna provenienza, utilizzo in partita o associazione storica viene attribuita al reperto se non è documentata nel catalogo.
+                  Nessuna provenienza,
+                  utilizzo in partita o
+                  associazione storica
+                  viene attribuita al
+                  reperto se non è
+                  documentata nel
+                  catalogo.
                 </p>
               </div>
             </div>
@@ -557,7 +663,9 @@ export default async function ArtifactPage({
                 </h3>
 
                 <p className="mt-7 max-w-xs text-sm leading-7 text-white/40">
-                  Il periodo sportivo e storico documentato per questo Artifact.
+                  Il periodo sportivo e
+                  storico documentato per
+                  questo Artifact.
                 </p>
               </div>
 
@@ -565,7 +673,9 @@ export default async function ArtifactPage({
                 <div className="hidden rounded-full bg-gradient-to-b from-lime-300 via-lime-300/30 to-transparent lg:block" />
 
                 <p className="max-w-5xl whitespace-pre-line text-lg leading-9 text-white/62 sm:text-xl sm:leading-10">
-                  {artifact.historicalContext}
+                  {
+                    artifact.historicalContext
+                  }
                 </p>
               </div>
             </div>
@@ -603,7 +713,9 @@ export default async function ArtifactPage({
                     </span>
 
                     <blockquote className="relative max-w-5xl whitespace-pre-line text-xl font-medium leading-9 tracking-[-0.015em] text-white/88 sm:text-2xl sm:leading-10 lg:text-[1.65rem] lg:leading-[1.55]">
-                      {artifact.curatorNote}
+                      {
+                        artifact.curatorNote
+                      }
                     </blockquote>
 
                     <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-white/10 pt-8">
@@ -613,11 +725,13 @@ export default async function ArtifactPage({
 
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/70">
-                          AGE202 Digital Museum
+                          AGE202 Digital
+                          Museum
                         </p>
 
                         <p className="mt-1 text-xs text-white/30">
-                          Curatorial archive note
+                          Curatorial archive
+                          note
                         </p>
                       </div>
                     </div>
@@ -630,7 +744,12 @@ export default async function ArtifactPage({
           {!hasEditorialStory && (
             <div className="border-t border-white/10 py-8">
               <p className="text-xs leading-6 text-white/30">
-                La narrazione curatoriale estesa non è ancora presente per questo reperto. I dati mostrati provengono dalla sua scheda AGE202.
+                La narrazione
+                curatoriale estesa non è
+                ancora presente per
+                questo reperto. I dati
+                mostrati provengono
+                dalla sua scheda AGE202.
               </p>
             </div>
           )}
@@ -643,14 +762,16 @@ export default async function ArtifactPage({
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  {artifact.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition hover:border-lime-300/30 hover:text-lime-200"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
+                  {artifact.tags.map(
+                    (tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-white/60 transition hover:border-lime-300/30 hover:text-lime-200"
+                      >
+                        #{tag}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
@@ -677,8 +798,12 @@ export default async function ArtifactPage({
                 <div className="flex items-center gap-4 lg:pb-1">
                   <span className="font-mono text-4xl font-black tracking-[-0.06em] text-white">
                     {String(
-                      artifact.images.length,
-                    ).padStart(2, "0")}
+                      artifact.images
+                        .length,
+                    ).padStart(
+                      2,
+                      "0",
+                    )}
                   </span>
 
                   <div>
@@ -687,7 +812,8 @@ export default async function ArtifactPage({
                     </p>
 
                     <p className="mt-1 text-sm text-white/40">
-                      Archivio fotografico
+                      Archivio
+                      fotografico
                     </p>
                   </div>
                 </div>
@@ -695,12 +821,19 @@ export default async function ArtifactPage({
 
               <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-black/20 p-3 shadow-2xl shadow-black/30 sm:p-5">
                 <ArtifactGallery
-                  artifactTitle={artifact.title}
+                  artifactTitle={
+                    artifact.title
+                  }
                   images={artifact.images.map(
                     (image) => ({
-                      id: image.id,
-                      url: image.url,
-                      alt: image.alt,
+                      id:
+                        image.id,
+
+                      url:
+                        image.url,
+
+                      alt:
+                        image.alt,
                     }),
                   )}
                 />
@@ -723,10 +856,11 @@ export default async function ArtifactPage({
               </h2>
 
               <p className="mt-7 max-w-md text-base leading-8 text-white/50">
-                I dati identificativi, storici e
-                tecnici registrati per questo
-                reperto nella collezione digitale
-                AGE202.
+                I dati identificativi,
+                storici e tecnici
+                registrati per questo
+                reperto nella collezione
+                digitale AGE202.
               </p>
 
               {artifact.archiveNumber && (
@@ -736,7 +870,9 @@ export default async function ArtifactPage({
                   </p>
 
                   <p className="mt-3 break-all font-mono text-sm tracking-[0.1em] text-lime-200">
-                    {artifact.archiveNumber}
+                    {
+                      artifact.archiveNumber
+                    }
                   </p>
                 </div>
               )}
@@ -746,33 +882,47 @@ export default async function ArtifactPage({
               <div className="border-b border-white/10 bg-white/[0.025] px-6 py-5 sm:px-8">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs font-bold uppercase tracking-[0.24em] text-white/40">
-                    Informazioni del reperto
+                    Informazioni del
+                    reperto
                   </p>
 
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lime-300">
-                    {details.length} dati registrati
+                    {
+                      details.length
+                    }{" "}
+                    dati registrati
                   </p>
                 </div>
               </div>
 
               <dl>
                 {details.map(
-                  (detail, index) => (
+                  (
+                    detail,
+                    index,
+                  ) => (
                     <div
-                      key={detail.label}
+                      key={
+                        detail.label
+                      }
                       className={`group flex flex-col gap-3 px-6 py-5 transition-colors hover:bg-white/[0.025] sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-8 sm:py-6 ${
                         index !==
-                        details.length - 1
+                        details.length -
+                          1
                           ? "border-b border-white/10"
                           : ""
                       }`}
                     >
                       <dt className="shrink-0 text-xs font-bold uppercase tracking-[0.18em] text-white/35 transition-colors group-hover:text-lime-300/80 sm:w-44">
-                        {detail.label}
+                        {
+                          detail.label
+                        }
                       </dt>
 
                       <dd className="min-w-0 flex-1 break-words text-left text-base font-semibold leading-7 text-white/90 sm:text-right sm:text-lg">
-                        {detail.value}
+                        {
+                          detail.value
+                        }
                       </dd>
                     </div>
                   ),
@@ -799,6 +949,7 @@ export default async function ArtifactPage({
 
               <div className="inline-flex w-fit items-center gap-3 rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-100">
                 <LockKeyhole className="h-4 w-4" />
+
                 Record protetto
               </div>
             </div>
@@ -822,11 +973,13 @@ export default async function ArtifactPage({
 
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.32em] text-amber-200">
-                          Certificate of authenticity
+                          Certificate of
+                          authenticity
                         </p>
 
                         <h2 className="mt-3 max-w-3xl text-3xl font-black leading-[1.02] tracking-[-0.04em] text-white sm:text-5xl">
-                          Autenticità registrata
+                          Autenticità
+                          registrata
                         </h2>
                       </div>
                     </div>
@@ -843,19 +996,25 @@ export default async function ArtifactPage({
 
                   <div className="py-10">
                     <p className="max-w-3xl text-base leading-8 text-white/55 sm:text-lg">
-                      AGE202 attesta che il reperto
-                      descritto in questa pagina è
-                      stato catalogato con i propri
-                      dati identificativi, storici e
-                      fotografici. Il certificato
-                      collega il bene alla sua scheda
-                      museale digitale.
+                      AGE202 attesta che
+                      il reperto descritto
+                      in questa pagina è
+                      stato catalogato con
+                      i propri dati
+                      identificativi,
+                      storici e
+                      fotografici. Il
+                      certificato collega
+                      il bene alla sua
+                      scheda museale
+                      digitale.
                     </p>
 
                     <div className="mt-8 flex flex-wrap gap-3">
                       <CertificateBadge>
                         <BadgeCheck className="h-4 w-4" />
-                        Reperto autenticato
+                        Reperto
+                        autenticato
                       </CertificateBadge>
 
                       <CertificateBadge>
@@ -875,13 +1034,15 @@ export default async function ArtifactPage({
                       <Fingerprint className="h-5 w-5 text-amber-200" />
 
                       <p className="text-[0.68rem] font-bold uppercase tracking-[0.28em] text-amber-100/70">
-                        Codice univoco di autenticità
+                        Codice univoco di
+                        autenticità
                       </p>
                     </div>
 
                     <p className="mt-5 break-all font-mono text-lg font-semibold leading-8 tracking-[0.08em] text-amber-100 sm:text-2xl">
                       {artifact.authenticityCode ??
-                        artifact.certificate
+                        artifact
+                          .certificate
                           ?.code ??
                         "CERTIFICATO-REGISTRATO"}
                     </p>
@@ -889,11 +1050,14 @@ export default async function ArtifactPage({
 
                   <div className="mt-8 grid gap-4 sm:grid-cols-2">
                     <CertificateInfo
-                      icon={BadgeCheck}
+                      icon={
+                        BadgeCheck
+                      }
                       label="Stato certificazione"
                       value={
                         artifact.certificate
-                          ? artifact.certificate
+                          ? artifact
+                              .certificate
                               .verified
                             ? "Identità verificata"
                             : "Verifica in lavorazione"
@@ -903,18 +1067,22 @@ export default async function ArtifactPage({
 
                     {artifact.certificate && (
                       <CertificateInfo
-                        icon={CalendarDays}
+                        icon={
+                          CalendarDays
+                        }
                         label="Data emissione"
                         value={new Intl.DateTimeFormat(
                           "it-IT",
                           {
                             day: "2-digit",
-                            month: "long",
+                            month:
+                              "long",
                             year: "numeric",
                           },
                         ).format(
                           new Date(
-                            artifact.certificate
+                            artifact
+                              .certificate
                               .issuedAt,
                           ),
                         )}
@@ -922,7 +1090,9 @@ export default async function ArtifactPage({
                     )}
 
                     <CertificateInfo
-                      icon={UserRound}
+                      icon={
+                        UserRound
+                      }
                       label="Curatore"
                       value={
                         artifact.certificate
@@ -932,7 +1102,9 @@ export default async function ArtifactPage({
                     />
 
                     <CertificateInfo
-                      icon={Fingerprint}
+                      icon={
+                        Fingerprint
+                      }
                       label="Numero archivio"
                       value={
                         artifact.archiveNumber ??
@@ -946,12 +1118,14 @@ export default async function ArtifactPage({
                     ?.notes && (
                     <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/[0.025] p-6 sm:p-7">
                       <p className="text-[0.65rem] font-bold uppercase tracking-[0.26em] text-white/35">
-                        Note del certificato
+                        Note del
+                        certificato
                       </p>
 
                       <p className="mt-4 whitespace-pre-line text-sm leading-7 text-white/55">
                         {
-                          artifact.certificate
+                          artifact
+                            .certificate
                             .notes
                         }
                       </p>
@@ -967,7 +1141,8 @@ export default async function ArtifactPage({
                       <div className="mt-3 h-px w-52 bg-gradient-to-r from-amber-200/60 to-transparent" />
 
                       <p className="mt-3 text-[0.62rem] font-bold uppercase tracking-[0.25em] text-white/30">
-                        Firma digitale del curatore
+                        Firma digitale del
+                        curatore
                       </p>
                     </div>
 
@@ -977,7 +1152,9 @@ export default async function ArtifactPage({
                       </p>
 
                       <p className="mt-2 max-w-sm text-sm font-semibold leading-6 text-white/70">
-                        {artifact.title}
+                        {
+                          artifact.title
+                        }
                       </p>
                     </div>
                   </div>
@@ -993,12 +1170,17 @@ export default async function ArtifactPage({
                         <div className="relative overflow-hidden rounded-2xl bg-white p-4 shadow-2xl shadow-black/35">
                           <Image
                             src={
-                              artifact.certificate
+                              artifact
+                                .certificate
                                 .qrCodeUrl
                             }
                             alt={`QR Code del certificato ${artifact.title}`}
-                            width={230}
-                            height={230}
+                            width={
+                              230
+                            }
+                            height={
+                              230
+                            }
                             className="h-auto w-full max-w-[230px]"
                           />
                         </div>
@@ -1019,10 +1201,13 @@ export default async function ArtifactPage({
                     </div>
 
                     <p className="mt-4 max-w-xs text-sm leading-7 text-white/45">
-                      Scansiona il codice per
-                      associare il certificato alla
-                      scheda ufficiale conservata
-                      nell’archivio AGE202.
+                      Scansiona il codice
+                      per associare il
+                      certificato alla
+                      scheda ufficiale
+                      conservata
+                      nell’archivio
+                      AGE202.
                     </p>
                   </div>
 
@@ -1044,16 +1229,30 @@ export default async function ArtifactPage({
       )}
 
       <ArtifactCollectingPanel
-  title={artifact.title}
-  availability={artifact.availability}
-  formattedPrice={formattedPrice}
-  vintedUrl={artifact.vintedUrl}
-  archiveNumber={artifact.archiveNumber}
-  authentic={artifact.authentic}
-  certificateVerified={
-    artifact.certificate?.verified ?? null
-  }
-/>
+        title={
+          artifact.title
+        }
+        availability={
+          artifact.availability
+        }
+        formattedPrice={
+          formattedPrice
+        }
+        vintedUrl={
+          artifact.vintedUrl
+        }
+        archiveNumber={
+          artifact.archiveNumber
+        }
+        authentic={
+          artifact.authentic
+        }
+        certificateVerified={
+          artifact.certificate
+            ?.verified ??
+          null
+        }
+      />
 
       {relatedArtifacts.length > 0 && (
         <section className="relative overflow-hidden border-b border-white/10 bg-white/[0.018]">
@@ -1062,7 +1261,10 @@ export default async function ArtifactPage({
           <div className="relative mx-auto max-w-7xl px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
               <SectionHeading
-                eyebrow={artifact.player.name}
+                eyebrow={
+                  artifact.player
+                    .name
+                }
                 title="Altri reperti dell’archivio"
                 description={`Continua l’esplorazione della collezione dedicata a ${artifact.player.name}.`}
               />
@@ -1071,7 +1273,9 @@ export default async function ArtifactPage({
                 href={`/archives/${artifact.player.slug}`}
                 className="inline-flex w-fit items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-white/55 transition hover:text-lime-300"
               >
-                Vedi tutta la collezione
+                Vedi tutta la
+                collezione
+
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
@@ -1087,11 +1291,36 @@ export default async function ArtifactPage({
                       (image) =>
                         image.isCover,
                     ) ??
-                    relatedArtifact.images[0];
+                    relatedArtifact
+                      .images[0];
+
+                  const relatedIsAvailable =
+                    relatedArtifact.availability ===
+                    "AVAILABLE";
+
+                  const relatedIsSold =
+                    relatedArtifact.availability ===
+                    "SOLD";
+
+                  const relatedStatusLabel =
+                    relatedIsAvailable
+                      ? "Available to collect"
+                      : relatedIsSold
+                        ? "Private collection"
+                        : "Museum artifact";
+
+                  const relatedActionLabel =
+                    relatedIsAvailable
+                      ? "Explore & Collect"
+                      : relatedIsSold
+                        ? "Explore Archive"
+                        : "Explore";
 
                   return (
                     <Link
-                      key={relatedArtifact.id}
+                      key={
+                        relatedArtifact.id
+                      }
                       href={`/artifacts/${relatedArtifact.slug}`}
                       className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#08101f] shadow-xl shadow-black/20 transition duration-500 hover:-translate-y-1.5 hover:border-lime-300/30 hover:shadow-2xl hover:shadow-black/35"
                     >
@@ -1115,18 +1344,44 @@ export default async function ArtifactPage({
 
                         <div className="absolute inset-0 bg-gradient-to-t from-[#050b18] via-black/10 to-transparent" />
 
-                        <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-1.5 backdrop-blur-md">
-                          <span className="h-1.5 w-1.5 rounded-full bg-lime-300" />
+                        <div
+                          className={`absolute left-5 top-5 flex items-center gap-2 rounded-full border px-3 py-1.5 backdrop-blur-md ${
+                            relatedIsAvailable
+                              ? "border-lime-300/30 bg-lime-300/10"
+                              : "border-white/15 bg-black/45"
+                          }`}
+                        >
+                          <span
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              relatedIsAvailable
+                                ? "bg-lime-300"
+                                : relatedIsSold
+                                  ? "bg-white/45"
+                                  : "bg-lime-300"
+                            }`}
+                          />
 
-                          <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-white/80">
-                            Museum artifact
+                          <span
+                            className={`text-[0.62rem] font-bold uppercase tracking-[0.2em] ${
+                              relatedIsAvailable
+                                ? "text-lime-200"
+                                : "text-white/70"
+                            }`}
+                          >
+                            {
+                              relatedStatusLabel
+                            }
                           </span>
                         </div>
 
                         <div className="absolute bottom-5 right-5 font-mono text-4xl font-black tracking-[-0.06em] text-white/20">
                           {String(
-                            index + 1,
-                          ).padStart(2, "0")}
+                            index +
+                              1,
+                          ).padStart(
+                            2,
+                            "0",
+                          )}
                         </div>
                       </div>
 
@@ -1137,20 +1392,32 @@ export default async function ArtifactPage({
                         </p>
 
                         <h3 className="mt-4 text-xl font-bold leading-snug text-white transition group-hover:text-lime-200">
-                          {relatedArtifact.title}
+                          {
+                            relatedArtifact.title
+                          }
                         </h3>
 
                         <div className="mt-6 flex items-center justify-between gap-5 border-t border-white/10 pt-5">
                           <p className="text-sm text-white/40">
                             {relatedArtifact.year ??
                               "AGE202 Archive"}
+
                             {relatedArtifact.tournament
                               ? ` · ${relatedArtifact.tournament}`
                               : ""}
                           </p>
 
-                          <span className="inline-flex shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-white/50 transition group-hover:text-lime-300">
-                            Esplora
+                          <span
+                            className={`inline-flex shrink-0 items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] transition ${
+                              relatedIsAvailable
+                                ? "text-lime-300"
+                                : "text-white/50 group-hover:text-lime-300"
+                            }`}
+                          >
+                            {
+                              relatedActionLabel
+                            }
+
                             <ArrowUpRight className="h-4 w-4" />
                           </span>
                         </div>
@@ -1175,14 +1442,17 @@ export default async function ArtifactPage({
               </p>
 
               <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-lime-300">
-                Second Hand. First Set.
+                Second Hand.
+                First Set.
               </p>
 
               <p className="mt-6 max-w-md text-sm leading-7 text-white/40">
-                Archivio digitale dedicato
-                all’abbigliamento autentico e ai
-                reperti che raccontano la storia
-                del tennis.
+                Archivio digitale
+                dedicato
+                all’abbigliamento
+                autentico e ai reperti
+                che raccontano la
+                storia del tennis.
               </p>
             </div>
 
@@ -1204,7 +1474,10 @@ export default async function ArtifactPage({
                   className="transition hover:text-lime-300"
                 >
                   Collezione{" "}
-                  {artifact.player.name}
+                  {
+                    artifact.player
+                      .name
+                  }
                 </Link>
 
                 <Link
@@ -1222,7 +1495,9 @@ export default async function ArtifactPage({
               </p>
 
               <p className="mt-5 text-sm font-semibold leading-6 text-white/70">
-                {artifact.title}
+                {
+                  artifact.title
+                }
               </p>
 
               <p className="mt-3 break-all font-mono text-xs leading-6 text-white/30">
@@ -1234,13 +1509,15 @@ export default async function ArtifactPage({
 
           <div className="flex flex-col gap-4 pt-8 text-xs uppercase tracking-[0.18em] text-white/25 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              © {new Date().getFullYear()} AGE202
-              Digital Museum
+              ©{" "}
+              {new Date().getFullYear()}{" "}
+              AGE202 Digital Museum
             </p>
 
             <p>
-              Preserving tennis history, one
-              artifact at a time.
+              Preserving tennis
+              history, one artifact at
+              a time.
             </p>
           </div>
         </div>
