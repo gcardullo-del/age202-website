@@ -63,7 +63,10 @@ export async function getPublishedArtifacts() {
         active: true,
       },
     },
-    include: publicArtifactInclude,
+
+    include:
+      publicArtifactInclude,
+
     orderBy: [
       {
         featured: "desc",
@@ -91,11 +94,15 @@ export async function getLatestArtifacts(
   return prisma.artifact.findMany({
     where: {
       status: "PUBLISHED",
+
       player: {
         active: true,
       },
     },
-    include: publicArtifactInclude,
+
+    include:
+      publicArtifactInclude,
+
     orderBy: [
       {
         publishedAt: "desc",
@@ -104,6 +111,59 @@ export async function getLatestArtifacts(
         createdAt: "desc",
       },
     ],
+
+    take: Math.max(
+      1,
+      Math.min(
+        Math.trunc(limit),
+        12,
+      ),
+    ),
+  });
+}
+
+/**
+ * Restituisce i reperti pubblicati
+ * attualmente disponibili per l'acquisizione.
+ *
+ * Questa query alimenta la sezione
+ * "Available to Collect" della homepage.
+ *
+ * L'ordine privilegia:
+ * 1. reperti featured;
+ * 2. pubblicazione più recente;
+ * 3. creazione più recente.
+ */
+export async function getAvailableArtifacts(
+  limit = 3,
+) {
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+
+      availability:
+        "AVAILABLE",
+
+      player: {
+        active: true,
+      },
+    },
+
+    include:
+      publicArtifactInclude,
+
+    orderBy: [
+      {
+        featured: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+
     take: Math.max(
       1,
       Math.min(
@@ -124,11 +184,15 @@ export async function getFeaturedArtifacts(
     where: {
       featured: true,
       status: "PUBLISHED",
+
       player: {
         active: true,
       },
     },
-    include: publicArtifactInclude,
+
+    include:
+      publicArtifactInclude,
+
     orderBy: [
       {
         publishedAt: "desc",
@@ -137,6 +201,7 @@ export async function getFeaturedArtifacts(
         createdAt: "desc",
       },
     ],
+
     take: Math.max(
       1,
       Math.min(
@@ -157,12 +222,19 @@ export async function getArtifactsByPlayerSlug(
   return prisma.artifact.findMany({
     where: {
       status: "PUBLISHED",
+
       player: {
-        slug: playerSlug,
-        active: true,
+        slug:
+          playerSlug,
+
+        active:
+          true,
       },
     },
-    include: publicArtifactInclude,
+
+    include:
+      publicArtifactInclude,
+
     orderBy: [
       {
         featured: "desc",
@@ -343,8 +415,10 @@ export async function getArtifactById(
 
   return prisma.artifact.findUnique({
     where: {
-      id: normalizedId,
+      id:
+        normalizedId,
     },
+
     include:
       publicArtifactInclude,
   });
@@ -368,8 +442,10 @@ export async function getArtifactBySlug(
 
   return prisma.artifact.findUnique({
     where: {
-      slug: normalizedSlug,
+      slug:
+        normalizedSlug,
     },
+
     include:
       publicArtifactInclude,
   });
@@ -387,11 +463,14 @@ export async function getPublishedArtifactBySlug(
   return prisma.artifact.findFirst({
     where: {
       slug,
-      status: "PUBLISHED",
+      status:
+        "PUBLISHED",
+
       player: {
         active: true,
       },
     },
+
     include:
       publicArtifactInclude,
   });
@@ -413,13 +492,19 @@ export async function getRelatedArtifacts({
   return prisma.artifact.findMany({
     where: {
       id: {
-        not: artifactId,
+        not:
+          artifactId,
       },
+
       playerId,
-      status: "PUBLISHED",
+
+      status:
+        "PUBLISHED",
     },
+
     include:
       publicArtifactInclude,
+
     orderBy: [
       {
         featured: "desc",
@@ -434,6 +519,7 @@ export async function getRelatedArtifacts({
         createdAt: "desc",
       },
     ],
+
     take: Math.max(
       1,
       Math.min(
@@ -453,16 +539,23 @@ export async function getRelatedArtifacts({
 export async function getPublishedArtifactSlugs() {
   return prisma.artifact.findMany({
     where: {
-      status: "PUBLISHED",
+      status:
+        "PUBLISHED",
+
       player: {
-        active: true,
+        active:
+          true,
       },
     },
+
     select: {
-      slug: true,
+      slug:
+        true,
     },
+
     orderBy: {
-      createdAt: "asc",
+      createdAt:
+        "asc",
     },
   });
 }

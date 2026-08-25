@@ -15,6 +15,10 @@ import {
   Trophy,
 } from "lucide-react";
 
+import AvailableToCollect, {
+  type AvailableArtifact,
+} from "@/components/home/AvailableToCollect";
+
 import ExploreTheMuseum from "@/components/home/ExploreTheMuseum";
 import LatestArrivals from "@/components/home/LatestArrivals";
 import OpeningFilm from "@/components/home/OpeningFilm";
@@ -43,10 +47,13 @@ const reveal = {
 
 type MuseumHomeProps = {
   settings: PublicHomepageSettings;
+
+  availableArtifacts: AvailableArtifact[];
 };
 
 export default function MuseumHome({
   settings,
+  availableArtifacts,
 }: MuseumHomeProps) {
   return (
     <>
@@ -58,10 +65,18 @@ export default function MuseumHome({
         />
 
         <MuseumCollections
-  players={settings.featuredPlayers}
-/>
+          players={
+            settings.featuredPlayers
+          }
+        />
 
         <LatestArrivals />
+
+        <AvailableToCollect
+          artifacts={
+            availableArtifacts
+          }
+        />
 
         <OpeningFilm />
 
@@ -113,9 +128,9 @@ export default function MuseumHome({
                 <p className="mt-5 max-w-2xl text-base leading-8 text-slate-400">
                   Every piece is presented as
                   part of tennis history,
-                  while purchases remain
+                  while acquisitions remain
                   simple and secure through
-                  Vinted.
+                  an external marketplace.
                 </p>
 
                 <Link
@@ -175,14 +190,16 @@ export default function MuseumHome({
                   />
 
                   <h3 className="mt-6 text-xl font-black uppercase tracking-[-0.025em]">
-                    Available on Vinted
+                    Available to Collect
                   </h3>
 
                   <p className="mt-3 text-sm leading-7 text-slate-400">
-                    AGE202 tells the story of
-                    every piece and directs
-                    visitors to Vinted for
-                    the final purchase.
+                    Selected museum
+                    Artifacts can enter a
+                    private collection while
+                    their archive identity
+                    and story remain
+                    preserved by AGE202.
                   </p>
                 </article>
               </div>
@@ -232,29 +249,40 @@ export default function MuseumHome({
               {[
                 {
                   value: "05",
+
                   label:
                     "Champion galleries",
+
                   description:
                     "Dedicated archives for five defining tennis icons.",
                 },
+
                 {
                   value: "04",
+
                   label:
                     "Museum pillars",
+
                   description:
                     "Champions, history, memorabilia and tennis culture.",
                 },
+
                 {
                   value: "01",
+
                   label:
                     "Digital archive",
+
                   description:
                     "One evolving home for every preserved tennis story.",
                 },
+
                 {
                   value: "100%",
+
                   label:
                     "Tennis culture",
+
                   description:
                     "Every gallery is created around the history of the game.",
                 },
@@ -273,9 +301,12 @@ export default function MuseumHome({
                       once: true,
                       amount: 0.3,
                     }}
-                    variants={reveal}
+                    variants={
+                      reveal
+                    }
                     transition={{
                       duration: 0.5,
+
                       delay:
                         index *
                         0.08,
@@ -327,16 +358,19 @@ export default function MuseumHome({
                 "Museum",
                 "Curated galleries dedicated to champions, brands and defining eras.",
               ],
+
               [
                 Trophy,
                 "Hall of Fame",
                 "Profiles, records and artifacts connected to tennis legends.",
               ],
+
               [
                 BookOpen,
                 "History",
                 "Open Era stories, rivalries and the evolution of tennis style.",
               ],
+
               [
                 Sparkles,
                 "Memorabilia",
@@ -364,9 +398,12 @@ export default function MuseumHome({
                     viewport={{
                       once: true,
                     }}
-                    variants={reveal}
+                    variants={
+                      reveal
+                    }
                     transition={{
                       duration: 0.5,
+
                       delay:
                         index *
                         0.08,
@@ -379,11 +416,15 @@ export default function MuseumHome({
                     />
 
                     <h3 className="mt-8 text-xl font-black uppercase tracking-[-0.025em]">
-                      {String(title)}
+                      {String(
+                        title,
+                      )}
                     </h3>
 
                     <p className="mt-4 text-sm leading-7 text-slate-400">
-                      {String(text)}
+                      {String(
+                        text,
+                      )}
                     </p>
                   </motion.article>
                 );

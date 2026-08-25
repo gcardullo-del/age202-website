@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import MuseumHome from "@/components/public/MuseumHome";
 
 import {
+  getAvailableArtifacts,
+} from "@/lib/repositories/artifact.repository";
+
+import {
   getPublicHomepageSettings,
 } from "@/lib/repositories/public/homepage.repository";
 
@@ -20,13 +24,85 @@ export const metadata: Metadata = {
 export const dynamic =
   "force-dynamic";
 
+export const revalidate =
+  0;
+
 export default async function HomePage() {
-  const settings =
-    await getPublicHomepageSettings();
+  const [
+    settings,
+    availableArtifacts,
+  ] = await Promise.all([
+    getPublicHomepageSettings(),
+    getAvailableArtifacts(3),
+  ]);
+
+  const serializedAvailableArtifacts =
+    availableArtifacts.map(
+      (artifact) => ({
+        id:
+          artifact.id,
+
+        slug:
+          artifact.slug,
+
+        title:
+          artifact.title,
+
+        subtitle:
+          artifact.subtitle,
+
+        archiveNumber:
+          artifact.archiveNumber,
+
+        currency:
+          artifact.currency,
+
+        price:
+          artifact.price !== null &&
+          artifact.price !== undefined
+            ? artifact.price.toString()
+            : null,
+
+        tournament:
+          artifact.tournament,
+
+        year:
+          artifact.year,
+
+        player: {
+          name:
+            artifact.player.name,
+        },
+
+        brand: {
+          name:
+            artifact.brand.name,
+        },
+
+        images:
+          artifact.images.map(
+            (image) => ({
+              url:
+                image.url,
+
+              alt:
+                image.alt,
+
+              isCover:
+                image.isCover,
+            }),
+          ),
+      }),
+    );
 
   return (
     <MuseumHome
-      settings={settings}
+      settings={
+        settings
+      }
+      availableArtifacts={
+        serializedAvailableArtifacts
+      }
     />
   );
 }
