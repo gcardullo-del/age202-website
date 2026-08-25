@@ -472,6 +472,87 @@ export async function updateArtifact(
   }
 
   /*
+   * Relazione Tournament.
+   *
+   * Il form invia tournamentId dal dropdown.
+   * Recuperiamo il record reale per verificare che esista,
+   * mantenere sincronizzato il vecchio campo testuale `tournament`
+   * e revalidare correttamente le pagine torneo coinvolte.
+   */
+  const requestedTournamentId =
+    getOptionalString(
+      formData,
+      "tournamentId",
+    );
+
+  const selectedTournament =
+    requestedTournamentId
+      ? await prisma.tournament.findUnique({
+          where: {
+            id:
+              requestedTournamentId,
+          },
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        })
+      : null;
+
+  if (
+    requestedTournamentId &&
+    !selectedTournament
+  ) {
+    throw new Error(
+      "Il torneo selezionato non esiste più nell'archivio AGE202.",
+    );
+  }
+
+  const previousTournament =
+    currentArtifact.tournamentId
+      ? await prisma.tournament.findUnique({
+          where: {
+            id:
+              currentArtifact.tournamentId,
+          },
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        })
+      : currentArtifact.tournament
+        ? await prisma.tournament.findFirst({
+            where: {
+              OR: [
+                {
+                  name: {
+                    equals:
+                      currentArtifact.tournament,
+                    mode:
+                      "insensitive",
+                  },
+                },
+                {
+                  shortName: {
+                    equals:
+                      currentArtifact.tournament,
+                    mode:
+                      "insensitive",
+                  },
+                },
+              ],
+            },
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          })
+        : null;
+
+  /*
    * Vecchio flusso File, mantenuto solo per compatibilità.
    * Con il nuovo MediaUploader normalmente sarà vuoto.
    */
@@ -738,12 +819,26 @@ export async function updateArtifact(
                 ) ??
                 null,
 
+              /*
+               * Manteniamo temporaneamente il nome testuale
+               * insieme alla relazione Prisma vera.
+               */
               tournament:
-                getOptionalString(
-                  formData,
-                  "tournament",
-                ) ??
+                selectedTournament?.name ??
                 null,
+
+              tournamentRecord:
+                selectedTournament
+                  ? {
+                      connect: {
+                        id:
+                          selectedTournament.id,
+                      },
+                    }
+                  : {
+                      disconnect:
+                        true,
+                    },
 
               collection:
                 getOptionalString(
@@ -1237,6 +1332,27 @@ export async function updateArtifact(
   revalidatePath(
     `/archive/${slug}`,
   );
+
+  /*
+   * Se il torneo è cambiato, aggiorniamo sia la vecchia
+   * sia la nuova pagina pubblica. In questo modo un Artifact
+   * sparisce subito dal vecchio Tournament e compare nel nuovo.
+   */
+  if (previousTournament) {
+    revalidatePath(
+      `/tournaments/${previousTournament.slug}`,
+    );
+  }
+
+  if (
+    selectedTournament &&
+    selectedTournament.slug !==
+      previousTournament?.slug
+  ) {
+    revalidatePath(
+      `/tournaments/${selectedTournament.slug}`,
+    );
+  }
 
   redirect(
     "/admin/artifacts",

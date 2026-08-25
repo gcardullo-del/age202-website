@@ -7,6 +7,8 @@ import {
   requireAdmin,
 } from "@/lib/auth/admin-auth";
 
+import { prisma } from "@/lib/prisma";
+
 import {
   createArtifact as createArtifactRepository,
   deleteArtifact as deleteArtifactRepository,
@@ -316,6 +318,47 @@ export async function createArtifact(
       "brandId",
     );
 
+  /*
+   * Nuova relazione Tournament.
+   *
+   * Il form invia tournamentId dal dropdown.
+   * Recuperiamo il record reale per:
+   *
+   * 1. verificare che il torneo esista;
+   * 2. salvare tournamentId;
+   * 3. mantenere temporaneamente sincronizzato
+   *    anche il vecchio campo testuale tournament.
+   */
+  const requestedTournamentId =
+    getOptionalString(
+      formData,
+      "tournamentId",
+    );
+
+  const selectedTournament =
+    requestedTournamentId
+      ? await prisma.tournament.findUnique({
+          where: {
+            id:
+              requestedTournamentId,
+          },
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        })
+      : null;
+
+  if (
+    requestedTournamentId &&
+    !selectedTournament
+  ) {
+    throw new Error(
+      "Il torneo selezionato non esiste più nell'archivio AGE202.",
+    );
+  }
+
   const authentic =
     getBoolean(
       formData,
@@ -435,11 +478,22 @@ export async function createArtifact(
           "season",
         ),
 
+      /*
+       * Durante la transizione manteniamo entrambi:
+       *
+       * tournament   -> nome leggibile legacy
+       * tournamentId -> relazione reale Prisma
+       */
       tournament:
+        selectedTournament?.name ??
         getOptionalString(
           formData,
           "tournament",
         ),
+
+      tournamentId:
+        selectedTournament?.id ??
+        null,
 
       collection:
         getOptionalString(
@@ -755,6 +809,19 @@ export async function createArtifact(
   revalidatePath(
     `/archive/${artifact.slug}`,
   );
+
+  /*
+   * Se l'Artifact è collegato a un Tournament,
+   * aggiorniamo immediatamente anche la relativa
+   * pagina pubblica.
+   */
+  if (
+    selectedTournament
+  ) {
+    revalidatePath(
+      `/tournaments/${selectedTournament.slug}`,
+    );
+  }
 
   redirect(
     "/admin/artifacts",

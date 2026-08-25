@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import Link from "next/link";
+
 import {
   BadgeCheck,
   BookOpenText,
@@ -24,9 +25,12 @@ import type {
   ArtifactStatus,
   Brand,
   Player,
+  Tournament,
 } from "@/generated/prisma/client";
 
-import type { ExistingMediaImage } from "@/components/media/MediaUploader";
+import type {
+  ExistingMediaImage,
+} from "@/components/media/MediaUploader";
 
 import {
   ArtifactStudioProvider,
@@ -39,8 +43,13 @@ import type {
   ArtifactPreviewData,
 } from "./ArtifactPreviewCard";
 
-import { createArtifact } from "../../actions/createArtifact";
-import { updateArtifact } from "../../actions/updateArtifact";
+import {
+  createArtifact,
+} from "../../actions/createArtifact";
+
+import {
+  updateArtifact,
+} from "../../actions/updateArtifact";
 
 import AuthenticityCard from "./AuthenticityCard";
 import GeneralInfoCard from "./GeneralInfoCard";
@@ -51,7 +60,9 @@ import StoryCard from "./StoryCard";
 import ArtifactSaveStatus from "./ArtifactSaveStatus";
 import ArtifactDraftRecoveryBanner from "./ArtifactDraftRecoveryBanner";
 
-type ArtifactFormMode = "create" | "edit";
+type ArtifactFormMode =
+  | "create"
+  | "edit";
 
 type WorkspaceSection =
   | "general"
@@ -103,6 +114,7 @@ export type ArtifactFormInitialValues = {
 type ArtifactFormProps = {
   players: Player[];
   brands: Brand[];
+  tournaments: Tournament[];
   mode?: ArtifactFormMode;
   artifactId?: string;
   initialValues?: ArtifactFormInitialValues;
@@ -113,37 +125,43 @@ const sections = [
   {
     id: "general",
     label: "General",
-    description: "Identity and classification",
+    description:
+      "Identity and classification",
     icon: Landmark,
   },
   {
     id: "media",
     label: "Media",
-    description: "Cover and gallery",
+    description:
+      "Cover and gallery",
     icon: Images,
   },
   {
     id: "story",
     label: "Story",
-    description: "Museum narrative",
+    description:
+      "Museum narrative",
     icon: BookOpenText,
   },
   {
     id: "marketplace",
     label: "Marketplace",
-    description: "Availability and price",
+    description:
+      "Availability and price",
     icon: ShoppingBag,
   },
   {
     id: "authenticity",
     label: "Authenticity",
-    description: "Codes and attributes",
+    description:
+      "Codes and attributes",
     icon: BadgeCheck,
   },
   {
     id: "publication",
     label: "Publication",
-    description: "Status and visibility",
+    description:
+      "Status and visibility",
     icon: FileText,
   },
 ] as const;
@@ -157,27 +175,36 @@ function SectionPanel({
 }) {
   return (
     <div
-      className={active ? "block" : "hidden"}
-      aria-hidden={!active}
+      className={
+        active
+          ? "block"
+          : "hidden"
+      }
+      aria-hidden={
+        !active
+      }
     >
       {children}
     </div>
   );
 }
 
-
 function ArtifactResetButton({
   label,
 }: {
   label: string;
 }) {
-  const { resetPreview } =
+  const {
+    resetPreview,
+  } =
     useArtifactStudio();
 
   return (
     <button
       type="reset"
-      onClick={() => resetPreview()}
+      onClick={() =>
+        resetPreview()
+      }
       className="rounded-2xl border border-white/10 px-5 py-3 text-sm text-white/60 transition hover:bg-white/5 hover:text-white"
     >
       {label}
@@ -188,13 +215,19 @@ function ArtifactResetButton({
 export default function ArtifactForm({
   players,
   brands,
+  tournaments,
   mode = "create",
   artifactId,
   initialValues,
   action,
 }: ArtifactFormProps) {
-  const [activeSection, setActiveSection] =
-    useState<WorkspaceSection>("general");
+  const [
+    activeSection,
+    setActiveSection,
+  ] =
+    useState<WorkspaceSection>(
+      "general",
+    );
 
   const initialPlayer =
     players.find(
@@ -212,86 +245,112 @@ export default function ArtifactForm({
 
   const initialCoverImage =
     initialValues?.images?.find(
-      (image) => image.isCover,
+      (image) =>
+        image.isCover,
     )?.url ??
-    initialValues?.images?.[0]?.url ??
+    initialValues?.images?.[0]
+      ?.url ??
     null;
 
-  const initialPreview: ArtifactPreviewData = {
-    title:
-      initialValues?.title ?? "",
+  const initialPreview: ArtifactPreviewData =
+    {
+      title:
+        initialValues?.title ??
+        "",
 
-    subtitle:
-      initialValues?.subtitle ?? null,
+      subtitle:
+        initialValues?.subtitle ??
+        null,
 
-    archiveNumber:
-      initialValues?.archiveNumber ?? null,
+      archiveNumber:
+        initialValues?.archiveNumber ??
+        null,
 
-    year:
-      initialValues?.year ?? null,
+      year:
+        initialValues?.year ??
+        null,
 
-    tournament:
-      initialValues?.tournament ?? null,
+      tournament:
+        initialValues?.tournament ??
+        null,
 
-    collection:
-      initialValues?.collection ?? null,
+      collection:
+        initialValues?.collection ??
+        null,
 
-    playerName:
-      initialPlayer?.name ?? null,
+      playerName:
+        initialPlayer?.name ??
+        null,
 
-    brandName:
-      initialBrand?.name ?? null,
+      brandName:
+        initialBrand?.name ??
+        null,
 
-    category:
-      initialValues?.category ?? null,
+      category:
+        initialValues?.category ??
+        null,
 
-    rarity:
-      initialValues?.rarity ?? null,
+      rarity:
+        initialValues?.rarity ??
+        null,
 
-    condition:
-      initialValues?.condition ?? null,
+      condition:
+        initialValues?.condition ??
+        null,
 
-    availability:
-      initialValues?.availability ?? null,
+      availability:
+        initialValues?.availability ??
+        null,
 
-    price:
-      initialValues?.price ?? null,
+      price:
+        initialValues?.price ??
+        null,
 
-    currency:
-      initialValues?.currency ?? "EUR",
+      currency:
+        initialValues?.currency ??
+        "EUR",
 
-    authentic:
-      initialValues?.authentic ?? false,
+      authentic:
+        initialValues?.authentic ??
+        false,
 
-    vintage:
-      initialValues?.vintage ?? false,
+      vintage:
+        initialValues?.vintage ??
+        false,
 
-    featured:
-      initialValues?.featured ?? false,
+      featured:
+        initialValues?.featured ??
+        false,
 
-    status:
-      initialValues?.status ?? "DRAFT",
+      status:
+        initialValues?.status ??
+        "DRAFT",
 
-    coverImage:
-      initialCoverImage,
-  };
+      coverImage:
+        initialCoverImage,
+    };
 
   const studio =
     useArtifactStudioState({
       initialPreview,
       mode,
-      draftKey: artifactId
-        ? `age202-artifact-studio-draft:${artifactId}`
-        : "age202-artifact-studio-draft:new",
+      draftKey:
+        artifactId
+          ? `age202-artifact-studio-draft:${artifactId}`
+          : "age202-artifact-studio-draft:new",
     });
 
   const {
     preview,
   } = studio;
 
-  const isEditing = mode === "edit";
+  const isEditing =
+    mode === "edit";
 
-  if (isEditing && !artifactId) {
+  if (
+    isEditing &&
+    !artifactId
+  ) {
     throw new Error(
       "artifactId is required when ArtifactForm is used in edit mode.",
     );
@@ -299,26 +358,33 @@ export default function ArtifactForm({
 
   const formAction =
     action ??
-    (isEditing
-      ? updateArtifact
-      : createArtifact);
+    (
+      isEditing
+        ? updateArtifact
+        : createArtifact
+    );
 
   const previewSlug =
-    initialValues?.slug?.trim() ?? "";
+    initialValues?.slug?.trim() ??
+    "";
 
   const isPublished =
-    initialValues?.status === "PUBLISHED";
+    initialValues?.status ===
+    "PUBLISHED";
 
   const canPreview =
     isEditing &&
-    Boolean(previewSlug) &&
+    Boolean(
+      previewSlug,
+    ) &&
     isPublished;
 
-  const previewHref = canPreview
-    ? `/artifacts/${encodeURIComponent(
-        previewSlug,
-      )}`
-    : null;
+  const previewHref =
+    canPreview
+      ? `/artifacts/${encodeURIComponent(
+          previewSlug,
+        )}`
+      : null;
 
   return (
     <ArtifactStudioProvider
@@ -328,349 +394,407 @@ export default function ArtifactForm({
         action={formAction}
         className="pb-8"
       >
-      {artifactId && (
-        <input
-          type="hidden"
-          name="artifactId"
-          value={artifactId}
-        />
-      )}
+        {artifactId && (
+          <input
+            type="hidden"
+            name="artifactId"
+            value={
+              artifactId
+            }
+          />
+        )}
 
-      <ArtifactDraftRecoveryBanner />
+        <ArtifactDraftRecoveryBanner />
 
-      <div className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
-        <div className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-lime-300/20 bg-lime-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-lime-200">
-                {isEditing
-                  ? "Artifact workspace"
-                  : "New catalog entry"}
-              </span>
-
-              {initialValues?.status && (
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-medium text-white/55">
-                  {initialValues.status}
+        <div className="mb-6 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025]">
+          <div className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-lime-300/20 bg-lime-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-lime-200">
+                  {isEditing
+                    ? "Artifact workspace"
+                    : "New catalog entry"}
                 </span>
-              )}
 
-              <ArtifactSaveStatus />
+                {initialValues?.status && (
+                  <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-medium text-white/55">
+                    {
+                      initialValues.status
+                    }
+                  </span>
+                )}
+
+                <ArtifactSaveStatus />
+              </div>
+
+              <h2 className="mt-4 text-2xl font-semibold text-white">
+                {initialValues?.title ||
+                  (
+                    isEditing
+                      ? "Edit artifact"
+                      : "Create artifact"
+                  )}
+              </h2>
+
+              <p className="mt-2 text-sm text-white/40">
+                {initialValues?.archiveNumber
+                  ? `Archive ${initialValues.archiveNumber}`
+                  : "Complete each section before saving the museum record."}
+              </p>
             </div>
 
-            <h2 className="mt-4 text-2xl font-semibold text-white">
-              {initialValues?.title ||
-                (isEditing
-                  ? "Edit artifact"
-                  : "Create artifact")}
-            </h2>
+            <div className="flex flex-wrap items-center gap-3">
+              {previewHref ? (
+                <Link
+                  href={
+                    previewHref
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white/65 transition hover:bg-white/5 hover:text-white"
+                >
+                  <Eye className="h-4 w-4" />
+                  Preview
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  title={
+                    !isEditing
+                      ? "Save the artifact before opening the preview."
+                      : !previewSlug
+                        ? "Add and save a slug before opening the preview."
+                        : "Publish the artifact before opening the public preview."
+                  }
+                  className="inline-flex cursor-not-allowed items-center gap-2 rounded-2xl border border-white/5 px-4 py-2.5 text-sm font-medium text-white/25"
+                >
+                  <Eye className="h-4 w-4" />
+                  Preview
+                </button>
+              )}
 
-            <p className="mt-2 text-sm text-white/40">
-              {initialValues?.archiveNumber
-                ? `Archive ${initialValues.archiveNumber}`
-                : "Complete each section before saving the museum record."}
-            </p>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 rounded-2xl bg-lime-300 px-5 py-2.5 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200"
+              >
+                <Save className="h-4 w-4" />
+
+                {isEditing
+                  ? "Save changes"
+                  : "Save artifact"}
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {previewHref ? (
-              <Link
-                href={previewHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white/65 transition hover:bg-white/5 hover:text-white"
-              >
-                <Eye className="h-4 w-4" />
-                Preview
-              </Link>
-            ) : (
-              <button
-                type="button"
-                disabled
-                title={
-                  !isEditing
-                    ? "Save the artifact before opening the preview."
-                    : !previewSlug
-                      ? "Add and save a slug before opening the preview."
-                      : "Publish the artifact before opening the public preview."
+          <div className="grid lg:grid-cols-[260px_minmax(0,1fr)]">
+            <nav
+              className="border-b border-white/10 p-3 lg:border-b-0 lg:border-r lg:p-4"
+              aria-label="Artifact sections"
+            >
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
+                {sections.map(
+                  (
+                    section,
+                  ) => {
+                    const Icon =
+                      section.icon;
+
+                    const isActive =
+                      activeSection ===
+                      section.id;
+
+                    return (
+                      <button
+                        key={
+                          section.id
+                        }
+                        type="button"
+                        onClick={() =>
+                          setActiveSection(
+                            section.id,
+                          )
+                        }
+                        aria-current={
+                          isActive
+                            ? "step"
+                            : undefined
+                        }
+                        className={`flex min-w-0 items-center gap-3 rounded-2xl px-3 py-3 text-left transition ${
+                          isActive
+                            ? "bg-lime-300 text-[#050B18]"
+                            : "text-white/55 hover:bg-white/5 hover:text-white"
+                        }`}
+                      >
+                        <span
+                          className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
+                            isActive
+                              ? "bg-black/10"
+                              : "bg-white/5"
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                        </span>
+
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold">
+                            {
+                              section.label
+                            }
+                          </span>
+
+                          <span
+                            className={`hidden truncate text-xs lg:block ${
+                              isActive
+                                ? "text-[#050B18]/60"
+                                : "text-white/30"
+                            }`}
+                          >
+                            {
+                              section.description
+                            }
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  },
+                )}
+              </div>
+            </nav>
+
+            <div className="min-w-0 p-4 sm:p-6 lg:p-8">
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "general"
                 }
-                className="inline-flex cursor-not-allowed items-center gap-2 rounded-2xl border border-white/5 px-4 py-2.5 text-sm font-medium text-white/25"
               >
-                <Eye className="h-4 w-4" />
-                Preview
-              </button>
-            )}
+                <GeneralInfoCard
+                  players={
+                    players
+                  }
+                  brands={
+                    brands
+                  }
+                  tournaments={
+                    tournaments
+                  }
+                  initialValues={{
+                    title:
+                      initialValues?.title ??
+                      "",
+
+                    subtitle:
+                      initialValues?.subtitle ??
+                      "",
+
+                    archiveNumber:
+                      initialValues?.archiveNumber ??
+                      "",
+
+                    year:
+                      initialValues?.year ??
+                      undefined,
+
+                    season:
+                      initialValues?.season ??
+                      "",
+
+                    tournament:
+                      initialValues?.tournament ??
+                      "",
+
+                    collection:
+                      initialValues?.collection ??
+                      "",
+
+                    edition:
+                      initialValues?.edition ??
+                      "",
+
+                    playerId:
+                      initialValues?.playerId ??
+                      "",
+
+                    brandId:
+                      initialValues?.brandId ??
+                      "",
+
+                    category:
+                      initialValues?.category ??
+                      undefined,
+
+                    rarity:
+                      initialValues?.rarity ??
+                      "COMMON",
+
+                    size:
+                      initialValues?.size ??
+                      "",
+
+                    condition:
+                      initialValues?.condition ??
+                      "EXCELLENT",
+
+                    colour:
+                      initialValues?.colour ??
+                      "",
+
+                    material:
+                      initialValues?.material ??
+                      "",
+                  }}
+                />
+              </SectionPanel>
+
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "media"
+                }
+              >
+                <MediaCard
+                  existingImages={
+                    initialValues?.images ??
+                    []
+                  }
+                />
+              </SectionPanel>
+
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "story"
+                }
+              >
+                <StoryCard
+                  initialValues={{
+                    description:
+                      initialValues?.description ??
+                      "",
+
+                    museumStory:
+                      initialValues?.museumStory ??
+                      "",
+
+                    historicalContext:
+                      initialValues?.historicalContext ??
+                      "",
+
+                    curatorNote:
+                      initialValues?.curatorNote ??
+                      "",
+                  }}
+                />
+              </SectionPanel>
+
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "marketplace"
+                }
+              >
+                <MarketplaceCard
+                  initialValues={{
+                    availability:
+                      initialValues?.availability ??
+                      "COMING_SOON",
+
+                    price:
+                      initialValues?.price ??
+                      null,
+
+                    currency:
+                      initialValues?.currency ??
+                      "EUR",
+
+                    vintedUrl:
+                      initialValues?.vintedUrl ??
+                      "",
+                  }}
+                />
+              </SectionPanel>
+
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "authenticity"
+                }
+              >
+                <AuthenticityCard
+                  authentic={
+                    initialValues?.authentic ??
+                    false
+                  }
+                  authenticityCode={
+                    initialValues?.authenticityCode ??
+                    ""
+                  }
+                  vintage={
+                    initialValues?.vintage ??
+                    false
+                  }
+                  tags={
+                    initialValues?.tags ??
+                    []
+                  }
+                />
+              </SectionPanel>
+
+              <SectionPanel
+                active={
+                  activeSection ===
+                  "publication"
+                }
+              >
+                <PublicationCard
+                  initialValues={{
+                    status:
+                      initialValues?.status ??
+                      "DRAFT",
+
+                    slug:
+                      initialValues?.slug ??
+                      "",
+
+                    featured:
+                      initialValues?.featured ??
+                      false,
+                  }}
+                />
+              </SectionPanel>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col-reverse gap-3 rounded-3xl border border-white/10 bg-[#08111F] p-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-white/35">
+            {isEditing
+              ? "Review the active section, then save the complete artifact record."
+              : "Create a new entry in the AGE202 digital archive."}
+          </p>
+
+          <div className="flex items-center justify-end gap-3">
+            <ArtifactResetButton
+              label={
+                isEditing
+                  ? "Reset changes"
+                  : "Reset"
+              }
+            />
 
             <button
               type="submit"
-              className="inline-flex items-center gap-2 rounded-2xl bg-lime-300 px-5 py-2.5 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200"
+              className="inline-flex items-center gap-2 rounded-2xl bg-lime-300 px-6 py-3 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200"
             >
               <Save className="h-4 w-4" />
+
               {isEditing
                 ? "Save changes"
                 : "Save artifact"}
             </button>
           </div>
         </div>
-
-        <div className="grid lg:grid-cols-[260px_minmax(0,1fr)]">
-          <nav
-            className="border-b border-white/10 p-3 lg:border-b-0 lg:border-r lg:p-4"
-            aria-label="Artifact sections"
-          >
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-1">
-              {sections.map((section) => {
-                const Icon = section.icon;
-                const isActive =
-                  activeSection === section.id;
-
-                return (
-                  <button
-                    key={section.id}
-                    type="button"
-                    onClick={() =>
-                      setActiveSection(
-                        section.id,
-                      )
-                    }
-                    aria-current={
-                      isActive
-                        ? "step"
-                        : undefined
-                    }
-                    className={`flex min-w-0 items-center gap-3 rounded-2xl px-3 py-3 text-left transition ${
-                      isActive
-                        ? "bg-lime-300 text-[#050B18]"
-                        : "text-white/55 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    <span
-                      className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${
-                        isActive
-                          ? "bg-black/10"
-                          : "bg-white/5"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                    </span>
-
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-semibold">
-                        {section.label}
-                      </span>
-
-                      <span
-                        className={`hidden truncate text-xs lg:block ${
-                          isActive
-                            ? "text-[#050B18]/60"
-                            : "text-white/30"
-                        }`}
-                      >
-                        {section.description}
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
-
-          <div className="min-w-0 p-4 sm:p-6 lg:p-8">
-            <SectionPanel
-              active={
-                activeSection === "general"
-              }
-            >
-              <GeneralInfoCard
-                players={players}
-                brands={brands}
-                initialValues={{
-                  title:
-                    initialValues?.title ??
-                    "",
-                  subtitle:
-                    initialValues?.subtitle ??
-                    "",
-                  archiveNumber:
-                    initialValues?.archiveNumber ??
-                    "",
-                  year:
-                    initialValues?.year ??
-                    undefined,
-                  season:
-                    initialValues?.season ??
-                    "",
-                  tournament:
-                    initialValues?.tournament ??
-                    "",
-                  collection:
-                    initialValues?.collection ??
-                    "",
-                  edition:
-                    initialValues?.edition ??
-                    "",
-                  playerId:
-                    initialValues?.playerId ??
-                    "",
-                  brandId:
-                    initialValues?.brandId ??
-                    "",
-                  category:
-                    initialValues?.category ??
-                    undefined,
-                  rarity:
-                    initialValues?.rarity ??
-                    "COMMON",
-                  size:
-                    initialValues?.size ??
-                    "",
-                  condition:
-                    initialValues?.condition ??
-                    "EXCELLENT",
-                  colour:
-                    initialValues?.colour ??
-                    "",
-                  material:
-                    initialValues?.material ??
-                    "",
-                }}
-              />
-            </SectionPanel>
-
-            <SectionPanel
-              active={
-                activeSection === "media"
-              }
-            >
-              <MediaCard
-                existingImages={
-                  initialValues?.images ?? []
-                }
-              />
-            </SectionPanel>
-
-            <SectionPanel
-              active={
-                activeSection === "story"
-              }
-            >
-              <StoryCard
-                initialValues={{
-                  description:
-                    initialValues?.description ??
-                    "",
-                  museumStory:
-                    initialValues?.museumStory ??
-                    "",
-                  historicalContext:
-                    initialValues?.historicalContext ??
-                    "",
-                  curatorNote:
-                    initialValues?.curatorNote ??
-                    "",
-                }}
-              />
-            </SectionPanel>
-
-            <SectionPanel
-              active={
-                activeSection ===
-                "marketplace"
-              }
-            >
-              <MarketplaceCard
-                initialValues={{
-                  availability:
-                    initialValues?.availability ??
-                    "COMING_SOON",
-                  price:
-                    initialValues?.price ??
-                    null,
-                  currency:
-                    initialValues?.currency ??
-                    "EUR",
-                  vintedUrl:
-                    initialValues?.vintedUrl ??
-                    "",
-                }}
-              />
-            </SectionPanel>
-
-            <SectionPanel
-              active={
-                activeSection ===
-                "authenticity"
-              }
-            >
-              <AuthenticityCard
-                authentic={
-                  initialValues?.authentic ??
-                  false
-                }
-                authenticityCode={
-                  initialValues?.authenticityCode ??
-                  ""
-                }
-                vintage={
-                  initialValues?.vintage ??
-                  false
-                }
-                tags={
-                  initialValues?.tags ?? []
-                }
-              />
-            </SectionPanel>
-
-            <SectionPanel
-              active={
-                activeSection ===
-                "publication"
-              }
-            >
-              <PublicationCard
-                initialValues={{
-                  status:
-                    initialValues?.status ??
-                    "DRAFT",
-                  slug:
-                    initialValues?.slug ??
-                    "",
-                  featured:
-                    initialValues?.featured ??
-                    false,
-                }}
-              />
-            </SectionPanel>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col-reverse gap-3 rounded-3xl border border-white/10 bg-[#08111F] p-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-white/35">
-          {isEditing
-            ? "Review the active section, then save the complete artifact record."
-            : "Create a new entry in the AGE202 digital archive."}
-        </p>
-
-        <div className="flex items-center justify-end gap-3">
-          <ArtifactResetButton
-            label={
-              isEditing
-                ? "Reset changes"
-                : "Reset"
-            }
-          />
-
-          <button
-            type="submit"
-            className="inline-flex items-center gap-2 rounded-2xl bg-lime-300 px-6 py-3 text-sm font-semibold text-[#050B18] transition hover:bg-lime-200"
-          >
-            <Save className="h-4 w-4" />
-            {isEditing
-              ? "Save changes"
-              : "Save artifact"}
-          </button>
-        </div>
-      </div>
       </form>
     </ArtifactStudioProvider>
   );

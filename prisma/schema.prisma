@@ -153,45 +153,49 @@ model Brand {
 }
 
 model Artifact {
-  id                String                     @id @default(cuid())
-  archiveNumber     String                     @unique
+  id                String               @id @default(cuid())
+  archiveNumber     String               @unique
   title             String
-  slug              String                     @unique
+  slug              String               @unique
   description       String?
   year              Int?
   size              String?
   colour            String?
   material          String?
   condition         ArtifactCondition
-  status            ArtifactStatus             @default(DRAFT)
-  featured          Boolean                    @default(false)
+  status            ArtifactStatus       @default(DRAFT)
+  featured          Boolean              @default(false)
   playerId          String
   brandId           String
-  createdAt         DateTime                   @default(now())
-  updatedAt         DateTime                   @updatedAt
-  authentic         Boolean                    @default(false)
-  authenticityCode  String?                    @unique
-  availability      ArtifactAvailability       @default(COMING_SOON)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  authentic         Boolean              @default(false)
+  authenticityCode  String?              @unique
+  availability      ArtifactAvailability @default(COMING_SOON)
   category          ArtifactCategory?
   collection        String?
   curatorNote       String?
-  currency          String                     @default("EUR")
+  currency          String               @default("EUR")
   edition           String?
   historicalContext String?
   metaDescription   String?
   metaTitle         String?
   museumStory       String?
-  price             Decimal?                   @db.Decimal(10, 2)
+  price             Decimal?             @db.Decimal(10, 2)
   publishedAt       DateTime?
-  rarity            ArtifactRarity             @default(COMMON)
+  rarity            ArtifactRarity       @default(COMMON)
   season            String?
   subtitle          String?
-  tags              String[]                   @default([])
+  tags              String[]             @default([])
   tournament        String?
-  vintage           Boolean                    @default(false)
+  tournamentId      String?
+  vintage           Boolean              @default(false)
   vintedUrl         String?
-  brand             Brand                      @relation(fields: [brandId], references: [id])
-  player            Player                     @relation(fields: [playerId], references: [id])
+
+  brand            Brand       @relation(fields: [brandId], references: [id])
+  player           Player      @relation(fields: [playerId], references: [id])
+  tournamentRecord Tournament? @relation(fields: [tournamentId], references: [id], onDelete: SetNull)
+
   images            ArtifactImage[]
   certificate       Certificate?
   museumCollections MuseumCollectionArtifact[]
@@ -211,6 +215,7 @@ model Artifact {
   @@index([publishedAt])
   @@index([year])
   @@index([tournament])
+  @@index([tournamentId])
   @@index([collection])
   @@index([createdAt])
 }
@@ -877,6 +882,7 @@ model Tournament {
   milestones    TournamentMilestone[]
   chapters      TournamentChapter[]
   iconicMoments TournamentIconicMoment[]
+  artifacts     Artifact[]
 
   @@index([name])
   @@index([category])

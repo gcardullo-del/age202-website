@@ -16,34 +16,53 @@ export default async function EditArtifactPage({
 }: PageProps) {
   const { artifactId } = await params;
 
-  const [artifact, players, brands] =
-    await Promise.all([
-      prisma.artifact.findUnique({
-        where: {
-          id: artifactId,
-        },
+  const [
+    artifact,
+    players,
+    brands,
+    tournaments,
+  ] = await Promise.all([
+    prisma.artifact.findUnique({
+      where: {
+        id: artifactId,
+      },
 
-        include: {
-          images: {
-            orderBy: {
-              sortOrder: "asc",
-            },
+      include: {
+        images: {
+          orderBy: {
+            sortOrder: "asc",
           },
         },
-      }),
+      },
+    }),
 
-      prisma.player.findMany({
-        orderBy: {
+    prisma.player.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+
+    prisma.brand.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+
+    prisma.tournament.findMany({
+      where: {
+        active: true,
+      },
+
+      orderBy: [
+        {
+          category: "asc",
+        },
+        {
           name: "asc",
         },
-      }),
-
-      prisma.brand.findMany({
-        orderBy: {
-          name: "asc",
-        },
-      }),
-    ]);
+      ],
+    }),
+  ]);
 
   if (!artifact) {
     notFound();
@@ -59,8 +78,10 @@ export default async function EditArtifactPage({
         artifactId={artifact.id}
         players={players}
         brands={brands}
+        tournaments={tournaments}
         initialValues={{
-          title: artifact.title,
+          title:
+            artifact.title,
 
           subtitle:
             artifact.subtitle,
@@ -153,16 +174,25 @@ export default async function EditArtifactPage({
           featured:
             artifact.featured,
 
-          images: artifact.images.map(
-            (image) => ({
-              id: image.id,
-              url: image.url,
-              alt: image.alt,
-              isCover: image.isCover,
-              sortOrder:
-                image.sortOrder,
-            }),
-          ),
+          images:
+            artifact.images.map(
+              (image) => ({
+                id:
+                  image.id,
+
+                url:
+                  image.url,
+
+                alt:
+                  image.alt,
+
+                isCover:
+                  image.isCover,
+
+                sortOrder:
+                  image.sortOrder,
+              }),
+            ),
         }}
       />
     </AdminShell>

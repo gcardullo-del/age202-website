@@ -6,6 +6,7 @@ import type {
   ArtifactRarity,
   Brand,
   Player,
+  Tournament,
 } from "@/generated/prisma/client";
 
 import {
@@ -38,6 +39,7 @@ export type GeneralInfoInitialValues = {
 type Props = {
   players: Player[];
   brands: Brand[];
+  tournaments: Tournament[];
   initialValues?: GeneralInfoInitialValues;
 };
 
@@ -53,6 +55,7 @@ const helperClass =
 export default function GeneralInfoCard({
   players,
   brands,
+  tournaments,
   initialValues,
 }: Props) {
   const {
@@ -89,6 +92,30 @@ export default function GeneralInfoCard({
     });
   }
 
+  function updateTournamentPreview(
+    tournamentId: string,
+  ) {
+    const tournament =
+      tournaments.find(
+        (item) =>
+          item.id === tournamentId,
+      );
+
+    updatePreview({
+      tournament:
+        tournament?.name ?? null,
+    });
+  }
+
+  const initialTournament =
+    tournaments.find(
+      (tournament) =>
+        tournament.name ===
+          initialValues?.tournament ||
+        tournament.shortName ===
+          initialValues?.tournament,
+    ) ?? null;
+
   return (
     <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
       <div className="border-b border-white/10 px-8 py-6">
@@ -117,7 +144,9 @@ export default function GeneralInfoCard({
             required
             className={inputClass}
             placeholder="Nike Federer Wimbledon Polo 2017"
-            defaultValue={initialValues?.title ?? ""}
+            defaultValue={
+              initialValues?.title ?? ""
+            }
             onChange={(event) =>
               updatePreview({
                 title:
@@ -140,7 +169,9 @@ export default function GeneralInfoCard({
             name="subtitle"
             className={inputClass}
             placeholder="The championship look from Federer's eighth Wimbledon title"
-            defaultValue={initialValues?.subtitle ?? ""}
+            defaultValue={
+              initialValues?.subtitle ?? ""
+            }
             onChange={(event) =>
               updatePreview({
                 subtitle:
@@ -169,7 +200,8 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="AGE202-0001"
             defaultValue={
-              initialValues?.archiveNumber ?? ""
+              initialValues?.archiveNumber ??
+              ""
             }
             onChange={(event) =>
               updatePreview({
@@ -199,7 +231,9 @@ export default function GeneralInfoCard({
             placeholder="2017"
             defaultValue={
               initialValues?.year != null
-                ? String(initialValues.year)
+                ? String(
+                    initialValues.year,
+                  )
                 : ""
             }
             onChange={(event) => {
@@ -229,7 +263,8 @@ export default function GeneralInfoCard({
             required
             className={inputClass}
             defaultValue={
-              initialValues?.playerId ?? ""
+              initialValues?.playerId ??
+              ""
             }
             onChange={(event) =>
               updatePlayerPreview(
@@ -269,7 +304,8 @@ export default function GeneralInfoCard({
             required
             className={inputClass}
             defaultValue={
-              initialValues?.brandId ?? ""
+              initialValues?.brandId ??
+              ""
             }
             onChange={(event) =>
               updateBrandPreview(
@@ -309,35 +345,70 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="Spring/Summer 2017"
             defaultValue={
-              initialValues?.season ?? ""
+              initialValues?.season ??
+              ""
             }
           />
         </div>
 
         <div>
           <label
-            htmlFor="artifact-tournament"
+            htmlFor="artifact-tournament-id"
             className={labelClass}
           >
             Tournament
           </label>
 
-          <input
-            id="artifact-tournament"
-            name="tournament"
+          <select
+            id="artifact-tournament-id"
+            name="tournamentId"
             className={inputClass}
-            placeholder="Wimbledon"
             defaultValue={
-              initialValues?.tournament ?? ""
+              initialTournament?.id ??
+              ""
             }
             onChange={(event) =>
-              updatePreview({
-                tournament:
-                  event.target.value ||
-                  null,
-              })
+              updateTournamentPreview(
+                event.target.value,
+              )
             }
+          >
+            <option value="">
+              No tournament
+            </option>
+
+            {tournaments.map(
+              (tournament) => (
+                <option
+                  key={tournament.id}
+                  value={tournament.id}
+                >
+                  {tournament.name}
+                  {tournament.shortName &&
+                  tournament.shortName !==
+                    tournament.name
+                    ? ` (${tournament.shortName})`
+                    : ""}
+                </option>
+              ),
+            )}
+          </select>
+
+          <input
+            type="hidden"
+            name="tournament"
+            value={
+              initialTournament?.name ??
+              initialValues?.tournament ??
+              ""
+            }
+            readOnly
           />
+
+          <p className={helperClass}>
+            Select a tournament from the AGE202 Tournament Archive. The relation
+            will be stored using its unique database record.
+          </p>
         </div>
 
         <div>
@@ -354,7 +425,8 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="NikeCourt Roger Federer Collection"
             defaultValue={
-              initialValues?.collection ?? ""
+              initialValues?.collection ??
+              ""
             }
             onChange={(event) =>
               updatePreview({
@@ -380,7 +452,8 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="Championship Edition"
             defaultValue={
-              initialValues?.edition ?? ""
+              initialValues?.edition ??
+              ""
             }
           />
         </div>
@@ -398,7 +471,8 @@ export default function GeneralInfoCard({
             name="category"
             className={inputClass}
             defaultValue={
-              initialValues?.category ?? ""
+              initialValues?.category ??
+              ""
             }
             onChange={(event) =>
               updatePreview({
@@ -455,7 +529,8 @@ export default function GeneralInfoCard({
             name="rarity"
             className={inputClass}
             defaultValue={
-              initialValues?.rarity ?? "COMMON"
+              initialValues?.rarity ??
+              "COMMON"
             }
             onChange={(event) =>
               updatePreview({
@@ -496,7 +571,8 @@ export default function GeneralInfoCard({
             name="size"
             className={inputClass}
             defaultValue={
-              initialValues?.size ?? ""
+              initialValues?.size ??
+              ""
             }
           >
             <option value="">
@@ -589,7 +665,8 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="White, gold and black"
             defaultValue={
-              initialValues?.colour ?? ""
+              initialValues?.colour ??
+              ""
             }
           />
         </div>
@@ -608,7 +685,8 @@ export default function GeneralInfoCard({
             className={inputClass}
             placeholder="100% polyester"
             defaultValue={
-              initialValues?.material ?? ""
+              initialValues?.material ??
+              ""
             }
           />
         </div>

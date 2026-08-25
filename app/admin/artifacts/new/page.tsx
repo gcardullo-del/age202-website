@@ -5,19 +5,35 @@ import AdminShell from "@/components/admin/AdminShell";
 import ArtifactForm from "./components/ArtifactForm";
 
 export default async function NewArtifactPage() {
-  const [players, brands] = await Promise.all([
-    prisma.player.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    }),
+  const [players, brands, tournaments] =
+    await Promise.all([
+      prisma.player.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      }),
 
-    prisma.brand.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    }),
-  ]);
+      prisma.brand.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      }),
+
+      prisma.tournament.findMany({
+        where: {
+          active: true,
+        },
+
+        orderBy: [
+          {
+            category: "asc",
+          },
+          {
+            name: "asc",
+          },
+        ],
+      }),
+    ]);
 
   return (
     <AdminShell
@@ -27,6 +43,7 @@ export default async function NewArtifactPage() {
       <ArtifactForm
         players={players}
         brands={brands}
+        tournaments={tournaments}
       />
     </AdminShell>
   );

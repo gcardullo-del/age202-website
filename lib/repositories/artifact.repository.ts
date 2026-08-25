@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/prisma";
 
 type CreateArtifactData =
-  Parameters<typeof prisma.artifact.create>[0]["data"];
+  Parameters<
+    typeof prisma.artifact.create
+  >[0]["data"];
 
 const publicArtifactInclude = {
   player: true,
@@ -104,7 +106,10 @@ export async function getLatestArtifacts(
     ],
     take: Math.max(
       1,
-      Math.min(Math.trunc(limit), 12),
+      Math.min(
+        Math.trunc(limit),
+        12,
+      ),
     ),
   });
 }
@@ -134,7 +139,10 @@ export async function getFeaturedArtifacts(
     ],
     take: Math.max(
       1,
-      Math.min(Math.trunc(limit), 24),
+      Math.min(
+        Math.trunc(limit),
+        24,
+      ),
     ),
   });
 }
@@ -173,6 +181,89 @@ export async function getArtifactsByPlayerSlug(
 }
 
 /**
+ * Restituisce i reperti pubblicati collegati
+ * a uno specifico torneo.
+ *
+ * Il collegamento utilizza il campo testuale `tournament`
+ * già presente nella scheda Artifact del CMS.
+ *
+ * Possono essere forniti più nomi per supportare
+ * name e shortName del torneo.
+ */
+export async function getArtifactsByTournamentNames(
+  tournamentNames: string[],
+  limit = 12,
+) {
+  const normalizedNames =
+    Array.from(
+      new Set(
+        tournamentNames
+          .map((name) =>
+            name.trim(),
+          )
+          .filter(
+            (name) =>
+              name.length > 0,
+          ),
+      ),
+    );
+
+  if (
+    normalizedNames.length === 0
+  ) {
+    return [];
+  }
+
+  return prisma.artifact.findMany({
+    where: {
+      status: "PUBLISHED",
+
+      player: {
+        active: true,
+      },
+
+      OR: normalizedNames.map(
+        (name) => ({
+          tournament: {
+            equals: name,
+            mode: "insensitive",
+          },
+        }),
+      ),
+    },
+
+    include:
+      publicArtifactInclude,
+
+    orderBy: [
+      {
+        availability: "asc",
+      },
+      {
+        featured: "desc",
+      },
+      {
+        year: "desc",
+      },
+      {
+        publishedAt: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+
+    take: Math.max(
+      1,
+      Math.min(
+        Math.trunc(limit),
+        24,
+      ),
+    ),
+  });
+}
+
+/**
  * Restituisce un reperto tramite ID senza applicare
  * restrizioni sullo stato.
  *
@@ -192,7 +283,8 @@ export async function getArtifactById(
     where: {
       id: normalizedId,
     },
-    include: publicArtifactInclude,
+    include:
+      publicArtifactInclude,
   });
 }
 
@@ -216,7 +308,8 @@ export async function getArtifactBySlug(
     where: {
       slug: normalizedSlug,
     },
-    include: publicArtifactInclude,
+    include:
+      publicArtifactInclude,
   });
 }
 
@@ -237,7 +330,8 @@ export async function getPublishedArtifactBySlug(
         active: true,
       },
     },
-    include: publicArtifactInclude,
+    include:
+      publicArtifactInclude,
   });
 }
 
@@ -262,7 +356,8 @@ export async function getRelatedArtifacts({
       playerId,
       status: "PUBLISHED",
     },
-    include: publicArtifactInclude,
+    include:
+      publicArtifactInclude,
     orderBy: [
       {
         featured: "desc",
@@ -279,7 +374,10 @@ export async function getRelatedArtifacts({
     ],
     take: Math.max(
       1,
-      Math.min(Math.trunc(limit), 12),
+      Math.min(
+        Math.trunc(limit),
+        12,
+      ),
     ),
   });
 }
