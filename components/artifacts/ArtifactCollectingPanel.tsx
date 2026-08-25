@@ -162,9 +162,11 @@ export default function ArtifactCollectingPanel({
 
             {isAvailable ? (
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/38">
-                Non è una disponibilità di magazzino:
-                rappresenta un singolo reperto fisico
-                catalogato nell’archivio AGE202.
+                Non è una disponibilità di
+                magazzino: rappresenta un
+                singolo reperto fisico
+                catalogato nell’archivio
+                AGE202.
               </p>
             ) : null}
 
@@ -218,13 +220,21 @@ export default function ArtifactCollectingPanel({
                     title="Authenticity"
                     description={
                       certificateVerified
-                        ? "Identità verificata"
+                        ? "Autenticità documentata"
                         : "Autenticità registrata"
                     }
                   />
                 ) : null}
 
-                {authentic ? (
+                {certificateVerified ? (
+                  <CollectingFact
+                    icon={
+                      <ShieldCheck className="h-4 w-4" />
+                    }
+                    title="Digital Certificate"
+                    description="Certificato AGE202 verificato"
+                  />
+                ) : authentic ? (
                   <CollectingFact
                     icon={
                       <Sparkles className="h-4 w-4" />
@@ -294,15 +304,21 @@ export default function ArtifactCollectingPanel({
 
                 {isAvailable ? (
                   <>
-                    <p className="mt-4 text-sm font-semibold text-lime-200/80">
-                      1 solo esemplare disponibile
+                    <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-lime-200/85">
+                      <CircleCheck className="h-4 w-4" />
+
+                      1 solo esemplare
+                      disponibile
                     </p>
 
-                    <p className="mt-2 text-sm leading-7 text-white/40">
-                      Una volta acquisito, questo
-                      Artifact non sarà più disponibile
-                      nell’archivio pubblico come pezzo
-                      collezionabile.
+                    <p className="mt-3 text-sm leading-7 text-white/40">
+                      Una volta acquisito,
+                      questo Artifact non sarà
+                      più disponibile come
+                      reperto collezionabile,
+                      mentre il suo record
+                      museale resterà
+                      preservato.
                     </p>
                   </>
                 ) : null}
@@ -315,8 +331,9 @@ export default function ArtifactCollectingPanel({
                       <ShieldCheck className="h-4 w-4" />
                     }
                   >
-                    Identità del reperto registrata
-                    nell’archivio AGE202
+                    Identità del reperto
+                    registrata nell’archivio
+                    AGE202
                   </TrustRow>
 
                   <TrustRow
@@ -324,7 +341,8 @@ export default function ArtifactCollectingPanel({
                       <Fingerprint className="h-4 w-4" />
                     }
                   >
-                    Record univoco associato al pezzo
+                    Record univoco associato
+                    al pezzo fisico
                   </TrustRow>
 
                   {authentic ? (
@@ -334,6 +352,18 @@ export default function ArtifactCollectingPanel({
                       }
                     >
                       Autenticità documentata
+                      nell’archivio
+                    </TrustRow>
+                  ) : null}
+
+                  {certificateVerified ? (
+                    <TrustRow
+                      icon={
+                        <FileCheck2 className="h-4 w-4" />
+                      }
+                    >
+                      Certificato digitale
+                      AGE202 verificato
                     </TrustRow>
                   ) : null}
 
@@ -342,8 +372,9 @@ export default function ArtifactCollectingPanel({
                       <LockKeyhole className="h-4 w-4" />
                     }
                   >
-                    Acquisizione completata tramite
-                    marketplace esterno
+                    Acquisizione completata
+                    tramite marketplace
+                    esterno
                   </TrustRow>
                 </div>
               ) : null}
@@ -353,31 +384,73 @@ export default function ArtifactCollectingPanel({
                 formattedPrice ? (
                   vintedUrl ? (
                     <>
+                      <div className="mb-4 rounded-2xl border border-lime-300/15 bg-lime-300/[0.045] px-4 py-4">
+                        <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-lime-300">
+                          Collector Assurance
+                        </p>
+
+                        <div className="mt-3 grid gap-2 text-xs leading-5 text-white/45">
+                          <span className="flex items-center gap-2">
+                            <CircleCheck className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+                            One physical
+                            specimen
+                          </span>
+
+                          <span className="flex items-center gap-2">
+                            <Fingerprint className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+                            Permanent AGE202
+                            archive identity
+                          </span>
+
+                          {authentic ? (
+                            <span className="flex items-center gap-2">
+                              <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+                              Authenticity
+                              documented
+                            </span>
+                          ) : null}
+
+                          {certificateVerified ? (
+                            <span className="flex items-center gap-2">
+                              <FileCheck2 className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+                              Digital
+                              certificate
+                              verified
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+
                       <Link
                         href={vintedUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-lime-300 bg-lime-300 px-6 py-5 text-sm font-black uppercase tracking-[0.17em] text-[#050b18] transition duration-300 hover:bg-lime-200"
+                        className="group inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-lime-300 bg-lime-300 px-6 py-5 text-sm font-black uppercase tracking-[0.17em] text-[#050b18] transition duration-300 hover:bg-lime-200 hover:shadow-[0_0_40px_rgba(190,242,100,0.12)]"
                       >
-                        Explore & Collect
+                        Collect this Artifact
 
                         <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                       </Link>
 
                       <div className="mt-5 border-t border-white/10 pt-5 text-center">
-                        <p className="text-xs leading-6 text-white/40">
-                          Acquisizione tramite Vinted.
+                        <p className="inline-flex items-center justify-center gap-2 text-xs leading-6 text-white/45">
+                          <LockKeyhole className="h-3.5 w-3.5 text-lime-300" />
+
+                          Continue securely on
+                          Vinted
                         </p>
 
                         <p className="mt-1 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/25">
-                          External secure marketplace
+                          External marketplace
+                          checkout
                         </p>
                       </div>
                     </>
                   ) : (
                     <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 px-6 py-5 text-sm leading-7 text-white/45">
-                      Questo Artifact è disponibile,
-                      ma non è ancora associato a un
+                      Questo Artifact è
+                      disponibile, ma non è
+                      ancora associato a un
                       link di acquisizione.
                     </div>
                   )
@@ -391,8 +464,9 @@ export default function ArtifactCollectingPanel({
                     </p>
 
                     <p className="mt-2 text-sm leading-7 text-white/35">
-                      La scheda museale continuerà a
-                      essere preservata nell’archivio
+                      La scheda museale
+                      continuerà a essere
+                      preservata nell’archivio
                       AGE202.
                     </p>
                   </div>
