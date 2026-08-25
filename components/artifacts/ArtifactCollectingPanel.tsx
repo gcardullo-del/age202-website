@@ -324,100 +324,37 @@ export default function ArtifactCollectingPanel({
                 ) : null}
               </div>
 
-              {isAvailable ? (
-                <div className="mb-7 grid gap-3">
-                  <TrustRow
-                    icon={
-                      <ShieldCheck className="h-4 w-4" />
-                    }
-                  >
-                    Identità del reperto
-                    registrata nell’archivio
-                    AGE202
-                  </TrustRow>
-
-                  <TrustRow
-                    icon={
-                      <Fingerprint className="h-4 w-4" />
-                    }
-                  >
-                    Record univoco associato
-                    al pezzo fisico
-                  </TrustRow>
-
-                  {authentic ? (
-                    <TrustRow
-                      icon={
-                        <BadgeCheck className="h-4 w-4" />
-                      }
-                    >
-                      Autenticità documentata
-                      nell’archivio
-                    </TrustRow>
-                  ) : null}
-
-                  {certificateVerified ? (
-                    <TrustRow
-                      icon={
-                        <FileCheck2 className="h-4 w-4" />
-                      }
-                    >
-                      Certificato digitale
-                      AGE202 verificato
-                    </TrustRow>
-                  ) : null}
-
-                  <TrustRow
-                    icon={
-                      <LockKeyhole className="h-4 w-4" />
-                    }
-                  >
-                    Acquisizione completata
-                    tramite marketplace
-                    esterno
-                  </TrustRow>
-                </div>
-              ) : null}
-
               <div className="mt-auto">
                 {isAvailable &&
                 formattedPrice ? (
                   vintedUrl ? (
                     <>
-                      <div className="mb-4 rounded-2xl border border-lime-300/15 bg-lime-300/[0.045] px-4 py-4">
+                      <div className="mb-5 rounded-2xl border border-lime-300/15 bg-lime-300/[0.045] px-5 py-5">
                         <p className="text-[0.62rem] font-black uppercase tracking-[0.2em] text-lime-300">
                           Collector Assurance
                         </p>
 
-                        <div className="mt-3 grid gap-2 text-xs leading-5 text-white/45">
+                        <div className="mt-4 grid gap-3 text-xs leading-5 text-white/45">
                           <span className="flex items-center gap-2">
                             <CircleCheck className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+
                             One physical
                             specimen
                           </span>
 
                           <span className="flex items-center gap-2">
-                            <Fingerprint className="h-3.5 w-3.5 shrink-0 text-lime-300" />
-                            Permanent AGE202
-                            archive identity
+                            <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-lime-300" />
+
+                            AGE202 archive
+                            record preserved
                           </span>
 
-                          {authentic ? (
-                            <span className="flex items-center gap-2">
-                              <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-lime-300" />
-                              Authenticity
-                              documented
-                            </span>
-                          ) : null}
+                          <span className="flex items-center gap-2">
+                            <LockKeyhole className="h-3.5 w-3.5 shrink-0 text-lime-300" />
 
-                          {certificateVerified ? (
-                            <span className="flex items-center gap-2">
-                              <FileCheck2 className="h-3.5 w-3.5 shrink-0 text-lime-300" />
-                              Digital
-                              certificate
-                              verified
-                            </span>
-                          ) : null}
+                            Secure acquisition
+                            via Vinted
+                          </span>
                         </div>
                       </div>
 
@@ -502,26 +439,6 @@ function CollectingFact({
       <p className="mt-3 text-sm leading-6 text-white/45">
         {description}
       </p>
-    </div>
-  );
-}
-
-function TrustRow({
-  icon,
-  children,
-}: {
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <div className="flex items-start gap-3 text-sm leading-6 text-white/45">
-      <span className="mt-0.5 shrink-0 text-lime-300">
-        {icon}
-      </span>
-
-      <span>
-        {children}
-      </span>
     </div>
   );
 }
