@@ -23,23 +23,22 @@ import {
 import TournamentHero from "@/components/tournaments/TournamentHero";
 
 import {
-  getArtifactsByTournamentId,
-} from "@/lib/repositories/artifact.repository";
+  prisma,
+} from "@/lib/prisma";
 
 import {
   getMuseumTournamentBySlug,
 } from "@/lib/services/museum/tournament.service";
 
 /*
- * Le pagine Tournament devono riflettere immediatamente
- * risultati, Artifact e aggiornamenti provenienti dal database.
- *
- * Evitiamo quindi il prerender statico e qualsiasi cache ISR.
+ * Tournament pages must always read the latest
+ * tournament results and museum Artifact relations.
  */
 export const dynamic =
   "force-dynamic";
 
-export const revalidate = 0;
+export const revalidate =
+  0;
 
 const getCachedTournamentBySlug =
   cache(
@@ -105,10 +104,14 @@ function formatPrice(
     "it-IT",
     {
       style: "currency",
+
       currency:
-        currency ?? "EUR",
+        currency ??
+        "EUR",
     },
-  ).format(numericPrice);
+  ).format(
+    numericPrice,
+  );
 }
 
 export async function generateMetadata({
@@ -154,6 +157,7 @@ export async function generateMetadata({
               {
                 url:
                   tournament.heroImage,
+
                 alt:
                   `${tournament.name} — AGE202 Tournament Archive`,
               },
@@ -164,6 +168,7 @@ export async function generateMetadata({
     twitter: {
       card:
         "summary_large_image",
+
       title,
       description,
 
@@ -202,16 +207,81 @@ export default async function TournamentPage({
   }
 
   /*
-   * Artifact collegati tramite relazione Prisma reale.
+   * IMPORTANT
+   * ---------
+   *
+   * Questa query è volutamente diretta.
+   *
+   * Il test effettuato nell'ambiente Vercel Production
+   * ha confermato che:
    *
    * Tournament.id
-   *      ↓
+   *        ↓
    * Artifact.tournamentId
+   *
+   * è correttamente registrato nel database.
+   *
+   * La pagina legge quindi direttamente la relazione
+   * Prisma senza utilizzare matching testuali o fallback.
    */
   const artifacts =
-    await getArtifactsByTournamentId(
-      tournament.id,
-    );
+    await prisma.artifact.findMany({
+      where: {
+        tournamentId:
+          tournament.id,
+
+        status:
+          "PUBLISHED",
+
+        player: {
+          active: true,
+        },
+      },
+
+      include: {
+        player: true,
+
+        brand: true,
+
+        images: {
+          orderBy: [
+            {
+              isCover:
+                "desc",
+            },
+            {
+              sortOrder:
+                "asc",
+            },
+          ],
+        },
+      },
+
+      orderBy: [
+        {
+          availability:
+            "asc",
+        },
+        {
+          featured:
+            "desc",
+        },
+        {
+          year:
+            "desc",
+        },
+        {
+          publishedAt:
+            "desc",
+        },
+        {
+          createdAt:
+            "desc",
+        },
+      ],
+
+      take: 24,
+    });
 
   const categoryLabel =
     formatCategory(
@@ -360,7 +430,7 @@ export default async function TournamentPage({
         </div>
       </section>
 
-      {artifacts.length > 0 && (
+      {artifacts.length > 0 ? (
         <section
           id="tournament-artifacts"
           className="relative overflow-hidden border-b border-white/10 bg-[#07101D] px-5 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-28"
@@ -389,18 +459,31 @@ export default async function TournamentPage({
                 </h2>
               </div>
 
-              <p className="max-w-xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8">
-                Museum artifacts
-                catalogued in connection
-                with{" "}
-                <span className="font-semibold text-white/75">
-                  {tournament.shortName ??
-                    tournament.name}
-                </span>
-                . Explore their stories,
-                archive records and
-                collecting status.
-              </p>
+              <div className="lg:text-right">
+                <p className="max-w-xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8 lg:ml-auto">
+                  Museum artifacts
+                  catalogued in direct
+                  connection with{" "}
+
+                  <span className="font-semibold text-white/75">
+                    {tournament.shortName ??
+                      tournament.name}
+                  </span>
+
+                  . Explore their stories,
+                  archive records and
+                  collecting status.
+                </p>
+
+                <p className="mt-4 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-[#D7FF00]">
+                  {artifacts.length}{" "}
+                  {artifacts.length ===
+                  1
+                    ? "Artifact"
+                    : "Artifacts"}{" "}
+                  catalogued
+                </p>
+              </div>
             </div>
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
@@ -472,6 +555,7 @@ export default async function TournamentPage({
                             <span
                               className={[
                                 "rounded-full border px-3 py-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] backdrop-blur-md",
+
                                 isAvailable
                                   ? "border-[#D7FF00]/30 bg-[#D7FF00]/10 text-[#D7FF00]"
                                   : "border-white/10 bg-black/45 text-white/45",
@@ -523,13 +607,13 @@ export default async function TournamentPage({
                           </h3>
                         </Link>
 
-                        {artifact.subtitle && (
+                        {artifact.subtitle ? (
                           <p className="mt-3 text-sm leading-6 text-white/45">
                             {
                               artifact.subtitle
                             }
                           </p>
-                        )}
+                        ) : null}
 
                         <div className="mt-6 border-t border-white/10 pt-5">
                           <div className="flex items-end justify-between gap-6">
@@ -581,7 +665,7 @@ export default async function TournamentPage({
             </div>
           </div>
         </section>
-      )}
+      ) : null}
     </main>
   );
 }
