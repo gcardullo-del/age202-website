@@ -364,6 +364,19 @@ function findRunnerUpName(
   candidate: FinalCandidate,
   winnerName: string,
 ): string | null {
+  /*
+   * Normal ATP Results pages expose player names through
+   * /players/ anchors.
+   *
+   * ATP Stats Centre, however, can render the final without
+   * player profile anchors. In that fallback we intentionally
+   * create synthetic candidate links with href = null.
+   *
+   * Therefore:
+   * - real links must point to /players/;
+   * - synthetic links with href = null are also valid;
+   * - unrelated links are ignored.
+   */
   const playerLinks =
     candidate.links
       .map(
@@ -378,15 +391,19 @@ function findRunnerUpName(
         }),
       )
       .filter(
-        (link) =>
-          Boolean(
-            link.name,
-          ) &&
-          Boolean(
-            link.href?.match(
-              /\/players\//i,
-            ),
-          ),
+        (link) => {
+          if (!link.name) {
+            return false;
+          }
+
+          if (link.href === null) {
+            return true;
+          }
+
+          return /\/players\//i.test(
+            link.href,
+          );
+        },
       );
 
   const uniqueNames =
@@ -414,7 +431,6 @@ function findRunnerUpName(
     null
   );
 }
-
 
 async function candidateFromLocator(
   locator: Locator,
@@ -1326,16 +1342,16 @@ async function main() {
    * ATP tournament ID: 1536
    */
   const raw =
-    await extractAtpTournamentFinal({
-      tournamentSlug:
-        "madrid",
+  await extractAtpTournamentFinal({
+    tournamentSlug:
+      "miami",
 
-      tournamentId:
-        "1536",
+    tournamentId:
+      "403",
 
-      year:
-        2026,
-    });
+    year:
+      2026,
+  });
 
   const parsed =
     parseAtpTournamentFinal(

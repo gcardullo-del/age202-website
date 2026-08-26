@@ -40,16 +40,44 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Sync ATP Masters 1000
+        id: sync_masters_1000
+        continue-on-error: true
         run: npx tsx scripts/sync-atp-masters-1000-live.ts --write
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Sync ATP 500
+        id: sync_atp_500
+        if: always()
+        continue-on-error: true
         run: npx tsx scripts/sync-atp-500-live.ts --write
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Sync ATP 250
+        id: sync_atp_250
+        if: always()
+        continue-on-error: true
         run: npx tsx scripts/sync-atp-250-live.ts --write
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Sync summary
+        if: always()
+        run: |
+          echo "======================================"
+          echo "AGE202 ATP TOURNAMENT SYNC SUMMARY"
+          echo "======================================"
+          echo ""
+          echo "Masters 1000: ${{ steps.sync_masters_1000.outcome }}"
+          echo "ATP 500:      ${{ steps.sync_atp_500.outcome }}"
+          echo "ATP 250:      ${{ steps.sync_atp_250.outcome }}"
+          echo ""
+
+          if [ "${{ steps.sync_masters_1000.outcome }}" != "success" ] || \
+             [ "${{ steps.sync_atp_500.outcome }}" != "success" ] || \
+             [ "${{ steps.sync_atp_250.outcome }}" != "success" ]; then
+            echo "⚠️ One or more tournament syncs reported an error."
+          else
+            echo "✅ All ATP tournament syncs completed successfully."
+          fi

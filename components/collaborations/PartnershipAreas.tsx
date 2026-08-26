@@ -1,8 +1,11 @@
+import Link from "next/link";
+
 import {
   Camera,
   Landmark,
   Sparkles,
   Trophy,
+  UserRound,
   Users,
 } from "lucide-react";
 
@@ -15,6 +18,7 @@ const partnershipAreas = [
     description:
       "Editorial projects with brands whose archives, design language and sporting history deserve a museum-quality presentation.",
     icon: Trophy,
+    href: null,
   },
   {
     number: "02",
@@ -23,6 +27,7 @@ const partnershipAreas = [
     description:
       "Collaborations with tennis clubs, academies and tournaments to document local stories and create memorable cultural activations.",
     icon: Landmark,
+    href: null,
   },
   {
     number: "03",
@@ -31,6 +36,7 @@ const partnershipAreas = [
     description:
       "Partnerships with photographers, filmmakers, designers and writers who can reinterpret the visual culture of tennis.",
     icon: Camera,
+    href: null,
   },
   {
     number: "04",
@@ -39,6 +45,16 @@ const partnershipAreas = [
     description:
       "Curated projects with collectors who want to preserve, contextualise and share significant apparel or memorabilia.",
     icon: Users,
+    href: null,
+  },
+  {
+    number: "05",
+    title: "Players & Legends",
+    eyebrow: "Stories & legacy",
+    description:
+      "Direct contributions from professional players and former champions through personal stories, video greetings, dedications and memorabilia preserved inside the AGE202 archive.",
+    icon: UserRound,
+    href: "/contribute",
   },
 ];
 
@@ -79,7 +95,8 @@ export default function PartnershipAreas() {
                 size={13}
                 className="text-[#ccff00]"
               />
-              Four areas · One partnership language
+
+              Five areas · One partnership language
             </div>
           </div>
         </div>
@@ -93,10 +110,13 @@ export default function PartnershipAreas() {
               const Icon =
                 area.icon;
 
-              return (
+              const card = (
                 <article
-                  key={area.number}
-                  className="group relative min-h-[330px] overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))] p-7 transition duration-500 hover:-translate-y-1 hover:border-[#ccff00]/35 sm:p-8"
+                  className={`group relative min-h-[330px] overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015))] p-7 transition duration-500 hover:-translate-y-1 hover:border-[#ccff00]/35 sm:p-8 ${
+                    area.href
+                      ? "cursor-pointer"
+                      : ""
+                  }`}
                 >
                   <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,rgba(204,255,0,.085),transparent_32%)] opacity-70 transition duration-500 group-hover:opacity-100" />
 
@@ -134,9 +154,43 @@ export default function PartnershipAreas() {
 
                     <div className="mt-auto pt-8">
                       <div className="h-px w-full bg-gradient-to-r from-white/10 via-white/[.06] to-transparent" />
+
+                      {area.href && (
+                        <div className="mt-5 flex items-center justify-between gap-4">
+                          <span className="text-[9px] font-black uppercase tracking-[.22em] text-[#ccff00]">
+                            Contribute to the Museum
+                          </span>
+
+                          <span className="text-lg text-[#ccff00] transition-transform duration-300 group-hover:translate-x-1">
+                            →
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </article>
+              );
+
+              if (
+                area.href
+              ) {
+                return (
+                  <Link
+                    key={area.number}
+                    href={area.href}
+                    className="block"
+                  >
+                    {card}
+                  </Link>
+                );
+              }
+
+              return (
+                <div
+                  key={area.number}
+                >
+                  {card}
+                </div>
               );
             },
           )}
@@ -145,14 +199,14 @@ export default function PartnershipAreas() {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-5">
           <p className="text-[8px] font-black uppercase tracking-[.22em] text-white/25">
-            Brands · Clubs · Creators · Collectors
+            Brands · Clubs · Creators · Collectors · Players
           </p>
 
           <div className="flex items-center gap-3">
             <span className="h-px w-10 bg-[#ccff00]/40" />
 
             <span className="text-[8px] font-black uppercase tracking-[.22em] text-[#ccff00]">
-              Culture · Access · Craft · Provenance
+              Culture · Access · Craft · Provenance · Legacy
             </span>
           </div>
         </div>

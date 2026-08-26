@@ -19,6 +19,7 @@ import {
 import GlobalMuseumSearch from "@/components/public/GlobalMuseumSearch";
 import MuseumSearchShortcut from "@/components/public/MuseumSearchShortcut";
 
+
 const playerLinks = [
   ["Roger Federer", "/archives/federer"],
   ["Rafael Nadal", "/archives/nadal"],
@@ -28,15 +29,26 @@ const playerLinks = [
   ["ATP Archive", "/players/other-players"],
 ] as const;
 
-const primaryLinks = [
+
+const primaryLinksBeforeCollaborations = [
   ["Legends", "/legends"],
   ["ATP Ranking", "/atp-ranking"],
   ["Results", "/results"],
   ["Tennis History", "/tennis-history"],
   ["Memorabilia", "/memorabilia"],
-  ["Collaborations", "/collaborations"],
+] as const;
+
+
+const primaryLinksAfterCollaborations = [
   ["Originals", "/age202-originals"],
 ] as const;
+
+
+const collaborationLinks = [
+  ["Partnerships", "/collaborations"],
+  ["Contribute to the Museum", "/contribute"],
+] as const;
+
 
 function isCurrent(
   pathname: string,
@@ -49,6 +61,7 @@ function isCurrent(
     )
   );
 }
+
 
 export default function MuseumNavbar() {
   const pathname = usePathname();
@@ -64,6 +77,11 @@ export default function MuseumNavbar() {
   ] = useState(false);
 
   const [
+    collaborationsOpen,
+    setCollaborationsOpen,
+  ] = useState(false);
+
+  const [
     searchOpen,
     setSearchOpen,
   ] = useState(false);
@@ -73,15 +91,18 @@ export default function MuseumNavbar() {
     setScrolled,
   ] = useState(false);
 
+
   const openSearch =
     useCallback(() => {
       setSearchOpen(true);
     }, []);
 
+
   const closeSearch =
     useCallback(() => {
       setSearchOpen(false);
     }, []);
+
 
   useEffect(() => {
     const updateNavbar = () => {
@@ -108,12 +129,14 @@ export default function MuseumNavbar() {
     };
   }, []);
 
+
   useEffect(() => {
     const frame =
       window.requestAnimationFrame(
         () => {
           setMenuOpen(false);
           setPlayersOpen(false);
+          setCollaborationsOpen(false);
           setSearchOpen(false);
         },
       );
@@ -127,6 +150,7 @@ export default function MuseumNavbar() {
     pathname,
   ]);
 
+
   const playersActive =
     pathname === "/players" ||
     pathname.startsWith(
@@ -135,6 +159,18 @@ export default function MuseumNavbar() {
     pathname.startsWith(
       "/archives/",
     );
+
+
+  const collaborationsActive =
+    pathname === "/collaborations" ||
+    pathname.startsWith(
+      "/collaborations/",
+    ) ||
+    pathname === "/contribute" ||
+    pathname.startsWith(
+      "/contribute/",
+    );
+
 
   return (
     <>
@@ -165,6 +201,7 @@ export default function MuseumNavbar() {
             />
           </Link>
 
+
           <nav
             aria-label="Primary navigation"
             className="mx-auto hidden h-full items-center gap-5 2xl:flex"
@@ -187,6 +224,7 @@ export default function MuseumNavbar() {
                 }`}
               />
             </Link>
+
 
             <div
               className="relative flex h-full items-center"
@@ -235,6 +273,7 @@ export default function MuseumNavbar() {
                 />
               </Link>
 
+
               <div
                 className={`absolute left-1/2 top-full w-64 -translate-x-1/2 pt-2 transition duration-200 ${
                   playersOpen
@@ -259,12 +298,8 @@ export default function MuseumNavbar() {
 
                       return (
                         <Link
-                          key={
-                            label
-                          }
-                          href={
-                            href
-                          }
+                          key={label}
+                          href={href}
                           role="menuitem"
                           className={`flex items-center justify-between rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-[.16em] transition ${
                             active
@@ -273,9 +308,7 @@ export default function MuseumNavbar() {
                           }`}
                         >
                           <span>
-                            {
-                              label
-                            }
+                            {label}
                           </span>
 
                           <span
@@ -291,7 +324,150 @@ export default function MuseumNavbar() {
               </div>
             </div>
 
-            {primaryLinks.map(
+
+            {primaryLinksBeforeCollaborations.map(
+              ([
+                label,
+                href,
+              ]) => {
+                const active =
+                  isCurrent(
+                    pathname,
+                    href,
+                  );
+
+                return (
+                  <Link
+                    key={label}
+                    href={href}
+                    className={`group relative flex h-full items-center whitespace-nowrap text-[10px] font-bold uppercase tracking-[.18em] transition ${
+                      active
+                        ? "text-[#d7ff00]"
+                        : "text-white/72 hover:text-white"
+                    }`}
+                  >
+                    {label}
+
+                    <span
+                      className={`absolute inset-x-0 bottom-[20px] h-px origin-left bg-[#d7ff00] transition-transform duration-300 ${
+                        active
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                );
+              },
+            )}
+
+
+            <div
+              className="relative flex h-full items-center"
+              onMouseEnter={() =>
+                setCollaborationsOpen(
+                  true,
+                )
+              }
+              onMouseLeave={() =>
+                setCollaborationsOpen(
+                  false,
+                )
+              }
+            >
+              <Link
+                href="/collaborations"
+                aria-haspopup="menu"
+                aria-expanded={
+                  collaborationsOpen
+                }
+                className={`group relative flex h-full items-center gap-1.5 whitespace-nowrap text-[10px] font-bold uppercase tracking-[.18em] transition ${
+                  collaborationsActive
+                    ? "text-[#d7ff00]"
+                    : "text-white/72 hover:text-white"
+                }`}
+              >
+                Collaborations
+
+                <ChevronDown
+                  size={13}
+                  strokeWidth={1.8}
+                  className={`transition-transform duration-200 ${
+                    collaborationsOpen
+                      ? "rotate-180"
+                      : ""
+                  }`}
+                />
+
+                <span
+                  className={`absolute inset-x-0 bottom-[20px] h-px origin-left bg-[#d7ff00] transition-transform duration-300 ${
+                    collaborationsActive ||
+                    collaborationsOpen
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
+                  }`}
+                />
+              </Link>
+
+
+              <div
+                className={`absolute left-1/2 top-full w-72 -translate-x-1/2 pt-2 transition duration-200 ${
+                  collaborationsOpen
+                    ? "pointer-events-auto translate-y-0 opacity-100"
+                    : "pointer-events-none -translate-y-1 opacity-0"
+                }`}
+              >
+                <div
+                  role="menu"
+                  className="overflow-hidden rounded-2xl border border-white/10 bg-[#07101f]/98 p-2 shadow-2xl shadow-black/50 backdrop-blur-2xl"
+                >
+                  <div className="px-4 pb-3 pt-2">
+                    <p className="text-[8px] font-black uppercase tracking-[.22em] text-white/25">
+                      AGE202 Collaboration Office
+                    </p>
+                  </div>
+
+                  {collaborationLinks.map(
+                    ([
+                      label,
+                      href,
+                    ]) => {
+                      const active =
+                        isCurrent(
+                          pathname,
+                          href,
+                        );
+
+                      return (
+                        <Link
+                          key={label}
+                          href={href}
+                          role="menuitem"
+                          className={`group/item flex items-center justify-between rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-[.16em] transition ${
+                            active
+                              ? "bg-white/[.06] text-[#d7ff00]"
+                              : "text-white/65 hover:bg-white/[.06] hover:text-[#d7ff00]"
+                          }`}
+                        >
+                          <span>
+                            {label}
+                          </span>
+
+                          <span
+                            aria-hidden="true"
+                            className="transition-transform duration-200 group-hover/item:translate-x-0.5"
+                          >
+                            ↗
+                          </span>
+                        </Link>
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+            </div>
+
+
+            {primaryLinksAfterCollaborations.map(
               ([
                 label,
                 href,
@@ -326,6 +502,7 @@ export default function MuseumNavbar() {
               },
             )}
           </nav>
+
 
           <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
             <Link
@@ -384,6 +561,7 @@ export default function MuseumNavbar() {
           </div>
         </div>
 
+
         {menuOpen && (
           <nav
             id="mobile-navigation"
@@ -396,10 +574,12 @@ export default function MuseumNavbar() {
                 className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
               >
                 Home
+
                 <span className="text-sm text-[#d7ff00]">
                   ↗
                 </span>
               </Link>
+
 
               <button
                 type="button"
@@ -426,6 +606,7 @@ export default function MuseumNavbar() {
                 />
               </button>
 
+
               {playersOpen && (
                 <div className="border-b border-white/10 bg-white/[.025] px-4 py-2">
                   <Link
@@ -447,17 +628,11 @@ export default function MuseumNavbar() {
                       href,
                     ]) => (
                       <Link
-                        key={
-                          label
-                        }
-                        href={
-                          href
-                        }
+                        key={label}
+                        href={href}
                         className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
                       >
-                        {
-                          label
-                        }
+                        {label}
 
                         <span
                           aria-hidden="true"
@@ -470,7 +645,8 @@ export default function MuseumNavbar() {
                 </div>
               )}
 
-              {primaryLinks.map(
+
+              {primaryLinksBeforeCollaborations.map(
                 ([
                   label,
                   href,
@@ -489,6 +665,79 @@ export default function MuseumNavbar() {
                 ),
               )}
 
+
+              <button
+                type="button"
+                onClick={() =>
+                  setCollaborationsOpen(
+                    (value) =>
+                      !value,
+                  )
+                }
+                aria-expanded={
+                  collaborationsOpen
+                }
+                className="flex w-full items-center justify-between border-b border-white/10 py-4 text-left text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
+              >
+                Collaborations
+
+                <ChevronDown
+                  size={18}
+                  className={`transition-transform duration-200 ${
+                    collaborationsOpen
+                      ? "rotate-180"
+                      : ""
+                  }`}
+                />
+              </button>
+
+
+              {collaborationsOpen && (
+                <div className="border-b border-white/10 bg-white/[.025] px-4 py-2">
+                  {collaborationLinks.map(
+                    ([
+                      label,
+                      href,
+                    ]) => (
+                      <Link
+                        key={label}
+                        href={href}
+                        className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
+                      >
+                        {label}
+
+                        <span
+                          aria-hidden="true"
+                        >
+                          ↗
+                        </span>
+                      </Link>
+                    ),
+                  )}
+                </div>
+              )}
+
+
+              {primaryLinksAfterCollaborations.map(
+                ([
+                  label,
+                  href,
+                ]) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
+                  >
+                    {label}
+
+                    <span className="text-sm text-[#d7ff00]">
+                      ↗
+                    </span>
+                  </Link>
+                ),
+              )}
+
+
               <Link
                 href="/shop"
                 className="flex items-center justify-between border-b border-white/10 py-4 text-lg font-black uppercase tracking-[-.02em] text-white transition hover:text-[#d7ff00]"
@@ -503,6 +752,7 @@ export default function MuseumNavbar() {
           </nav>
         )}
       </header>
+
 
       <GlobalMuseumSearch
         open={searchOpen}
