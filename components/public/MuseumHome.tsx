@@ -1,5 +1,5 @@
-"use client";
 
+"use client";
 import Link from "next/link";
 
 import { motion } from "framer-motion";
@@ -27,6 +27,7 @@ import ExploreTheMuseum from "@/components/home/ExploreTheMuseum";
 import LatestArrivals from "@/components/home/LatestArrivals";
 import OpeningFilm from "@/components/home/OpeningFilm";
 import TodaysMuseumHighlights from "@/components/home/TodaysMuseumHighlights";
+import LiveTennisArchives from "@/components/home/LiveTennisArchives";
 
 import MuseumCollections from "@/components/public/MuseumCollections";
 import MuseumHero from "@/components/public/MuseumHero";
@@ -77,6 +78,8 @@ export default function MuseumHome({
             settings.featuredPlayers
           }
         />
+
+        <LiveTennisArchives />
 
         <LatestArrivals />
 
