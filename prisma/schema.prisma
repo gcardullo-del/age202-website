@@ -39,6 +39,7 @@ model Player {
   artifacts           Artifact[]
   memorabilia         Memorabilia[]
   atpPlayer           AtpPlayer?
+  wtaPlayer           WtaPlayer?
   playerProfile       PlayerProfile?
   careerEvents        PlayerCareerEvent[]
   museumCollections   MuseumCollectionPlayer[]
@@ -515,6 +516,40 @@ model OriginalProductImage {
 }
 
 model AtpPlayer {
+  id           String  @id
+  rank         Int
+  previousRank Int?
+  name         String
+  firstName    String?
+  lastName     String?
+  slug         String  @unique
+  country      String
+  countryCode  String
+  points       Int?
+  age          Int?
+  imageUrl     String?
+
+  playerId String? @unique
+  player   Player? @relation(fields: [playerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  rankingDate DateTime @default(now())
+  source      String   @default("AGE202")
+  active      Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([rank])
+  @@index([rank, active])
+  @@index([active])
+  @@index([countryCode])
+  @@index([name])
+  @@index([points])
+  @@index([previousRank])
+  @@index([rankingDate])
+}
+
+model WtaPlayer {
   id           String  @id
   rank         Int
   previousRank Int?

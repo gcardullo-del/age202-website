@@ -1,0 +1,52 @@
+name: AGE202 WTA Ranking + Profile Sync
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+      timezone: "Europe/Rome"
+
+  workflow_dispatch:
+
+concurrency:
+  group: age202-wta-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-wta:
+    name: Sync WTA Ranking and Smart Profiles
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Sync WTA Live Ranking
+        run: npx tsx scripts/sync-wta-ranking-live.ts --write
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Smart sync WTA Top 50 profiles
+        run: npx tsx scripts/sync-wta-player-profiles.ts --limit=50 --stale-days=30 --write
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+

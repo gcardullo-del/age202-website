@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
+
+
 export const PREMIUM_PLAYER_MAX_RANK = 50;
 export const ARCHIVE_DIRECTORY_MIN_RANK =
   PREMIUM_PLAYER_MAX_RANK + 1;
@@ -29,6 +31,12 @@ const publishedArtifactCount = {
 const archivePlayerInclude = {
   ...publishedArtifactCount,
   atpPlayer: true,
+  playerProfile: true,
+};
+
+const womenArchivePlayerInclude = {
+  ...publishedArtifactCount,
+  wtaPlayer: true,
   playerProfile: true,
 };
 
@@ -251,6 +259,171 @@ export async function getOtherPlayers() {
 }
 
 /*
+ * WOMEN · Top 50:
+ * vengono lette da Player perché, come per gli uomini,
+ * devono possedere la card Premium e la pagina completa.
+ */
+export async function getWomenPremiumPlayers() {
+  return prisma.player.findMany({
+    where: {
+      active: true,
+
+      wtaPlayer: {
+        is: {
+          active: true,
+
+          rank: {
+            gte: 1,
+            lte:
+              PREMIUM_PLAYER_MAX_RANK,
+          },
+        },
+      },
+    },
+
+    include: womenArchivePlayerInclude,
+
+    orderBy: {
+      wtaPlayer: {
+        rank: "asc",
+      },
+    },
+  });
+}
+
+/*
+ * Alias pubblico per la pagina PLAYERS → WOMEN.
+ * Mantiene la stessa filosofia di getOtherPlayers()
+ * per l'archivio maschile.
+ */
+export async function getWomenPlayers() {
+  return getWomenPremiumPlayers();
+}
+
+/*
+ * WOMEN · posizioni 51–100:
+ * vengono lette direttamente da WtaPlayer.
+ * La relazione Player resta opzionale.
+ */
+export async function getWomenArchiveDirectory() {
+  return prisma.wtaPlayer.findMany({
+    where: {
+      active: true,
+
+      rank: {
+        gte:
+          ARCHIVE_DIRECTORY_MIN_RANK,
+
+        lte:
+          ARCHIVE_DIRECTORY_MAX_RANK,
+      },
+    },
+
+    orderBy: {
+      rank: "asc",
+    },
+
+    include: {
+      player: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          country: true,
+          biography: true,
+          heroImage: true,
+          portraitImage: true,
+          active: true,
+          collectionType: true,
+          playerProfile: {
+            select: {
+              id: true,
+            },
+          },
+          _count: {
+            select: {
+              artifacts: {
+                where: {
+                  status:
+                    "PUBLISHED",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+/*
+ * WOMEN · ranking 1–100 direttamente dalla
+ * classifica corrente WTA.
+ */
+export async function getWomenArchiveRanking() {
+  return prisma.wtaPlayer.findMany({
+    where: {
+      active: true,
+
+      rank: {
+        gte: 1,
+        lte:
+          ARCHIVE_DIRECTORY_MAX_RANK,
+      },
+    },
+
+    orderBy: {
+      rank: "asc",
+    },
+
+    include: {
+      player: {
+        select: {
+          id: true,
+          slug: true,
+          active: true,
+        },
+      },
+    },
+  });
+}
+
+/*
+ * WOMEN · Player Archive 1–100.
+ * I Top 50 esistono già come Player grazie
+ * al repository WTA di sincronizzazione; la query
+ * resta pronta anche per eventuali profili 51–100
+ * aggiunti in futuro.
+ */
+export async function getWomenArchivePlayers() {
+  return prisma.player.findMany({
+    where: {
+      active: true,
+
+      wtaPlayer: {
+        is: {
+          active: true,
+
+          rank: {
+            gte: 1,
+            lte:
+              ARCHIVE_DIRECTORY_MAX_RANK,
+          },
+        },
+      },
+    },
+
+    include: womenArchivePlayerInclude,
+
+    orderBy: {
+      wtaPlayer: {
+        rank: "asc",
+      },
+    },
+  });
+}
+
+/*
  * Elenco ATP 1–100 direttamente dalla
  * classifica corrente. Utile per ricerca,
  * controlli e future directory.
@@ -322,6 +495,7 @@ export async function getPlayerBySlug(
 
     include: {
       atpPlayer: true,
+      wtaPlayer: true,
       playerProfile: true,
 
       equipment: {
@@ -445,6 +619,87 @@ export async function getAdjacentArchivePlayers(
 
       orderBy: {
         atpPlayer: {
+          rank: "asc",
+        },
+      },
+    }),
+  ]);
+
+  return {
+    previousPlayer,
+    nextPlayer,
+  };
+}
+
+export async function getAdjacentWomenArchivePlayers(
+  currentRank: number,
+  currentPlayerId: string,
+) {
+  const [
+    previousPlayer,
+    nextPlayer,
+  ] = await Promise.all([
+    prisma.player.findFirst({
+      where: {
+        id: {
+          not: currentPlayerId,
+        },
+
+        active: true,
+
+        wtaPlayer: {
+          is: {
+            active: true,
+
+            rank: {
+              lt: currentRank,
+              gte: 1,
+            },
+          },
+        },
+      },
+
+      include: {
+        wtaPlayer: true,
+        playerProfile: true,
+      },
+
+      orderBy: {
+        wtaPlayer: {
+          rank: "desc",
+        },
+      },
+    }),
+
+    prisma.player.findFirst({
+      where: {
+        id: {
+          not: currentPlayerId,
+        },
+
+        active: true,
+
+        wtaPlayer: {
+          is: {
+            active: true,
+
+            rank: {
+              gt: currentRank,
+
+              lte:
+                ARCHIVE_DIRECTORY_MAX_RANK,
+            },
+          },
+        },
+      },
+
+      include: {
+        wtaPlayer: true,
+        playerProfile: true,
+      },
+
+      orderBy: {
+        wtaPlayer: {
           rank: "asc",
         },
       },
