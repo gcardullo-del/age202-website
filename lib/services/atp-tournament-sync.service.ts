@@ -1,6 +1,7 @@
 import {
   Prisma,
   TournamentCategory,
+  TournamentCircuit,
 } from "@/generated/prisma/client";
 
 import {
@@ -54,6 +55,7 @@ export type AtpTournamentSyncResult = {
     id: string;
     year: number;
     editionKey: string;
+    circuit: TournamentCircuit;
     created: boolean;
   };
 
@@ -121,6 +123,11 @@ function normalizeSlug(
       value,
     )
       ?.toLowerCase()
+      .normalize("NFD")
+      .replace(
+        /[\u0300-\u036f]/g,
+        "",
+      )
       .replace(
         /[^a-z0-9]+/g,
         "-",
@@ -220,9 +227,6 @@ async function resolvePlayer(
   /*
    * 1.
    * Preferiamo lo slug ATP quando il parser lo possiede.
-   *
-   * È il matching più affidabile perché evita collisioni
-   * tra omonimi e differenze di formattazione del nome.
    */
   if (profileSlug) {
     const atpPlayer =
@@ -274,12 +278,6 @@ async function resolvePlayer(
     }
 
 
-    /*
-     * Il giocatore esiste nel Ranking ATP ma non possiede
-     * ancora un Player AGE202.
-     *
-     * Lo creiamo e colleghiamo in modo atomico.
-     */
     if (atpPlayer) {
       const existingPlayerBySlug =
         await transaction.player.findUnique({
@@ -356,11 +354,7 @@ async function resolvePlayer(
 
   /*
    * 2.
-   * Fallback: Player AGE202 con nome esatto.
-   *
-   * Non facciamo fuzzy matching nel write path:
-   * se il nome non è univoco preferiamo bloccare il sync
-   * invece di collegare una finale al giocatore sbagliato.
+   * Fallback sicuro: Player AGE202 con nome esatto.
    */
   const directPlayers =
     await transaction.player.findMany({
@@ -434,7 +428,7 @@ async function resolvePlayer(
 
   /*
    * 3.
-   * Ultimo fallback sicuro: AtpPlayer con nome esatto.
+   * Fallback: AtpPlayer con nome esatto.
    */
   const atpPlayers =
     await transaction.atpPlayer.findMany({
@@ -487,11 +481,7 @@ async function resolvePlayer(
 
   /*
    * 4.
-   * Fallback storico: il giocatore può non essere presente
-   * nell'attuale tabella AtpPlayer.
-   *
-   * In questo caso creiamo direttamente un Player AGE202 minimo,
-   * senza inventare un record AtpPlayer.
+   * Fallback storico.
    */
   if (
     atpPlayers.length ===
@@ -716,6 +706,9 @@ async function syncTournamentChampionSummary(
         where: {
           tournamentId,
 
+          circuit:
+            TournamentCircuit.ATP,
+
           championPlayerId:
             player.id,
 
@@ -737,6 +730,9 @@ async function syncTournamentChampionSummary(
         where: {
           tournamentId,
 
+          circuit:
+            TournamentCircuit.ATP,
+
           runnerUpPlayerId:
             player.id,
 
@@ -751,13 +747,6 @@ async function syncTournamentChampionSummary(
     titleEditions.length ===
     0
   ) {
-    /*
-     * Un semplice finalista non deve essere creato nella
-     * tabella TournamentChampion.
-     *
-     * Se però esiste già come campione storico del torneo,
-     * aggiorniamo almeno il numero di finali.
-     */
     const existingChampion =
       await transaction.tournamentChampion.findUnique({
         where: {
@@ -831,13 +820,6 @@ async function syncTournamentChampionSummary(
 
 
   if (linkedChampion) {
-    /*
-     * Aggiorniamo SOLO i dati sportivi / identificativi.
-     *
-     * quote, imageUrl, legend, featured, recordLabel e
-     * sortOrder restano intatti: sono contenuti editoriali
-     * gestiti dal CMS.
-     */
     await transaction.tournamentChampion.update({
       where: {
         id:
@@ -866,11 +848,6 @@ async function syncTournamentChampionSummary(
   }
 
 
-  /*
-   * Compatibilità con i vecchi import:
-   * se esiste una legend storica senza playerId ma con
-   * lo stesso nome, la colleghiamo invece di duplicarla.
-   */
   const historicalChampion =
     await transaction.tournamentChampion.findFirst({
       where: {
@@ -1077,7 +1054,7 @@ export async function syncAtpTournamentResult(
       const existingEdition =
         await transaction.tournamentEdition.findUnique({
           where: {
-            tournamentId_year_editionKey: {
+            tournamentId_year_editionKey_circuit: {
               tournamentId:
                 tournament.id,
 
@@ -1085,6 +1062,9 @@ export async function syncAtpTournamentResult(
                 input.year,
 
               editionKey,
+
+              circuit:
+                TournamentCircuit.ATP,
             },
           },
 
@@ -1161,6 +1141,7 @@ export async function syncAtpTournamentResult(
                 id: true,
                 year: true,
                 editionKey: true,
+                circuit: true,
               },
             })
           : await transaction.tournamentEdition.create({
@@ -1173,6 +1154,9 @@ export async function syncAtpTournamentResult(
 
                 editionKey,
 
+                circuit:
+                  TournamentCircuit.ATP,
+
                 ...editionData,
               },
 
@@ -1180,18 +1164,11 @@ export async function syncAtpTournamentResult(
                 id: true,
                 year: true,
                 editionKey: true,
+                circuit: true,
               },
             });
 
 
-      /*
-       * Dopo aver persistito l'edizione ricostruiamo
-       * i riepiloghi sportivi del torneo.
-       *
-       * Nessun deleteMany:
-       * le informazioni editoriali del Tournament Studio
-       * vengono preservate.
-       */
       await syncTournamentChampionSummary(
         transaction,
         tournament.id,
@@ -1230,6 +1207,9 @@ export async function syncAtpTournamentResult(
 
           editionKey:
             edition.editionKey,
+
+          circuit:
+            edition.circuit,
 
           created:
             !existingEdition,

@@ -1,6 +1,6 @@
+
+
 import { prisma } from "@/lib/prisma";
-
-
 
 export const PREMIUM_PLAYER_MAX_RANK = 50;
 export const ARCHIVE_DIRECTORY_MIN_RANK =
@@ -497,6 +497,29 @@ export async function getPlayerBySlug(
       atpPlayer: true,
       wtaPlayer: true,
       playerProfile: true,
+
+      trophyWins: {
+        where: {
+          category: {
+            in: [
+              "GRAND_SLAM",
+              "WTA_1000",
+            ],
+          },
+        },
+
+        orderBy: [
+          {
+            category: "asc",
+          },
+          {
+            tournamentName: "asc",
+          },
+          {
+            year: "asc",
+          },
+        ],
+      },
 
       equipment: {
         orderBy: [

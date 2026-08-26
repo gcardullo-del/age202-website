@@ -1,4 +1,10 @@
-import { prisma } from "../../lib/prisma";
+import {
+  TournamentCircuit,
+} from "../../generated/prisma/client";
+
+import {
+  prisma,
+} from "../../lib/prisma";
 
 import {
   resolveTournamentHistoryPlayerIds,
@@ -166,11 +172,16 @@ export async function importTournamentEditions(
 
     await prisma.tournamentEdition.upsert({
       where: {
-        tournamentId_year_editionKey: {
+        tournamentId_year_editionKey_circuit: {
           tournamentId:
             tournament.id,
+
           year,
+
           editionKey,
+
+          circuit:
+            TournamentCircuit.ATP,
         },
       },
 
@@ -179,12 +190,17 @@ export async function importTournamentEditions(
           tournament.id,
 
         year,
+
         editionKey,
+
+        circuit:
+          TournamentCircuit.ATP,
 
         ...editionData,
       },
 
-      update: editionData,
+      update:
+        editionData,
     });
 
     const editionLabel =

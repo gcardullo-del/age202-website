@@ -1,11 +1,9 @@
-
-
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 
 import {
   motion,
-  useReducedMotion,
 } from "framer-motion";
 
 import {
@@ -154,10 +152,6 @@ export default function WomenPlayersExperience({
   totalArtifactCount,
   nations,
 }: WomenPlayersExperienceProps) {
-  const shouldReduceMotion =
-    useReducedMotion();
-
-
   const stats = [
     {
       value:
@@ -203,10 +197,7 @@ export default function WomenPlayersExperience({
               opacity:
                 0,
 
-              scale:
-                shouldReduceMotion
-                  ? 1
-                  : 1.04,
+              scale: 1.04,
             }}
             animate={{
               opacity:
@@ -216,10 +207,7 @@ export default function WomenPlayersExperience({
                 1,
             }}
             transition={{
-              duration:
-                shouldReduceMotion
-                  ? 0
-                  : 1.2,
+              duration: 1.2,
 
               ease:
                 easePremium,
@@ -227,7 +215,7 @@ export default function WomenPlayersExperience({
             className="absolute inset-0"
           >
             <Image
-              src="/players/players-trophies-hero.png"
+              src="/players/women/wta-archive-hero.png"
               alt="AGE202 women's professional tennis archive"
               fill
               priority
@@ -253,15 +241,9 @@ export default function WomenPlayersExperience({
 
               visible: {
                 transition: {
-                  staggerChildren:
-                    shouldReduceMotion
-                      ? 0
-                      : 0.11,
+                  staggerChildren: 0.11,
 
-                  delayChildren:
-                    shouldReduceMotion
-                      ? 0
-                      : 0.15,
+                  delayChildren: 0.15,
                 },
               },
             }}
@@ -363,15 +345,9 @@ export default function WomenPlayersExperience({
               opacity:
                 0,
 
-              x:
-                shouldReduceMotion
-                  ? 0
-                  : 34,
+              x: 34,
 
-              y:
-                shouldReduceMotion
-                  ? 0
-                  : 18,
+              y: 18,
             }}
             animate={{
               opacity:
@@ -384,15 +360,9 @@ export default function WomenPlayersExperience({
                 0,
             }}
             transition={{
-              delay:
-                shouldReduceMotion
-                  ? 0
-                  : 0.32,
+              delay: 0.32,
 
-              duration:
-                shouldReduceMotion
-                  ? 0
-                  : 0.8,
+              duration: 0.8,
 
               ease:
                 easePremium,
@@ -710,7 +680,7 @@ export default function WomenPlayersExperience({
             className="group relative min-h-[500px] overflow-hidden rounded-[34px] border border-white/10"
           >
             <Image
-              src="/players/other-players/hero.png"
+              src="/players/women/wta-archive-hero copia.png"
               alt="AGE202 WTA Archive"
               fill
               sizes="(max-width: 1024px) 100vw, 58vw"

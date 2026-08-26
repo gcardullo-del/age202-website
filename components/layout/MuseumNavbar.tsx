@@ -27,6 +27,8 @@ const playerLinks = [
   ["Jannik Sinner", "/archives/sinner"],
   ["Carlos Alcaraz", "/archives/alcaraz"],
   ["ATP Archive", "/players/other-players"],
+  ["WTA Players", "/players/women"],
+  ["WTA Archive", "/players/women/archive"],
 ] as const;
 
 

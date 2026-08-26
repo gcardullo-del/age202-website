@@ -47,6 +47,7 @@ model Player {
   tournamentWins      TournamentEdition[]      @relation("TournamentEditionChampion")
   tournamentRunnerUps TournamentEdition[]      @relation("TournamentEditionRunnerUp")
   tournamentChampions TournamentChampion[]
+  trophyWins          PlayerTrophyWin[]
 
   @@index([name])
   @@index([collectionType])
@@ -86,6 +87,35 @@ model PlayerProfile {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   player           Player    @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model PlayerTrophyWin {
+  id String @id @default(cuid())
+
+  playerId String
+
+  tournamentKey  String
+  tournamentName String
+
+  category PlayerTrophyCategory
+
+  year Int
+
+  sourceUrl String?
+
+  verified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, tournamentKey, year])
+  @@index([playerId])
+  @@index([tournamentKey])
+  @@index([category])
+  @@index([year])
+  @@index([playerId, category])
 }
 
 model PlayerEquipment {
@@ -929,9 +959,10 @@ model Tournament {
 }
 
 model TournamentEdition {
-  id           String @id @default(cuid())
+  id           String            @id @default(cuid())
   tournamentId String
   year         Int
+  circuit      TournamentCircuit @default(ATP)
 
   editionKey   String  @default("main")
   editionLabel String?
@@ -961,10 +992,11 @@ model TournamentEdition {
   championPlayer Player?    @relation("TournamentEditionChampion", fields: [championPlayerId], references: [id], onDelete: SetNull)
   runnerUpPlayer Player?    @relation("TournamentEditionRunnerUp", fields: [runnerUpPlayerId], references: [id], onDelete: SetNull)
 
-  @@unique([tournamentId, year, editionKey])
+  @@unique([tournamentId, year, editionKey, circuit])
   @@index([tournamentId])
   @@index([year])
   @@index([editionKey])
+  @@index([circuit])
   @@index([championPlayerId])
   @@index([runnerUpPlayerId])
   @@index([cancelled])
@@ -1110,6 +1142,14 @@ model TournamentIconicMoment {
   @@index([tournamentId, year])
   @@index([tournamentId, sortOrder])
   @@index([featured])
+}
+
+enum PlayerTrophyCategory {
+  GRAND_SLAM
+  WTA_FINALS
+  WTA_1000
+  OLYMPICS
+  OTHER
 }
 
 enum TennisHistoryEntryType {
@@ -1368,6 +1408,11 @@ enum TournamentCategory {
   OLYMPICS
   DAVIS_CUP
   OTHER
+}
+
+enum TournamentCircuit {
+  ATP
+  WTA
 }
 
 enum CourtSurface {

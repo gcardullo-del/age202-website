@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {
   notFound,
 } from "next/navigation";
@@ -45,6 +46,91 @@ type WomenPlayerPageProps = {
     slug: string;
   }>;
 };
+
+
+type TrophyWinEntry = {
+  tournamentKey: string;
+  tournamentName: string;
+  category: string;
+  year: number;
+};
+
+
+type TrophyCabinetItem = {
+  tournamentKey: string;
+  tournamentName: string;
+  years: number[];
+};
+
+
+function buildTrophyCabinet(
+  trophies: TrophyWinEntry[],
+): TrophyCabinetItem[] {
+  const grouped =
+    new Map<
+      string,
+      TrophyCabinetItem
+    >();
+
+  for (const trophy of trophies) {
+    const existing =
+      grouped.get(
+        trophy.tournamentKey,
+      );
+
+    if (existing) {
+      existing.years.push(
+        trophy.year,
+      );
+
+      continue;
+    }
+
+    grouped.set(
+      trophy.tournamentKey,
+      {
+        tournamentKey:
+          trophy.tournamentKey,
+
+        tournamentName:
+          trophy.tournamentName,
+
+        years: [
+          trophy.year,
+        ],
+      },
+    );
+  }
+
+  return Array.from(
+    grouped.values(),
+  )
+    .map(
+      (trophy) => ({
+        ...trophy,
+        years:
+          trophy.years
+            .slice()
+            .sort(
+              (
+                first,
+                second,
+              ) =>
+                first -
+                second,
+            ),
+      }),
+    )
+    .sort(
+      (
+        first,
+        second,
+      ) =>
+        first.tournamentName.localeCompare(
+          second.tournamentName,
+        ),
+    );
+}
 
 
 function formatPoints(
@@ -398,6 +484,51 @@ export default async function WomenPlayerPage({
     },
   ];
 
+  const grandSlamCabinet =
+    buildTrophyCabinet(
+      player.trophyWins.filter(
+        (trophy) =>
+          trophy.category ===
+          "GRAND_SLAM",
+      ),
+    );
+
+  const wta1000Cabinet =
+    buildTrophyCabinet(
+      player.trophyWins.filter(
+        (trophy) =>
+          trophy.category ===
+          "WTA_1000",
+      ),
+    );
+
+  const grandSlamTotal =
+    grandSlamCabinet.reduce(
+      (
+        total,
+        trophy,
+      ) =>
+        total +
+        trophy.years.length,
+      0,
+    );
+
+  const wta1000Total =
+    wta1000Cabinet.reduce(
+      (
+        total,
+        trophy,
+      ) =>
+        total +
+        trophy.years.length,
+      0,
+    );
+
+  const trophyCabinetTotal =
+    grandSlamTotal +
+    wta1000Total;
+
+
   const structuredData = {
     "@context":
       "https://schema.org",
@@ -598,6 +729,10 @@ export default async function WomenPlayerPage({
             [
               "#wta-dossier",
               "Dossier",
+            ],
+            [
+              "#trophy-cabinet",
+              "Trophy Cabinet",
             ],
             [
               "#wta-data",
@@ -817,8 +952,7 @@ export default async function WomenPlayerPage({
 
                 <dd className="font-semibold text-white/72">
                   {
-                    profile?.grandSlams ??
-                    0
+                    grandSlamTotal
                   }
                 </dd>
               </div>
@@ -885,6 +1019,185 @@ export default async function WomenPlayerPage({
 
 
       <section
+        id="trophy-cabinet"
+        className="relative overflow-hidden border-y border-white/10 bg-[#030711]"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(200,255,0,.09),transparent_28%),radial-gradient(circle_at_80%_72%,rgba(255,255,255,.035),transparent_26%)]" />
+
+        <div className="relative mx-auto w-full max-w-[1560px] px-6 py-24 sm:px-10 lg:px-14 lg:py-32">
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+            <div>
+              <div className="text-[10px] font-black uppercase tracking-[0.22em] text-[#C8FF00]">
+                03 · Trophy Cabinet
+              </div>
+
+              <h2 className="mt-4 max-w-4xl text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-6xl">
+                Grand Slam
+                <span className="block text-[#C8FF00]">
+                  + WTA 1000.
+                </span>
+              </h2>
+
+              <p className="mt-6 max-w-2xl text-sm leading-7 text-white/55 sm:text-base">
+                Every title is calculated from the individual victories stored
+                in the AGE202 archive. No manual totals.
+              </p>
+            </div>
+
+            <div className="grid w-full max-w-xl grid-cols-3 gap-3">
+              <div className="rounded-[22px] border border-white/10 bg-[#07101D] p-5">
+                <div className="text-[9px] font-black uppercase tracking-[0.15em] text-white/28">
+                  Grand Slam
+                </div>
+
+                <div className="mt-2 text-3xl font-black text-[#C8FF00]">
+                  {grandSlamTotal}
+                </div>
+              </div>
+
+              <div className="rounded-[22px] border border-white/10 bg-[#07101D] p-5">
+                <div className="text-[9px] font-black uppercase tracking-[0.15em] text-white/28">
+                  WTA 1000
+                </div>
+
+                <div className="mt-2 text-3xl font-black">
+                  {wta1000Total}
+                </div>
+              </div>
+
+              <div className="rounded-[22px] border border-[#C8FF00]/20 bg-[#C8FF00]/[0.06] p-5">
+                <div className="text-[9px] font-black uppercase tracking-[0.15em] text-[#C8FF00]/70">
+                  Total
+                </div>
+
+                <div className="mt-2 text-3xl font-black">
+                  {trophyCabinetTotal}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {trophyCabinetTotal > 0 ? (
+            <div className="mt-14 grid gap-8 xl:grid-cols-2">
+              <article className="min-h-[520px] rounded-[32px] border border-white/10 bg-[#07101D] p-7 sm:p-9">
+                <div className="flex items-center justify-between gap-5">
+                  <div>
+                    <div className="text-[9px] font-black uppercase tracking-[0.18em] text-[#C8FF00]">
+                      Major titles
+                    </div>
+
+                    <h3 className="mt-2 text-3xl font-black uppercase tracking-[-0.04em]">
+                      Grand Slam
+                    </h3>
+                  </div>
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C8FF00]/25 bg-[#C8FF00]/10">
+                    <Trophy className="h-5 w-5 text-[#C8FF00]" />
+                  </div>
+                </div>
+
+                <div className="mt-9 space-y-4">
+                  {grandSlamCabinet.length > 0 ? (
+                    grandSlamCabinet.map(
+                      (trophy) => (
+                        <div
+                          key={trophy.tournamentKey}
+                          className="grid min-h-[92px] gap-5 rounded-[24px] border border-white/8 bg-black/15 p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-6"
+                        >
+                          <div>
+                            <div className="text-lg font-black uppercase tracking-[-0.025em]">
+                              {trophy.tournamentName}
+                            </div>
+
+                            <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.13em] text-white/30">
+                              {trophy.years.join(" · ")}
+                            </div>
+                          </div>
+
+                          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#C8FF00]/25 bg-[#C8FF00]/10 px-4 py-2 text-sm font-black text-[#C8FF00]">
+                            <Trophy className="h-4 w-4" />
+                            ×{trophy.years.length}
+                          </div>
+                        </div>
+                      ),
+                    )
+                  ) : (
+                    <div className="rounded-[22px] border border-dashed border-white/10 p-6 text-sm text-white/35">
+                      No Grand Slam title archived yet.
+                    </div>
+                  )}
+                </div>
+              </article>
+
+              <article className="min-h-[520px] rounded-[32px] border border-white/10 bg-[#07101D] p-7 sm:p-9">
+                <div className="flex items-center justify-between gap-5">
+                  <div>
+                    <div className="text-[9px] font-black uppercase tracking-[0.18em] text-[#C8FF00]">
+                      Tour elite
+                    </div>
+
+                    <h3 className="mt-2 text-3xl font-black uppercase tracking-[-0.04em]">
+                      WTA 1000
+                    </h3>
+                  </div>
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04]">
+                    <Medal className="h-5 w-5 text-[#C8FF00]" />
+                  </div>
+                </div>
+
+                <div className="mt-9 space-y-4">
+                  {wta1000Cabinet.length > 0 ? (
+                    wta1000Cabinet.map(
+                      (trophy) => (
+                        <div
+                          key={trophy.tournamentKey}
+                          className="grid min-h-[92px] gap-5 rounded-[24px] border border-white/8 bg-black/15 p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:p-6"
+                        >
+                          <div>
+                            <div className="text-lg font-black uppercase tracking-[-0.025em]">
+                              {trophy.tournamentName}
+                            </div>
+
+                            <div className="mt-2 text-[10px] font-bold uppercase tracking-[0.13em] text-white/30">
+                              {trophy.years.join(" · ")}
+                            </div>
+                          </div>
+
+                          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-black text-white/78">
+                            <Trophy className="h-4 w-4 text-[#C8FF00]" />
+                            ×{trophy.years.length}
+                          </div>
+                        </div>
+                      ),
+                    )
+                  ) : (
+                    <div className="rounded-[22px] border border-dashed border-white/10 p-6 text-sm text-white/35">
+                      No WTA 1000 title archived yet.
+                    </div>
+                  )}
+                </div>
+              </article>
+            </div>
+          ) : (
+            <div className="mt-12 rounded-[30px] border border-dashed border-white/10 bg-[#07101D]/70 p-8 sm:p-10">
+              <Trophy className="h-6 w-6 text-[#C8FF00]" />
+
+              <h3 className="mt-5 text-2xl font-black uppercase">
+                Trophy archive pending
+              </h3>
+
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-white/45">
+                This player&apos;s Grand Slam and WTA 1000 victories have not
+                been imported yet.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+
+      <section
         id="wta-data"
         className="mx-auto w-full max-w-[1560px] px-6 py-20 sm:px-10 lg:px-14 lg:py-28"
       >
@@ -892,7 +1205,7 @@ export default async function WomenPlayerPage({
           <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
             <div>
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C8FF00]">
-                03 · WTA data
+                04 · WTA data
               </div>
 
               <h2 className="mt-3 text-4xl font-black uppercase tracking-[-0.05em] sm:text-5xl">

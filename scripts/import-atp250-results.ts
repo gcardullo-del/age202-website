@@ -1,4 +1,8 @@
-import "dotenv/config";
+
+
+import {
+  TournamentCircuit,
+} from "../generated/prisma/client";
 
 import {
   atp250Tournaments,
@@ -49,13 +53,22 @@ async function main() {
 
     const existingEdition =
       await prisma.tournamentEdition.findUnique({
-      where: {
-  tournamentId_year_editionKey: {
-    tournamentId: tournament.id,
-    year: tournamentData.latestFinal.year,
-    editionKey: "main",
-  },
-},
+        where: {
+          tournamentId_year_editionKey_circuit: {
+            tournamentId:
+              tournament.id,
+
+            year:
+              tournamentData.latestFinal.year,
+
+            editionKey:
+              "main",
+
+            circuit:
+              TournamentCircuit.ATP,
+          },
+        },
+
         select: {
           id: true,
         },
@@ -87,6 +100,10 @@ async function main() {
               tournament.id,
             year:
               tournamentData.latestFinal.year,
+            editionKey:
+              "main",
+            circuit:
+              TournamentCircuit.ATP,
             championName:
               tournamentData.latestFinal.champion,
             runnerUpName:

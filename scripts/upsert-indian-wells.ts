@@ -1,6 +1,12 @@
-import "dotenv/config";
 
-import { prisma } from "../lib/prisma";
+
+import {
+  TournamentCircuit,
+} from "../generated/prisma/client";
+
+import {
+  prisma,
+} from "../lib/prisma";
 
 const TOURNAMENT_SLUG =
   "indian-wells";
@@ -263,17 +269,25 @@ async function upsertEditions(
 
     await prisma.tournamentEdition.upsert({
       where: {
-  tournamentId_year_editionKey: {
-    tournamentId,
-    year: edition.year,
-    editionKey: "main",
-  },
-},
+        tournamentId_year_editionKey_circuit: {
+          tournamentId,
+          year:
+            edition.year,
+          editionKey:
+            "main",
+          circuit:
+            TournamentCircuit.ATP,
+        },
+      },
 
       create: {
         tournamentId,
         year:
           edition.year,
+        editionKey:
+          "main",
+        circuit:
+          TournamentCircuit.ATP,
         championName:
           edition.championName,
         runnerUpName:
@@ -325,8 +339,13 @@ async function rebuildChampionSummary(
     await prisma.tournamentEdition.findMany({
       where: {
         tournamentId,
+
+        circuit:
+          TournamentCircuit.ATP,
+
         cancelled:
           false,
+
         championPlayerId: {
           not: null,
         },
