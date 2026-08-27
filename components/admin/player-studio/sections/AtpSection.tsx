@@ -17,7 +17,8 @@ import {
   usePlayerStudio,
 } from "../PlayerStudioForm";
 
-export type AvailableAtpPlayer = {
+
+export type AvailableTourPlayer = {
   id: string;
   rank: number;
   previousRank: number | null;
@@ -32,13 +33,23 @@ export type AvailableAtpPlayer = {
   imageUrl: string | null;
 };
 
+
+type TourKey =
+  | "ATP"
+  | "WTA";
+
+
 type AtpSectionProps = {
-  availablePlayers: AvailableAtpPlayer[];
+  availableAtpPlayers: AvailableTourPlayer[];
+  availableWtaPlayers: AvailableTourPlayer[];
   initialAtpPlayerId?: string | null;
+  initialWtaPlayerId?: string | null;
 };
+
 
 const inputClassName =
   "h-12 w-full rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white outline-none transition placeholder:text-white/22 focus:border-lime-300/35";
+
 
 function getMovementLabel(
   rank: number,
@@ -59,13 +70,29 @@ function getMovementLabel(
     : `Down ${Math.abs(difference)}`;
 }
 
+
 export default function AtpSection({
-  availablePlayers,
+  availableAtpPlayers,
+  availableWtaPlayers,
   initialAtpPlayerId = null,
+  initialWtaPlayerId = null,
 }: AtpSectionProps) {
   const {
     updatePreview,
   } = usePlayerStudio();
+
+  const initialTour: TourKey =
+    initialWtaPlayerId
+      ? "WTA"
+      : "ATP";
+
+  const [
+    activeTour,
+    setActiveTour,
+  ] =
+    useState<TourKey>(
+      initialTour,
+    );
 
   const [query, setQuery] =
     useState("");
@@ -78,6 +105,24 @@ export default function AtpSection({
       initialAtpPlayerId ?? "",
     );
 
+  const [
+    selectedWtaPlayerId,
+    setSelectedWtaPlayerId,
+  ] =
+    useState<string>(
+      initialWtaPlayerId ?? "",
+    );
+
+  const activePlayers =
+    activeTour === "ATP"
+      ? availableAtpPlayers
+      : availableWtaPlayers;
+
+  const activeSelectedId =
+    activeTour === "ATP"
+      ? selectedAtpPlayerId
+      : selectedWtaPlayerId;
+
   const filteredPlayers =
     useMemo(() => {
       const normalized =
@@ -86,10 +131,10 @@ export default function AtpSection({
           .toLowerCase();
 
       if (!normalized) {
-        return availablePlayers;
+        return activePlayers;
       }
 
-      return availablePlayers.filter(
+      return activePlayers.filter(
         (player) =>
           [
             player.name,
@@ -104,44 +149,123 @@ export default function AtpSection({
             .includes(normalized),
       );
     }, [
-      availablePlayers,
+      activePlayers,
       query,
     ]);
 
   const selectedPlayer =
     useMemo(
       () =>
-        availablePlayers.find(
+        activePlayers.find(
           (player) =>
             player.id ===
-            selectedAtpPlayerId,
+            activeSelectedId,
         ) ?? null,
       [
-        availablePlayers,
-        selectedAtpPlayerId,
+        activePlayers,
+        activeSelectedId,
       ],
     );
 
   function selectPlayer(
-    player: AvailableAtpPlayer,
+    player: AvailableTourPlayer,
   ) {
-    setSelectedAtpPlayerId(
-      player.id,
-    );
+    if (
+      activeTour ===
+      "ATP"
+    ) {
+      setSelectedAtpPlayerId(
+        player.id,
+      );
+
+      setSelectedWtaPlayerId(
+        "",
+      );
+    } else {
+      setSelectedWtaPlayerId(
+        player.id,
+      );
+
+      setSelectedAtpPlayerId(
+        "",
+      );
+    }
 
     updatePreview({
-      ranking: player.rank,
-      points: player.points,
-      country: player.country,
+      ranking:
+        player.rank,
+
+      points:
+        player.points,
+
+      country:
+        player.country,
     });
   }
 
   function clearSelection() {
-    setSelectedAtpPlayerId("");
+    if (
+      activeTour ===
+      "ATP"
+    ) {
+      setSelectedAtpPlayerId(
+        "",
+      );
+    } else {
+      setSelectedWtaPlayerId(
+        "",
+      );
+    }
 
     updatePreview({
-      ranking: null,
-      points: null,
+      ranking:
+        null,
+
+      points:
+        null,
+    });
+  }
+
+  function switchTour(
+    tour: TourKey,
+  ) {
+    setActiveTour(
+      tour,
+    );
+
+    setQuery(
+      "",
+    );
+
+    const targetPlayers =
+      tour === "ATP"
+        ? availableAtpPlayers
+        : availableWtaPlayers;
+
+    const targetId =
+      tour === "ATP"
+        ? selectedAtpPlayerId
+        : selectedWtaPlayerId;
+
+    const targetPlayer =
+      targetPlayers.find(
+        (player) =>
+          player.id ===
+          targetId,
+      );
+
+    updatePreview({
+      ranking:
+        targetPlayer?.rank ??
+        null,
+
+      points:
+        targetPlayer?.points ??
+        null,
+
+      country:
+        targetPlayer?.country ??
+        null,
     });
   }
 
@@ -149,7 +273,7 @@ export default function AtpSection({
     <section className="space-y-7">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-lime-200/70">
-          ATP connection
+          Tour connection
         </p>
 
         <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -157,7 +281,7 @@ export default function AtpSection({
         </h2>
 
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/40">
-          Connect this AGE202 profile to an available ATP ranking record.
+          Connect this AGE202 profile to one ATP or WTA ranking record.
           Ranking, points and country will be reflected in the live preview.
         </p>
       </div>
@@ -165,8 +289,48 @@ export default function AtpSection({
       <input
         type="hidden"
         name="atpPlayerId"
-        value={selectedAtpPlayerId}
+        value={
+          selectedAtpPlayerId
+        }
       />
+
+      <input
+        type="hidden"
+        name="wtaPlayerId"
+        value={
+          selectedWtaPlayerId
+        }
+      />
+
+      <div className="inline-flex rounded-2xl border border-white/10 bg-[#08111F] p-1">
+        {(
+          [
+            "ATP",
+            "WTA",
+          ] as const
+        ).map(
+          (tour) => (
+            <button
+              key={tour}
+              type="button"
+              onClick={() =>
+                switchTour(
+                  tour,
+                )
+              }
+              className={[
+                "rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-[0.16em] transition",
+                activeTour ===
+                tour
+                  ? "bg-lime-300 text-[#050B18]"
+                  : "text-white/45 hover:text-white",
+              ].join(" ")}
+            >
+              {tour}
+            </button>
+          ),
+        )}
+      </div>
 
       {selectedPlayer ? (
         <div className="rounded-3xl border border-lime-300/25 bg-lime-300/[0.05] p-5">
@@ -181,7 +345,7 @@ export default function AtpSection({
 
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.18em] text-lime-200/70">
-                  Linked ATP player
+                  Linked {activeTour} player
                 </p>
 
                 <h3 className="mt-1 text-xl font-semibold text-white">
@@ -189,40 +353,44 @@ export default function AtpSection({
                 </h3>
 
                 <p className="mt-1 text-sm text-white/40">
-                  {selectedPlayer.country} · ATP #{selectedPlayer.rank}
+                  {selectedPlayer.country} · {activeTour} #{selectedPlayer.rank}
                 </p>
               </div>
             </div>
 
             <button
               type="button"
-              onClick={clearSelection}
+              onClick={
+                clearSelection
+              }
               className="inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-white/10 px-4 text-sm font-semibold text-white/55 transition hover:border-red-300/25 hover:bg-red-300/5 hover:text-red-200"
             >
               <Unlink
                 className="h-4 w-4"
                 aria-hidden="true"
               />
+
               Remove link
             </button>
           </div>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-4">
-            <AtpMetric
+            <TourMetric
               label="Rank"
               value={`#${selectedPlayer.rank}`}
             />
 
-            <AtpMetric
+            <TourMetric
               label="Points"
               value={
                 selectedPlayer.points?.toLocaleString(
                   "en-US",
-                ) ?? "—"
+                ) ??
+                "—"
               }
             />
 
-            <AtpMetric
+            <TourMetric
               label="Age"
               value={
                 selectedPlayer.age ??
@@ -230,7 +398,7 @@ export default function AtpSection({
               }
             />
 
-            <AtpMetric
+            <TourMetric
               label="Movement"
               value={getMovementLabel(
                 selectedPlayer.rank,
@@ -249,11 +417,11 @@ export default function AtpSection({
 
             <div>
               <h3 className="text-sm font-semibold text-white">
-                No ATP record linked
+                No {activeTour} record linked
               </h3>
 
               <p className="mt-1 text-xs leading-5 text-white/35">
-                Search the available ATP records below and select one player.
+                Search the available {activeTour} records below and select one player.
               </p>
             </div>
           </div>
@@ -263,20 +431,22 @@ export default function AtpSection({
       <div className="space-y-4">
         <label className="relative block">
           <span className="sr-only">
-            Search ATP players
+            Search {activeTour} players
           </span>
 
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
 
           <input
             type="search"
-            value={query}
+            value={
+              query
+            }
             onChange={(event) =>
               setQuery(
                 event.target.value,
               )
             }
-            placeholder="Search name, country or ranking..."
+            placeholder={`Search ${activeTour} name, country or ranking...`}
             className={`${inputClassName} pl-11`}
           />
         </label>
@@ -287,11 +457,13 @@ export default function AtpSection({
               (player) => {
                 const selected =
                   player.id ===
-                  selectedAtpPlayerId;
+                  activeSelectedId;
 
                 return (
                   <button
-                    key={player.id}
+                    key={
+                      player.id
+                    }
                     type="button"
                     onClick={() =>
                       selectPlayer(
@@ -312,7 +484,7 @@ export default function AtpSection({
                         </span>
 
                         <span className="rounded-full border border-white/10 px-2 py-1 font-mono text-[7px] font-black uppercase tracking-[0.13em] text-white/35">
-                          ATP #{player.rank}
+                          {activeTour} #{player.rank}
                         </span>
                       </div>
 
@@ -354,7 +526,7 @@ export default function AtpSection({
                 <Search className="mx-auto h-7 w-7 text-white/20" />
 
                 <h3 className="mt-4 text-base font-semibold text-white">
-                  No ATP players found
+                  No {activeTour} players found
                 </h3>
 
                 <p className="mt-2 text-sm text-white/35">
@@ -369,15 +541,17 @@ export default function AtpSection({
   );
 }
 
-type AtpMetricProps = {
+
+type TourMetricProps = {
   label: string;
   value: string | number;
 };
 
-function AtpMetric({
+
+function TourMetric({
   label,
   value,
-}: AtpMetricProps) {
+}: TourMetricProps) {
   return (
     <div className="rounded-2xl border border-white/10 bg-[#08111F] p-4">
       <p className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/25">

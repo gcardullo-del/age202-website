@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 import {
   Archive,
   ArrowRight,
@@ -15,45 +16,121 @@ import {
   UserRound,
 } from "lucide-react";
 
-
-const contactEmail =
-  "postmaster@age202.com";
-
-const contributionMailto =
-  `mailto:${contactEmail}?subject=${encodeURIComponent(
-    "AGE202 Museum Contribution",
-  )}`;
+import type {
+  PublicContributeSettings,
+} from "@/lib/repositories/contribute.repository";
 
 
-const contributionTypes = [
-  {
-    number: "01",
-    eyebrow: "Direct voice",
-    title: "Video Greeting",
-    description:
-      "A short video message for AGE202 can become a direct testimony preserved inside the museum's digital archive.",
-    icon: Camera,
-  },
-  {
-    number: "02",
-    eyebrow: "Personal message",
-    title: "Dedication",
-    description:
-      "A signed photograph, personal message or digital dedication can preserve a unique connection between the player and tennis history.",
-    icon: MessageSquareText,
-  },
-  {
-    number: "03",
-    eyebrow: "Physical history",
-    title: "Memorabilia",
-    description:
-      "A signed item, match-related object or personal piece can be documented, catalogued and preserved together with its story.",
-    icon: Archive,
-  },
-];
+type ContributeExperienceProps = {
+  settings: PublicContributeSettings;
+};
 
 
-export default function ContributeExperience() {
+function splitHeadline(
+  value: string,
+) {
+  const words =
+    value
+      .trim()
+      .split(/\s+/);
+
+  if (
+    words.length <= 2
+  ) {
+    return {
+      first:
+        value,
+      accent: "",
+    };
+  }
+
+  return {
+    first:
+      words
+        .slice(
+          0,
+          -2,
+        )
+        .join(" "),
+
+    accent:
+      words
+        .slice(-2)
+        .join(" "),
+  };
+}
+
+
+export default function ContributeExperience({
+  settings,
+}: ContributeExperienceProps) {
+  const contributionMailto =
+    `mailto:${settings.contactEmail}?subject=${encodeURIComponent(
+      "AGE202 Museum Contribution",
+    )}`;
+
+  const contributionTypes = [
+    settings.videoGreeting.enabled
+      ? {
+          number: "01",
+          eyebrow:
+            "Direct voice",
+          title:
+            settings.videoGreeting
+              .title,
+          description:
+            settings.videoGreeting
+              .description,
+          icon:
+            Camera,
+        }
+      : null,
+
+    settings.dedication.enabled
+      ? {
+          number: "02",
+          eyebrow:
+            "Personal message",
+          title:
+            settings.dedication
+              .title,
+          description:
+            settings.dedication
+              .description,
+          icon:
+            MessageSquareText,
+        }
+      : null,
+
+    settings.memorabilia.enabled
+      ? {
+          number: "03",
+          eyebrow:
+            "Physical history",
+          title:
+            settings.memorabilia
+              .title,
+          description:
+            settings.memorabilia
+              .description,
+          icon:
+            Archive,
+        }
+      : null,
+  ].filter(
+    (
+      item,
+    ): item is NonNullable<
+      typeof item
+    > =>
+      item !== null,
+  );
+
+  const headline =
+    splitHeadline(
+      settings.title,
+    );
+
   return (
     <main className="overflow-hidden bg-[#050B18] text-white">
       <section className="relative isolate min-h-[80vh] overflow-hidden border-b border-white/10">
@@ -65,29 +142,28 @@ export default function ContributeExperience() {
 
         <div className="pointer-events-none absolute left-1/2 top-0 h-px w-[72%] -translate-x-1/2 bg-gradient-to-r from-transparent via-[#ccff00]/45 to-transparent" />
 
-
         <div className="mx-auto grid min-h-[80vh] max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-[1.02fr_.98fr] lg:px-10">
           <div>
             <div className="flex items-center gap-3">
               <span className="h-px w-12 bg-[#ccff00]" />
 
               <p className="text-[10px] font-black uppercase tracking-[.3em] text-[#ccff00]">
-                AGE202 · The Digital Tennis Museum
+                {settings.eyebrow}
               </p>
             </div>
 
             <h1 className="mt-7 max-w-5xl text-5xl font-black uppercase leading-[.86] tracking-[-.06em] sm:text-7xl lg:text-[7rem]">
-              Contribute to
-              <span className="block text-[#ccff00]">
-                the museum.
-              </span>
+              {headline.first}
+
+              {headline.accent ? (
+                <span className="block text-[#ccff00]">
+                  {headline.accent}
+                </span>
+              ) : null}
             </h1>
 
             <p className="mt-8 max-w-2xl text-base leading-8 text-white/60 sm:text-lg">
-              Tennis history is made of more than trophies and results.
-              It lives through voices, memories, objects and personal stories.
-              AGE202 invites players and former players to preserve a direct
-              testimony of their journey.
+              {settings.intro}
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
@@ -130,7 +206,6 @@ export default function ContributeExperience() {
             </div>
           </div>
 
-
           <div className="relative mx-auto w-full max-w-xl">
             <div className="absolute -inset-14 rounded-full bg-[#ccff00]/10 blur-3xl" />
 
@@ -156,7 +231,6 @@ export default function ContributeExperience() {
                     />
                   </div>
                 </div>
-
 
                 <div className="relative mt-10 flex min-h-[300px] items-center justify-center">
                   <div className="absolute h-64 w-64 rounded-full border border-[#ccff00]/15" />
@@ -187,7 +261,6 @@ export default function ContributeExperience() {
                     </span>
                   </div>
                 </div>
-
 
                 <div className="relative mt-8 grid grid-cols-3 gap-3 border-t border-white/10 pt-5 text-center">
                   <div>
@@ -221,7 +294,6 @@ export default function ContributeExperience() {
                   </div>
                 </div>
 
-
                 <div className="relative mt-6 flex items-center justify-between border-t border-white/[.06] pt-5">
                   <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/20">
                     Museum contribution
@@ -237,7 +309,6 @@ export default function ContributeExperience() {
         </div>
       </section>
 
-
       <section
         id="contribute"
         className="relative overflow-hidden border-b border-white/10"
@@ -251,7 +322,7 @@ export default function ContributeExperience() {
                 <span className="h-px w-10 bg-[#ccff00]" />
 
                 <p className="text-[10px] font-black uppercase tracking-[.3em] text-[#ccff00]">
-                  Three ways to contribute
+                  Ways to contribute
                 </p>
               </div>
 
@@ -276,13 +347,21 @@ export default function ContributeExperience() {
                   className="text-[#ccff00]"
                 />
 
-                Three formats · One museum archive
+                {contributionTypes.length} formats · One museum archive
               </div>
             </div>
           </div>
 
-
-          <div className="mt-16 grid gap-4 lg:grid-cols-3">
+          <div
+            className={[
+              "mt-16 grid gap-4",
+              contributionTypes.length === 1
+                ? "lg:grid-cols-1"
+                : contributionTypes.length === 2
+                  ? "lg:grid-cols-2"
+                  : "lg:grid-cols-3",
+            ].join(" ")}
+          >
             {contributionTypes.map(
               (
                 contribution,
@@ -343,7 +422,6 @@ export default function ContributeExperience() {
         </div>
       </section>
 
-
       <section
         id="provenance"
         className="relative overflow-hidden border-b border-white/10"
@@ -368,18 +446,13 @@ export default function ContributeExperience() {
             </div>
 
             <h2 className="mt-6 max-w-xl text-4xl font-black uppercase leading-[.9] tracking-[-.05em] sm:text-6xl">
-              The story begins
-              <span className="block text-[#ccff00]">
-                with the player.
-              </span>
+              {settings.provenanceTitle}
             </h2>
 
             <p className="mt-7 max-w-xl text-base leading-8 text-white/55">
-              When an item reaches AGE202 directly from a player,
-              its origin becomes part of the historical record.
+              {settings.provenanceText}
             </p>
           </div>
-
 
           <div className="relative overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015))] p-6 sm:p-8">
             <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-[#ccff00]/10 blur-3xl" />
@@ -412,47 +485,47 @@ export default function ContributeExperience() {
               </div>
 
               <p className="mt-8 text-sm leading-7 text-white/50">
-                The contribution can be documented together with its story,
-                context and available provenance information, creating a
-                permanent record inside the AGE202 archive.
+                {settings.provenanceText}
               </p>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-white/[.025] p-4">
-                  <p className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                    Source
-                  </p>
+                {[
+                  [
+                    "Source",
+                    "Player",
+                  ],
+                  [
+                    "Status",
+                    "Documented",
+                  ],
+                  [
+                    "Archive",
+                    "AGE202",
+                  ],
+                ].map(
+                  ([
+                    label,
+                    value,
+                  ]) => (
+                    <div
+                      key={label}
+                      className="rounded-2xl border border-white/10 bg-white/[.025] p-4"
+                    >
+                      <p className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
+                        {label}
+                      </p>
 
-                  <p className="mt-2 text-xs font-black uppercase text-white">
-                    Player
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[.025] p-4">
-                  <p className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                    Status
-                  </p>
-
-                  <p className="mt-2 text-xs font-black uppercase text-white">
-                    Documented
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-white/[.025] p-4">
-                  <p className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                    Archive
-                  </p>
-
-                  <p className="mt-2 text-xs font-black uppercase text-white">
-                    AGE202
-                  </p>
-                </div>
+                      <p className="mt-2 text-xs font-black uppercase text-white">
+                        {value}
+                      </p>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           </div>
         </div>
       </section>
-
 
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(204,255,0,.08),transparent_42%)]" />
@@ -479,13 +552,13 @@ export default function ContributeExperience() {
               </h2>
 
               <p className="mx-auto mt-8 max-w-2xl text-base leading-8 text-white/55">
-                Whether it is a few seconds on video, a personal dedication
-                or an object connected to your career, every contribution
-                helps preserve the human story of tennis.
+                {settings.closingText}
               </p>
 
               <a
-                href={contributionMailto}
+                href={
+                  contributionMailto
+                }
                 className="group mt-10 inline-flex items-center gap-3 rounded-full bg-[#ccff00] px-8 py-4 text-[10px] font-black uppercase tracking-[.18em] text-[#050B18] transition duration-300 hover:scale-[1.025]"
               >
                 <Mail className="h-4 w-4" />
@@ -496,37 +569,37 @@ export default function ContributeExperience() {
               </a>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-                <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                  Players
-                </span>
+                {[
+                  "Players",
+                  "Former Players",
+                  "Teams",
+                  "Management",
+                ].map(
+                  (
+                    label,
+                    index,
+                  ) => (
+                    <span
+                      key={
+                        label
+                      }
+                      className="contents"
+                    >
+                      {index > 0 ? (
+                        <span className="text-[#ccff00]/45">
+                          ·
+                        </span>
+                      ) : null}
 
-                <span className="text-[#ccff00]/45">
-                  ·
-                </span>
-
-                <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                  Former Players
-                </span>
-
-                <span className="text-[#ccff00]/45">
-                  ·
-                </span>
-
-                <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                  Teams
-                </span>
-
-                <span className="text-[#ccff00]/45">
-                  ·
-                </span>
-
-                <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
-                  Management
-                </span>
+                      <span className="text-[8px] font-black uppercase tracking-[.2em] text-white/25">
+                        {label}
+                      </span>
+                    </span>
+                  ),
+                )}
               </div>
             </div>
           </div>
-
 
           <div className="mt-8 flex flex-wrap items-center justify-between gap-5">
             <div className="flex items-center gap-2">

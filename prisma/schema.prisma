@@ -1551,3 +1551,37 @@ model PushSubscription {
   @@index([enabled])
   @@index([createdAt])
 }
+
+model ContributeSettings {
+  id String @id @default("main")
+
+  active    Boolean @default(true)
+  published Boolean @default(true)
+
+  eyebrow      String  @default("CONTRIBUTE TO THE MUSEUM")
+  title        String  @default("Help preserve tennis history.")
+  intro        String? @db.Text
+  contactEmail String  @default("postmaster@age202.com")
+
+  videoGreetingTitle       String  @default("Video Greeting")
+  videoGreetingDescription String? @db.Text
+  videoGreetingEnabled     Boolean @default(true)
+
+  dedicationTitle       String  @default("Dedication")
+  dedicationDescription String? @db.Text
+  dedicationEnabled     Boolean @default(true)
+
+  memorabiliaTitle       String  @default("Memorabilia")
+  memorabiliaDescription String? @db.Text
+  memorabiliaEnabled     Boolean @default(true)
+
+  provenanceTitle String  @default("Provenance matters")
+  provenanceText  String? @db.Text
+  closingText     String? @db.Text
+
+  metaTitle       String?
+  metaDescription String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

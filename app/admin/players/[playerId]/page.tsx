@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import AdminShell from "@/components/admin/AdminShell";
 
 import AtpSection, {
-  type AvailableAtpPlayer,
+  type AvailableTourPlayer,
 } from "@/components/admin/player-studio/sections/AtpSection";
 
 import BiographySection from "@/components/admin/player-studio/sections/BiographySection";
@@ -14,6 +14,7 @@ import IdentitySection from "@/components/admin/player-studio/sections/IdentityS
 import MediaSection from "@/components/admin/player-studio/sections/MediaSection";
 import PublishingSection from "@/components/admin/player-studio/sections/PublishingSection";
 import SeoSection from "@/components/admin/player-studio/sections/SeoSection";
+import TrophyCabinetSection from "@/components/admin/player-studio/sections/TrophyCabinetSection";
 
 import PlayerStudioForm from "@/components/admin/player-studio/PlayerStudioForm";
 
@@ -26,6 +27,7 @@ import { updatePlayer } from "../actions/updatePlayer";
 import {
   getAdminPlayer,
   getAvailableAtpPlayers,
+  getAvailableWtaPlayers,
 } from "@/lib/repositories/admin/admin-player.repository";
 
 import {
@@ -127,13 +129,13 @@ function mapCareerEvents(
   );
 }
 
-function mergeAvailableAtpPlayers({
+function mergeAvailableTourPlayers({
   availablePlayers,
   currentPlayer,
 }: {
-  availablePlayers: AvailableAtpPlayer[];
-  currentPlayer: AvailableAtpPlayer | null;
-}): AvailableAtpPlayer[] {
+  availablePlayers: AvailableTourPlayer[];
+  currentPlayer: AvailableTourPlayer | null;
+}): AvailableTourPlayer[] {
   if (!currentPlayer) {
     return availablePlayers;
   }
@@ -172,10 +174,13 @@ export default async function EditPlayerPage({
 
   const [
     availableAtpPlayers,
+    availableWtaPlayers,
     mediaAssets,
     museumCollections,
   ] = await Promise.all([
     getAvailableAtpPlayers(),
+
+    getAvailableWtaPlayers(),
 
     getAllMedia({
       mimeType: "image/",
@@ -185,7 +190,7 @@ export default async function EditPlayerPage({
   ]);
 
   const currentAtpPlayer:
-    AvailableAtpPlayer | null =
+    AvailableTourPlayer | null =
     player.atpPlayer
       ? {
           id:
@@ -220,12 +225,56 @@ export default async function EditPlayerPage({
         }
       : null;
 
+  const currentWtaPlayer:
+    AvailableTourPlayer | null =
+    player.wtaPlayer
+      ? {
+          id:
+            player.wtaPlayer.id,
+          rank:
+            player.wtaPlayer.rank,
+          previousRank:
+            player.wtaPlayer
+              .previousRank,
+          name:
+            player.wtaPlayer.name,
+          firstName:
+            player.wtaPlayer
+              .firstName,
+          lastName:
+            player.wtaPlayer
+              .lastName,
+          slug:
+            player.wtaPlayer.slug,
+          country:
+            player.wtaPlayer.country,
+          countryCode:
+            player.wtaPlayer
+              .countryCode,
+          points:
+            player.wtaPlayer.points,
+          age:
+            player.wtaPlayer.age,
+          imageUrl:
+            player.wtaPlayer
+              .imageUrl,
+        }
+      : null;
+
   const selectableAtpPlayers =
-    mergeAvailableAtpPlayers({
+    mergeAvailableTourPlayers({
       availablePlayers:
         availableAtpPlayers,
       currentPlayer:
         currentAtpPlayer,
+    });
+
+  const selectableWtaPlayers =
+    mergeAvailableTourPlayers({
+      availablePlayers:
+        availableWtaPlayers,
+      currentPlayer:
+        currentWtaPlayer,
     });
 
   const profile =
@@ -260,7 +309,9 @@ export default async function EditPlayerPage({
         formAction={updatePlayer}
         initialSection="identity"
         previewHref={
-          `/players/${player.slug}`
+          player.wtaPlayer
+            ? `/players/women/${player.slug}`
+            : `/players/${player.slug}`
         }
         playerStatus={
           playerStatus
@@ -275,6 +326,8 @@ export default async function EditPlayerPage({
             player.country ??
             player.atpPlayer
               ?.country ??
+            player.wtaPlayer
+              ?.country ??
             null,
           heroImage:
             player.heroImage,
@@ -287,9 +340,13 @@ export default async function EditPlayerPage({
           ranking:
             player.atpPlayer
               ?.rank ??
+            player.wtaPlayer
+              ?.rank ??
             null,
           points:
             player.atpPlayer
+              ?.points ??
+            player.wtaPlayer
               ?.points ??
             null,
           artifactCount:
@@ -329,11 +386,19 @@ export default async function EditPlayerPage({
 
           atp: (
             <AtpSection
-              availablePlayers={
+              availableAtpPlayers={
                 selectableAtpPlayers
+              }
+              availableWtaPlayers={
+                selectableWtaPlayers
               }
               initialAtpPlayerId={
                 player.atpPlayer
+                  ?.id ??
+                null
+              }
+              initialWtaPlayerId={
+                player.wtaPlayer
                   ?.id ??
                 null
               }
@@ -462,6 +527,19 @@ export default async function EditPlayerPage({
             </div>
           ),
 
+          trophies: (
+            <TrophyCabinetSection
+              wins={
+                player.trophyWins
+              }
+              isWtaPlayer={
+                Boolean(
+                  player.wtaPlayer,
+                )
+              }
+            />
+          ),
+
           collections: (
             <CollectionsSection
               collections={
@@ -499,7 +577,9 @@ export default async function EditPlayerPage({
           publishing: (
             <PublishingSection
               previewHref={
-                `/players/${player.slug}`
+                player.wtaPlayer
+                  ? `/players/women/${player.slug}`
+                  : `/players/${player.slug}`
               }
             />
           ),

@@ -118,9 +118,9 @@ const sectionDefinitions: Array<
   },
   {
     id: "atp",
-    label: "ATP",
+    label: "Tour & Ranking",
     description:
-      "Ranking connection and tour data",
+      "ATP or WTA ranking connection",
   },
   {
     id: "media",
@@ -139,6 +139,12 @@ const sectionDefinitions: Array<
     label: "Career",
     description:
       "Profile, titles and achievements",
+  },
+  {
+    id: "trophies",
+    label: "Trophy Cabinet",
+    description:
+      "Grand Slams and WTA 1000 victories",
   },
   {
     id: "collections",
@@ -319,6 +325,12 @@ function getSectionStatus({
             snapshot,
             "atpPlayerId",
           ),
+        ) ||
+        Boolean(
+          readString(
+            snapshot,
+            "wtaPlayerId",
+          ),
         );
 
       return linked
@@ -450,6 +462,34 @@ function getSectionStatus({
       return {
         status: "empty",
         statusLabel: "No career data",
+      };
+    }
+
+    case "trophies": {
+      const trophyCount =
+        Number(
+          readString(
+            snapshot,
+            "trophyWinCount",
+          ),
+        );
+
+      if (
+        Number.isFinite(
+          trophyCount,
+        ) &&
+        trophyCount > 0
+      ) {
+        return {
+          status: "complete",
+          statusLabel:
+            `${trophyCount} wins`,
+        };
+      }
+
+      return {
+        status: "neutral",
+        statusLabel: "Synced",
       };
     }
 
@@ -663,10 +703,14 @@ function buildWarnings({
     !readString(
       snapshot,
       "atpPlayerId",
+    ) &&
+    !readString(
+      snapshot,
+      "wtaPlayerId",
     )
   ) {
     warnings.push(
-      "Connect an ATP player when available.",
+      "Connect an ATP or WTA ranking record when available.",
     );
   }
 

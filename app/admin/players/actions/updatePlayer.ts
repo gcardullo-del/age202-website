@@ -1,5 +1,6 @@
 "use server";
 
+
 import {
   revalidatePath,
 } from "next/cache";
@@ -218,6 +219,12 @@ export async function updatePlayer(
             id: true,
           },
         },
+
+        wtaPlayer: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
@@ -397,6 +404,21 @@ export async function updatePlayer(
       formData,
       "atpPlayerId",
     );
+
+  const wtaPlayerId =
+    getOptionalString(
+      formData,
+      "wtaPlayerId",
+    );
+
+  if (
+    atpPlayerId &&
+    wtaPlayerId
+  ) {
+    throw new Error(
+      "A Player profile cannot be linked to ATP and WTA ranking records at the same time.",
+    );
+  }
 
   const careerEvents =
     parseAndNormalizeCareerTimeline(
@@ -675,6 +697,36 @@ export async function updatePlayer(
     }
   }
 
+  if (wtaPlayerId) {
+    const selectedWtaPlayer =
+      await prisma.wtaPlayer.findUnique({
+        where: {
+          id: wtaPlayerId,
+        },
+
+        select: {
+          id: true,
+          playerId: true,
+        },
+      });
+
+    if (!selectedWtaPlayer) {
+      throw new Error(
+        "The selected WTA player could not be found.",
+      );
+    }
+
+    if (
+      selectedWtaPlayer.playerId &&
+      selectedWtaPlayer.playerId !==
+        playerId
+    ) {
+      throw new Error(
+        "The selected WTA player is already linked to another Player record.",
+      );
+    }
+  }
+
   if (
     museumCollectionIds.length >
     0
@@ -844,6 +896,43 @@ export async function updatePlayer(
         });
       }
 
+      const previousWtaPlayerId =
+        existingPlayer.wtaPlayer?.id ??
+        null;
+
+      if (
+        previousWtaPlayerId &&
+        previousWtaPlayerId !==
+          wtaPlayerId
+      ) {
+        await transaction.wtaPlayer.update({
+          where: {
+            id:
+              previousWtaPlayerId,
+          },
+
+          data: {
+            playerId: null,
+          },
+        });
+      }
+
+      if (
+        wtaPlayerId &&
+        wtaPlayerId !==
+          previousWtaPlayerId
+      ) {
+        await transaction.wtaPlayer.update({
+          where: {
+            id: wtaPlayerId,
+          },
+
+          data: {
+            playerId,
+          },
+        });
+      }
+
       await replacePlayerCareerTimeline({
         transaction,
         playerId,
@@ -897,6 +986,14 @@ export async function updatePlayer(
 
   revalidatePath(
     `/players/${slug}`,
+  );
+
+  revalidatePath(
+    `/players/women/${existingPlayer.slug}`,
+  );
+
+  revalidatePath(
+    `/players/women/${slug}`,
   );
 
   revalidatePath(

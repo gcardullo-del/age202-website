@@ -1,5 +1,6 @@
 "use client";
 
+
 import {
   AlertTriangle,
   Check,
@@ -19,6 +20,7 @@ export type PlayerStudioSectionId =
   | "media"
   | "biography"
   | "career"
+  | "trophies"
   | "collections"
   | "seo"
   | "publishing";
@@ -56,8 +58,8 @@ const defaultSections: PlayerStudioSectionItem[] = [
   },
   {
     id: "atp",
-    label: "ATP",
-    description: "Ranking connection and tour data",
+    label: "Tour & Ranking",
+    description: "ATP or WTA ranking connection",
     status: "neutral",
   },
   {
@@ -76,6 +78,12 @@ const defaultSections: PlayerStudioSectionItem[] = [
     id: "career",
     label: "Career",
     description: "Profile, titles and achievements",
+    status: "neutral",
+  },
+  {
+    id: "trophies",
+    label: "Trophy Cabinet",
+    description: "Grand Slams and WTA 1000 victories",
     status: "neutral",
   },
   {
@@ -104,6 +112,7 @@ const sectionIcons = {
   media: ImageIcon,
   biography: Landmark,
   career: Sparkles,
+  trophies: Trophy,
   collections: FolderKanban,
   seo: Search,
   publishing: Circle,

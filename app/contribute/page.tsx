@@ -1,21 +1,59 @@
-import type { Metadata } from "next";
+import type {
+
+  Metadata,
+} from "next";
+
+import {
+  notFound,
+} from "next/navigation";
 
 import ContributeExperience from "@/components/contribute/ContributeExperience";
+
+import {
+  getPublicContributeSettings,
+} from "@/lib/repositories/contribute.repository";
 
 
 export const dynamic =
   "force-dynamic";
 
 
-export const metadata: Metadata = {
-  title: "Contribute to the Museum | AGE202",
-  description:
-    "Contribute to AGE202 — The Digital Tennis Museum with a video greeting, digital dedication or tennis memorabilia and help preserve the history of the game.",
-};
+export async function generateMetadata():
+  Promise<Metadata> {
+  const settings =
+    await getPublicContributeSettings();
+
+  return {
+    title:
+      settings.metaTitle,
+
+    description:
+      settings.metaDescription,
+
+    alternates: {
+      canonical:
+        "/contribute",
+    },
+  };
+}
 
 
-export default function ContributePage() {
+export default async function ContributePage() {
+  const settings =
+    await getPublicContributeSettings();
+
+  if (
+    !settings.active ||
+    !settings.published
+  ) {
+    notFound();
+  }
+
   return (
-    <ContributeExperience />
+    <ContributeExperience
+      settings={
+        settings
+      }
+    />
   );
 }

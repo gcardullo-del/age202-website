@@ -1,5 +1,5 @@
-import AdminShell from "@/components/admin/AdminShell";
 
+import AdminShell from "@/components/admin/AdminShell";
 import AtpSection from "@/components/admin/player-studio/sections/AtpSection";
 import BiographySection from "@/components/admin/player-studio/sections/BiographySection";
 import CareerSection from "@/components/admin/player-studio/sections/CareerSection";
@@ -14,6 +14,7 @@ import { createPlayer } from "../actions/createPlayer";
 
 import {
   getAvailableAtpPlayers,
+  getAvailableWtaPlayers,
 } from "@/lib/repositories/admin/admin-player.repository";
 
 import {
@@ -24,16 +25,21 @@ import {
   getAllMuseumCollections,
 } from "@/lib/repositories/museum-collection.repository";
 
+
 export const dynamic =
   "force-dynamic";
+
 
 export default async function NewPlayerPage() {
   const [
     availableAtpPlayers,
+    availableWtaPlayers,
     mediaAssets,
     museumCollections,
   ] = await Promise.all([
     getAvailableAtpPlayers(),
+
+    getAvailableWtaPlayers(),
 
     getAllMedia({
       mimeType: "image/",
@@ -45,7 +51,7 @@ export default async function NewPlayerPage() {
   return (
     <AdminShell
       title="New Player"
-      description="Create a new AGE202 player profile and connect it to the ATP archive."
+      description="Create a new AGE202 player profile and connect it to the ATP or WTA archive."
     >
       <PlayerStudioForm
         mode="create"
@@ -74,8 +80,11 @@ export default async function NewPlayerPage() {
 
           atp: (
             <AtpSection
-              availablePlayers={
+              availableAtpPlayers={
                 availableAtpPlayers
+              }
+              availableWtaPlayers={
+                availableWtaPlayers
               }
             />
           ),

@@ -33,6 +33,7 @@ import {
   getPlayerStats,
   type AdminPlayerProfileFilter,
   type AdminPlayerStatusFilter,
+  type AdminPlayerTourFilter,
 } from "@/lib/repositories/admin/admin-player.repository";
 
 export const dynamic =
@@ -44,6 +45,7 @@ type PlayersPageProps = {
     status?: string;
     type?: string;
     profile?: string;
+    tour?: string;
   }>;
 };
 
@@ -68,6 +70,14 @@ const PROFILE_FILTERS =
     "complete",
     "missing",
   ]);
+
+const TOUR_FILTERS =
+  new Set<AdminPlayerTourFilter>([
+    "",
+    "ATP",
+    "WTA",
+  ]);
+
 
 function normalize(
   value: string | undefined,
@@ -118,6 +128,20 @@ function parseProfile(
     ? normalized
     : "";
 }
+
+function parseTour(
+  value: string | undefined,
+): AdminPlayerTourFilter {
+  const normalized =
+    normalize(value).toUpperCase() as AdminPlayerTourFilter;
+
+  return TOUR_FILTERS.has(
+    normalized,
+  )
+    ? normalized
+    : "";
+}
+
 
 function formatLabel(
   value: string,
@@ -211,6 +235,12 @@ export default async function PlayersPage({
       params.profile,
     );
 
+
+  const tour =
+    parseTour(
+      params.tour,
+    );
+
   const [
     players,
     stats,
@@ -220,6 +250,7 @@ export default async function PlayersPage({
       status,
       collectionType,
       profile,
+      tour,
     }),
 
     getPlayerStats(),
@@ -230,19 +261,20 @@ export default async function PlayersPage({
       query ||
         status ||
         collectionType ||
-        profile,
+        profile ||
+        tour,
     );
 
   return (
     <AdminShell
       title="Players"
-      description="Manage the champions, legends and ATP profiles that power the AGE202 archive."
+      description="Manage the ATP and WTA players, champions and archive profiles that power AGE202."
     >
       <div className="space-y-7">
         <AdminPageHeader
           eyebrow="Player Studio"
           title="Players"
-          description="Create and maintain player identities, ATP links, biographies, collections and archive profiles from one central workspace."
+          description="Create and maintain ATP and WTA player identities, ranking links, biographies, collections and archive profiles from one central workspace."
           icon={Users}
           actionLabel="New Player"
           actionHref="/admin/players/new"
@@ -260,17 +292,12 @@ export default async function PlayersPage({
               tone: "neutral",
             },
             {
-              label: "Active",
-              value: stats.active,
+              label:
+                "Active",
+              value:
+                stats.active,
               icon: Activity,
               tone: "success",
-            },
-            {
-              label: "Featured",
-              value:
-                stats.featured,
-              icon: Crown,
-              tone: "museum",
             },
             {
               label:
@@ -279,6 +306,14 @@ export default async function PlayersPage({
                 stats.linkedToAtp,
               icon: Trophy,
               tone: "warning",
+            },
+            {
+              label:
+                "WTA linked",
+              value:
+                stats.linkedToWta,
+              icon: Crown,
+              tone: "museum",
             },
           ]}
         />
@@ -311,7 +346,7 @@ export default async function PlayersPage({
               ) : null}
             </div>
 
-            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_190px_190px_190px_auto]">
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_150px_170px_170px_170px_auto]">
               <label className="relative md:col-span-2 xl:col-span-1">
                 <span className="sr-only">
                   Search players
@@ -327,6 +362,22 @@ export default async function PlayersPage({
                   className="h-12 w-full rounded-2xl border border-white/10 bg-[#08111F] pl-11 pr-4 text-sm text-white outline-none placeholder:text-white/25 focus:border-lime-300/35"
                 />
               </label>
+
+              <select
+                name="tour"
+                defaultValue={tour}
+                className="h-12 rounded-2xl border border-white/10 bg-[#08111F] px-4 text-sm text-white/70 outline-none focus:border-lime-300/35"
+              >
+                <option value="">
+                  All tours
+                </option>
+                <option value="ATP">
+                  ATP
+                </option>
+                <option value="WTA">
+                  WTA
+                </option>
+              </select>
 
               <select
                 name="status"
@@ -399,13 +450,27 @@ export default async function PlayersPage({
           <div className="grid gap-5 lg:grid-cols-2 2xl:grid-cols-3">
             {players.map(
               (player) => {
-              const image =
-  player.heroImage?.trim() ||
-  player.portraitImage?.trim() ||
-  player.atpPlayer?.imageUrl?.trim() ||
-  `/players/other-players/top-50/${player.slug}.webp`;
+                const tourLabel =
+                  player.atpPlayer
+                    ? "ATP"
+                    : player.wtaPlayer
+                      ? "WTA"
+                      : null;
+
                 const ranking =
-                  player.atpPlayer;
+                  player.atpPlayer ??
+                  player.wtaPlayer;
+
+                const image =
+                  player.heroImage?.trim() ||
+                  player.portraitImage?.trim() ||
+                  player.atpPlayer?.imageUrl?.trim() ||
+                  player.wtaPlayer?.imageUrl?.trim() ||
+                  (
+                    player.atpPlayer
+                      ? `/players/other-players/top-50/${player.slug}.webp`
+                      : null
+                  );
 
                 const movement =
                   ranking
@@ -487,7 +552,7 @@ export default async function PlayersPage({
                         {ranking ? (
                           <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-2xl border border-white/10 bg-black/45 px-3 py-2 backdrop-blur">
                             <span className="text-lg font-semibold text-white">
-                              ATP #{ranking.rank}
+                              {tourLabel} #{ranking.rank}
                             </span>
 
                             <span
@@ -578,9 +643,9 @@ export default async function PlayersPage({
                           <CircleOff className="h-3.5 w-3.5" />
                         )}
 
-                        {ranking
-                          ? `${ranking.points ?? 0} ATP points`
-                          : "No ATP link"}
+                        {ranking && tourLabel
+                          ? `${ranking.points ?? 0} ${tourLabel} points`
+                          : "No tour link"}
                       </div>
 
                       <div className="flex items-center gap-2">

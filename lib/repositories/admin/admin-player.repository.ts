@@ -1,5 +1,5 @@
 import type {
-  PlayerCollectionType,
+   PlayerCollectionType,
   Prisma,
 } from "@/generated/prisma/client";
 
@@ -15,11 +15,17 @@ export type AdminPlayerProfileFilter =
   | "missing"
   | "";
 
+export type AdminPlayerTourFilter =
+  | ""
+  | "ATP"
+  | "WTA";
+
 export type AdminPlayerFilters = {
   query?: string;
   status?: AdminPlayerStatusFilter;
   collectionType?: PlayerCollectionType | "";
   profile?: AdminPlayerProfileFilter;
+  tour?: AdminPlayerTourFilter;
 };
 
 export type AdminPlayerStats = {
@@ -32,6 +38,7 @@ export type AdminPlayerStats = {
   archive: number;
   withProfile: number;
   linkedToAtp: number;
+  linkedToWta: number;
 };
 
 const PLAYER_COLLECTION_TYPES =
@@ -131,6 +138,16 @@ function buildAdminPlayerWhere(
                 },
               },
             },
+            {
+              wtaPlayer: {
+                is: {
+                  name: {
+                    contains: query,
+                    mode: "insensitive",
+                  },
+                },
+              },
+            },
           ],
         }
       : {}),
@@ -151,6 +168,20 @@ function buildAdminPlayerWhere(
           collectionType,
         }
       : {}),
+
+    ...(filters.tour === "ATP"
+      ? {
+          atpPlayer: {
+            isNot: null,
+          },
+        }
+      : filters.tour === "WTA"
+        ? {
+            wtaPlayer: {
+              isNot: null,
+            },
+          }
+        : {}),
 
     ...(filters.profile ===
     "complete"
@@ -181,6 +212,7 @@ export async function getAdminPlayers(
 
     include: {
       atpPlayer: true,
+      wtaPlayer: true,
       playerProfile: true,
 
       museumCollections: {
@@ -233,11 +265,6 @@ export async function getAdminPlayers(
         },
       },
       {
-        atpPlayer: {
-          rank: "asc",
-        },
-      },
-      {
         name: "asc",
       },
     ],
@@ -261,7 +288,19 @@ export async function getAdminPlayer(
 
     include: {
       atpPlayer: true,
+      wtaPlayer: true,
       playerProfile: true,
+
+      trophyWins: {
+        orderBy: [
+          {
+            year: "desc",
+          },
+          {
+            tournamentName: "asc",
+          },
+        ],
+      },
 
       careerEvents: {
         orderBy: [
@@ -367,6 +406,7 @@ export async function getAdminPlayerBySlug(
 
     include: {
       atpPlayer: true,
+      wtaPlayer: true,
       playerProfile: true,
 
       _count: {
@@ -390,6 +430,7 @@ export async function getPlayerStats(): Promise<AdminPlayerStats> {
     archive,
     withProfile,
     linkedToAtp,
+    linkedToWta,
   ] = await Promise.all([
     prisma.player.count(),
 
@@ -448,6 +489,14 @@ export async function getPlayerStats(): Promise<AdminPlayerStats> {
         },
       },
     }),
+
+    prisma.player.count({
+      where: {
+        wtaPlayer: {
+          isNot: null,
+        },
+      },
+    }),
   ]);
 
   return {
@@ -460,6 +509,7 @@ export async function getPlayerStats(): Promise<AdminPlayerStats> {
     archive,
     withProfile,
     linkedToAtp,
+    linkedToWta,
   };
 }
 
@@ -510,6 +560,16 @@ export async function searchAdminPlayers(
         },
       },
 
+      wtaPlayer: {
+        select: {
+          rank: true,
+          previousRank: true,
+          points: true,
+          country: true,
+          imageUrl: true,
+        },
+      },
+
       playerProfile: {
         select: {
           id: true,
@@ -525,11 +585,6 @@ export async function searchAdminPlayers(
     },
 
     orderBy: [
-      {
-        atpPlayer: {
-          rank: "asc",
-        },
-      },
       {
         displayOrder: {
           sort: "asc",
@@ -552,6 +607,74 @@ export async function getAvailableAtpPlayers(
     query.trim();
 
   return prisma.atpPlayer.findMany({
+    where: {
+      active: true,
+
+      playerId: null,
+
+      ...(normalizedQuery
+        ? {
+            OR: [
+              {
+                name: {
+                  contains:
+                    normalizedQuery,
+                  mode:
+                    "insensitive",
+                },
+              },
+              {
+                firstName: {
+                  contains:
+                    normalizedQuery,
+                  mode:
+                    "insensitive",
+                },
+              },
+              {
+                lastName: {
+                  contains:
+                    normalizedQuery,
+                  mode:
+                    "insensitive",
+                },
+              },
+              {
+                country: {
+                  contains:
+                    normalizedQuery,
+                  mode:
+                    "insensitive",
+                },
+              },
+              {
+                countryCode: {
+                  contains:
+                    normalizedQuery,
+                  mode:
+                    "insensitive",
+                },
+              },
+            ],
+          }
+        : {}),
+    },
+
+    orderBy: {
+      rank: "asc",
+    },
+
+    take: 100,
+  });
+}
+
+export async function getAvailableWtaPlayers(
+  query = "",
+) {
+  const normalizedQuery =
+    query.trim();
+
+  return prisma.wtaPlayer.findMany({
     where: {
       active: true,
 
