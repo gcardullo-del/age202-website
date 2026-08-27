@@ -227,7 +227,7 @@ export default function ChampionShowcase({
         <div className="mx-auto w-full max-w-[1840px]">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
-              eyebrow="Champion collections"
+              eyebrow="Champions collection"
               title={
                 <span
                   id="champion-collections-title"
