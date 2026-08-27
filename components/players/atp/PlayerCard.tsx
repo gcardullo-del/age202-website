@@ -22,8 +22,8 @@ export default function PlayerCard({
   player,
 }: PlayerCardProps) {
   const image =
-    player.heroImage?.trim() ||
     player.portraitImage?.trim() ||
+    player.heroImage?.trim() ||
     `/players/other-players/top-50/${player.slug}.webp`;
 
   const collectionLabel = getCollectionLabel(
