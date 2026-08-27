@@ -981,6 +981,18 @@ export async function updatePlayer(
   );
 
   revalidatePath(
+    "/players/other-players",
+  );
+
+  revalidatePath(
+    "/players/women",
+  );
+
+  revalidatePath(
+    "/players/women/archive",
+  );
+
+  revalidatePath(
     `/players/${existingPlayer.slug}`,
   );
 
