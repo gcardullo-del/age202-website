@@ -1,5 +1,5 @@
-"use client";
 
+"use client";
 import {
   CheckCircle2,
   LoaderCircle,
@@ -56,6 +56,9 @@ type Coordinates = {
   longitude: number;
 };
 
+const CHECKOUT_ENABLED =
+  process.env.NEXT_PUBLIC_CHECKOUT_ENABLED === "true";
+
 export default function StripeCheckoutButton({
   itemId,
   itemType,
@@ -85,6 +88,13 @@ export default function StripeCheckoutButton({
 
   async function handleStartCheckout() {
     if (isLoading) {
+      return;
+    }
+
+    if (!CHECKOUT_ENABLED) {
+      setError(
+        "Gli acquisti diretti su AGE202 saranno disponibili a breve.",
+      );
       return;
     }
 
@@ -469,7 +479,9 @@ export default function StripeCheckoutButton({
       <div className="flex items-center justify-center gap-2 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-white/30">
         <LockKeyhole className="h-3.5 w-3.5" />
 
-        Pagamento sicuro tramite Stripe
+        {CHECKOUT_ENABLED
+          ? "Pagamento sicuro tramite Stripe"
+          : "Acquisti diretti AGE202 in arrivo"}
       </div>
 
       {error ? (
