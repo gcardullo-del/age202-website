@@ -25,7 +25,7 @@ export default function HeroBackground({
         alt=""
         fill
         priority
-        quality={100}
+        quality={85}
         sizes="100vw"
         className="object-cover object-center select-none"
       />
