@@ -19,7 +19,7 @@ self.addEventListener("push", (event) => {
     tag: data.tag || "age202-notification",
     renotify: true,
     data: {
-      url: data.url || "/admin/orders",
+      url: data.url || "/",
     },
   };
 
@@ -37,8 +37,7 @@ self.addEventListener(
     event.notification.close();
 
     const targetUrl =
-      event.notification?.data?.url ||
-      "/admin/orders";
+      event.notification?.data?.url || "/";
 
     event.waitUntil(
       clients

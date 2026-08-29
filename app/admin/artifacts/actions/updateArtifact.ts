@@ -1,5 +1,6 @@
 "use server";
 
+
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -17,6 +18,10 @@ import {
 import {
   syncArtifactWithStripe,
 } from "@/lib/services/stripeCatalog.service";
+
+import {
+  sendPublicArtifactNotification,
+} from "@/lib/push/sendPublicArtifactNotification";
 
 import {
   MAX_ARTIFACT_IMAGES,
@@ -682,6 +687,11 @@ export async function updateArtifact(
         )
       : -1;
 
+  const nextStatus =
+    getArtifactStatus(
+      formData,
+    );
+
   const slug =
     await createAvailableSlug(
       getOptionalString(
@@ -942,9 +952,7 @@ export async function updateArtifact(
                 ),
 
               status:
-                getArtifactStatus(
-                  formData,
-                ),
+                nextStatus,
 
               featured:
                 getBoolean(
@@ -1295,6 +1303,38 @@ export async function updateArtifact(
     console.info(
       `Stripe sync saltata per Artifact ${artifactId}: checkout temporaneamente disabilitato.`,
     );
+  }
+
+  /*
+   * Invia la notifica pubblica una sola volta,
+   * esclusivamente nel momento in cui l'Artifact
+   * passa da uno stato diverso da PUBLISHED
+   * allo stato PUBLISHED.
+   *
+   * Le modifiche successive a un Artifact già
+   * pubblicato non generano nuove notifiche.
+   */
+  if (
+    currentArtifact.status !==
+      "PUBLISHED" &&
+    nextStatus ===
+      "PUBLISHED"
+  ) {
+    try {
+      await sendPublicArtifactNotification({
+        artifactId,
+      });
+    } catch (error) {
+      /*
+       * Un eventuale errore Web Push non deve
+       * annullare il salvataggio/pubblicazione
+       * dell'Artifact nel CMS.
+       */
+      console.error(
+        `Notifica pubblica AGE202 fallita per Artifact ${artifactId}:`,
+        error,
+      );
+    }
   }
 
   revalidatePath(

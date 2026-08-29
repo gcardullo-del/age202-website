@@ -16,6 +16,8 @@ import {
 
 import PlayerArtifacts from "@/components/players/atp/PlayerArtifacts";
 
+import FollowPlayerNotifications from "@/components/notifications/FollowPlayerNotifications";
+
 import ArchiveHero from "./ArchiveHero";
 import ArchiveTournamentResults from "./ArchiveTournamentResults";
 import ChampionStory from "./ChampionStory";
@@ -77,6 +79,20 @@ export default function ChampionArchive({
         accent={champion.accent}
         playerName={champion.name}
       />
+
+      {museumPlayer ? (
+        <FollowPlayerNotifications
+          playerId={
+            museumPlayer.id
+          }
+          playerName={
+            museumPlayer.name
+          }
+          accent={
+            champion.accent
+          }
+        />
+      ) : null}
 
       <ChampionStory
         champion={champion}

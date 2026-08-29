@@ -1,5 +1,4 @@
 "use server";
-
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -40,6 +39,10 @@ import {
 import {
   syncArtifactWithStripe,
 } from "@/lib/services/stripeCatalog.service";
+
+import {
+  sendPublicArtifactNotification,
+} from "@/lib/push/sendPublicArtifactNotification";
 
 import {
   createUniqueSlug,
@@ -425,6 +428,11 @@ export async function createArtifact(
         )
       : -1;
 
+  const status =
+    getArtifactStatus(
+      formData,
+    );
+
   const artifact =
     await createArtifactRepository({
       archiveNumber:
@@ -592,10 +600,7 @@ export async function createArtifact(
           formData,
         ),
 
-      status:
-        getArtifactStatus(
-          formData,
-        ),
+      status,
 
       featured:
         getBoolean(
@@ -904,6 +909,31 @@ export async function createArtifact(
     console.info(
       `Stripe sync saltata per Artifact ${artifact.id}: checkout temporaneamente disabilitato.`,
     );
+  }
+
+  /*
+   * Se un nuovo Artifact viene creato direttamente
+   * come PUBLISHED, invia la notifica pubblica
+   * dopo che l'intero flusso di creazione è terminato.
+   *
+   * Un eventuale errore Web Push non deve impedire
+   * la creazione dell'Artifact nel CMS.
+   */
+  if (
+    status ===
+      "PUBLISHED"
+  ) {
+    try {
+      await sendPublicArtifactNotification({
+        artifactId:
+          artifact.id,
+      });
+    } catch (error) {
+      console.error(
+        `Notifica pubblica AGE202 fallita per Artifact ${artifact.id}:`,
+        error,
+      );
+    }
   }
 
   revalidatePath(

@@ -48,6 +48,7 @@ model Player {
   tournamentRunnerUps TournamentEdition[]      @relation("TournamentEditionRunnerUp")
   tournamentChampions TournamentChampion[]
   trophyWins          PlayerTrophyWin[]
+  publicPushFollows   PublicPushPlayerFollow[]
 
   @@index([name])
   @@index([collectionType])
@@ -1556,6 +1557,43 @@ model PushSubscription {
 
   @@index([enabled])
   @@index([createdAt])
+}
+
+model PublicPushSubscription {
+  id String @id @default(cuid())
+
+  endpoint String @unique @db.Text
+  p256dh   String @db.Text
+  auth     String @db.Text
+
+  userAgent String?
+  enabled   Boolean @default(true)
+
+  followAllArtifacts Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  playerFollows PublicPushPlayerFollow[]
+
+  @@index([enabled])
+  @@index([createdAt])
+}
+
+model PublicPushPlayerFollow {
+  id String @id @default(cuid())
+
+  subscriptionId String
+  playerId       String
+
+  subscription PublicPushSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  player       Player                 @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([subscriptionId, playerId])
+  @@index([subscriptionId])
+  @@index([playerId])
 }
 
 model ContributeSettings {
