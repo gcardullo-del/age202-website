@@ -25,6 +25,9 @@ import {
   getMuseumPlayerBySlug,
 } from "@/lib/services/museum/player-museum.service";
 
+export const dynamic =
+  "force-dynamic";
+
 type ArchivePageProps = {
   params: Promise<{
     player: string;
