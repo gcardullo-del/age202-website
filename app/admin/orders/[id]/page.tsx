@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Clock3,
   CreditCard,
+  Download,
   Mail,
   MapPin,
   PackageCheck,
@@ -19,6 +20,8 @@ import {
   UserRound,
 } from "lucide-react";
 
+import CreateInPostShipmentButton from "@/components/admin/orders/CreateInPostShipmentButton";
+import SyncInPostTrackingButton from "@/components/admin/orders/SyncInPostTrackingButton";
 import { prisma } from "@/lib/prisma";
 
 type AdminOrderDetailPageProps = {
@@ -354,6 +357,45 @@ export default async function AdminOrderDetailPage({
     order.shippingStatus ===
     "READY_TO_CREATE";
 
+  const isShipmentCreated =
+    [
+      "CREATED",
+      "LABEL_READY",
+      "IN_TRANSIT",
+      "DELIVERED",
+    ].includes(
+      order.shippingStatus,
+    );
+
+  const isInTransit =
+    order.shippingStatus ===
+    "IN_TRANSIT";
+
+  const isDelivered =
+    order.shippingStatus ===
+    "DELIVERED";
+
+  const hasReachedShipmentStage =
+    isReadyToShip ||
+    isShipmentCreated;
+
+  const inPostShippingEnabled =
+    process.env
+      .INPOST_SHIPPING_ENABLED ===
+    "true";
+
+  const webhookSecret =
+    process.env
+      .INPOST_WEBHOOK_SECRET
+      ?.trim();
+
+  const inPostWebhookConfigured =
+    Boolean(
+      webhookSecret &&
+        webhookSecret !==
+          "INSERIREMO_IL_SECRET_INPOST",
+    );
+
   const canMarkPreparing =
     !order.isTest &&
     order.status === "PAID" &&
@@ -527,41 +569,46 @@ export default async function AdminOrderDetailPage({
           </section>
         ) : null}
 
-        {isPreparing ? (
+        {(
+          isPreparing ||
+          isReadyToShip
+        ) ? (
           <>
-            <section className="mb-8 rounded-[24px] border border-emerald-300/15 bg-emerald-300/[0.035] p-5 sm:p-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-300/15 bg-emerald-300/[0.07]">
-                  <PackageCheck className="h-5 w-5 text-emerald-300" />
+            {isPreparing ? (
+              <section className="mb-8 rounded-[24px] border border-emerald-300/15 bg-emerald-300/[0.035] p-5 sm:p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-300/15 bg-emerald-300/[0.07]">
+                    <PackageCheck className="h-5 w-5 text-emerald-300" />
+                  </div>
+
+                  <div>
+                    <p className="font-semibold text-emerald-300">
+                      Order in preparation
+                    </p>
+
+                    <p className="mt-2 text-sm leading-6 text-white/45">
+                      Il pagamento è
+                      confermato e
+                      l&apos;ordine è ora
+                      nella fase di
+                      preparazione.
+                    </p>
+
+                    <p className="mt-3 text-xs font-medium uppercase tracking-[0.16em] text-white/30">
+                      Preparing since
+                    </p>
+
+                    <p className="mt-1 text-sm font-semibold text-white/65">
+                      {order.preparingAt
+                        ? formatDate(
+                            order.preparingAt,
+                          )
+                        : "Timestamp non disponibile"}
+                    </p>
+                  </div>
                 </div>
-
-                <div>
-                  <p className="font-semibold text-emerald-300">
-                    Order in preparation
-                  </p>
-
-                  <p className="mt-2 text-sm leading-6 text-white/45">
-                    Il pagamento è
-                    confermato e
-                    l&apos;ordine è ora
-                    nella fase di
-                    preparazione.
-                  </p>
-
-                  <p className="mt-3 text-xs font-medium uppercase tracking-[0.16em] text-white/30">
-                    Preparing since
-                  </p>
-
-                  <p className="mt-1 text-sm font-semibold text-white/65">
-                    {order.preparingAt
-                      ? formatDate(
-                          order.preparingAt,
-                        )
-                      : "Timestamp non disponibile"}
-                  </p>
-                </div>
-              </div>
-            </section>
+              </section>
+            ) : null}
 
             {canMarkReadyForShipment ? (
               <section className="mb-8 rounded-[28px] border border-[#c8ff00]/20 bg-[#c8ff00]/[0.035] p-6 sm:p-8">
@@ -621,20 +668,27 @@ export default async function AdminOrderDetailPage({
 
                   <p className="mt-2 max-w-2xl text-sm leading-7 text-white/45">
                     {isReadyToShip
-                      ? "L'ordine è pronto per la spedizione. Il prossimo passaggio sarà la creazione effettiva della spedizione InPost non appena saranno disponibili le credenziali ufficiali."
+                      ? inPostShippingEnabled
+                        ? "L'ordine è pronto. Il pulsante può creare una spedizione InPost reale: usalo soltanto per un ordine LIVE verificato."
+                        : "L'ordine è pronto, ma la creazione reale InPost resta bloccata dal safety switch INPOST_SHIPPING_ENABLED. Nessuna spedizione può partire finché rimane false."
                       : "L'ordine è in preparazione. Quando la preparazione sarà completata, potrà essere segnato come pronto per la spedizione."}
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  disabled
-                  className="inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-bold text-white/30"
-                >
-                  <Truck className="h-4 w-4" />
-
-                  Create InPost shipment
-                </button>
+                <CreateInPostShipmentButton
+                  orderId={order.id}
+                  disabled={
+                    order.isTest ||
+                    !isReadyToShip
+                  }
+                  disabledReason={
+                    order.isTest
+                      ? "Stripe TEST order: la creazione della spedizione InPost è bloccata per sicurezza."
+                      : !isReadyToShip
+                        ? "L'ordine deve essere READY_TO_CREATE prima di poter creare la spedizione InPost."
+                        : undefined
+                  }
+                />
               </div>
 
               <div className="mt-6 rounded-[20px] border border-[#c8ff00]/15 bg-[#c8ff00]/[0.035] p-5">
@@ -643,7 +697,9 @@ export default async function AdminOrderDetailPage({
 
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c8ff00]">
                     {isReadyToShip
-                      ? "Ready to connect with InPost"
+                      ? inPostShippingEnabled
+                        ? "Production shipment creation enabled"
+                        : "Production shipment creation locked"
                       : "Waiting for preparation completion"}
                   </p>
                 </div>
@@ -1006,6 +1062,34 @@ export default async function AdminOrderDetailPage({
                       "—"}
                   </span>
                 </div>
+
+                {order.inpostTrackingNumber ? (
+                  <div className="space-y-4 pt-2">
+                    <a
+                      href={`/api/inpost/shipments/${encodeURIComponent(
+                        order.inpostTrackingNumber,
+                      )}/label`}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c8ff00] px-5 py-3 text-sm font-bold text-[#050b18] transition hover:bg-[#d6ff42]"
+                    >
+                      <Download className="h-4 w-4" />
+
+                      Download InPost label
+                    </a>
+
+                    <SyncInPostTrackingButton
+                      trackingNumber={
+                        order.inpostTrackingNumber
+                      }
+                      isTest={
+                        order.isTest
+                      }
+                    />
+
+                    <p className="text-center text-xs leading-5 text-white/30">
+                      Scarica l&apos;etichetta oppure sincronizza manualmente lo stato della spedizione con InPost.
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </section>
 
@@ -1024,18 +1108,44 @@ export default async function AdminOrderDetailPage({
                 <p className="mt-5 text-sm leading-7 text-white/50">
                   {order.isTest
                     ? "Ordine Stripe TEST: l'integrazione InPost è bloccata per sicurezza e nessuna spedizione reale può essere creata."
-                    : "L'ordine è pronto per il collegamento logistico InPost. Creazione spedizione, Locker/Point, tracking ed etichetta saranno gestiti da questa sezione appena saranno disponibili le credenziali ufficiali."}
+                    : inPostShippingEnabled
+                      ? "La creazione spedizioni InPost Production è abilitata. Il tracking viene gestito dagli eventi InPost non appena la subscription webhook Production sarà attiva."
+                      : "Le API InPost Production sono integrate, ma la creazione reale delle spedizioni resta disabilitata dal safety switch. È la configurazione corretta finché non completiamo il go-live."}
                 </p>
 
-                <div className="mt-6 rounded-[20px] border border-white/10 bg-black/10 p-5">
-                  <div className="flex items-center gap-3">
-                    <Clock3 className="h-4 w-4 text-[#c8ff00]" />
+                <div className="mt-6 grid gap-3">
+                  <div className="rounded-[20px] border border-white/10 bg-black/10 p-5">
+                    <div className="flex items-center gap-3">
+                      {inPostShippingEnabled ? (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                      ) : (
+                        <ShieldCheck className="h-4 w-4 text-[#c8ff00]" />
+                      )}
 
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c8ff00]">
-                      {order.isTest
-                        ? "Test order · InPost locked"
-                        : "Waiting for API credentials"}
-                    </p>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c8ff00]">
+                        {order.isTest
+                          ? "Test order · InPost locked"
+                          : inPostShippingEnabled
+                            ? "Real shipment creation enabled"
+                            : "Real shipment creation safely disabled"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-[20px] border border-white/10 bg-black/10 p-5">
+                    <div className="flex items-center gap-3">
+                      {inPostWebhookConfigured ? (
+                        <CheckCircle2 className="h-4 w-4 text-emerald-300" />
+                      ) : (
+                        <Clock3 className="h-4 w-4 text-amber-200" />
+                      )}
+
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/55">
+                        {inPostWebhookConfigured
+                          ? "Webhook secret configured"
+                          : "Webhook Production pending InPost"}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1084,7 +1194,8 @@ export default async function AdminOrderDetailPage({
                 </div>
 
                 <div className="flex gap-4">
-                  {isPreparing ? (
+                  {isPreparing ||
+                  hasReachedShipmentStage ? (
                     <PackageCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#c8ff00]" />
                   ) : (
                     <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-white/30" />
@@ -1093,12 +1204,13 @@ export default async function AdminOrderDetailPage({
                   <div>
                     <p
                       className={
-                        isPreparing
+                        isPreparing ||
+                        hasReachedShipmentStage
                           ? "text-sm font-semibold text-[#c8ff00]"
                           : "text-sm font-semibold text-white/60"
                       }
                     >
-                      {isReadyToShip
+                      {hasReachedShipmentStage
                         ? "Preparation completed"
                         : isPreparing
                           ? "Order preparing"
@@ -1106,41 +1218,142 @@ export default async function AdminOrderDetailPage({
                     </p>
 
                     <p className="mt-1 text-xs text-white/35">
-                      {isPreparing
-                        ? order.preparingAt
-                          ? formatDate(
-                              order.preparingAt,
-                            )
-                          : "Timestamp non disponibile"
+                      {order.preparingAt
+                        ? formatDate(
+                            order.preparingAt,
+                          )
                         : "Waiting for admin action"}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  {isReadyToShip ? (
+                  {isShipmentCreated ? (
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  ) : isReadyToShip ? (
                     <Truck className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
                   ) : (
-                    <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-sky-300/70" />
+                    <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-white/30" />
                   )}
 
                   <div>
                     <p
                       className={
-                        isReadyToShip
+                        isShipmentCreated
+                          ? "text-sm font-semibold text-emerald-300"
+                          : isReadyToShip
+                            ? "text-sm font-semibold text-sky-300"
+                            : "text-sm font-semibold text-white/60"
+                      }
+                    >
+                      {isShipmentCreated
+                        ? "InPost shipment created"
+                        : isReadyToShip
+                          ? "Ready to create shipment"
+                          : "Shipment creation pending"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-white/30">
+                      {order.shippingCreatedAt
+                        ? formatDate(
+                            order.shippingCreatedAt,
+                          )
+                        : isReadyToShip
+                          ? "Waiting for InPost shipment creation"
+                          : "Waiting for preparation completion"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  {order.inpostTrackingNumber ? (
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  ) : (
+                    <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-white/30" />
+                  )}
+
+                  <div>
+                    <p
+                      className={
+                        order.inpostTrackingNumber
+                          ? "text-sm font-semibold text-emerald-300"
+                          : "text-sm font-semibold text-white/60"
+                      }
+                    >
+                      {order.inpostTrackingNumber
+                        ? "Tracking assigned"
+                        : "Tracking pending"}
+                    </p>
+
+                    <p className="mt-1 break-all text-xs text-white/30">
+                      {order.inpostTrackingNumber ??
+                        "Generated after shipment creation"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  {isInTransit ||
+                  isDelivered ? (
+                    <Truck className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
+                  ) : (
+                    <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-white/30" />
+                  )}
+
+                  <div>
+                    <p
+                      className={
+                        isInTransit ||
+                        isDelivered
                           ? "text-sm font-semibold text-sky-300"
                           : "text-sm font-semibold text-white/60"
                       }
                     >
-                      {isReadyToShip
-                        ? "Ready to ship"
-                        : "Shipment creation pending"}
+                      {isDelivered
+                        ? "Transit completed"
+                        : isInTransit
+                          ? "Shipment in transit"
+                          : "Transit pending"}
                     </p>
 
                     <p className="mt-1 text-xs text-white/30">
-                      {isReadyToShip
-                        ? "Waiting for InPost shipment creation"
-                        : "Waiting for preparation completion"}
+                      {order.shippedAt
+                        ? formatDate(
+                            order.shippedAt,
+                          )
+                        : order.inpostStatus
+                          ? `InPost: ${order.inpostStatus}`
+                          : "Waiting for tracking event"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  {isDelivered ? (
+                    <PackageCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-300" />
+                  ) : (
+                    <Clock3 className="mt-0.5 h-5 w-5 shrink-0 text-white/30" />
+                  )}
+
+                  <div>
+                    <p
+                      className={
+                        isDelivered
+                          ? "text-sm font-semibold text-emerald-300"
+                          : "text-sm font-semibold text-white/60"
+                      }
+                    >
+                      {isDelivered
+                        ? "Delivered"
+                        : "Delivery pending"}
+                    </p>
+
+                    <p className="mt-1 text-xs text-white/30">
+                      {order.deliveredAt
+                        ? formatDate(
+                            order.deliveredAt,
+                          )
+                        : "Waiting for InPost delivery event"}
                     </p>
                   </div>
                 </div>

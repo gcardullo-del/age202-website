@@ -3,82 +3,136 @@ import Stripe from "stripe";
 
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import { sendSalePushNotification } from "@/lib/push/sendPushNotification";
+
+import {
+  createInPostShipmentForOrder,
+  isInPostShippingEnabled,
+} from "@/lib/server/inpost/inpost-shipping.service";
+
+import {
+  sendSalePushNotification,
+} from "@/lib/push/sendPushNotification";
+
+import {
+  sendOrderConfirmationEmail,
+} from "@/lib/services/order-email.service";
+
 
 type StripeCatalogType =
   | "ARTIFACT"
   | "MEMORABILIA"
   | "ORIGINAL_PRODUCT";
 
-export async function POST(request: Request) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+type InPostPointType =
+  | "APM"
+  | "PUDO";
+
+
+export async function POST(
+  request: Request,
+) {
+  const webhookSecret =
+    process.env
+      .STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
-    console.error("STRIPE_WEBHOOK_SECRET non configurata.");
+    console.error(
+      "STRIPE_WEBHOOK_SECRET non configurata.",
+    );
 
     return NextResponse.json(
       {
-        error: "Webhook Stripe non configurato.",
+        error:
+          "Webhook Stripe non configurato.",
       },
       {
-        status: 500,
+        status:
+          500,
       },
     );
   }
 
-  const signature = request.headers.get("stripe-signature");
+
+  const signature =
+    request.headers.get(
+      "stripe-signature",
+    );
 
   if (!signature) {
     return NextResponse.json(
       {
-        error: "Firma Stripe mancante.",
+        error:
+          "Firma Stripe mancante.",
       },
       {
-        status: 400,
+        status:
+          400,
       },
     );
   }
 
-  const rawBody = await request.text();
 
-  let event: Stripe.Event;
+  const rawBody =
+    await request.text();
+
+  let event:
+    Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      rawBody,
-      signature,
-      webhookSecret,
-    );
+    event =
+      stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        webhookSecret,
+      );
   } catch (error) {
-    console.error("Firma webhook Stripe non valida:", error);
+    console.error(
+      "Firma webhook Stripe non valida:",
+      error,
+    );
 
     return NextResponse.json(
       {
-        error: "Firma webhook non valida.",
+        error:
+          "Firma webhook non valida.",
       },
       {
-        status: 400,
+        status:
+          400,
       },
     );
   }
 
-  try {
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as Stripe.Checkout.Session;
 
-        await handleCompletedCheckout(session);
+  try {
+    switch (
+      event.type
+    ) {
+      case "checkout.session.completed": {
+        const session =
+          event.data
+            .object as Stripe.Checkout.Session;
+
+        await handleCompletedCheckout(
+          session,
+        );
 
         break;
       }
 
+
       default: {
-        console.log(`Evento Stripe ignorato: ${event.type}`);
+        console.log(
+          `Evento Stripe ignorato: ${event.type}`,
+        );
       }
     }
 
+
     return NextResponse.json({
-      received: true,
+      received:
+        true,
     });
   } catch (error) {
     console.error(
@@ -88,42 +142,72 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       {
-        error: "Errore durante la gestione del webhook.",
+        error:
+          "Errore durante la gestione del webhook.",
       },
       {
-        status: 500,
+        status:
+          500,
       },
     );
   }
 }
 
+
 async function handleCompletedCheckout(
-  session: Stripe.Checkout.Session,
+  session:
+    Stripe.Checkout.Session,
 ) {
   /*
    * IDEMPOTENZA
    *
-   * Stripe può inviare lo stesso webhook più di una volta.
-   * Se l'ordine esiste già non dobbiamo duplicarlo.
+   * Stripe può inviare
+   * lo stesso webhook
+   * più di una volta.
    */
-  const existingOrder = await prisma.order.findUnique({
-    where: {
-      stripeCheckoutSessionId: session.id,
-    },
-    select: {
-      id: true,
-    },
-  });
+  const existingOrder =
+    await prisma.order.findUnique({
+      where: {
+        stripeCheckoutSessionId:
+          session.id,
+      },
+
+      select: {
+        id:
+          true,
+
+        orderNumber:
+          true,
+
+        isTest:
+          true,
+
+        shippingStatus:
+          true,
+      },
+    });
+
 
   if (existingOrder) {
     console.log(
       `Ordine già processato per Checkout Session ${session.id}`,
     );
 
+    /*
+     * Non tentiamo automaticamente
+     * una seconda spedizione.
+     *
+     * Eventuali retry InPost verranno
+     * gestiti separatamente.
+     */
     return;
   }
 
-  if (session.payment_status !== "paid") {
+
+  if (
+    session.payment_status !==
+    "paid"
+  ) {
     console.log(
       `Checkout ${session.id} completato ma non ancora pagato. Stato: ${session.payment_status}`,
     );
@@ -131,11 +215,56 @@ async function handleCompletedCheckout(
     return;
   }
 
-  const itemId = session.metadata?.age202ItemId;
-  const itemType = session.metadata
-    ?.age202ItemType as StripeCatalogType | undefined;
 
-  const size = session.metadata?.size?.trim() || null;
+  const itemId =
+    session.metadata
+      ?.age202ItemId;
+
+
+  const itemType =
+    session.metadata
+      ?.age202ItemType as
+      | StripeCatalogType
+      | undefined;
+
+
+  const size =
+    session.metadata
+      ?.size
+      ?.trim() ||
+    null;
+
+
+  /*
+   * INPOST METADATA
+   */
+  const inpostPointId =
+    session.metadata
+      ?.inpostPointId
+      ?.trim() ||
+    null;
+
+
+  const inpostPointType =
+    normalizeInPostPointType(
+      session.metadata
+        ?.inpostPointType,
+    );
+
+
+  const inpostPointName =
+    session.metadata
+      ?.inpostPointName
+      ?.trim() ||
+    null;
+
+
+  const inpostPointAddress =
+    session.metadata
+      ?.inpostPointAddress
+      ?.trim() ||
+    null;
+
 
   if (!itemId) {
     throw new Error(
@@ -143,17 +272,47 @@ async function handleCompletedCheckout(
     );
   }
 
+
   if (
-    itemType !== "ARTIFACT" &&
-    itemType !== "MEMORABILIA" &&
-    itemType !== "ORIGINAL_PRODUCT"
+    itemType !==
+      "ARTIFACT" &&
+    itemType !==
+      "MEMORABILIA" &&
+    itemType !==
+      "ORIGINAL_PRODUCT"
   ) {
     throw new Error(
       `Metadata age202ItemType non valida nella sessione ${session.id}`,
     );
   }
 
-  const item = await getPurchasableItem(itemType, itemId);
+
+  if (!inpostPointId) {
+    throw new Error(
+      `Metadata inpostPointId mancante nella sessione ${session.id}`,
+    );
+  }
+
+
+  if (!inpostPointType) {
+    throw new Error(
+      `Metadata inpostPointType mancante o non valida nella sessione ${session.id}`,
+    );
+  }
+
+
+  const shippingMethod =
+    mapInPostPointTypeToShippingMethod(
+      inpostPointType,
+    );
+
+
+  const item =
+    await getPurchasableItem(
+      itemType,
+      itemId,
+    );
+
 
   if (!item) {
     throw new Error(
@@ -161,24 +320,41 @@ async function handleCompletedCheckout(
     );
   }
 
-  const amountSubtotal = session.amount_subtotal;
 
-  if (amountSubtotal === null) {
+  const amountSubtotal =
+    session
+      .amount_subtotal;
+
+  if (
+    amountSubtotal ===
+    null
+  ) {
     throw new Error(
       `amount_subtotal mancante nella sessione ${session.id}`,
     );
   }
 
-  const amountTotal = session.amount_total;
 
-  if (amountTotal === null) {
+  const amountTotal =
+    session
+      .amount_total;
+
+  if (
+    amountTotal ===
+    null
+  ) {
     throw new Error(
       `amount_total mancante nella sessione ${session.id}`,
     );
   }
 
+
   const shippingAmount =
-    session.total_details?.amount_shipping ?? 0;
+    session
+      .total_details
+      ?.amount_shipping ??
+    0;
+
 
   const currency = (
     session.currency ??
@@ -186,16 +362,32 @@ async function handleCompletedCheckout(
     "eur"
   ).toUpperCase();
 
-  const subtotal = amountSubtotal / 100;
-  const shipping = shippingAmount / 100;
-  const total = amountTotal / 100;
 
-  const customer = session.customer_details;
+  const subtotal =
+    amountSubtotal /
+    100;
+
+
+  const shipping =
+    shippingAmount /
+    100;
+
+
+  const total =
+    amountTotal /
+    100;
+
+
+  const customer =
+    session
+      .customer_details;
+
 
   const customerEmail =
     customer?.email ??
     session.customer_email ??
     null;
+
 
   if (!customerEmail) {
     throw new Error(
@@ -203,324 +395,812 @@ async function handleCompletedCheckout(
     );
   }
 
+
   const shippingDetails =
-  session.collected_information?.shipping_details ?? null;
+    session
+      .collected_information
+      ?.shipping_details ??
+    null;
+
 
   const shippingAddress =
-    shippingDetails?.address ??
+    shippingDetails
+      ?.address ??
     customer?.address ??
     null;
 
+
   const stripePaymentIntentId =
-    typeof session.payment_intent === "string"
-      ? session.payment_intent
-      : session.payment_intent?.id ?? null;
+    typeof session
+      .payment_intent ===
+    "string"
+      ? session
+          .payment_intent
+      : session
+          .payment_intent
+          ?.id ??
+        null;
+
 
   const stripeCustomerId =
-    typeof session.customer === "string"
+    typeof session
+      .customer ===
+    "string"
       ? session.customer
-      : session.customer?.id ?? null;
+      : session
+          .customer
+          ?.id ??
+        null;
 
-  const orderNumber = createOrderNumber(session.id);
 
-  const createdOrder = await prisma.$transaction(async (tx) => {
-    /*
-     * Secondo controllo di idempotenza dentro la transazione.
-     */
-    const duplicate = await tx.order.findUnique({
-      where: {
-        stripeCheckoutSessionId: session.id,
-      },
-      select: {
-        id: true,
-      },
-    });
+  const orderNumber =
+    createOrderNumber(
+      session.id,
+    );
 
-    if (duplicate) {
-      return null;
-    }
 
-    /*
-     * Verifica disponibilità prima di creare l'ordine.
-     */
-    await ensureStillAvailable(tx, itemType, itemId);
+  const createdOrder =
+    await prisma.$transaction(
+      async (
+        tx,
+      ) => {
+        /*
+         * Secondo controllo
+         * di idempotenza.
+         */
+        const duplicate =
+          await tx.order.findUnique({
+            where: {
+              stripeCheckoutSessionId:
+                session.id,
+            },
 
-    const order = await tx.order.create({
-      data: {
-        orderNumber,
+            select: {
+              id:
+                true,
+            },
+          });
 
-        status: "PAID",
-        paymentStatus: "PAID",
-        isTest: !session.livemode,
 
-        currency,
-        subtotal,
-        shipping,
-        total,
+        if (duplicate) {
+          return null;
+        }
 
-        customerEmail,
-        customerName:
-          shippingDetails?.name ??
-          customer?.name ??
-          null,
-        customerPhone: customer?.phone ?? null,
 
-        shippingName:
-          shippingDetails?.name ??
-          customer?.name ??
-          null,
+        /*
+         * Verifica disponibilità
+         * prima di creare l'ordine.
+         */
+        await ensureStillAvailable(
+          tx,
+          itemType,
+          itemId,
+        );
 
-        shippingLine1: shippingAddress?.line1 ?? null,
-        shippingLine2: shippingAddress?.line2 ?? null,
-        shippingCity: shippingAddress?.city ?? null,
-        shippingPostalCode:
-          shippingAddress?.postal_code ?? null,
-        shippingState: shippingAddress?.state ?? null,
-        shippingCountry:
-          shippingAddress?.country ?? null,
 
-        stripeCheckoutSessionId: session.id,
-        stripePaymentIntentId,
-        stripeCustomerId,
+        const order =
+          await tx.order.create({
+            data: {
+              orderNumber,
 
-        paidAt: new Date(),
+              status:
+                "PAID",
 
-        items: {
-          create: {
+              paymentStatus:
+                "PAID",
+
+              /*
+               * Stripe TEST:
+               * l'ordine viene marcato
+               * automaticamente come test.
+               */
+              isTest:
+                !session
+                  .livemode,
+
+              currency,
+              subtotal,
+              shipping,
+              total,
+
+              customerEmail,
+
+              customerName:
+                shippingDetails
+                  ?.name ??
+                customer?.name ??
+                null,
+
+              customerPhone:
+                customer?.phone ??
+                null,
+
+              shippingName:
+                shippingDetails
+                  ?.name ??
+                customer?.name ??
+                null,
+
+              shippingLine1:
+                shippingAddress
+                  ?.line1 ??
+                null,
+
+              shippingLine2:
+                shippingAddress
+                  ?.line2 ??
+                null,
+
+              shippingCity:
+                shippingAddress
+                  ?.city ??
+                null,
+
+              shippingPostalCode:
+                shippingAddress
+                  ?.postal_code ??
+                null,
+
+              shippingState:
+                shippingAddress
+                  ?.state ??
+                null,
+
+              shippingCountry:
+                shippingAddress
+                  ?.country ??
+                null,
+
+
+              /*
+               * INPOST
+               */
+              shippingProvider:
+                "INPOST",
+
+              shippingMethod,
+
+              shippingStatus:
+                "READY_TO_CREATE",
+
+              inpostPointId,
+
+              inpostPointName,
+
+              inpostPointAddress,
+
+
+              stripeCheckoutSessionId:
+                session.id,
+
+              stripePaymentIntentId,
+
+              stripeCustomerId,
+
+              paidAt:
+                new Date(),
+
+
+              items: {
+                create: {
+                  itemType,
+
+                  artifactId:
+                    itemType ===
+                    "ARTIFACT"
+                      ? item.id
+                      : null,
+
+                  memorabiliaId:
+                    itemType ===
+                    "MEMORABILIA"
+                      ? item.id
+                      : null,
+
+                  originalProductId:
+                    itemType ===
+                    "ORIGINAL_PRODUCT"
+                      ? item.id
+                      : null,
+
+                  productName:
+                    item.title,
+
+                  productSlug:
+                    item.slug,
+
+                  quantity:
+                    1,
+
+                  unitPrice:
+                    subtotal,
+
+                  totalPrice:
+                    subtotal,
+
+                  currency,
+
+                  size,
+
+                  stripePriceId:
+                    item
+                      .stripePriceId,
+
+                  stripeProductId:
+                    item
+                      .stripeProductId,
+                },
+              },
+            },
+          });
+
+
+        /*
+         * DISPONIBILITÀ CATALOGO
+         *
+         * Un pagamento Stripe TEST
+         * NON deve modificare
+         * la disponibilità reale
+         * dei prodotti AGE202.
+         *
+         * Soltanto un pagamento LIVE
+         * può impostare SOLD.
+         */
+        if (
+          session.livemode
+        ) {
+          await markAsSold(
+            tx,
             itemType,
+            itemId,
+          );
 
-            artifactId:
-              itemType === "ARTIFACT"
-                ? item.id
-                : null,
+          console.log(
+            `Prodotto ${itemId} segnato SOLD.`,
+          );
+        } else {
+          console.log(
+            `Stripe TEST: prodotto ${itemId} lasciato AVAILABLE.`,
+          );
+        }
 
-            memorabiliaId:
-              itemType === "MEMORABILIA"
-                ? item.id
-                : null,
 
-            originalProductId:
-              itemType === "ORIGINAL_PRODUCT"
-                ? item.id
-                : null,
+        console.log(
+          `Ordine AGE202 creato: ${order.orderNumber}`,
+        );
 
-            productName: item.title,
-            productSlug: item.slug,
+        console.log(
+          `InPost point: ${inpostPointId} (${inpostPointType})`,
+        );
 
-            quantity: 1,
-            unitPrice: subtotal,
-            totalPrice: subtotal,
-            currency,
+        console.log(
+          "Shipping status: READY_TO_CREATE",
+        );
 
-            size,
 
-            stripePriceId:
-              item.stripePriceId,
-
-            stripeProductId:
-              item.stripeProductId,
-          },
-        },
+        return order;
       },
-    });
+    );
+
+
+  if (!createdOrder) {
+    return;
+  }
+
+
+  /*
+   * NOTIFICA VENDITA
+   *
+   * Solo ordini LIVE.
+   */
+  if (
+    !createdOrder
+      .isTest
+  ) {
+    await sendSalePushNotification({
+      orderId:
+        createdOrder.id,
+
+      orderNumber:
+        createdOrder
+          .orderNumber,
+
+      productName:
+        item.title,
+
+      total,
+
+      currency,
+    }).catch(
+      (
+        error,
+      ) => {
+        console.error(
+          "Errore notifica vendita AGE202:",
+          error,
+        );
+      },
+    );
+  }
+
+
+  /*
+   * EMAIL CONFERMA ORDINE
+   *
+   * Il servizio gestisce autonomamente:
+   * - ordini Stripe TEST;
+   * - RESEND_API_KEY assente;
+   * - email cliente mancante.
+   *
+   * Un errore email NON deve mai
+   * invalidare un ordine già pagato.
+   */
+  try {
+    const emailResult =
+      await sendOrderConfirmationEmail(
+        createdOrder.id,
+      );
+
+    if (
+      emailResult.sent
+    ) {
+      console.log(
+        `✅ Email conferma ordine inviata per ${createdOrder.orderNumber}.`,
+      );
+    } else {
+      console.log(
+        `Email conferma ordine non inviata per ${createdOrder.orderNumber}: ${emailResult.reason ?? "invio saltato"}`,
+      );
+    }
+  } catch (error) {
+    console.error(
+      `⚠️ Errore email conferma ordine per ${createdOrder.orderNumber}:`,
+      error,
+    );
 
     /*
-     * Dopo la creazione dell'ordine segniamo il pezzo come SOLD.
+     * NON rilanciamo.
+     *
+     * Il pagamento Stripe è già valido
+     * e l'ordine deve rimanere registrato.
      */
-    await markAsSold(
-      tx,
-      itemType,
-      itemId,
+  }
+
+
+  /*
+   * ========================================
+   * INPOST AUTOMATIC SHIPPING
+   * ========================================
+   *
+   * REGOLA 1:
+   * gli ordini Stripe TEST
+   * NON possono creare spedizioni.
+   *
+   * REGOLA 2:
+   * se INPOST_SHIPPING_ENABLED
+   * non è "true", non chiamiamo
+   * nemmeno createInPostShipmentForOrder().
+   */
+  if (
+    createdOrder
+      .isTest
+  ) {
+    console.log(
+      `Ordine ${createdOrder.orderNumber}: spedizione InPost NON creata perché si tratta di un ordine Stripe TEST.`,
+    );
+
+    return;
+  }
+
+
+  if (
+    !isInPostShippingEnabled()
+  ) {
+    console.log(
+      `Ordine ${createdOrder.orderNumber}: InPost pronto ma creazione automatica disabilitata.`,
     );
 
     console.log(
-      `Ordine AGE202 creato: ${order.orderNumber}`,
+      "INPOST_SHIPPING_ENABLED=false",
     );
 
-    return order;
-  });
+    return;
+  }
 
-  if (createdOrder && !createdOrder.isTest) {
-    await sendSalePushNotification({
-      orderId: createdOrder.id,
-      orderNumber: createdOrder.orderNumber,
-      productName: item.title,
-      total,
-      currency,
-    }).catch((error) => {
-      console.error(
-        "Errore notifica vendita AGE202:",
-        error,
-      );
-    });
+
+  /*
+   * Da qui in poi siamo:
+   *
+   * - ordine LIVE
+   * - pagamento PAID
+   * - punto InPost presente
+   * - ordine READY_TO_CREATE
+   * - INPOST_SHIPPING_ENABLED=true
+   *
+   * Solo in queste condizioni
+   * tentiamo la spedizione reale.
+   *
+   * IMPORTANTE:
+   * eventuali errori InPost
+   * NON devono invalidare
+   * il webhook Stripe.
+   *
+   * L'ordine resterà
+   * READY_TO_CREATE e potrà
+   * essere ritentato manualmente.
+   */
+  try {
+    const shipment =
+      await createInPostShipmentForOrder({
+        orderId:
+          createdOrder.id,
+      });
+
+
+    console.log(
+      `✅ Spedizione InPost creata per ordine ${createdOrder.orderNumber}`,
+    );
+
+    console.log(
+      `Tracking: ${shipment.trackingNumber}`,
+    );
+  } catch (error) {
+    console.error(
+      `⚠️ Impossibile creare automaticamente la spedizione InPost per ordine ${createdOrder.orderNumber}:`,
+      error,
+    );
+
+    /*
+     * NON rilanciamo l'errore.
+     *
+     * Il pagamento Stripe
+     * è già valido e l'ordine
+     * deve rimanere registrato.
+     */
   }
 }
 
+
 async function getPurchasableItem(
-  itemType: StripeCatalogType,
-  itemId: string,
+  itemType:
+    StripeCatalogType,
+
+  itemId:
+    string,
 ) {
   const select = {
-    id: true,
-    title: true,
-    slug: true,
-    currency: true,
-    stripeProductId: true,
-    stripePriceId: true,
+    id:
+      true,
+
+    title:
+      true,
+
+    slug:
+      true,
+
+    currency:
+      true,
+
+    stripeProductId:
+      true,
+
+    stripePriceId:
+      true,
   } as const;
 
-  if (itemType === "ARTIFACT") {
+
+  if (
+    itemType ===
+    "ARTIFACT"
+  ) {
     return prisma.artifact.findUnique({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
+
       select,
     });
   }
 
-  if (itemType === "MEMORABILIA") {
+
+  if (
+    itemType ===
+    "MEMORABILIA"
+  ) {
     return prisma.memorabilia.findUnique({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
+
       select,
     });
   }
+
 
   return prisma.originalProduct.findUnique({
     where: {
-      id: itemId,
+      id:
+        itemId,
     },
+
     select,
   });
 }
 
-async function ensureStillAvailable(
-  tx: Parameters<
-    Parameters<typeof prisma.$transaction>[0]
-  >[0],
-  itemType: StripeCatalogType,
-  itemId: string,
-) {
-  if (itemType === "ARTIFACT") {
-    const item = await tx.artifact.findUnique({
-      where: {
-        id: itemId,
-      },
-      select: {
-        availability: true,
-      },
-    });
 
-    if (!item || item.availability !== "AVAILABLE") {
+async function ensureStillAvailable(
+  tx:
+    Parameters<
+      Parameters<
+        typeof prisma.$transaction
+      >[0]
+    >[0],
+
+  itemType:
+    StripeCatalogType,
+
+  itemId:
+    string,
+) {
+  if (
+    itemType ===
+    "ARTIFACT"
+  ) {
+    const item =
+      await tx.artifact.findUnique({
+        where: {
+          id:
+            itemId,
+        },
+
+        select: {
+          availability:
+            true,
+        },
+      });
+
+
+    if (
+      !item ||
+      item.availability !==
+        "AVAILABLE"
+    ) {
       throw new Error(
         `Artifact ${itemId} non più disponibile.`,
       );
     }
 
+
     return;
   }
 
-  if (itemType === "MEMORABILIA") {
-    const item = await tx.memorabilia.findUnique({
-      where: {
-        id: itemId,
-      },
-      select: {
-        availability: true,
-      },
-    });
 
-    if (!item || item.availability !== "AVAILABLE") {
+  if (
+    itemType ===
+    "MEMORABILIA"
+  ) {
+    const item =
+      await tx.memorabilia.findUnique({
+        where: {
+          id:
+            itemId,
+        },
+
+        select: {
+          availability:
+            true,
+        },
+      });
+
+
+    if (
+      !item ||
+      item.availability !==
+        "AVAILABLE"
+    ) {
       throw new Error(
         `Memorabilia ${itemId} non più disponibile.`,
       );
     }
 
+
     return;
   }
+
 
   const item =
     await tx.originalProduct.findUnique({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
+
       select: {
-        availability: true,
+        availability:
+          true,
       },
     });
 
-  if (!item || item.availability !== "AVAILABLE") {
+
+  if (
+    !item ||
+    item.availability !==
+      "AVAILABLE"
+  ) {
     throw new Error(
       `OriginalProduct ${itemId} non più disponibile.`,
     );
   }
 }
 
+
 async function markAsSold(
-  tx: Parameters<
-    Parameters<typeof prisma.$transaction>[0]
-  >[0],
-  itemType: StripeCatalogType,
-  itemId: string,
+  tx:
+    Parameters<
+      Parameters<
+        typeof prisma.$transaction
+      >[0]
+    >[0],
+
+  itemType:
+    StripeCatalogType,
+
+  itemId:
+    string,
 ) {
-  if (itemType === "ARTIFACT") {
+  if (
+    itemType ===
+    "ARTIFACT"
+  ) {
     await tx.artifact.update({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
+
       data: {
-        availability: "SOLD",
+        availability:
+          "SOLD",
       },
     });
+
 
     return;
   }
 
-  if (itemType === "MEMORABILIA") {
+
+  if (
+    itemType ===
+    "MEMORABILIA"
+  ) {
     await tx.memorabilia.update({
       where: {
-        id: itemId,
+        id:
+          itemId,
       },
+
       data: {
-        availability: "SOLD",
+        availability:
+          "SOLD",
       },
     });
 
+
     return;
   }
+
 
   await tx.originalProduct.update({
     where: {
-      id: itemId,
+      id:
+        itemId,
     },
+
     data: {
-      availability: "SOLD",
+      availability:
+        "SOLD",
     },
   });
 }
 
+
+function normalizeInPostPointType(
+  value:
+    | string
+    | undefined,
+):
+  | InPostPointType
+  | null {
+  const normalized =
+    value
+      ?.trim()
+      .toUpperCase();
+
+
+  if (
+    normalized ===
+    "APM"
+  ) {
+    return "APM";
+  }
+
+
+  if (
+    normalized ===
+    "PUDO"
+  ) {
+    return "PUDO";
+  }
+
+
+  return null;
+}
+
+
+function mapInPostPointTypeToShippingMethod(
+  pointType:
+    InPostPointType,
+):
+  | "INPOST_LOCKER"
+  | "INPOST_POINT" {
+  if (
+    pointType ===
+    "APM"
+  ) {
+    return "INPOST_LOCKER";
+  }
+
+
+  return "INPOST_POINT";
+}
+
+
 function createOrderNumber(
-  checkoutSessionId: string,
+  checkoutSessionId:
+    string,
 ) {
-  const date = new Date();
+  const date =
+    new Date();
 
-  const year = date
-    .getFullYear()
-    .toString();
 
-  const month = String(
-    date.getMonth() + 1,
-  ).padStart(2, "0");
+  const year =
+    date
+      .getFullYear()
+      .toString();
 
-  const day = String(
-    date.getDate(),
-  ).padStart(2, "0");
 
-  const suffix = checkoutSessionId
-    .replace(/^cs_(test|live)_/, "")
-    .slice(-8)
-    .toUpperCase();
+  const month =
+    String(
+      date.getMonth() +
+        1,
+    ).padStart(
+      2,
+      "0",
+    );
+
+
+  const day =
+    String(
+      date.getDate(),
+    ).padStart(
+      2,
+      "0",
+    );
+
+
+  const suffix =
+    checkoutSessionId
+      .replace(
+        /^cs_(test|live)_/,
+        "",
+      )
+      .slice(
+        -8,
+      )
+      .toUpperCase();
+
 
   return `AGE202-${year}${month}${day}-${suffix}`;
 }

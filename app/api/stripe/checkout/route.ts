@@ -11,6 +11,11 @@ type CheckoutRequestBody = {
   itemId?: string;
   itemType?: StripeCatalogType;
   size?: string;
+
+  inpostPointId?: string;
+  inpostPointType?: string;
+  inpostPointName?: string;
+  inpostPointAddress?: string;
 };
 
 type CheckoutItem = {
@@ -38,9 +43,8 @@ const SHIPPING_COUNTRIES_SETTING_KEY =
  * IMPORTANT:
  * Checkout is OFF unless CHECKOUT_ENABLED is explicitly set to "true".
  *
- * This makes production safe while InPost is not ready and also prevents
- * Stripe configuration from being evaluated during build when checkout
- * is intentionally disabled.
+ * This keeps production safe while the InPost integration
+ * is still being completed.
  */
 const CHECKOUT_ENABLED =
   process.env.CHECKOUT_ENABLED === "true";
@@ -95,12 +99,6 @@ export async function POST(
   }
 
   try {
-    /**
-     * Lazy import:
-     * Stripe is loaded only when checkout is actually enabled and a POST
-     * request reaches this route. This avoids evaluating @/lib/stripe
-     * during the production build while checkout is disabled.
-     */
     const {
       stripe,
     } = await import(
@@ -118,6 +116,22 @@ export async function POST(
 
     const size =
       body.size?.trim() ||
+      null;
+
+    const inpostPointId =
+      body.inpostPointId?.trim() ||
+      null;
+
+    const inpostPointType =
+      body.inpostPointType?.trim() ||
+      null;
+
+    const inpostPointName =
+      body.inpostPointName?.trim() ||
+      null;
+
+    const inpostPointAddress =
+      body.inpostPointAddress?.trim() ||
       null;
 
     if (!itemId) {
@@ -144,6 +158,20 @@ export async function POST(
         {
           error:
             "itemType non valido. Usa ARTIFACT, MEMORABILIA oppure ORIGINAL_PRODUCT.",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
+    if (!inpostPointId) {
+      return NextResponse.json(
+        {
+          error:
+            "Punto InPost mancante.",
+          code:
+            "INPOST_POINT_REQUIRED",
         },
         {
           status: 400,
@@ -231,6 +259,35 @@ export async function POST(
       process.env.NEXT_PUBLIC_APP_URL ??
       "http://localhost:3000";
 
+    const metadata = {
+      age202ItemId:
+        item.id,
+
+      age202ItemType:
+        itemType,
+
+      age202Slug:
+        item.slug,
+
+      age202Title:
+        item.title,
+
+      size:
+        size ?? "",
+
+      inpostPointId:
+        inpostPointId,
+
+      inpostPointType:
+        inpostPointType ?? "",
+
+      inpostPointName:
+        inpostPointName ?? "",
+
+      inpostPointAddress:
+        inpostPointAddress ?? "",
+    };
+
     const session =
       await stripe.checkout.sessions.create({
         mode:
@@ -273,39 +330,10 @@ export async function POST(
               item.slug,
           }),
 
-        metadata: {
-          age202ItemId:
-            item.id,
-
-          age202ItemType:
-            itemType,
-
-          age202Slug:
-            item.slug,
-
-          age202Title:
-            item.title,
-
-          size:
-            size ??
-            "",
-        },
+        metadata,
 
         payment_intent_data: {
-          metadata: {
-            age202ItemId:
-              item.id,
-
-            age202ItemType:
-              itemType,
-
-            age202Slug:
-              item.slug,
-
-            size:
-              size ??
-              "",
-          },
+          metadata,
         },
       });
 
@@ -337,6 +365,20 @@ export async function POST(
 
       itemId:
         item.id,
+
+      inpostPoint: {
+        id:
+          inpostPointId,
+
+        type:
+          inpostPointType,
+
+        name:
+          inpostPointName,
+
+        address:
+          inpostPointAddress,
+      },
 
       allowedCountries,
     });

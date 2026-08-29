@@ -198,6 +198,7 @@ function ChampionImage({
                 aria-hidden="true"
                 fill
                 priority={activeIndex === 0}
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 55vw"
                 className="scale-110 object-cover opacity-35 blur-2xl saturate-75"
               />

@@ -1,4 +1,4 @@
-"use client";
+
 
 import Link from "next/link";
 
@@ -16,6 +16,7 @@ import {
 
 import { createMemorabilia } from "../../actions/createMemorabilia";
 import { updateMemorabilia } from "../../actions/updateMemorabilia";
+import DeleteMemorabiliaButton from "./DeleteMemorabiliaButton";
 
 import MediaUploader, {
   type ExistingMediaImage,
@@ -252,6 +253,12 @@ export default function MemorabiliaForm({
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
+            {isEditing && memorabiliaId ? (
+              <DeleteMemorabiliaButton
+                memorabiliaId={memorabiliaId}
+              />
+            ) : null}
+
             <Link
               href="/admin/memorabilia"
               className="inline-flex h-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] px-5 text-sm font-semibold text-white/65 transition hover:bg-white/[0.07] hover:text-white"

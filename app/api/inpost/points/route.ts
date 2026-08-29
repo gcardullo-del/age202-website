@@ -1,43 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { inpostFetch } from "@/lib/inpost";
+import {
+  searchInPostPoints,
+} from "@/lib/services/inpost.service";
 
-type InPostPointCoordinates = {
-  latitude?: number;
-  longitude?: number;
-};
 
-type InPostPointAddress = {
-  line1?: string;
-  line2?: string;
-  city?: string;
-  postalCode?: string;
-  countryCode?: string;
-};
+function parseNumber(
+  value: string | null,
+): number | null {
+  if (!value) {
+    return null;
+  }
 
-type InPostPoint = {
-  id: string;
-  type?: string;
-  country?: string;
-  locationType?: string;
-  name?: string;
-  description?: string;
-  imageUrl?: string;
+  const parsed = Number(value);
 
-  coordinates?: InPostPointCoordinates;
+  return Number.isFinite(parsed)
+    ? parsed
+    : null;
+}
 
-  address?: InPostPointAddress;
-
-  openingHours?: string[];
-};
-
-type InPostPointsResponse = {
-  count?: number;
-  page?: number;
-  perPage?: number;
-  totalPages?: number;
-  items?: InPostPoint[];
-};
 
 export async function GET(
   request: NextRequest,
@@ -46,118 +27,89 @@ export async function GET(
     const searchParams =
       request.nextUrl.searchParams;
 
+    const latitude =
+      parseNumber(
+        searchParams.get("latitude"),
+      );
+
+    const longitude =
+      parseNumber(
+        searchParams.get("longitude"),
+      );
+
     const country =
       searchParams
         .get("country")
         ?.trim()
         .toUpperCase() || "IT";
 
-    const city =
+    const maxDistance =
+      parseNumber(
+        searchParams.get("maxDistance"),
+      ) ?? 10_000;
+
+    const limit =
+      parseNumber(
+        searchParams.get("limit"),
+      ) ?? 10;
+
+    const type =
       searchParams
-        .get("city")
-        ?.trim();
+        .get("type")
+        ?.trim()
+        .toUpperCase();
 
-    const postalCode =
-      searchParams
-        .get("postalCode")
-        ?.trim();
-
-    const latitude =
-      searchParams
-        .get("latitude")
-        ?.trim();
-
-    const longitude =
-      searchParams
-        .get("longitude")
-        ?.trim();
-
-    const page =
-      searchParams
-        .get("page")
-        ?.trim() || "1";
-
-    const perPage =
-      searchParams
-        .get("perPage")
-        ?.trim() || "25";
-
-    const query =
-      new URLSearchParams();
-
-    query.set(
-      "country",
-      country,
-    );
-
-    query.set(
-      "page",
-      page,
-    );
-
-    query.set(
-      "perPage",
-      perPage,
-    );
-
-    if (city) {
-      query.set(
-        "city",
-        city,
-      );
-    }
-
-    if (postalCode) {
-      query.set(
-        "postalCode",
-        postalCode,
+    if (
+      latitude === null ||
+      longitude === null
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "latitude e longitude sono obbligatori.",
+        },
+        {
+          status: 400,
+        },
       );
     }
 
     if (
-      latitude &&
-      longitude
+      type &&
+      type !== "APM" &&
+      type !== "PUDO"
     ) {
-      query.set(
-        "latitude",
-        latitude,
-      );
-
-      query.set(
-        "longitude",
-        longitude,
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            'type deve essere "APM" oppure "PUDO".',
+        },
+        {
+          status: 400,
+        },
       );
     }
 
-    const data =
-      await inpostFetch<InPostPointsResponse>(
-        `/location/v1/points?${query.toString()}`,
-        {
-          method: "GET",
-        },
-      );
+    const result =
+      await searchInPostPoints({
+        latitude,
+        longitude,
+        country,
+        maxDistance,
+        limit: Math.trunc(limit),
+        type:
+          type === "APM" ||
+          type === "PUDO"
+            ? type
+            : undefined,
+      });
 
     return NextResponse.json({
       success: true,
-
-      points:
-        data.items ?? [],
-
-      pagination: {
-        count:
-          data.count ?? 0,
-
-        page:
-          data.page ??
-          Number(page),
-
-        perPage:
-          data.perPage ??
-          Number(perPage),
-
-        totalPages:
-          data.totalPages ?? 0,
-      },
+      count: result.count,
+      points: result.items,
     });
   } catch (error) {
     console.error(

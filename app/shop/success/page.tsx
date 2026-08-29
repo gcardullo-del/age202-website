@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {
   ArrowRight,
   Check,
@@ -12,6 +13,8 @@ import {
 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 type SuccessPageProps = {
   searchParams: Promise<{
@@ -47,6 +50,25 @@ function formatItemType(itemType: string) {
   }
 
   return itemType.replaceAll("_", " ");
+}
+
+
+function formatShippingMethod(
+  shippingMethod: string | null,
+) {
+  if (shippingMethod === "INPOST_LOCKER") {
+    return "InPost Locker";
+  }
+
+  if (shippingMethod === "INPOST_POINT") {
+    return "InPost Point";
+  }
+
+  if (shippingMethod === "HOME_DELIVERY") {
+    return "Home delivery";
+  }
+
+  return "InPost";
 }
 
 export default async function ShopSuccessPage({
@@ -155,6 +177,26 @@ export default async function ShopSuccessPage({
     .filter(Boolean)
     .join(", ");
 
+
+  const hasInPostPoint = Boolean(
+    order.inpostPointId ||
+      order.inpostPointName ||
+      order.inpostPointAddress,
+  );
+
+  const inPostPointTitle =
+    order.inpostPointName?.trim() ||
+    order.inpostPointId?.trim() ||
+    "Punto InPost selezionato";
+
+  const inPostPointAddress =
+    order.inpostPointAddress?.trim() ||
+    "Indirizzo punto non disponibile";
+
+  const shippingMethod = formatShippingMethod(
+    order.shippingMethod,
+  );
+
   return (
     <main className="relative min-h-[calc(100vh-80px)] overflow-hidden bg-[#050b18] text-white">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -165,7 +207,7 @@ export default async function ShopSuccessPage({
         <div className="absolute bottom-[-250px] left-[-150px] h-[500px] w-[500px] rounded-full bg-sky-300/[0.025] blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1440px] px-5 py-10 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
+      <div className="relative mx-auto w-full max-w-[2200px] px-5 py-10 sm:px-8 sm:py-14 lg:px-12 lg:py-20">
         <div className="mb-8 flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-emerald-300/20 bg-emerald-300/10">
             <Check className="h-5 w-5 text-emerald-300" />
@@ -225,9 +267,17 @@ export default async function ShopSuccessPage({
                   </h2>
                 </div>
 
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">
-                  <ShieldCheck className="h-4 w-4" />
-                  Paid
+                <div className="flex flex-wrap gap-2">
+                  {order.isTest ? (
+                    <div className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-200">
+                      Test order
+                    </div>
+                  ) : null}
+
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">
+                    <ShieldCheck className="h-4 w-4" />
+                    Paid
+                  </div>
                 </div>
               </div>
 
@@ -308,6 +358,41 @@ export default async function ShopSuccessPage({
                   </p>
                 </div>
               </div>
+
+
+              {hasInPostPoint ? (
+                <div className="mt-6 rounded-[28px] border border-[#c8ff00]/20 bg-[#c8ff00]/[0.035] p-6 sm:p-8">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#c8ff00]/20 bg-[#c8ff00]/10">
+                      <MapPin className="h-5 w-5 text-[#c8ff00]" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c8ff00]/70">
+                        Pickup location
+                      </p>
+
+                      <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-white/35">
+                        {shippingMethod}
+                      </p>
+
+                      <h3 className="mt-2 text-lg font-semibold text-white/90">
+                        {inPostPointTitle}
+                      </h3>
+
+                      <p className="mt-2 text-sm leading-6 text-white/50">
+                        {inPostPointAddress}
+                      </p>
+
+                      {order.inpostPointId ? (
+                        <p className="mt-3 text-xs text-white/30">
+                          Point ID: {order.inpostPointId}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <aside className="p-7 sm:p-10 lg:p-12">
@@ -352,6 +437,22 @@ export default async function ShopSuccessPage({
                       <p className="mt-1 text-sm leading-6 text-white/50">
                         {shippingAddress || "Indirizzo non disponibile"}
                       </p>
+
+                      {hasInPostPoint ? (
+                        <div className="mt-4 border-t border-white/10 pt-4">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#c8ff00]/65">
+                            Delivery point
+                          </p>
+
+                          <p className="mt-2 text-sm font-semibold text-white/75">
+                            {inPostPointTitle}
+                          </p>
+
+                          <p className="mt-1 text-sm leading-6 text-white/45">
+                            {inPostPointAddress}
+                          </p>
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -367,9 +468,11 @@ export default async function ShopSuccessPage({
                 </div>
 
                 <p className="mt-4 text-sm leading-7 text-white/50">
-                  AGE202 ha registrato il pagamento. Il tuo ordine potrà ora
-                  essere preparato per la spedizione. Le informazioni
-                  dell&apos;acquisto rimarranno associate al numero ordine.
+                  AGE202 ha registrato il pagamento. Il tuo ordine verrà ora
+                  preparato per la spedizione
+                  {hasInPostPoint ? " verso il punto InPost selezionato." : "."}{" "}
+                  Le informazioni dell&apos;acquisto rimarranno associate al
+                  numero ordine.
                 </p>
 
                 <div className="mt-6 space-y-3">
@@ -382,6 +485,13 @@ export default async function ShopSuccessPage({
                     <CheckCircle2 className="h-4 w-4 text-emerald-300" />
                     Order registered
                   </div>
+
+                  {hasInPostPoint ? (
+                    <div className="flex items-center gap-3 text-sm text-white/55">
+                      <CheckCircle2 className="h-4 w-4 text-[#c8ff00]" />
+                      InPost point selected
+                    </div>
+                  ) : null}
 
                   <div className="flex items-center gap-3 text-sm text-white/55">
                     <PackageCheck className="h-4 w-4 text-white/35" />
@@ -414,7 +524,7 @@ export default async function ShopSuccessPage({
 
               <Link
                 href="/artifacts"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#050b18] transition hover:bg-white/90"
+                className="inline-flex items-center gap-2 rounded-full bg-[#c8ff00] px-5 py-3 text-sm font-bold !text-[#050b18] transition hover:bg-[#d6ff42] hover:!text-[#050b18]"
               >
                 Explore AGE202
                 <ArrowRight className="h-4 w-4" />

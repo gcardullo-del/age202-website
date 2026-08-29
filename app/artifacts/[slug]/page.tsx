@@ -1229,6 +1229,7 @@ export default async function ArtifactPage({
       )}
 
       <ArtifactCollectingPanel
+        itemId={artifact.id}
         title={
           artifact.title
         }

@@ -1,6 +1,5 @@
 "use client";
 
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,6 +9,7 @@ import {
   BookOpen,
   ChevronRight,
   Crown,
+  Gem,
   Gift,
   Handshake,
   Home,
@@ -45,6 +45,11 @@ const navigationItems = [
     label: "Originals",
     href: "/admin/originals",
     icon: ShoppingBag,
+  },
+  {
+    label: "Memorabilia",
+    href: "/admin/memorabilia",
+    icon: Gem,
   },
   {
     label: "Orders",
