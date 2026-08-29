@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import AgeImage from "@/components/media/AgeImage";
 
 import {
   BadgeCheck,
@@ -176,24 +176,19 @@ export default function ArtifactCard({
       <div className="relative aspect-[4/3] overflow-hidden bg-[#050B18]">
         {artifact.coverImage ? (
           <>
-            <Image
-              src={
-                artifact.coverImage
-              }
-              alt=""
-              fill
+            <div
               aria-hidden="true"
-              sizes="360px"
-              className="scale-110 object-cover opacity-25 blur-2xl"
+              className="absolute inset-0 scale-110 bg-cover bg-center opacity-25 blur-2xl"
+              style={{
+                backgroundImage: `url("${artifact.coverImage}")`,
+              }}
             />
 
-            <Image
-              src={
-                artifact.coverImage
-              }
+            <AgeImage
+              src={artifact.coverImage}
               alt={title}
               fill
-              sizes="360px"
+              preset="card"
               className="object-cover"
             />
           </>

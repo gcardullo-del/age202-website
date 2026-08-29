@@ -1,4 +1,4 @@
-import {
+ import {
   Archive,
   BadgeCheck,
   Box,
@@ -14,7 +14,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import Image from "next/image";
+import AgeImage from "@/components/media/AgeImage";
 import Link from "next/link";
 
 import type {
@@ -106,11 +106,78 @@ type ArtifactsPageProps = {
     player?: string;
     brand?: string;
     rarity?: string;
+    page?: string;
   }>;
 };
 
 function normalizedFilter(value: string | undefined): string {
   return value?.trim() ?? "";
+}
+
+const ARTIFACTS_PER_PAGE = 25;
+
+function parsePage(value: string | undefined): number {
+  const parsed = Number.parseInt(value ?? "1", 10);
+
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return 1;
+  }
+
+  return parsed;
+}
+
+function buildArtifactsPageHref({
+  page,
+  query,
+  status,
+  availability,
+  playerId,
+  brandId,
+  rarity,
+}: {
+  page: number;
+  query: string;
+  status?: ArtifactStatus;
+  availability?: ArtifactAvailability;
+  playerId: string;
+  brandId: string;
+  rarity?: ArtifactRarity;
+}): string {
+  const searchParams = new URLSearchParams();
+
+  if (query) {
+    searchParams.set("q", query);
+  }
+
+  if (status) {
+    searchParams.set("status", status);
+  }
+
+  if (availability) {
+    searchParams.set("availability", availability);
+  }
+
+  if (playerId) {
+    searchParams.set("player", playerId);
+  }
+
+  if (brandId) {
+    searchParams.set("brand", brandId);
+  }
+
+  if (rarity) {
+    searchParams.set("rarity", rarity);
+  }
+
+  if (page > 1) {
+    searchParams.set("page", String(page));
+  }
+
+  const queryString = searchParams.toString();
+
+  return queryString
+    ? `/admin/artifacts?${queryString}`
+    : "/admin/artifacts";
 }
 
 const ARTIFACT_STATUSES = new Set<ArtifactStatus>([
@@ -159,6 +226,7 @@ export default async function ArtifactsPage({
   const playerId = normalizedFilter(params.player);
   const brandId = normalizedFilter(params.brand);
   const rarity = parseEnumFilter(params.rarity, ARTIFACT_RARITIES);
+  const requestedPage = parsePage(params.page);
 
   const where = {
     ...(query
@@ -180,9 +248,45 @@ export default async function ArtifactsPage({
     ...(brandId ? { brandId } : {}),
   } satisfies Prisma.ArtifactWhereInput;
 
-  const [artifacts, players, brands, totalCount, publishedCount, draftCount, certificateCount] =
-    await Promise.all([
-      prisma.artifact.findMany({
+  const [
+    players,
+    brands,
+    totalCount,
+    publishedCount,
+    draftCount,
+    certificateCount,
+    filteredCount,
+  ] = await Promise.all([
+    prisma.player.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+    prisma.brand.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+    prisma.artifact.count(),
+    prisma.artifact.count({
+      where: { status: "PUBLISHED" },
+    }),
+    prisma.artifact.count({
+      where: { status: "DRAFT" },
+    }),
+    prisma.certificate.count(),
+    prisma.artifact.count({ where }),
+  ]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredCount / ARTIFACTS_PER_PAGE),
+  );
+
+  const currentPage = Math.min(
+    requestedPage,
+    totalPages,
+  );
+
+  const artifacts = await prisma.artifact.findMany({
     include: {
       player: true,
       brand: true,
@@ -200,18 +304,31 @@ export default async function ArtifactsPage({
         },
       },
     },
-        where,
-        orderBy: {
-          createdAt: "desc",
-        },
-      }),
-      prisma.player.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
-      prisma.brand.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true } }),
-      prisma.artifact.count(),
-      prisma.artifact.count({ where: { status: "PUBLISHED" } }),
-      prisma.artifact.count({ where: { status: "DRAFT" } }),
-      prisma.certificate.count(),
-    ]);
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip:
+      (currentPage - 1) *
+      ARTIFACTS_PER_PAGE,
+    take: ARTIFACTS_PER_PAGE,
+  });
+
+  const firstVisibleItem =
+    filteredCount === 0
+      ? 0
+      : (currentPage - 1) *
+          ARTIFACTS_PER_PAGE +
+        1;
+
+  const lastVisibleItem =
+    filteredCount === 0
+      ? 0
+      : Math.min(
+          currentPage *
+            ARTIFACTS_PER_PAGE,
+          filteredCount,
+        );
 
   const hasActiveFilters = Boolean(
     query || status || availability || playerId || brandId || rarity,
@@ -412,7 +529,7 @@ export default async function ArtifactsPage({
 
             <div className="flex items-center gap-2 text-xs font-medium text-white/35">
               <Sparkles className="h-4 w-4 text-yellow-100/60" aria-hidden="true" />
-              {artifacts.length} of {totalCount} catalog entries
+              {firstVisibleItem}-{lastVisibleItem} of {filteredCount} matching entries
             </div>
           </div>
 
@@ -429,11 +546,11 @@ export default async function ArtifactsPage({
                     <div className="flex min-w-0 items-center gap-4 sm:gap-5">
                       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#08111F] sm:h-24 sm:w-24">
                         {coverImage ? (
-                          <Image
+                          <AgeImage
                             src={coverImage.url}
                             alt={coverImage.alt ?? artifact.title}
                             fill
-                            sizes="96px"
+                            preset="thumbnail"
                             className="object-cover transition duration-300 group-hover:scale-[1.03]"
                           />
                         ) : (
@@ -582,6 +699,65 @@ export default async function ArtifactsPage({
               actionHref={hasActiveFilters ? "/admin/artifacts" : "/admin/artifacts/new"}
             />
           )}
+
+          {filteredCount > ARTIFACTS_PER_PAGE ? (
+            <div className="flex flex-col gap-4 border-t border-white/10 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+              <p className="text-sm text-white/40">
+                Page{" "}
+                <span className="font-semibold text-white/70">
+                  {currentPage}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-white/70">
+                  {totalPages}
+                </span>
+              </p>
+
+              <div className="flex items-center gap-2">
+                {currentPage > 1 ? (
+                  <Link
+                    href={buildArtifactsPageHref({
+                      page: currentPage - 1,
+                      query,
+                      status,
+                      availability,
+                      playerId,
+                      brandId,
+                      rarity,
+                    })}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-white/10 px-4 text-sm font-semibold text-white/70 transition hover:border-lime-300/30 hover:bg-lime-300/10 hover:text-lime-200"
+                  >
+                    Previous
+                  </Link>
+                ) : (
+                  <span className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-xl border border-white/5 px-4 text-sm font-semibold text-white/20">
+                    Previous
+                  </span>
+                )}
+
+                {currentPage < totalPages ? (
+                  <Link
+                    href={buildArtifactsPageHref({
+                      page: currentPage + 1,
+                      query,
+                      status,
+                      availability,
+                      playerId,
+                      brandId,
+                      rarity,
+                    })}
+                    className="inline-flex h-10 items-center justify-center rounded-xl border border-lime-300/20 bg-lime-300/10 px-4 text-sm font-semibold text-lime-200 transition hover:bg-lime-300/20"
+                  >
+                    Next
+                  </Link>
+                ) : (
+                  <span className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-xl border border-white/5 px-4 text-sm font-semibold text-white/20">
+                    Next
+                  </span>
+                )}
+              </div>
+            </div>
+          ) : null}
         </AdminPanel>
       </div>
     </AdminShell>
