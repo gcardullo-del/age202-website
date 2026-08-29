@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    unoptimized: true,
+
     deviceSizes: [
       640,
       768,
