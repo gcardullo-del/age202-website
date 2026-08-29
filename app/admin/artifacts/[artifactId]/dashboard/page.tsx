@@ -121,10 +121,14 @@ export default async function ArtifactDashboardPage({
 
           status:
             item.status,
+coverImage:
+  coverImage?.url ??
+  null,
 
-          coverImage:
-            coverImage?.url ??
-            null,
+cardImage:
+  coverImage?.cardUrl ??
+  coverImage?.url ??
+  null,
         };
       },
     );

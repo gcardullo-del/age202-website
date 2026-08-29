@@ -66,6 +66,37 @@ function getPrimaryImage(
   );
 }
 
+function getCardImage(
+  artifact: PublishedArtifact,
+  fallbackImage: string,
+): string {
+  const coverImage = artifact.images.find(
+    (image) => image.isCover,
+  );
+
+  return (
+    coverImage?.cardUrl?.trim() ||
+    coverImage?.url.trim() ||
+    fallbackImage
+  );
+}
+
+function getHeroImage(
+  artifact: PublishedArtifact,
+  fallbackImage: string,
+): string {
+  const coverImage = artifact.images.find(
+    (image) => image.isCover,
+  );
+
+  return (
+    coverImage?.heroUrl?.trim() ||
+    coverImage?.galleryUrl?.trim() ||
+    coverImage?.url.trim() ||
+    fallbackImage
+  );
+}
+
 function getText(
   value: string | null | undefined,
   fallback: string,
@@ -80,6 +111,24 @@ export function mapArtifactToProduct(
 ): Product {
   const imageUrls =
     getImageUrls(artifact);
+
+  const primaryImage =
+    getPrimaryImage(
+      artifact,
+      imageUrls,
+    );
+
+  const cardImage =
+    getCardImage(
+      artifact,
+      primaryImage,
+    );
+
+  const heroImage =
+    getHeroImage(
+      artifact,
+      primaryImage,
+    );
 
   const description = getText(
     artifact.description,
@@ -98,58 +147,82 @@ export function mapArtifactToProduct(
     artifact.createdAt.getFullYear();
 
   return {
-    id: artifact.id,
-    slug: artifact.slug,
-    title: artifact.title,
+    id:
+      artifact.id,
 
-    player: artifact.player.name,
-    tournament: getText(
-      artifact.tournament,
-      "AGE202 Archive",
-    ),
+    slug:
+      artifact.slug,
+
+    title:
+      artifact.title,
+
+    player:
+      artifact.player.name,
+
+    tournament:
+      getText(
+        artifact.tournament,
+        "AGE202 Archive",
+      ),
+
     year,
-    brand: artifact.brand.name,
 
-    category: artifact.category
-      ? categoryMap[artifact.category]
-      : "accessory",
+    brand:
+      artifact.brand.name,
 
-    collection: getText(
-      artifact.collection,
-      "AGE202 Digital Museum",
-    ),
+    category:
+      artifact.category
+        ? categoryMap[
+            artifact.category
+          ]
+        : "accessory",
+
+    collection:
+      getText(
+        artifact.collection,
+        "AGE202 Digital Museum",
+      ),
 
     description,
+
     museumStory,
 
-    story: museumStory,
+    story:
+      museumStory,
 
-    historicalContext: getText(
-      artifact.historicalContext,
-      `A collectible tennis artifact connected to ${artifact.player.name}.`,
-    ),
-
-    curatorNote: getText(
-      artifact.curatorNote,
-      "Catalogued by AGE202 as part of the digital tennis apparel museum.",
-    ),
-
-    size: getText(
-      artifact.size,
-      "Not specified",
-    ),
-
-    color: getText(
-      artifact.colour,
-      "Not specified",
-    ),
-
-    condition: artifact.condition
-      .replaceAll("_", " ")
-      .toLowerCase()
-      .replace(/\b\w/g, (letter) =>
-        letter.toUpperCase(),
+    historicalContext:
+      getText(
+        artifact.historicalContext,
+        `A collectible tennis artifact connected to ${artifact.player.name}.`,
       ),
+
+    curatorNote:
+      getText(
+        artifact.curatorNote,
+        "Catalogued by AGE202 as part of the digital tennis apparel museum.",
+      ),
+
+    size:
+      getText(
+        artifact.size,
+        "Not specified",
+      ),
+
+    color:
+      getText(
+        artifact.colour,
+        "Not specified",
+      ),
+
+    condition:
+      artifact.condition
+        .replaceAll("_", " ")
+        .toLowerCase()
+        .replace(
+          /\b\w/g,
+          (letter) =>
+            letter.toUpperCase(),
+        ),
 
     status:
       availabilityMap[
@@ -160,12 +233,19 @@ export function mapArtifactToProduct(
       artifact.availability ===
       "AVAILABLE",
 
-    authentic: artifact.authentic,
-    featured: artifact.featured,
-    vintage: artifact.vintage,
+    authentic:
+      artifact.authentic,
+
+    featured:
+      artifact.featured,
+
+    vintage:
+      artifact.vintage,
 
     rarity:
-      rarityMap[artifact.rarity],
+      rarityMap[
+        artifact.rarity
+      ],
 
     archiveNumber:
       artifact.archiveNumber,
@@ -178,15 +258,19 @@ export function mapArtifactToProduct(
     price:
       artifact.price === null
         ? null
-        : Number(artifact.price),
+        : Number(
+            artifact.price,
+          ),
 
     vintedUrl:
       artifact.vintedUrl,
 
-    image: getPrimaryImage(
-      artifact,
-      imageUrls,
-    ),
+    image:
+      primaryImage,
+
+    cardImage,
+
+    heroImage,
 
     images:
       imageUrls.length > 0
@@ -202,7 +286,8 @@ export function mapArtifactToProduct(
             FALLBACK_PRODUCT_IMAGE,
           ],
 
-    tags: artifact.tags,
+    tags:
+      artifact.tags,
   };
 }
 

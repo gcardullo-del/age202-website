@@ -29,6 +29,7 @@
     "react-hook-form": "^7.82.0",
     "resend": "^6.24.0",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.4",
     "sonner": "^2.0.7",
     "stripe": "^22.5.0",
     "web-push": "^3.6.7",

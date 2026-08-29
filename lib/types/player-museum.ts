@@ -2,17 +2,13 @@ export type PlayerMuseumProfile = {
   birthDate: Date | null;
   birthPlace: string | null;
   residence: string | null;
-
   height: number | null;
   weight: number | null;
-
   plays: string | null;
   backhand: string | null;
   coach: string | null;
-
   turnedPro: number | null;
   careerHigh: number | null;
-
   atpTitles: number;
   australianOpen: number;
   rolandGarros: number;
@@ -23,12 +19,9 @@ export type PlayerMuseumProfile = {
   atpFinals: number;
   olympicGold: number;
   davisCup: number;
-
   prizeMoney: string | null;
-
   playingStyle: string | null;
   favouriteSurface: string | null;
-
   biographyShort: string | null;
   biographyLong: string | null;
 };
@@ -83,6 +76,7 @@ export type PlayerMuseumEquipment = {
 export type PlayerMuseumArtifactImage = {
   id: string;
   url: string;
+  cardUrl: string | null;
   alt: string | null;
   isCover: boolean;
   sortOrder: number;
@@ -98,9 +92,11 @@ export type PlayerMuseumArtifact = {
   vintedUrl: string | null;
   price: string | null;
   currency: string;
+
   brand: {
     name: string;
   };
+
   images: PlayerMuseumArtifactImage[];
 };
 
@@ -108,19 +104,14 @@ export type PlayerMuseumData = {
   id: string;
   name: string;
   slug: string;
-
   firstName: string | null;
   lastName: string | null;
   nickname: string | null;
-
   country: string | null;
-
   quote: string | null;
   biography: string | null;
-
   heroImage: string | null;
   portraitImage: string | null;
-
   accent: string;
 
   collectionType:

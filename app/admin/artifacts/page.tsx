@@ -1,5 +1,5 @@
  import {
-  Archive,
+     Archive,
   BadgeCheck,
   Box,
   ChevronRight,
@@ -547,7 +547,10 @@ export default async function ArtifactsPage({
                       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#08111F] sm:h-24 sm:w-24">
                         {coverImage ? (
                           <AgeImage
-                            src={coverImage.url}
+                            src={
+                               coverImage.thumbnailUrl ??
+                               coverImage.url
+                             }
                             alt={coverImage.alt ?? artifact.title}
                             fill
                             preset="thumbnail"
@@ -653,7 +656,11 @@ export default async function ArtifactsPage({
                     <div className="flex items-center gap-2 lg:justify-end">
                       {artifact.slug ? (
                         <Link
-                          href={`/archive/${artifact.slug}`}
+                          href={
+                             artifact.status === "PUBLISHED"
+                               ? `/artifacts/${artifact.slug}`
+                               : `/admin/artifacts/${artifact.id}/preview`
+                           }
                           aria-label={`View ${artifact.title}`}
                           className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-white/55 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                         >

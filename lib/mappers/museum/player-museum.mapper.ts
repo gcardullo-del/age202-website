@@ -270,6 +270,8 @@ export function mapPlayerToMuseumData(
                 id: image.id,
 
                 url: image.url,
+                
+                cardUrl: image.cardUrl,
 
                 alt: image.alt,
 

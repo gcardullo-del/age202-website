@@ -29,12 +29,6 @@ const staticRoutes = [
   },
 
   {
-    path: "/archive",
-    changeFrequency: "weekly",
-    priority: 0.9,
-  },
-
-  {
     path: "/players",
     changeFrequency: "weekly",
     priority: 0.9,
@@ -62,12 +56,6 @@ const staticRoutes = [
     path: "/collections",
     changeFrequency: "weekly",
     priority: 0.85,
-  },
-
-  {
-    path: "/hall-of-fame",
-    changeFrequency: "weekly",
-    priority: 0.9,
   },
 
   {

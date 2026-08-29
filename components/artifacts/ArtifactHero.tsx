@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowDown,
@@ -10,6 +9,7 @@ import {
   Trophy,
 } from "lucide-react";
 
+import AgeImage from "@/components/media/AgeImage";
 import type { getPublishedArtifactBySlug } from "@/lib/repositories/artifact.repository";
 
 type PublishedArtifact = NonNullable<
@@ -131,15 +131,18 @@ export default function ArtifactHero({
   return (
     <section className="relative isolate min-h-[calc(100svh-72px)] overflow-hidden border-b border-white/10 bg-[#050b18]">
       {coverImage ? (
-        <Image
-          src={coverImage.url}
+        <AgeImage
+          src={
+  coverImage.heroUrl ??
+  coverImage.url
+}
           alt={
             coverImage.alt ??
             artifact.title
           }
+          preset="hero"
           fill
           priority
-          sizes="100vw"
           className="object-cover object-center"
         />
       ) : (

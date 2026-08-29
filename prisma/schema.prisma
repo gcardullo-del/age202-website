@@ -252,15 +252,21 @@ model Artifact {
 }
 
 model ArtifactImage {
-  id         String   @id @default(cuid())
-  url        String
-  alt        String?
-  sortOrder  Int      @default(0)
-  isCover    Boolean  @default(false)
-  artifactId String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  artifact   Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  url          String
+  thumbnailUrl String?
+  cardUrl      String?
+  galleryUrl   String?
+  detailUrl    String?
+  heroUrl      String?
+  alt          String?
+  sortOrder    Int      @default(0)
+  isCover      Boolean  @default(false)
+  artifactId   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
 
   @@index([artifactId])
   @@index([sortOrder])

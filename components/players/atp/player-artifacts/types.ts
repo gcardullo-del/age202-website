@@ -16,12 +16,12 @@ export type PlayerArtifactRecord = {
   brand: {
     name: string;
   };
-
-  images: Array<{
-    url: string;
-    alt: string | null;
-    isCover: boolean;
-  }>;
+images: Array<{
+  url: string;
+  cardUrl: string | null;
+  alt: string | null;
+  isCover: boolean;
+}>;
 };
 
 export type PlayerArtifactsProps = {

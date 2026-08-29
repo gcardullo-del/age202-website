@@ -1,5 +1,6 @@
 "use client";
 
+
 import {
   BadgeCheck,
   BookOpenText,
@@ -113,6 +114,7 @@ export default function ArtifactDashboard({
     null;
 
   const image =
+    coverImage?.heroUrl ??
     coverImage?.url ??
     artifact.player.heroImage ??
     artifact.player.portraitImage ??

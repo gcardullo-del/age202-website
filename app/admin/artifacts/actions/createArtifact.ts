@@ -29,6 +29,15 @@ import {
 } from "@/lib/services/artifactStorage.service";
 
 import {
+  processArtifactPendingImage,
+} from "@/lib/services/artifactImageProcessing.service";
+
+import {
+  deleteStoredArtifactImageVariants,
+  type StoredArtifactImageVariant,
+} from "@/lib/services/artifactImageVariantStorage.service";
+
+import {
   syncArtifactWithStripe,
 } from "@/lib/services/stripeCatalog.service";
 
@@ -604,6 +613,9 @@ export async function createArtifact(
   const createdImageIds:
     string[] = [];
 
+  const generatedVariants:
+    StoredArtifactImageVariant[] = [];
+
   try {
     /*
      * 1. Registra nel database le immagini già caricate
@@ -615,13 +627,84 @@ export async function createArtifact(
         image,
       ] of orderedBrowserImages.entries()
     ) {
+      /*
+       * L'immagine browser si trova ancora in pending/.
+       * Generiamo una sola volta tutte le varianti WebP definitive
+       * e salviamo nel DB sia l'URL fallback sia gli URL dedicati
+       * a thumbnail/card/gallery/detail/hero.
+       */
+      const processedImage =
+        await processArtifactPendingImage({
+          artifactId:
+            artifact.id,
+          sourcePath:
+            image.path,
+          imageKey:
+            image.id,
+        });
+
+      generatedVariants.push(
+        ...processedImage.variants,
+      );
+
+      const variantsByName =
+        new Map(
+          processedImage.variants.map(
+            (variant) => [
+              variant.name,
+              variant,
+            ],
+          ),
+        );
+
+      const thumbnailVariant =
+        variantsByName.get(
+          "thumbnail",
+        );
+
+      const cardVariant =
+        variantsByName.get(
+          "card",
+        );
+
+      const galleryVariant =
+        variantsByName.get(
+          "gallery",
+        );
+
+      const detailVariant =
+        variantsByName.get(
+          "detail",
+        );
+
+      const heroVariant =
+        variantsByName.get(
+          "hero",
+        );
+
+      if (
+        !thumbnailVariant ||
+        !cardVariant ||
+        !galleryVariant ||
+        !detailVariant ||
+        !heroVariant
+      ) {
+        throw new Error(
+          `Set completo delle varianti non generato per l'immagine ${index + 1}.`,
+        );
+      }
+
       const artifactImage =
         await createArtifactImage({
           artifactId:
             artifact.id,
 
+          /*
+           * Manteniamo gallery.webp come URL principale/fallback
+           * per compatibilità con tutto il frontend esistente.
+           */
           url:
-            image.url,
+            galleryVariant.publicUrl,
 
           alt:
             image.alt ||
@@ -637,6 +720,35 @@ export async function createArtifact(
                 browserUploadedCoverId
               : index === 0,
         });
+
+      /*
+       * Salviamo anche tutte le varianti dedicate.
+       *
+       * Usiamo un update separato per mantenere compatibile
+       * ArtifactImageRepository senza modificarlo in questo step.
+       */
+      await prisma.artifactImage.update({
+        where: {
+          id:
+            artifactImage.id,
+        },
+        data: {
+          thumbnailUrl:
+            thumbnailVariant.publicUrl,
+
+          cardUrl:
+            cardVariant.publicUrl,
+
+          galleryUrl:
+            galleryVariant.publicUrl,
+
+          detailUrl:
+            detailVariant.publicUrl,
+
+          heroUrl:
+            heroVariant.publicUrl,
+        },
+      });
 
       createdImageIds.push(
         artifactImage.id,
@@ -733,6 +845,22 @@ export async function createArtifact(
           ),
       ),
     );
+
+    /*
+     * Elimina le varianti WebP eventualmente già generate
+     * se la creazione dell'Artifact non viene completata.
+     */
+    if (
+      generatedVariants.length >
+      0
+    ) {
+      await deleteStoredArtifactImageVariants(
+        generatedVariants,
+      ).catch(
+        () =>
+          undefined,
+      );
+    }
 
     /*
      * Elimina anche gli upload browser temporanei

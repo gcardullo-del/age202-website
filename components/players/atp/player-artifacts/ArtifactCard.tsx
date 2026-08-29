@@ -70,7 +70,10 @@ export default function ArtifactCard({
           {cover ? (
             <Image
               fill
-              src={cover.url}
+              src={
+  cover.cardUrl ??
+  cover.url
+}
               alt={
                 cover.alt ??
                 artifact.title

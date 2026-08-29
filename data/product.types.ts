@@ -57,6 +57,25 @@ export interface Product {
   vintedUrl: string | null;
 
   image: string;
+
+  /**
+   * Variante ottimizzata per card generata
+   * dalla pipeline immagini AGE202.
+   *
+   * Opzionale per mantenere compatibilità
+   * con i vecchi prodotti statici.
+   */
+  cardImage?: string;
+
+  /**
+   * Variante ottimizzata per hero generata
+   * dalla pipeline immagini AGE202.
+   *
+   * Opzionale per mantenere compatibilità
+   * con i vecchi prodotti statici.
+   */
+  heroImage?: string;
+
   images: string[];
   gallery: string[];
 

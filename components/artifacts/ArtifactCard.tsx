@@ -1,5 +1,6 @@
 "use client";
 
+
 import AgeImage from "@/components/media/AgeImage";
 
 import {
@@ -49,6 +50,8 @@ export type ArtifactCardData = {
   status?: string | null;
 
   coverImage?: string | null;
+
+  cardImage?: string | null;
 };
 
 type ArtifactCardProps = {
@@ -171,21 +174,26 @@ export default function ArtifactCard({
     artifact.title.trim() ||
     "Untitled Artifact";
 
+  const displayImage =
+    artifact.cardImage ??
+    artifact.coverImage ??
+    null;
+
   return (
     <article className="overflow-hidden rounded-[28px] border border-white/10 bg-[#07101F] shadow-[0_30px_90px_rgba(0,0,0,.35)]">
       <div className="relative aspect-[4/3] overflow-hidden bg-[#050B18]">
-        {artifact.coverImage ? (
+        {displayImage ? (
           <>
             <div
               aria-hidden="true"
               className="absolute inset-0 scale-110 bg-cover bg-center opacity-25 blur-2xl"
               style={{
-                backgroundImage: `url("${artifact.coverImage}")`,
+                backgroundImage: `url("${displayImage}")`,
               }}
             />
 
             <AgeImage
-              src={artifact.coverImage}
+              src={displayImage}
               alt={title}
               fill
               preset="card"

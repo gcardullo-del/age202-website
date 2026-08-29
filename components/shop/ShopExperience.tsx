@@ -1,5 +1,6 @@
 "use client";
 
+
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -120,12 +121,21 @@ function getPublicArtifactHref(
 function ProductArtwork({
   product,
   priority = false,
+  variant = "card",
 }: {
   product: Product;
   priority?: boolean;
+  variant?: "hero" | "card";
 }) {
   const [failed, setFailed] =
     useState(false);
+
+  const imageSource =
+    variant === "hero"
+      ? product.heroImage ??
+        product.image
+      : product.cardImage ??
+        product.image;
 
   if (failed) {
     return (
@@ -147,7 +157,7 @@ function ProductArtwork({
 
   return (
     <Image
-      src={product.image}
+      src={imageSource}
       alt={product.title}
       fill
       priority={priority}
@@ -650,6 +660,7 @@ export default function ShopExperience({
                         featuredProduct
                       }
                       priority
+                      variant="hero"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050B18]/75 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#0A1425]/35" />

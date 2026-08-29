@@ -189,7 +189,10 @@ export async function generateMetadata({
       images: coverImage
         ? [
             {
-              url: coverImage.url,
+              url:
+                coverImage.heroUrl ??
+                coverImage.galleryUrl ??
+                coverImage.url,
               alt:
                 coverImage.alt ??
                 artifact.title,
@@ -370,6 +373,8 @@ export default async function ArtifactPage({
     image:
       artifact.images.map(
         (image) =>
+          image.detailUrl ??
+          image.galleryUrl ??
           image.url,
       ),
 
@@ -825,17 +830,23 @@ export default async function ArtifactPage({
                     artifact.title
                   }
                   images={artifact.images.map(
-                    (image) => ({
-                      id:
-                        image.id,
+  (image) => ({
+    id:
+      image.id,
 
-                      url:
-                        image.url,
+    url:
+      image.url,
 
-                      alt:
-                        image.alt,
-                    }),
-                  )}
+    galleryUrl:
+      image.galleryUrl,
+
+    detailUrl:
+      image.detailUrl,
+
+    alt:
+      image.alt,
+  }),
+)}
                 />
               </div>
             </div>
@@ -1329,6 +1340,7 @@ export default async function ArtifactPage({
                         {relatedCover ? (
                           <Image
                             src={
+                              relatedCover.cardUrl ??
                               relatedCover.url
                             }
                             alt={

@@ -16,9 +16,10 @@ import {
 export type ArtifactGalleryImage = {
   id: string;
   url: string;
+  galleryUrl: string | null;
+  detailUrl: string | null;
   alt: string | null;
 };
-
 type ArtifactGalleryProps = {
   images: ArtifactGalleryImage[];
   artifactTitle: string;
@@ -143,7 +144,7 @@ export default function ArtifactGallery({
               }
             >
               <Image
-                src={image.url}
+                src={image.galleryUrl ??image.url}
                 alt={
                   image.alt ??
                   `${artifactTitle} – immagine ${index + 1}`
@@ -214,7 +215,11 @@ export default function ArtifactGallery({
           <div className="flex h-full w-full max-w-7xl flex-col">
             <div className="relative min-h-0 flex-1">
               <Image
-                src={activeImage.url}
+                src={
+  activeImage.detailUrl ??
+  activeImage.galleryUrl ??
+  activeImage.url
+}
                 alt={
                   activeImage.alt ??
                   `${artifactTitle} – immagine ${(activeIndex ?? 0) + 1}`
