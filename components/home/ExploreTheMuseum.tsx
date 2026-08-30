@@ -1,9 +1,9 @@
 import {
   BookOpen,
-  Crown,
-  Landmark,
   LibraryBig,
+  Sparkles,
   Trophy,
+  Users,
 } from "lucide-react";
 
 import Card from "@/components/ui/Card";
@@ -12,15 +12,15 @@ import SectionTitle from "@/components/ui/SectionTitle";
 
 const museumRooms = [
   {
-    title: "Hall of Champions",
+    title: "WTA Archive",
     description:
-      "Enter the permanent galleries dedicated to Roger Federer, Rafael Nadal, Novak Djokovic, Jannik Sinner and Carlos Alcaraz.",
-    badge: "Permanent Gallery",
+      "Explore the women's game through rankings, player profiles, careers, titles and the stories shaping today's WTA Tour.",
+    badge: "Women's Archive",
     status: "open" as const,
-    href: "/archives",
+    href: "/players/women/archive",
     accent: "#C8FF00",
     icon: (
-      <Crown
+      <Users
         size={24}
         aria-hidden="true"
       />
@@ -72,15 +72,15 @@ const museumRooms = [
     ),
   },
   {
-    title: "Hall of Fame",
+    title: "Next Gen Archive",
     description:
-      "A permanent tribute to the players, identities and achievements that shaped the history of the game.",
-    badge: "Legacy Gallery",
+      "Meet the emerging players shaping the next chapter of tennis and follow their careers as they develop on the professional tour.",
+    badge: "Careers in Progress",
     status: "open" as const,
-    href: "/hall-of-fame",
-    accent: "#FFFFFF",
+    href: "/next-gen",
+    accent: "#C8FF00",
     icon: (
-      <Landmark
+      <Sparkles
         size={24}
         aria-hidden="true"
       />
@@ -126,10 +126,20 @@ export default function ExploreTheMuseum() {
                 index === 0 ||
                 index === 1;
 
+              const gridClassName =
+                large
+                  ? "xl:col-span-6"
+                  : index === 4
+                    ? "md:col-span-2 xl:col-span-4"
+                    : "xl:col-span-4";
+
               return (
                 <Reveal
                   key={room.title}
                   delay={index * 0.08}
+                  className={
+                    gridClassName
+                  }
                 >
                   <Card
                     title={room.title}
@@ -141,14 +151,7 @@ export default function ExploreTheMuseum() {
                     status={room.status}
                     accent={room.accent}
                     icon={room.icon}
-                    className={[
-                      "h-full min-h-[330px]",
-                      large
-                        ? "xl:col-span-6"
-                        : index === 4
-                          ? "md:col-span-2 xl:col-span-4"
-                          : "xl:col-span-4",
-                    ].join(" ")}
+                    className="h-full min-h-[330px]"
                   >
                     <div className="mt-8 border-t border-white/10 pt-5">
                       <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/30">

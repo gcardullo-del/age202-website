@@ -1,5 +1,6 @@
 "use client";
 
+
 import {
   Bell,
   BellOff,
@@ -20,6 +21,13 @@ type FollowState =
   | "working"
   | "error";
 
+/*
+ * Manteniamo temporaneamente la stessa firma del
+ * componente perché ChampionArchive lo usa già.
+ *
+ * playerId e playerName non servono più alla logica:
+ * FOLLOW ARTIFACTS segue l'intero Archive.
+ */
 type FollowPlayerNotificationsProps = {
   playerId: string;
   playerName: string;
@@ -29,7 +37,6 @@ type FollowPlayerNotificationsProps = {
 type PublicPushStatusResponse = {
   active?: boolean;
   followAllArtifacts?: boolean;
-  followsPlayer?: boolean;
 };
 
 function urlBase64ToUint8Array(
@@ -57,8 +64,6 @@ function urlBase64ToUint8Array(
 }
 
 export default function FollowPlayerNotifications({
-  playerId,
-  playerName,
   accent = "#c8ff00",
 }: FollowPlayerNotificationsProps) {
   const [state, setState] =
@@ -69,7 +74,7 @@ export default function FollowPlayerNotifications({
 
   useEffect(() => {
     void refreshState();
-  }, [playerId]);
+  }, []);
 
   async function getRegistration() {
     const registration =
@@ -116,7 +121,6 @@ export default function FollowPlayerNotifications({
         new URLSearchParams({
           endpoint:
             subscription.endpoint,
-          playerId,
         });
 
       const response = await fetch(
@@ -136,15 +140,12 @@ export default function FollowPlayerNotifications({
       const data =
         (await response.json()) as PublicPushStatusResponse;
 
-      if (
-        data.followAllArtifacts ||
-        data.followsPlayer
-      ) {
-        setState("following");
-        return;
-      }
-
-      setState("inactive");
+      setState(
+        data.active &&
+          data.followAllArtifacts
+          ? "following"
+          : "inactive",
+      );
     } catch (error) {
       console.error(error);
 
@@ -155,7 +156,7 @@ export default function FollowPlayerNotifications({
     }
   }
 
-  async function followPlayer() {
+  async function followArtifacts() {
     setState("working");
     setMessage("");
 
@@ -214,11 +215,8 @@ export default function FollowPlayerNotifications({
           },
           body: JSON.stringify({
             ...subscription.toJSON(),
-            followAllArtifacts:
-              false,
-            playerIds: [
-              playerId,
-            ],
+            followAllArtifacts: true,
+            playerIds: [],
           }),
         },
       );
@@ -232,7 +230,7 @@ export default function FollowPlayerNotifications({
       setState("following");
 
       setMessage(
-        `Riceverai una notifica quando AGE202 pubblica un nuovo Artifact di ${playerName}.`,
+        "Riceverai una notifica ogni volta che AGE202 pubblica un nuovo Artifact.",
       );
     } catch (error) {
       console.error(error);
@@ -245,7 +243,7 @@ export default function FollowPlayerNotifications({
     }
   }
 
-  async function unfollowPlayer() {
+  async function unfollowArtifacts() {
     setState("working");
     setMessage("");
 
@@ -285,14 +283,14 @@ export default function FollowPlayerNotifications({
       /*
        * Non chiamiamo subscription.unsubscribe().
        *
-       * La stessa PushSubscription del browser
-       * può essere utilizzata anche dal sistema
-       * Admin AGE202.
+       * La stessa PushSubscription del browser può
+       * essere utilizzata anche dal sistema Admin
+       * AGE202.
        */
       setState("inactive");
 
       setMessage(
-        `Non riceverai più notifiche per ${playerName}.`,
+        "Non riceverai più notifiche per i nuovi Artifact.",
       );
     } catch (error) {
       console.error(error);
@@ -322,11 +320,11 @@ export default function FollowPlayerNotifications({
           </p>
 
           <p className="mt-1 text-sm text-white/65">
-            Get notified when a new{" "}
+            Get notified whenever a new{" "}
             <span className="font-semibold text-white">
-              {playerName}
+              Artifact
             </span>{" "}
-            Artifact enters the AGE202 Archive.
+            enters the AGE202 Archive.
           </p>
 
           {message ? (
@@ -349,9 +347,9 @@ export default function FollowPlayerNotifications({
               if (
                 state === "following"
               ) {
-                void unfollowPlayer();
+                void unfollowArtifacts();
               } else {
-                void followPlayer();
+                void followArtifacts();
               }
             }}
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] transition disabled:cursor-wait disabled:opacity-50"
@@ -383,8 +381,8 @@ export default function FollowPlayerNotifications({
               ? "Please wait"
               : state ===
                   "following"
-                ? `Following ${playerName}`
-                : `Follow ${playerName}`}
+                ? "Following Artifacts"
+                : "Follow Artifacts"}
           </button>
         )}
 

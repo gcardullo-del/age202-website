@@ -29,6 +29,7 @@ const playerLinks = [
   ["ATP Archive", "/players/other-players"],
   ["WTA Players", "/players/women"],
   ["WTA Archive", "/players/women/archive"],
+  ["Next Gen", "/next-gen"],
 ] as const;
 
 
@@ -160,6 +161,10 @@ export default function MuseumNavbar() {
     ) ||
     pathname.startsWith(
       "/archives/",
+    ) ||
+    pathname === "/next-gen" ||
+    pathname.startsWith(
+      "/next-gen/",
     );
 
 
@@ -298,15 +303,23 @@ export default function MuseumNavbar() {
                           href,
                         );
 
+                      const isNextGen =
+                        href ===
+                        "/next-gen";
+
                       return (
                         <Link
                           key={label}
                           href={href}
                           role="menuitem"
                           className={`flex items-center justify-between rounded-xl px-4 py-3 text-[10px] font-bold uppercase tracking-[.16em] transition ${
-                            active
-                              ? "bg-white/[.06] text-[#d7ff00]"
-                              : "text-white/65 hover:bg-white/[.06] hover:text-[#d7ff00]"
+                            isNextGen
+                              ? active
+                                ? "bg-[#d7ff00]/10 text-[#d7ff00]"
+                                : "text-[#d7ff00] hover:bg-[#d7ff00]/10"
+                              : active
+                                ? "bg-white/[.06] text-[#d7ff00]"
+                                : "text-white/65 hover:bg-white/[.06] hover:text-[#d7ff00]"
                           }`}
                         >
                           <span>
@@ -315,6 +328,11 @@ export default function MuseumNavbar() {
 
                           <span
                             aria-hidden="true"
+                            className={
+                              isNextGen
+                                ? "text-[#d7ff00]"
+                                : ""
+                            }
                           >
                             ↗
                           </span>
@@ -628,21 +646,46 @@ export default function MuseumNavbar() {
                     ([
                       label,
                       href,
-                    ]) => (
-                      <Link
-                        key={label}
-                        href={href}
-                        className="flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] text-white/60 transition hover:text-[#d7ff00]"
-                      >
-                        {label}
+                    ]) => {
+                      const active =
+                        isCurrent(
+                          pathname,
+                          href,
+                        );
 
-                        <span
-                          aria-hidden="true"
+                      const isNextGen =
+                        href ===
+                        "/next-gen";
+
+                      return (
+                        <Link
+                          key={label}
+                          href={href}
+                          className={`flex items-center justify-between py-3 text-sm font-bold uppercase tracking-[.08em] transition ${
+                            isNextGen
+                              ? active
+                                ? "text-[#d7ff00]"
+                                : "text-[#d7ff00] hover:text-white"
+                              : active
+                                ? "text-[#d7ff00]"
+                                : "text-white/60 hover:text-[#d7ff00]"
+                          }`}
                         >
-                          ↗
-                        </span>
-                      </Link>
-                    ),
+                          {label}
+
+                          <span
+                            aria-hidden="true"
+                            className={
+                              isNextGen
+                                ? "text-[#d7ff00]"
+                                : ""
+                            }
+                          >
+                            ↗
+                          </span>
+                        </Link>
+                      );
+                    },
                   )}
                 </div>
               )}
