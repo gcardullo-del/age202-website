@@ -586,6 +586,56 @@ model AtpPlayer {
   @@index([rankingDate])
 }
 
+model NextGenPlayer {
+  id String @id @default(cuid())
+
+  playerKey     String @unique
+  archiveNumber Int    @unique
+
+  name      String
+  firstName String?
+  lastName  String?
+
+  country     String
+  countryCode String?
+  flag        String?
+
+  birthDate  DateTime?
+  birthPlace String?
+
+  plays    String?
+  backhand String?
+
+  story      String?  @db.Text
+  highlights String[] @default([])
+
+  portraitImage String?
+  portraitAlt   String?
+
+  contributionStatus NextGenContributionStatus @default(AWAITING)
+  contributionTitle  String?
+  contributionText   String?                   @db.Text
+  contributionImage  String?
+  contributionDate   DateTime?
+  contributionSource String?
+
+  status   NextGenPlayerStatus @default(DRAFT)
+  featured Boolean             @default(false)
+
+  atpProfileUrl String? @unique
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+
+  @@index([archiveNumber])
+  @@index([name])
+  @@index([country])
+  @@index([status])
+  @@index([featured])
+  @@index([publishedAt])
+}
+
 model NextGenRanking {
   id String @id @default(cuid())
 
@@ -1178,6 +1228,18 @@ model TournamentIconicMoment {
   @@index([tournamentId, year])
   @@index([tournamentId, sortOrder])
   @@index([featured])
+}
+
+enum NextGenPlayerStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum NextGenContributionStatus {
+  AWAITING
+  RECEIVED
+  PUBLISHED
 }
 
 enum PlayerTrophyCategory {

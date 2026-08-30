@@ -1,5 +1,6 @@
+import Image from "next/image";
 import {
-ArrowDown,
+  ArrowDown,
   Camera,
   Quote,
   Trophy,
@@ -12,6 +13,10 @@ import type {
 import {
   getNextGenRankings,
 } from "@/lib/next-gen/next-gen-ranking.service";
+
+import {
+  prisma,
+} from "@/lib/prisma";
 
 
 type NextGenPlayer = {
@@ -31,6 +36,16 @@ type NextGenPlayer = {
     detail?: string;
     year: string;
   }[];
+  portraitImage?: string | null;
+  portraitAlt?: string | null;
+  contributionImage?: string | null;
+  contributionTitle?: string | null;
+  contributionText?: string | null;
+  contributionSource?: string | null;
+  contributionStatus?:
+    | "AWAITING"
+    | "RECEIVED"
+    | "PUBLISHED";
   contribution?: {
     dedicatedPhoto?: boolean;
     personalMessage?: boolean;
@@ -314,6 +329,48 @@ function PortraitPlaceholder({
 }
 
 
+function PlayerPortrait({
+  player,
+}: {
+  player: NextGenPlayer;
+}) {
+  if (!player.portraitImage) {
+    return (
+      <PortraitPlaceholder
+        playerName={player.name}
+      />
+    );
+  }
+
+  return (
+    <div className="relative min-h-[340px] overflow-hidden rounded-[24px] border border-white/10 bg-[#050914] sm:min-h-[480px] lg:min-h-[580px] lg:rounded-[28px]">
+      <Image
+        src={player.portraitImage}
+        alt={
+          player.portraitAlt ??
+          `Official portrait of ${player.name}`
+        }
+        fill
+        priority={false}
+        sizes="(max-width: 1024px) 100vw, 42vw"
+        className="object-cover object-center"
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-[#030914]/35 via-transparent to-transparent"
+      />
+
+      <div className="absolute bottom-4 left-4 rounded-full border border-[#C8FF00]/25 bg-[#030914]/75 px-3 py-2 backdrop-blur sm:bottom-5 sm:left-5">
+        <p className="font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-[#C8FF00] sm:text-[9px]">
+          Official Player Portrait
+        </p>
+      </div>
+    </div>
+  );
+}
+
+
 function ContributionOption({
   icon,
   title,
@@ -350,6 +407,9 @@ function PlayerContribution({
   player: NextGenPlayer;
 }) {
   const hasDedicatedPhoto =
+    Boolean(
+      player.contributionImage,
+    ) ||
     player.contribution
       ?.dedicatedPhoto === true;
 
@@ -514,8 +574,35 @@ function PlayerContribution({
         </div>
 
         <div className="border-t border-white/10 p-4 sm:p-6 lg:border-l lg:border-t-0">
-          <div className="flex min-h-[145px] flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8FF00]/35 bg-black/20 px-5 py-6 text-center sm:min-h-[180px] lg:h-full lg:min-h-[230px]">
-            {hasContribution ? (
+          <div className="relative flex min-h-[145px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-dashed border-[#C8FF00]/35 bg-black/20 px-5 py-6 text-center sm:min-h-[180px] lg:h-full lg:min-h-[230px]">
+            {player.contributionImage ? (
+              <>
+                <Image
+                  src={player.contributionImage}
+                  alt={
+                    player.contributionTitle ??
+                    `Contribution from ${player.name}`
+                  }
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 440px"
+                  className="object-cover object-center"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[#030914]/80 via-transparent to-transparent" />
+
+                <div className="absolute inset-x-0 bottom-0 p-4 text-left sm:p-5">
+                  <p className="font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-[#C8FF00]">
+                    Contribution Received
+                  </p>
+
+                  {player.contributionTitle ? (
+                    <p className="mt-1 text-sm font-bold uppercase tracking-wide text-white">
+                      {player.contributionTitle}
+                    </p>
+                  ) : null}
+                </div>
+              </>
+            ) : hasContribution ? (
               <>
                 <Trophy
                   size={34}
@@ -587,8 +674,8 @@ function PlayerSection({
           ].join(" ")}
         >
           <div className="lg:col-span-5 lg:[direction:ltr]">
-            <PortraitPlaceholder
-              playerName={player.name}
+            <PlayerPortrait
+              player={player}
             />
           </div>
 
@@ -739,9 +826,42 @@ function PlayerSection({
 }
 
 
+export const dynamic =
+  "force-dynamic";
+
 export default async function NextGenPage() {
-  const rankingByPlayerKey =
-    await getNextGenRankings();
+  const [
+    rankingByPlayerKey,
+    cmsPlayers,
+  ] = await Promise.all([
+    getNextGenRankings(),
+
+    prisma.nextGenPlayer.findMany({
+      where: {
+        status: "PUBLISHED",
+      },
+      select: {
+        playerKey: true,
+        portraitImage: true,
+        portraitAlt: true,
+        contributionImage: true,
+        contributionTitle: true,
+        contributionText: true,
+        contributionSource: true,
+        contributionStatus: true,
+      },
+    }),
+  ]);
+
+  const cmsByPlayerKey =
+    new Map(
+      cmsPlayers.map(
+        (player) => [
+          player.playerKey,
+          player,
+        ],
+      ),
+    );
 
   const rankedPlayers =
     players
@@ -751,8 +871,41 @@ export default async function NextGenPage() {
             player.playerKey,
           );
 
+        const cmsPlayer =
+          cmsByPlayerKey.get(
+            player.playerKey,
+          );
+
         return {
           ...player,
+
+          portraitImage:
+            cmsPlayer?.portraitImage ??
+            null,
+
+          portraitAlt:
+            cmsPlayer?.portraitAlt ??
+            null,
+
+          contributionImage:
+            cmsPlayer?.contributionImage ??
+            null,
+
+          contributionTitle:
+            cmsPlayer?.contributionTitle ??
+            null,
+
+          contributionText:
+            cmsPlayer?.contributionText ??
+            null,
+
+          contributionSource:
+            cmsPlayer?.contributionSource ??
+            null,
+
+          contributionStatus:
+            cmsPlayer?.contributionStatus ??
+            "AWAITING",
 
           ranking:
             liveRanking?.currentRank != null

@@ -21,6 +21,7 @@ import {
   ReceiptText,
   Settings,
   ShoppingBag,
+  Sparkles,
   Trophy,
   Users,
 } from "lucide-react";
@@ -65,6 +66,11 @@ const navigationItems = [
     label: "Players",
     href: "/admin/players",
     icon: Users,
+  },
+  {
+    label: "NEXT GEN",
+    href: "/admin/next-gen",
+    icon: Sparkles,
   },
   {
     label: "Legends",
