@@ -4,14 +4,28 @@ import {
   chromium,
 } from "playwright";
 
+import {
+  parseAtpLiveRanking,
+} from "./atp-live-parser";
 
-const ATP_URL =
-  "https://www.atptour.com/en/rankings/singles/live";
+import {
+  ATP_LIVE_RANKING_URL,
+} from "./types";
+
+
+const USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+  "AppleWebKit/537.36 (KHTML, like Gecko) " +
+  "Chrome/151.0.0.0 Safari/537.36";
 
 
 async function main() {
+  console.log("");
   console.log(
-    "🎾 AGE202 ATP DOM Inspector",
+    "🎾 AGE202 — ATP Navigation Response Inspector",
+  );
+  console.log(
+    "────────────────────────────────────",
   );
 
 
@@ -33,20 +47,18 @@ async function main() {
           "en-US",
 
         userAgent:
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-          "AppleWebKit/537.36 (KHTML, like Gecko) " +
-          "Chrome/151.0.0.0 Safari/537.36",
+          USER_AGENT,
       });
 
 
     console.log(
-      "🌐 Opening ATP Live Ranking...",
+      "🌐 Apertura ATP Live...",
     );
 
 
-    const response =
+    const baseResponse =
       await page.goto(
-        ATP_URL,
+        ATP_LIVE_RANKING_URL,
         {
           waitUntil:
             "domcontentloaded",
@@ -57,34 +69,136 @@ async function main() {
       );
 
 
-    const status =
-      response?.status() ??
-      null;
-
-
     console.log(
-      `📡 Status: ${status ?? "unknown"}`,
+      `📡 Base HTTP: ${baseResponse?.status() ?? "unknown"}`,
     );
-
-
-    if (
-      status !== null &&
-      status >= 400
-    ) {
-      console.log(
-        "❌ ATP blocked this browser request.",
-      );
-
-      console.log(
-        "Stopping DOM inspection.",
-      );
-
-      return;
-    }
 
 
     await page.waitForTimeout(
       5_000,
+    );
+
+
+    const baseEntries =
+      await parseAtpLiveRanking(
+        page,
+      );
+
+
+    console.log(
+      `✅ Base: ${baseEntries.length} giocatori`,
+    );
+
+    console.log(
+      `📊 Rank base: ${baseEntries[0]?.rank ?? "—"} → ${baseEntries.at(-1)?.rank ?? "—"}`,
+    );
+
+
+    const rankingSelect =
+      page.locator(
+        "#rankRange-filter",
+      );
+
+
+    await rankingSelect.waitFor({
+      state:
+        "attached",
+
+      timeout:
+        30_000,
+    });
+
+
+    console.log("");
+    console.log(
+      "➡️ Cambio reale ATP → 101-200",
+    );
+
+
+    const responsePromise =
+      page.waitForResponse(
+        (response) =>
+          response.url().includes(
+            "rankRange=101-200",
+          ) &&
+          response.request().isNavigationRequest(),
+        {
+          timeout:
+            30_000,
+        },
+      );
+
+
+    const urlPromise =
+      page.waitForURL(
+        (url) =>
+          url.searchParams.get(
+            "rankRange",
+          ) ===
+          "101-200",
+        {
+          timeout:
+            30_000,
+        },
+      );
+
+
+    await rankingSelect.selectOption(
+      "101-200",
+    );
+
+
+    const [
+      navigationResponse,
+    ] =
+      await Promise.all([
+        responsePromise,
+        urlPromise,
+      ]);
+
+
+    console.log("");
+    console.log(
+      `📍 URL finale: ${page.url()}`,
+    );
+
+    console.log(
+      `📡 Navigation HTTP: ${navigationResponse.status()}`,
+    );
+
+    console.log(
+      `📡 Status text: ${navigationResponse.statusText()}`,
+    );
+
+
+    const headers =
+      await navigationResponse.allHeaders();
+
+
+    console.log(
+      `🌐 Server: ${headers.server ?? "—"}`,
+    );
+
+    console.log(
+      `📄 Content-Type: ${headers["content-type"] ?? "—"}`,
+    );
+
+
+    await page
+      .waitForLoadState(
+        "domcontentloaded",
+        {
+          timeout:
+            30_000,
+        },
+      )
+      .catch(
+        () => undefined,
+      );
+
+
+    await page.waitForTimeout(
+      3_000,
     );
 
 
@@ -93,244 +207,112 @@ async function main() {
 
 
     const bodyText =
-      await page
-        .locator("body")
-        .innerText();
-
-
-    console.log(
-      `📄 Title: ${title}`,
-    );
-
-
-    console.log(
-      `📏 Body length: ${bodyText.length.toLocaleString(
-        "en-US",
-      )}`,
-    );
-
-
-    console.log(
-      `🎾 Contains Jannik Sinner: ${
-        bodyText
-          .toLowerCase()
-          .includes(
-            "jannik sinner",
+      (
+        await page
+          .locator(
+            "body",
           )
-          ? "YES"
-          : "NO"
-      }`,
-    );
-
-
-    console.log(
-      `📊 Contains Live Rank: ${
-        bodyText
-          .toLowerCase()
-          .includes(
-            "live rank",
+          .innerText()
+          .catch(
+            () => "",
           )
-          ? "YES"
-          : "NO"
-      }`,
-    );
-
-
-    const playerLinks =
-      await page
-        .locator(
-          'a[href*="/en/players/"]',
+      )
+        .replace(
+          /\s+/g,
+          " ",
         )
-        .count();
-
-
-    console.log(
-      `🔗 Player links detected: ${playerLinks}`,
-    );
-
-
-    const tables =
-      page.locator(
-        "table",
-      );
-
-
-    const tableCount =
-      await tables.count();
-
-
-    console.log(
-      `📊 Tables detected: ${tableCount}`,
-    );
-
-
-    const rows =
-      page.locator(
-        "tr",
-      );
-
-
-    const rowCount =
-      await rows.count();
-
-
-    console.log(
-      `📋 TR elements detected: ${rowCount}`,
-    );
+        .trim();
 
 
     console.log("");
     console.log(
-      "────────────────────────────────",
+      `📄 Page title: ${title || "—"}`,
     );
 
     console.log(
-      "🔬 FIRST TABLE ROWS",
+      `📏 Body length: ${bodyText.length}`,
     );
 
     console.log(
-      "────────────────────────────────",
+      `📝 Body preview: ${bodyText.slice(0, 500) || "—"}`,
     );
 
 
-    const rowsToInspect =
-      Math.min(
-        rowCount,
-        8,
+    const afterEntries =
+      await parseAtpLiveRanking(
+        page,
       );
 
 
-    for (
-      let index = 0;
-      index < rowsToInspect;
-      index += 1
+    console.log("");
+    console.log(
+      `🎾 Giocatori parsati: ${afterEntries.length}`,
+    );
+
+
+    if (
+      afterEntries.length >
+      0
     ) {
-      const row =
-        rows.nth(
-          index,
-        );
-
-
-      const text =
-        (
-          await row.innerText()
-        )
-          .replace(
-            /\s+/g,
-            " ",
-          )
-          .trim();
-
-
-      console.log("");
       console.log(
-        `ROW ${index}`,
+        `📊 Rank: ${afterEntries[0].rank} → ${afterEntries.at(-1)?.rank ?? "—"}`,
       );
-
-
-      console.log(
-        text,
-      );
-
-
-      const cells =
-        row.locator(
-          "th, td",
-        );
-
-
-      const cellCount =
-        await cells.count();
-
-
-      console.log(
-        `Cells: ${cellCount}`,
-      );
-
-
-      for (
-        let cellIndex = 0;
-        cellIndex < cellCount;
-        cellIndex += 1
-      ) {
-        const cell =
-          cells.nth(
-            cellIndex,
-          );
-
-
-        const cellText =
-          (
-            await cell.innerText()
-          )
-            .replace(
-              /\s+/g,
-              " ",
-            )
-            .trim();
-
-
-        console.log(
-          `  [${cellIndex}] ${cellText}`,
-        );
-      }
-
-
-      const links =
-        row.locator(
-          'a[href*="/en/players/"]',
-        );
-
-
-      const linkCount =
-        await links.count();
-
-
-      for (
-        let linkIndex = 0;
-        linkIndex < linkCount;
-        linkIndex += 1
-      ) {
-        const link =
-          links.nth(
-            linkIndex,
-          );
-
-
-        const href =
-          await link.getAttribute(
-            "href",
-          );
-
-
-        console.log(
-          `  🔗 ${href}`,
-        );
-      }
     }
 
 
     console.log("");
     console.log(
-      "────────────────────────────────",
+      "────────────────────────────────────",
     );
 
+
+    if (
+      navigationResponse.status() ===
+      403
+    ) {
+      console.log(
+        "🔒 CONFERMATO: ATP blocca la navigazione parametrizzata del browser headless.",
+      );
+    } else {
+      console.log(
+        `ℹ️ La navigazione ha restituito HTTP ${navigationResponse.status()}.`,
+      );
+    }
+
+
     console.log(
-      "🏁 DOM inspection completed.",
+      "🛡️ Database invariato.",
     );
+
+    console.log("");
   } finally {
     await browser.close();
   }
 }
 
 
-main().catch(
-  (error) => {
-    console.error(
-      "❌ ATP DOM inspection failed:",
-      error,
-    );
+main()
+  .catch(
+    (error: unknown) => {
+      console.error("");
+      console.error(
+        "❌ ATP Navigation Response Inspector fallito.",
+      );
 
-    process.exitCode = 1;
-  },
-);
+
+      if (
+        error instanceof Error
+      ) {
+        console.error(
+          error.message,
+        );
+      } else {
+        console.error(
+          error,
+        );
+      }
+
+
+      process.exitCode = 1;
+    },
+  );

@@ -1,5 +1,5 @@
 import {
-  ArrowDown,
+ArrowDown,
   Camera,
   Quote,
   Trophy,
@@ -9,8 +9,13 @@ import type {
   ReactNode,
 } from "react";
 
+import {
+  getNextGenRankings,
+} from "@/lib/next-gen/next-gen-ranking.service";
+
 
 type NextGenPlayer = {
+  playerKey: string;
   number: string;
   name: string;
   country: string;
@@ -36,14 +41,14 @@ type NextGenPlayer = {
 
 const players: NextGenPlayer[] = [
   {
+    playerKey: "moise-kouame",
     number: "01",
     name: "Moïse Kouamé",
     country: "France",
     flag: "🇫🇷",
     age: 17,
     birthDate: "06 Mar 2009",
-    plays:
-      "Right-handed · Two-handed backhand",
+    plays: "Right-handed · Two-handed backhand",
     ranking: "#200",
     careerHigh: "#200",
     story: [
@@ -52,40 +57,218 @@ const players: NextGenPlayer[] = [
       "At Roland Garros 2026, he reached the third round and produced one of the standout runs of the tournament, confirming his place among the most closely watched young players in men's tennis.",
     ],
     highlights: [
-      {
-        title:
-          "Roland Garros — Third Round",
-        detail:
-          "Youngest Frenchman to reach the third round at Roland Garros in the Open Era.",
-        year: "2026",
-      },
-      {
-        title:
-          "Historic Win over Marin Čilić",
-        detail:
-          "Youngest player in the Open Era to defeat a Grand Slam champion at Roland Garros.",
-        year: "2026",
-      },
-      {
-        title:
-          "Three ITF Professional Titles",
-        detail:
-          "Won three ITF World Tennis Tour singles titles during the 2026 season.",
-        year: "2026",
-      },
-      {
-        title:
-          "Next Gen ATP Race — No. 6",
-        detail:
-          "Ranked sixth in the Next Gen ATP Race on 4 August 2026.",
-        year: "2026",
-      },
-      {
-        title: "ATP Career High",
-        detail:
-          "Reached a career-high ranking of No. 200 on 24 August 2026.",
-        year: "2026",
-      },
+      { title: "Roland Garros — Third Round", detail: "Reached the third round of his home Grand Slam at just 17.", year: "2026" },
+      { title: "Miami — Historic Match Win", detail: "Became the youngest match winner in Miami tournament history.", year: "2026" },
+      { title: "Three ITF Professional Titles", detail: "Won three ITF World Tennis Tour singles titles during the 2026 season.", year: "2026" },
+      { title: "Next Gen ATP Race — No. 6", detail: "Moved firmly into the qualification picture during the 2026 season.", year: "2026" },
+      { title: "ATP Career High", detail: "Reached World No. 200 in August 2026.", year: "2026" },
+    ],
+  },
+  {
+    playerKey: "federico-cina",
+    number: "02",
+    name: "Federico Cinà",
+    country: "Italy",
+    flag: "🇮🇹",
+    age: 19,
+    birthDate: "30 Mar 2007",
+    plays: "Right-handed · Two-handed backhand",
+    ranking: "#174",
+    careerHigh: "#174",
+    story: [
+      "Born in Palermo on 30 March 2007, Federico Cinà grew up immersed in tennis under the guidance of his father and coach, Francesco Cinà.",
+      "A former junior World No. 4, Cinà began translating his junior pedigree into professional results early, becoming the first player born in 2007 or later to win an ATP Masters 1000 match when he defeated Francisco Comesaña in Miami in 2025.",
+      "His 2026 season marked another step forward: a first ATP Challenger title in Pune, a Roland Garros main-draw debut and qualification for his first US Open main draw.",
+    ],
+    highlights: [
+      { title: "US Open — Main Draw Qualification", detail: "Qualified for his first US Open main draw after coming through qualifying in New York.", year: "2026" },
+      { title: "Pune Challenger — Champion", detail: "Won his first ATP Challenger title, saving five championship points in the final.", year: "2026" },
+      { title: "Roland Garros — Main Draw Debut", detail: "Qualified for his first Grand Slam main draw in Paris.", year: "2026" },
+      { title: "Miami Masters 1000 — First ATP Win", detail: "First player born in 2007 or later to win an ATP Masters 1000 match.", year: "2025" },
+      { title: "Junior World No. 4", detail: "Reached No. 4 in the ITF junior rankings.", year: "2024" },
+    ],
+  },
+  {
+    playerKey: "diego-dedura",
+    number: "03",
+    name: "Diego Dedura",
+    country: "Germany",
+    flag: "🇩🇪",
+    age: 18,
+    birthDate: "12 Mar 2008",
+    plays: "Left-handed · Two-handed backhand",
+    ranking: "#194",
+    careerHigh: "#194",
+    story: [
+      "Born in Berlin on 12 March 2008, Diego Dedura is one of the youngest players already establishing himself on the professional circuit.",
+      "His first major ATP milestone arrived in Munich in 2025, where he became the first player born in 2008 or later to compete on the ATP Tour and advanced past Denis Shapovalov.",
+      "In July 2026, Dedura captured his maiden ATP Challenger title in Tampere, becoming the youngest Challenger champion of the season and breaking into the world's Top 200.",
+    ],
+    highlights: [
+      { title: "Tampere Challenger — Champion", detail: "Won his maiden Challenger title and became the youngest champion at that level in 2026.", year: "2026" },
+      { title: "ATP Top 200 Debut", detail: "Broke into the world's Top 200 following his Tampere title run.", year: "2026" },
+      { title: "Munich — ATP Breakthrough", detail: "Advanced past Denis Shapovalov in his first ATP Tour appearance.", year: "2025" },
+      { title: "Historic 2008 Milestone", detail: "First player born in 2008 or later to compete on the ATP Tour.", year: "2025" },
+    ],
+  },
+  {
+    playerKey: "nicolai-budkov-kjaer",
+    number: "04",
+    name: "Nicolai Budkov Kjær",
+    country: "Norway",
+    flag: "🇳🇴",
+    age: 19,
+    birthDate: "01 Sep 2006",
+    plays: "Right-handed · Two-handed backhand",
+    ranking: "#155",
+    careerHigh: "#124",
+    story: [
+      "Born in Oslo on 1 September 2006, Nicolai Budkov Kjær became one of Norway's most accomplished junior players before making a rapid transition to the professional game.",
+      "He reached junior World No. 1 in 2024 and won the Wimbledon boys' singles title, becoming the first Norwegian man to win a Grand Slam singles title at any level.",
+      "Four Challenger titles in 2025 carried him into the Top 150 and to the Next Gen ATP Finals, where he reached the semi-finals before making his Grand Slam main-draw debut at the 2026 Australian Open.",
+    ],
+    highlights: [
+      { title: "Australian Open — Main Draw Debut", detail: "Qualified for his first Grand Slam main draw.", year: "2026" },
+      { title: "Next Gen ATP Finals — Semi-finalist", detail: "Reached the semi-finals on his debut at the season-ending event.", year: "2025" },
+      { title: "Four ATP Challenger Titles", detail: "Won Challenger titles in Glasgow, Tampere, Astana and Mouilleron-le-Captif.", year: "2025" },
+      { title: "Wimbledon Boys' Singles — Champion", detail: "First Norwegian man to win a Grand Slam singles title at any level.", year: "2024" },
+      { title: "Junior World No. 1", detail: "Reached the top of the ITF junior rankings.", year: "2024" },
+    ],
+  },
+  {
+    playerKey: "henry-searle",
+    number: "05",
+    name: "Henry Searle",
+    country: "Great Britain",
+    flag: "🇬🇧",
+    age: 20,
+    birthDate: "29 Mar 2006",
+    plays: "Left-handed · Two-handed backhand",
+    ranking: "#220",
+    careerHigh: "#220",
+    story: [
+      "Born in Wolverhampton on 29 March 2006, Henry Searle announced himself internationally by winning the Wimbledon boys' singles title in 2023 without dropping a set.",
+      "The British left-hander has since moved steadily into the professional game, building his ranking through the ITF and ATP Challenger circuits while retaining the grass-court strengths that defined his junior breakthrough.",
+      "In 2026 he captured his first Challenger crown in Dublin and added another title in Nottingham, pushing himself firmly into the Next Gen ATP Finals qualification race.",
+    ],
+    highlights: [
+      { title: "Dublin Challenger — Champion", detail: "Won his maiden ATP Challenger title and became the youngest grass-court Challenger champion since Alex de Minaur in 2018.", year: "2026" },
+      { title: "Nottingham Challenger — Champion", detail: "Added a second grass-court Challenger title during his 2026 rise.", year: "2026" },
+      { title: "Wimbledon Boys' Singles — Champion", detail: "First British boy since 1962 to lift the Wimbledon boys' singles trophy.", year: "2023" },
+      { title: "Junior World No. 3", detail: "Reached a career-high junior ranking of No. 3.", year: "2023" },
+    ],
+  },
+  {
+    playerKey: "joel-schwaerzler",
+    number: "06",
+    name: "Joel Schwärzler",
+    country: "Austria",
+    flag: "🇦🇹",
+    age: 20,
+    birthDate: "27 Jan 2006",
+    plays: "Left-handed · Two-handed backhand",
+    ranking: "#171",
+    careerHigh: "#171",
+    story: [
+      "Born on 27 January 2006, Joel Schwärzler developed into one of Austria's leading young prospects after a standout junior career.",
+      "The powerful left-hander reached junior World No. 1 and won the 2024 Roland Garros boys' singles title before establishing himself on the ATP Challenger Tour.",
+      "His progress continued in 2026 with Challenger titles in Kigali and at the Mazovia Open in Poland, taking his career total to three and keeping him in contention in the Next Gen ATP Race.",
+    ],
+    highlights: [
+      { title: "Mazovia Open — Champion", detail: "Claimed his second Challenger title of the 2026 season and third overall.", year: "2026" },
+      { title: "Kigali Challenger — Champion", detail: "Opened his 2026 Challenger title account in Rwanda.", year: "2026" },
+      { title: "Roland Garros Boys' Singles — Champion", detail: "Won his first junior Grand Slam singles title in Paris.", year: "2024" },
+      { title: "Junior World No. 1", detail: "Reached the top of the ITF junior rankings.", year: "2024" },
+    ],
+  },
+  {
+    playerKey: "maxim-mrva",
+    number: "07",
+    name: "Maxim Mrva",
+    country: "Czechia",
+    flag: "🇨🇿",
+    age: 19,
+    birthDate: "02 Aug 2007",
+    plays: "Right-handed · Two-handed backhand",
+    ranking: "#211",
+    careerHigh: "#211",
+    story: [
+      "Born in Prostějov on 2 August 2007, Maxim Mrva emerged from the Czech junior system as one of the country's most promising young players.",
+      "His junior years included major team and Grand Slam success, highlighted by the 2024 US Open boys' doubles title alongside Rei Sakamoto.",
+      "Mrva's professional development accelerated in 2026. In August he won his first ATP Challenger title in Todi without dropping a set, moving rapidly toward the world's Top 200 and into the Next Gen ATP Race conversation.",
+    ],
+    highlights: [
+      { title: "Todi Challenger — Champion", detail: "Won his maiden ATP Challenger title without dropping a set during the tournament.", year: "2026" },
+      { title: "Next Gen ATP Race — Top 12", detail: "Moved into the leading group of the 2026 Next Gen qualification race.", year: "2026" },
+      { title: "US Open Boys' Doubles — Champion", detail: "Won the junior doubles title alongside Rei Sakamoto.", year: "2024" },
+      { title: "First Professional Title", detail: "Captured his first professional singles title as a teenager.", year: "2024" },
+    ],
+  },
+  {
+    playerKey: "cruz-hewitt",
+    number: "08",
+    name: "Cruz Hewitt",
+    country: "Australia",
+    flag: "🇦🇺",
+    age: 17,
+    birthDate: "11 Dec 2008",
+    plays: "Right-handed · Two-handed backhand",
+    ranking: "#376",
+    careerHigh: "#376",
+    story: [
+      "Born on 11 December 2008, Cruz Hewitt is beginning to build a professional identity of his own while carrying one of Australian tennis's most recognisable surnames.",
+      "Still only 17, Hewitt has moved rapidly from junior competition into professional events and earned increasingly significant opportunities on the ATP Tour during 2026.",
+      "His breakthrough arrived in Washington, where he defeated Marcos Giron for his first ATP Tour victory, becoming the youngest match winner at the tournament since Kei Nishikori in 2007.",
+    ],
+    highlights: [
+      { title: "Washington — First ATP Tour Win", detail: "Defeated Marcos Giron in straight sets for his first tour-level victory.", year: "2026" },
+      { title: "Washington Youth Milestone", detail: "Youngest player to win a match at the event since Kei Nishikori in 2007.", year: "2026" },
+      { title: "ATP Top 400", detail: "Continued his rapid ranking rise during his first sustained professional season.", year: "2026" },
+    ],
+  },
+  {
+    playerKey: "max-schoenhaus",
+    number: "09",
+    name: "Max Schönhaus",
+    country: "Germany",
+    flag: "🇩🇪",
+    age: 19,
+    birthDate: "01 Aug 2007",
+    plays: "Right-handed · One-handed backhand",
+    ranking: "#317",
+    careerHigh: "#310",
+    story: [
+      "Born in Soest on 1 August 2007, Max Schönhaus built a strong junior résumé before beginning his climb through the professional rankings.",
+      "His junior career included the 2024 Wimbledon boys' doubles title, a run to the 2025 Roland Garros boys' singles final and a Wimbledon boys' singles semi-final later that summer.",
+      "Schönhaus closed his junior chapter by winning the 2025 ITF Junior Finals in Chengdu and has since focused on the professional circuit, where his ranking accelerated sharply during 2026.",
+    ],
+    highlights: [
+      { title: "ITF Junior Finals — Champion", detail: "Won the season-ending junior title in Chengdu.", year: "2025" },
+      { title: "Roland Garros Boys' Singles — Finalist", detail: "Reached an all-German junior final in Paris.", year: "2025" },
+      { title: "Wimbledon Boys' Singles — Semi-finalist", detail: "Became the first German boy since 2013 to reach the Wimbledon semi-finals.", year: "2025" },
+      { title: "Wimbledon Boys' Doubles — Champion", detail: "Captured a junior Grand Slam doubles title.", year: "2024" },
+    ],
+  },
+  {
+    playerKey: "ognjen-milic",
+    number: "10",
+    name: "Ognjen Milić",
+    country: "Serbia",
+    flag: "🇷🇸",
+    age: 19,
+    birthDate: "22 Jun 2007",
+    plays: "Left-handed",
+    ranking: "#343",
+    careerHigh: "#336",
+    story: [
+      "Born on 22 June 2007, Ognjen Milić is part of the next wave of Serbian players making the transition from junior tennis into the professional game.",
+      "His rise has been built primarily through the ITF World Tennis Tour and ATP Challenger circuit, with results on both clay and hard courts steadily pushing him up the rankings.",
+      "During 2026 he began appearing regularly at Challenger level, including a quarter-final run in Plovdiv, while reaching a new career-high ranking inside the world's Top 350.",
+    ],
+    highlights: [
+      { title: "ATP Top 350", detail: "Reached a new career-high ranking during the 2026 season.", year: "2026" },
+      { title: "Plovdiv Challenger — Quarter-finalist", detail: "Reached the last eight on clay after consecutive main-draw victories.", year: "2026" },
+      { title: "Challenger Transition", detail: "Established a regular presence across ATP Challenger events during his professional rise.", year: "2026" },
     ],
   },
 ];
@@ -556,7 +739,42 @@ function PlayerSection({
 }
 
 
-export default function NextGenPage() {
+export default async function NextGenPage() {
+  const rankingByPlayerKey =
+    await getNextGenRankings();
+
+  const rankedPlayers =
+    players
+      .map((player) => {
+        const liveRanking =
+          rankingByPlayerKey.get(
+            player.playerKey,
+          );
+
+        return {
+          ...player,
+
+          ranking:
+            liveRanking?.currentRank != null
+              ? `#${liveRanking.currentRank}`
+              : player.ranking,
+
+          careerHigh:
+            liveRanking?.careerHighRank != null
+              ? `#${liveRanking.careerHighRank}`
+              : player.careerHigh,
+
+          currentRankValue:
+            liveRanking?.currentRank ??
+            Number.POSITIVE_INFINITY,
+        };
+      })
+      .sort(
+        (a, b) =>
+          a.currentRankValue -
+          b.currentRankValue,
+      );
+
   return (
     <main className="min-h-screen bg-[#030914] text-white">
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-10 pt-10 sm:px-8 sm:pb-16 sm:pt-16 lg:px-12 lg:pb-28 lg:pt-28">
@@ -615,7 +833,41 @@ export default function NextGenPage() {
         </div>
       </section>
 
-      {players.map(
+      <section className="border-b border-white/10 px-5 py-6 sm:px-8 sm:py-8 lg:px-12">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-[#C8FF00] sm:text-[9px]">
+              Founding Players · 2026 Archive
+            </p>
+
+            <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-white/30 sm:text-[9px]">
+              10 Careers in Progress
+            </p>
+          </div>
+
+          <nav
+            aria-label="Next Gen player index"
+            className="mt-5 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:overflow-visible sm:pb-0"
+          >
+            {rankedPlayers.map((player) => (
+              <a
+                key={`index-${player.number}`}
+                href={`#player-${player.number}`}
+                className="group flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-2 transition hover:border-[#C8FF00]/50 hover:bg-[#C8FF00]/5 sm:px-4"
+              >
+                <span className="font-mono text-[8px] font-bold text-[#C8FF00]/70 group-hover:text-[#C8FF00]">
+                  {player.number}
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/65 group-hover:text-white sm:text-xs">
+                  {player.name}
+                </span>
+              </a>
+            ))}
+          </nav>
+        </div>
+      </section>
+
+      {rankedPlayers.map(
         (player, index) => (
           <PlayerSection
             key={player.name}

@@ -586,6 +586,35 @@ model AtpPlayer {
   @@index([rankingDate])
 }
 
+model NextGenRanking {
+  id String @id @default(cuid())
+
+  playerKey String @unique
+  name      String
+
+  atpProfileUrl String @unique
+
+  currentRank  Int?
+  previousRank Int?
+
+  careerHighRank Int?
+  careerHighDate DateTime?
+
+  source String @default("ATP_PROFILE")
+
+  active Boolean @default(true)
+
+  lastSyncedAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([currentRank])
+  @@index([careerHighRank])
+  @@index([active])
+  @@index([name])
+  @@index([lastSyncedAt])
+}
+
 model WtaPlayer {
   id           String  @id
   rank         Int
