@@ -328,7 +328,7 @@ export default function TodaysMuseumHighlights() {
                     aria-hidden="true"
                   />
                 }
-                className="h-full min-h-[520px]"
+                className="h-auto min-h-0 xl:h-full xl:min-h-[520px]"
               >
                 {isLoading ? (
                   <div className="mt-7 aspect-[16/9] animate-pulse rounded-[1.4rem] border border-white/10 bg-white/[0.025]" />
@@ -372,7 +372,7 @@ export default function TodaysMuseumHighlights() {
                     aria-hidden="true"
                   />
                 }
-                className="h-full min-h-[520px]"
+                className="h-auto min-h-0 xl:h-full xl:min-h-[520px]"
               >
                 <div className="mt-8 border-t border-white/10 pt-6">
                   <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/35">
@@ -428,7 +428,7 @@ export default function TodaysMuseumHighlights() {
                     aria-hidden="true"
                   />
                 }
-                className="h-full min-h-[520px]"
+                className="h-auto min-h-0 xl:h-full xl:min-h-[520px]"
               >
                 {isLoading ? (
                   <div className="mt-7 aspect-[16/9] animate-pulse rounded-[1.4rem] border border-white/10 bg-white/[0.025]" />

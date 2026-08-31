@@ -153,7 +153,7 @@ export default function OpeningFilm() {
       ref={sectionRef}
       id="opening-film"
       aria-labelledby="opening-film-title"
-      className="relative min-h-[92svh] overflow-hidden border-y border-white/10 bg-[#02050c] text-white"
+      className="relative min-h-[460px] overflow-hidden border-y border-white/10 bg-[#02050c] text-white sm:min-h-[92svh]"
     >
       <div
         aria-hidden="true"
@@ -197,7 +197,7 @@ export default function OpeningFilm() {
         className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C8FF00]/[0.035] blur-[180px]"
       />
 
-      <div className="relative mx-auto flex min-h-[92svh] max-w-[1500px] flex-col px-5 py-8 sm:px-8 lg:px-12">
+      <div className="relative mx-auto flex min-h-[460px] max-w-[1500px] flex-col px-5 py-5 sm:min-h-[92svh] sm:px-8 sm:py-8 lg:px-12">
         <div className="flex items-center justify-between gap-6 border-b border-white/10 pb-5">
           <div>
             <p className="font-mono text-[8px] font-bold uppercase tracking-[0.28em] text-[#C8FF00]">
@@ -242,7 +242,7 @@ export default function OpeningFilm() {
           </button>
         </div>
 
-        <div className="relative flex flex-1 items-center justify-center py-16 text-center">
+        <div className="relative flex flex-1 items-center justify-center py-8 text-center sm:py-16">
           <AnimatePresence
             mode="wait"
           >
@@ -295,7 +295,7 @@ export default function OpeningFilm() {
 
               <h2
                 id="opening-film-title"
-                className="mt-7 text-[clamp(3.6rem,8.5vw,8.6rem)] font-black uppercase leading-[0.78] tracking-[-0.075em]"
+                className="mt-5 text-[clamp(2.75rem,13vw,4rem)] font-black uppercase leading-[0.82] tracking-[-0.07em] sm:mt-7 sm:text-[clamp(3.6rem,8.5vw,8.6rem)] sm:leading-[0.78] sm:tracking-[-0.075em]"
               >
                 {
                   scenes[
@@ -304,7 +304,7 @@ export default function OpeningFilm() {
                 }
               </h2>
 
-              <p className="mx-auto mt-8 max-w-2xl text-sm leading-7 text-white/45 sm:text-base sm:leading-8">
+              <p className="mx-auto mt-6 max-w-2xl text-sm leading-6 text-white/45 sm:mt-8 sm:text-base sm:leading-8">
                 {
                   scenes[
                     activeScene
@@ -315,7 +315,7 @@ export default function OpeningFilm() {
           </AnimatePresence>
         </div>
 
-        <div className="border-t border-white/10 pt-5">
+        <div className="border-t border-white/10 pt-4 sm:pt-5">
           <div className="flex items-center gap-5">
             <span className="w-10 font-mono text-[8px] text-white/25">
               {String(
@@ -354,7 +354,7 @@ export default function OpeningFilm() {
             </span>
           </div>
 
-          <div className="mt-5 flex items-center justify-between gap-6">
+          <div className="mt-4 flex items-center justify-between gap-6 sm:mt-5">
             <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
               From origins to legacy
             </p>
@@ -364,6 +364,7 @@ export default function OpeningFilm() {
               className="inline-flex items-center gap-2 font-mono text-[8px] font-bold uppercase tracking-[0.2em] text-white/35 transition hover:text-[#C8FF00]"
             >
               Continue the story
+
               <ArrowDown
                 size={12}
                 aria-hidden="true"

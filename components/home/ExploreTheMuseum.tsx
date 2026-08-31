@@ -92,7 +92,7 @@ export default function ExploreTheMuseum() {
   return (
     <section
       id="explore-the-museum"
-      className="relative overflow-hidden border-b border-white/10 bg-[#050b18] px-5 py-20 sm:px-8 lg:px-12 lg:py-28"
+      className="relative overflow-hidden border-b border-white/10 bg-[#050b18] px-4 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-28"
     >
       <div
         aria-hidden="true"
@@ -119,9 +119,12 @@ export default function ExploreTheMuseum() {
           />
         </Reveal>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-12">
+        <div className="grid gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-12">
           {museumRooms.map(
-            (room, index) => {
+            (
+              room,
+              index,
+            ) => {
               const large =
                 index === 0 ||
                 index === 1;
@@ -136,7 +139,10 @@ export default function ExploreTheMuseum() {
               return (
                 <Reveal
                   key={room.title}
-                  delay={index * 0.08}
+                  delay={
+                    index *
+                    0.08
+                  }
                   className={
                     gridClassName
                   }
@@ -151,13 +157,19 @@ export default function ExploreTheMuseum() {
                     status={room.status}
                     accent={room.accent}
                     icon={room.icon}
-                    className="h-full min-h-[330px]"
+                    className="
+                      h-auto
+                      min-h-0
+                      md:h-full
+                      md:min-h-[330px]
+                    "
                   >
-                    <div className="mt-8 border-t border-white/10 pt-5">
+                    <div className="mt-5 border-t border-white/10 pt-4 md:mt-8 md:pt-5">
                       <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/30">
                         Museum Room{" "}
                         {String(
-                          index + 1,
+                          index +
+                            1,
                         ).padStart(
                           2,
                           "0",
@@ -172,7 +184,7 @@ export default function ExploreTheMuseum() {
         </div>
 
         <Reveal delay={0.18}>
-          <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-5 sm:mt-10 sm:flex-row sm:items-center sm:justify-between sm:pt-6">
             <p className="max-w-2xl text-sm leading-7 text-white/40">
               AGE202 is a living museum.
               Every wing connects to a

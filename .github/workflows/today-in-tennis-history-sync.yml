@@ -1,0 +1,43 @@
+name: AGE202 Today in Tennis History Sync
+
+on:
+  schedule:
+    - cron: "10 0 * * *"
+      timezone: "Europe/Rome"
+
+  workflow_dispatch:
+
+concurrency:
+  group: age202-today-in-tennis-history-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-today-in-tennis-history:
+    name: Sync Today in Tennis History
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Sync Today in Tennis History
+        run: npx tsx scripts/sync-today-in-tennis-history.ts --write
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
