@@ -388,31 +388,36 @@ model MemorabiliaImage {
 }
 
 model OriginalProduct {
-  id                String                      @id @default(cuid())
-  title             String
-  subtitle          String?
-  slug              String                      @unique
-  description       String?
-  collection        String?
-  edition           String?
-  category          OriginalProductCategory
-  material          String?
-  colour            String?
-  sizes             String[]                    @default([])
-  tags              String[]                    @default([])
-  price             Decimal?                    @db.Decimal(10, 2)
-  currency          String                      @default("EUR")
-  vintedUrl         String?
-  availability      OriginalProductAvailability @default(COMING_SOON)
-  status            OriginalProductStatus       @default(DRAFT)
-  featured          Boolean                     @default(false)
-  displayOrder      Int?
-  metaTitle         String?
-  metaDescription   String?
-  publishedAt       DateTime?
-  createdAt         DateTime                    @default(now())
-  updatedAt         DateTime                    @updatedAt
+  id          String                  @id @default(cuid())
+  title       String
+  subtitle    String?
+  slug        String                  @unique
+  description String?
+  collection  String?
+  edition     String?
+  category    OriginalProductCategory
+  material    String?
+
+  // Legacy fields kept temporarily for compatibility with the current Admin.
+  colour    String?
+  sizes     String[] @default([])
+  vintedUrl String?
+
+  tags            String[]                    @default([])
+  price           Decimal?                    @db.Decimal(10, 2)
+  currency        String                      @default("EUR")
+  availability    OriginalProductAvailability @default(COMING_SOON)
+  status          OriginalProductStatus       @default(DRAFT)
+  featured        Boolean                     @default(false)
+  displayOrder    Int?
+  metaTitle       String?
+  metaDescription String?
+  publishedAt     DateTime?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+
   images            OriginalProductImage[]
+  variants          OriginalProductVariant[]
   museumCollections MuseumCollectionOriginal[]
   orderItems        OrderItem[]
 
@@ -428,6 +433,56 @@ model OriginalProduct {
   @@index([publishedAt])
   @@index([collection])
   @@index([createdAt])
+}
+
+model OriginalProductVariant {
+  id                String @id @default(cuid())
+  originalProductId String
+
+  name      String
+  colour    String
+  colourHex String?
+  logoTone  OriginalProductLogoTone
+  sku       String?                 @unique
+
+  active    Boolean @default(true)
+  isDefault Boolean @default(false)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  originalProduct OriginalProduct               @relation(fields: [originalProductId], references: [id], onDelete: Cascade)
+  images          OriginalProductImage[]
+  stock           OriginalProductVariantStock[]
+  orderItems      OrderItem[]
+
+  @@index([originalProductId])
+  @@index([active])
+  @@index([isDefault])
+  @@index([sortOrder])
+  @@index([colour])
+}
+
+model OriginalProductVariantStock {
+  id        String @id @default(cuid())
+  variantId String
+
+  size  String
+  stock Int    @default(0)
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  variant OriginalProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@unique([variantId, size])
+  @@index([variantId])
+  @@index([size])
+  @@index([stock])
+  @@index([active])
 }
 
 model Order {
@@ -508,6 +563,8 @@ model OrderItem {
   memorabiliaId     String?
   originalProductId String?
 
+  originalProductVariantId String?
+
   itemType    OrderItemType
   productName String
   productSlug String?
@@ -515,7 +572,10 @@ model OrderItem {
   unitPrice   Decimal       @db.Decimal(10, 2)
   totalPrice  Decimal       @db.Decimal(10, 2)
   currency    String        @default("EUR")
-  size        String?
+
+  // Snapshot of the selected Original variant.
+  colour String?
+  size   String?
 
   stripePriceId   String?
   stripeProductId String?
@@ -523,31 +583,37 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  order           Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  artifact        Artifact?        @relation(fields: [artifactId], references: [id], onDelete: SetNull)
-  memorabilia     Memorabilia?     @relation(fields: [memorabiliaId], references: [id], onDelete: SetNull)
-  originalProduct OriginalProduct? @relation(fields: [originalProductId], references: [id], onDelete: SetNull)
+  order                  Order                   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  artifact               Artifact?               @relation(fields: [artifactId], references: [id], onDelete: SetNull)
+  memorabilia            Memorabilia?            @relation(fields: [memorabiliaId], references: [id], onDelete: SetNull)
+  originalProduct        OriginalProduct?        @relation(fields: [originalProductId], references: [id], onDelete: SetNull)
+  originalProductVariant OriginalProductVariant? @relation(fields: [originalProductVariantId], references: [id], onDelete: SetNull)
 
   @@index([orderId])
   @@index([artifactId])
   @@index([memorabiliaId])
   @@index([originalProductId])
+  @@index([originalProductVariantId])
   @@index([itemType])
   @@index([stripePriceId])
 }
 
 model OriginalProductImage {
-  id                String          @id @default(cuid())
+  id                String   @id @default(cuid())
   url               String
   alt               String?
-  sortOrder         Int             @default(0)
-  isCover           Boolean         @default(false)
+  sortOrder         Int      @default(0)
+  isCover           Boolean  @default(false)
   originalProductId String
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  originalProduct   OriginalProduct @relation(fields: [originalProductId], references: [id], onDelete: Cascade)
+  variantId         String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  originalProduct OriginalProduct         @relation(fields: [originalProductId], references: [id], onDelete: Cascade)
+  variant         OriginalProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@index([originalProductId])
+  @@index([variantId])
   @@index([sortOrder])
   @@index([isCover])
 }
@@ -1444,6 +1510,11 @@ enum PaymentStatus {
   FAILED
   REFUNDED
   PARTIALLY_REFUNDED
+}
+
+enum OriginalProductLogoTone {
+  BLACK
+  WHITE
 }
 
 enum OriginalProductStatus {

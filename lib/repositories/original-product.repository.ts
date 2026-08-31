@@ -10,8 +10,13 @@ type UpdateOriginalProductData =
     typeof prisma.originalProduct.update
   >[0]["data"];
 
+
 const publicOriginalProductInclude = {
   images: {
+    where: {
+      variantId: null,
+    },
+
     orderBy: [
       {
         isCover: "desc" as const,
@@ -21,7 +26,49 @@ const publicOriginalProductInclude = {
       },
     ],
   },
+
+  variants: {
+    where: {
+      active: true,
+    },
+
+    orderBy: [
+      {
+        isDefault: "desc" as const,
+      },
+      {
+        sortOrder: "asc" as const,
+      },
+      {
+        createdAt: "asc" as const,
+      },
+    ],
+
+    include: {
+      images: {
+        orderBy: [
+          {
+            isCover: "desc" as const,
+          },
+          {
+            sortOrder: "asc" as const,
+          },
+        ],
+      },
+
+      stock: {
+        where: {
+          active: true,
+        },
+
+        orderBy: {
+          size: "asc" as const,
+        },
+      },
+    },
+  },
 };
+
 
 function normalizeLimit(
   limit: number,
@@ -35,6 +82,7 @@ function normalizeLimit(
     maximum,
   );
 }
+
 
 /**
  * Crea un nuovo prodotto AGE202 Originals.
@@ -51,6 +99,7 @@ export async function createOriginalProduct(
   });
 }
 
+
 /**
  * Aggiorna un prodotto AGE202 Originals.
  */
@@ -62,9 +111,11 @@ export async function updateOriginalProduct(
     where: {
       id,
     },
+
     data,
   });
 }
+
 
 /**
  * Elimina un prodotto AGE202 Originals.
@@ -81,6 +132,7 @@ export async function deleteOriginalProduct(
     },
   });
 }
+
 
 /**
  * Restituisce tutti i prodotti Originals
@@ -107,6 +159,7 @@ export async function getAdminOriginalProducts() {
   });
 }
 
+
 /**
  * Restituisce un prodotto Originals tramite id.
  * Pensato per l'area Admin.
@@ -122,6 +175,7 @@ export async function getOriginalProductById(
     include: publicOriginalProductInclude,
   });
 }
+
 
 /**
  * Restituisce un prodotto Originals tramite slug
@@ -139,6 +193,7 @@ export async function getOriginalProductBySlug(
     include: publicOriginalProductInclude,
   });
 }
+
 
 /**
  * Restituisce tutti i prodotti Originals
@@ -168,6 +223,7 @@ export async function getPublishedOriginalProducts() {
     ],
   });
 }
+
 
 /**
  * Restituisce i prodotti Originals pubblicati
@@ -202,6 +258,7 @@ export async function getFeaturedOriginalProducts(
     ),
   });
 }
+
 
 /**
  * Restituisce i prodotti pubblicati appartenenti
@@ -245,9 +302,16 @@ export async function getOriginalProductsByCategory(
   });
 }
 
+
 /**
  * Restituisce un singolo prodotto Originals
  * visibile pubblicamente.
+ *
+ * Include:
+ * - gallery globale;
+ * - varianti colore attive;
+ * - immagini dedicate per variante;
+ * - stock attivo per taglia.
  */
 export async function getPublishedOriginalProductBySlug(
   slug: string,
@@ -262,6 +326,7 @@ export async function getPublishedOriginalProductBySlug(
   });
 }
 
+
 /**
  * Restituisce prodotti correlati della stessa
  * categoria, escludendo il prodotto corrente.
@@ -272,6 +337,7 @@ export async function getRelatedOriginalProducts({
   limit = 4,
 }: {
   productId: string;
+
   category:
     | "TSHIRT"
     | "POLO"
@@ -283,6 +349,7 @@ export async function getRelatedOriginalProducts({
     | "POSTER"
     | "ACCESSORY"
     | "OTHER";
+
   limit?: number;
 }) {
   return prisma.originalProduct.findMany({
@@ -319,6 +386,7 @@ export async function getRelatedOriginalProducts({
   });
 }
 
+
 /**
  * Restituisce gli slug dei prodotti Originals
  * pubblicati per generateStaticParams().
@@ -338,6 +406,7 @@ export async function getPublishedOriginalProductSlugs() {
     },
   });
 }
+
 
 /**
  * Restituisce i contatori principali

@@ -77,6 +77,23 @@ type MediaUploaderProps = {
   onCoverChange?: (
     coverUrl: string | null,
   ) => void;
+
+  /*
+   * Optional namespace for hidden form fields.
+   *
+   * IMPORTANT:
+   * When omitted, every hidden field keeps the exact
+   * same name used today. This preserves compatibility
+   * with every existing page already using MediaUploader.
+   *
+   * Example:
+   * fieldNamePrefix="variant_black"
+   *
+   * existingCoverImageId
+   * becomes
+   * variant_black_existingCoverImageId
+   */
+  fieldNamePrefix?: string;
 };
 
 function createFileKey(
@@ -155,7 +172,23 @@ export default function MediaUploader({
   existingImages = [],
   libraryAssets = [],
   onCoverChange,
+  fieldNamePrefix,
 }: MediaUploaderProps) {
+  /*
+   * Backward-compatible field naming.
+   *
+   * No prefix = original field names.
+   * Prefix supplied = isolated field namespace.
+   */
+  const fieldName =
+    useCallback(
+      (baseName: string) =>
+        fieldNamePrefix
+          ? `${fieldNamePrefix}_${baseName}`
+          : baseName,
+      [fieldNamePrefix],
+    );
+
   const [images, setImages] =
     useState<MediaImage[]>(
       () =>
@@ -924,7 +957,7 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="existingCoverImageId"
+        name={fieldName("existingCoverImageId")}
         value={
           existingCoverImageId
         }
@@ -932,7 +965,7 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="browserUploadedCoverId"
+        name={fieldName("browserUploadedCoverId")}
         value={
           browserUploadedCoverId
         }
@@ -940,7 +973,7 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="browserUploadedImages"
+        name={fieldName("browserUploadedImages")}
         value={
           browserUploadedImagesJson
         }
@@ -948,7 +981,7 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="libraryCoverMediaAssetId"
+        name={fieldName("libraryCoverMediaAssetId")}
         value={
           libraryCoverMediaAssetId
         }
@@ -956,7 +989,7 @@ export default function MediaUploader({
 
       <input
         type="hidden"
-        name="mediaOrder"
+        name={fieldName("mediaOrder")}
         value={mediaOrder}
       />
 
@@ -967,7 +1000,7 @@ export default function MediaUploader({
               image.mediaAssetId
             }
             type="hidden"
-            name="selectedMediaAssetIds"
+            name={fieldName("selectedMediaAssetIds")}
             value={
               image.mediaAssetId
             }
@@ -980,7 +1013,7 @@ export default function MediaUploader({
           <input
             key={imageId}
             type="hidden"
-            name="removedImageIds"
+            name={fieldName("removedImageIds")}
             value={imageId}
           />
         ),
