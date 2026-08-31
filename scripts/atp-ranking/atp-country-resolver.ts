@@ -11,6 +11,15 @@ export type AtpCountryResolution = {
 };
 
 
+const STATIC_ATP_COUNTRY_MAP =
+  new Map<string, string>([
+    [
+      "BIH",
+      "Bosnia and Herzegovina",
+    ],
+  ]);
+
+
 function normalizeCountryCode(
   value: string | null | undefined,
 ): string | null {
@@ -158,6 +167,36 @@ export function buildAtpCountryMap(
       countryCode,
       country,
     );
+  }
+
+
+  /*
+   * Fallback statici verificati.
+   *
+   * Servono per nuovi ingressi ATP il cui
+   * countryCode non è ancora presente nello
+   * snapshot AGE202.
+   *
+   * Non sovrascriviamo mai un valore già
+   * conosciuto dal database.
+   */
+  for (
+    const [
+      countryCode,
+      country,
+    ]
+    of STATIC_ATP_COUNTRY_MAP
+  ) {
+    if (
+      !countryMap.has(
+        countryCode,
+      )
+    ) {
+      countryMap.set(
+        countryCode,
+        country,
+      );
+    }
   }
 
 
