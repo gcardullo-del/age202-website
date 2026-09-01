@@ -1,4 +1,6 @@
-import type { MetadataRoute } from "next";
+import type {
+  MetadataRoute,
+} from "next";
 
 const siteUrl =
   "https://www.age202.com";
@@ -9,9 +11,12 @@ export default function robots():
     rules: [
       {
         userAgent: "*",
+
         allow: "/",
+
         disallow: [
           "/admin/",
+          "/api/",
         ],
       },
     ],

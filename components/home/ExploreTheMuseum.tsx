@@ -32,7 +32,7 @@ const museumRooms = [
       "Explore the living archive of today's tour, with rankings, player profiles, careers, titles and museum connections.",
     badge: "Living Archive",
     status: "open" as const,
-    href: "/atp-ranking",
+    href: "/players/other-players",
     accent: "#4F8CFF",
     icon: (
       <LibraryBig

@@ -378,8 +378,8 @@ export default function MuseumHome({
 
               [
                 Trophy,
-                "Hall of Fame",
-                "Profiles, records and artifacts connected to tennis legends.",
+                "Legends",
+                "Profiles, careers, achievements and stories connected to tennis legends.",
               ],
 
               [
