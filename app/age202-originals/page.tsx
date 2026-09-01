@@ -1,5 +1,5 @@
 import type {
- Metadata,
+  Metadata,
 } from "next";
 
 import Image from "next/image";
@@ -610,11 +610,11 @@ export default async function OriginalsPage() {
                   202
                 </p>
 
-                <p className="mt-5 text-[12px] font-black uppercase tracking-[0.32em] text-[#050B18]">
+                <p className="mt-5 text-[12px] font-black uppercase tracking-[0.32em] text-[#C8FF00]">
                   Objects for the court.
                 </p>
 
-                <p className="mt-2 text-[12px] font-black uppercase tracking-[0.32em] text-[#050B18]">
+                <p className="mt-2 text-[12px] font-black uppercase tracking-[0.32em] text-[#C8FF00]">
                   Objects for the archive.
                 </p>
               </div>
