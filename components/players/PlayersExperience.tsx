@@ -117,9 +117,9 @@ function ArchiveGatewayCard({
       variants={fadeUp}
       transition={{ duration: 0.65, ease: easePremium }}
       className={`group relative overflow-hidden rounded-[30px] border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.28)] transition duration-500 hover:-translate-y-1 hover:border-white/20 ${
-        wide
-          ? "h-[330px] sm:h-[360px]"
-          : "aspect-[16/8.5] min-h-[330px]"
+    wide
+  ? "h-[520px] sm:h-[600px] lg:h-[680px]"
+  : "aspect-[16/8.5] min-h-[330px]"
       }`}
       style={{ background }}
     >
@@ -686,17 +686,20 @@ export default function PlayersExperience({
 
             <div className="grid gap-5">
               <ArchiveGatewayCard
-                index="03"
-                eyebrow="The future of tennis"
-                title="Next Gen Archive"
-                description="Meet the emerging generation building the future of professional tennis and the stories still being written."
-                href="/next-gen"
-                cta="Enter Next Gen"
-                visual="NEXT"
-                accent="#4EB3FF"
-                background="radial-gradient(circle at 74% 22%, rgba(78,179,255,0.20), transparent 28%), linear-gradient(145deg, #071827 0%, #07101D 50%, #030711 100%)"
-                wide
-              />
+  index="03"
+  eyebrow="The future of tennis"
+  title="Next Gen Archive"
+  description="Meet the emerging generation building the future of professional tennis and the stories still being written."
+  href="/next-gen"
+  cta="Enter Next Gen"
+  visual="NEXT"
+  accent="#C8FF00"
+  background="radial-gradient(circle at 74% 22%, rgba(200,255,0,0.18), transparent 28%), linear-gradient(145deg, #071827 0%, #07101D 50%, #030711 100%)"
+  image="/players/next-gen/next-gen-archive-hero.png"
+  imageAlt="AGE202 Next Gen Archive"
+  imagePosition="object-[center_42%]"
+  wide
+/>
             </div>
           </div>
 
