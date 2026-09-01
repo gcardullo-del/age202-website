@@ -1,5 +1,10 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import type {
+  Metadata,
+} from "next";
+
+import {
+  notFound,
+} from "next/navigation";
 
 import {
   CareerEventCategory,
@@ -42,13 +47,68 @@ const LIVE_ARCHIVE_SLUGS =
   ]);
 
 /* =========================================================
+   SEO
+========================================================= */
+
+type ChampionSeoConfig = {
+  title: string;
+  description: string;
+};
+
+const CHAMPION_SEO: Record<
+  string,
+  ChampionSeoConfig
+> = {
+  sinner: {
+    title:
+      "Jannik Sinner: Career, Grand Slams & Tennis Archive",
+
+    description:
+      "Explore Jannik Sinner's career, Grand Slam achievements, titles, milestones and tennis story through the AGE202 digital tennis archive.",
+  },
+
+  alcaraz: {
+    title:
+      "Carlos Alcaraz: Career, Grand Slams & Tennis Archive",
+
+    description:
+      "Explore Carlos Alcaraz's career, Grand Slam achievements, titles, milestones and tennis story through the AGE202 digital tennis archive.",
+  },
+
+  federer: {
+    title:
+      "Roger Federer: Career, Grand Slams & Tennis Archive",
+
+    description:
+      "Explore Roger Federer's legendary career, Grand Slam achievements, titles, milestones and tennis legacy through the AGE202 digital tennis archive.",
+  },
+
+  nadal: {
+    title:
+      "Rafael Nadal: Career, Grand Slams & Tennis Archive",
+
+    description:
+      "Explore Rafael Nadal's legendary career, Grand Slam achievements, titles, milestones and tennis legacy through the AGE202 digital tennis archive.",
+  },
+
+  djokovic: {
+    title:
+      "Novak Djokovic: Career, Grand Slams & Tennis Archive",
+
+    description:
+      "Explore Novak Djokovic's career, Grand Slam achievements, titles, records, milestones and tennis legacy through the AGE202 digital tennis archive.",
+  },
+};
+
+/* =========================================================
    STATIC ROUTES
 ========================================================= */
 
 export function generateStaticParams() {
   return champions.map(
     (champion) => ({
-      player: champion.slug,
+      player:
+        champion.slug,
     }),
   );
 }
@@ -60,27 +120,110 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ArchivePageProps): Promise<Metadata> {
-  const { player } = await params;
+  const {
+    player,
+  } = await params;
 
   const champion =
-    getChampionBySlug(player);
+    getChampionBySlug(
+      player,
+    );
 
   if (!champion) {
     return {
       title:
-        "Archive Not Found | AGE202",
+        "Archive Not Found",
+
       description:
         "The requested AGE202 champion archive could not be found.",
+
+      robots: {
+        index:
+          false,
+
+        follow:
+          false,
+      },
     };
   }
 
+  const seo =
+    CHAMPION_SEO[
+      champion.slug
+    ];
+
+  const title =
+    seo?.title ??
+    `${champion.name}: Career & Tennis Archive`;
+
+  const description =
+    seo?.description ??
+    champion.description;
+
+  const canonical =
+    `/archives/${champion.slug}`;
+
   return {
-    title: `${champion.name} Archive | AGE202`,
-    description:
-      champion.description,
+    title,
+
+    description,
+
     alternates: {
-      canonical:
-        `/archives/${champion.slug}`,
+      canonical,
+    },
+
+    openGraph: {
+      type:
+        "profile",
+
+      url:
+        canonical,
+
+      title:
+        `${title} | AGE202`,
+
+      description,
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
+    },
+
+    twitter: {
+      card:
+        "summary_large_image",
+
+      title:
+        `${title} | AGE202`,
+
+      description,
+    },
+
+    robots: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
   };
 }
@@ -92,10 +235,14 @@ export async function generateMetadata({
 export default async function ArchivePage({
   params,
 }: ArchivePageProps) {
-  const { player } = await params;
+  const {
+    player,
+  } = await params;
 
   const champion =
-    getChampionBySlug(player);
+    getChampionBySlug(
+      player,
+    );
 
   if (!champion) {
     notFound();
@@ -161,7 +308,8 @@ export default async function ArchivePage({
           },
 
           select: {
-            year: true,
+            year:
+              true,
           },
 
           orderBy: {
@@ -201,14 +349,17 @@ export default async function ArchivePage({
 
   const nextChampion =
     champions[
-      (currentChampionIndex + 1) %
+      (currentChampionIndex +
+        1) %
         champions.length
     ];
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#050b18] text-white">
       <ChampionArchive
-        champion={champion}
+        champion={
+          champion
+        }
         nextChampion={
           nextChampion
         }

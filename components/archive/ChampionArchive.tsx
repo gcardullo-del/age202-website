@@ -51,6 +51,20 @@ type ChampionArchiveProps = {
   davisCupTitles?: number;
 };
 
+const SITE_URL =
+  "https://www.age202.com";
+
+function serializeJsonLd(
+  value: unknown,
+) {
+  return JSON.stringify(
+    value,
+  ).replace(
+    /</g,
+    "\\u003c",
+  );
+}
+
 export default function ChampionArchive({
   champion,
   nextChampion,
@@ -69,15 +83,148 @@ export default function ChampionArchive({
       davisCupTitles,
     });
 
+  const archiveUrl =
+    `${SITE_URL}/archives/${champion.slug}`;
+
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "ProfilePage",
+
+        "@id":
+          `${archiveUrl}#profilepage`,
+
+        url:
+          archiveUrl,
+
+        name:
+          `${champion.name} Tennis Archive`,
+
+        description:
+          champion.description,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          url:
+            SITE_URL,
+
+          name:
+            "AGE202",
+
+          alternateName:
+            "AGE202 Digital Tennis Museum",
+        },
+
+        mainEntity: {
+          "@id":
+            `${archiveUrl}#person`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${archiveUrl}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "Person",
+
+        "@id":
+          `${archiveUrl}#person`,
+
+        name:
+          champion.name,
+
+        description:
+          champion.description,
+
+        url:
+          archiveUrl,
+
+        mainEntityOfPage: {
+          "@id":
+            `${archiveUrl}#profilepage`,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${archiveUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              `${champion.name} Tennis Archive`,
+
+            item:
+              archiveUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            serializeJsonLd(
+              structuredData,
+            ),
+        }}
+      />
+
       <ArchiveHero
-        champion={champion}
+        champion={
+          champion
+        }
+        liveStats={
+          liveTrophyStats
+        }
       />
 
       <MuseumNavigation
-        accent={champion.accent}
-        playerName={champion.name}
+        accent={
+          champion.accent
+        }
+        playerName={
+          champion.name
+        }
       />
 
       {museumPlayer ? (
@@ -95,28 +242,40 @@ export default function ChampionArchive({
       ) : null}
 
       <ChampionStory
-        champion={champion}
+        champion={
+          champion
+        }
       />
 
       <CareerTimeline
-        champion={champion}
+        champion={
+          champion
+        }
       />
 
       {museumPlayer ? (
         <PlayingStyle
-          player={museumPlayer}
+          player={
+            museumPlayer
+          }
         />
       ) : null}
 
       {museumPlayer ? (
         <EquipmentSection
-          player={museumPlayer}
+          player={
+            museumPlayer
+          }
         />
       ) : null}
 
       <TrophyRoom
-        champion={champion}
-        liveStats={liveTrophyStats}
+        champion={
+          champion
+        }
+        liveStats={
+          liveTrophyStats
+        }
       />
 
       {archivePlayerId &&
@@ -139,22 +298,32 @@ export default function ChampionArchive({
       ) : null}
 
       <LegacySection
-        champion={champion}
+        champion={
+          champion
+        }
       />
 
       {museumPlayer ? (
         <PlayerArtifacts
-          player={museumPlayer}
+          player={
+            museumPlayer
+          }
         />
       ) : null}
 
       <DigitalCertificate
-        champion={champion}
+        champion={
+          champion
+        }
       />
 
       <NextChampion
-        champion={champion}
-        nextChampion={nextChampion}
+        champion={
+          champion
+        }
+        nextChampion={
+          nextChampion
+        }
       />
     </>
   );

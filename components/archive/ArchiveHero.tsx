@@ -11,17 +11,49 @@ import type {
   Champion,
 } from "@/data/champions";
 
+import type {
+  PlayerTrophyStats,
+} from "@/lib/services/players/player-trophy-stats.service";
+
 type ArchiveHeroProps = {
   champion: Champion;
+
+  liveStats:
+    | PlayerTrophyStats
+    | null;
 };
 
 export default function ArchiveHero({
   champion,
+  liveStats,
 }: ArchiveHeroProps) {
-  const debutSuffix = String(
-    champion.debutYear,
-  ).slice(-2);
+  const debutSuffix =
+    String(
+      champion.debutYear,
+    ).slice(-2);
 
+  /*
+   * Le statistiche live vengono utilizzate
+   * quando AGE202 possiede un archivio tornei
+   * collegato al giocatore.
+   *
+   * In assenza di dati live utilizziamo
+   * i valori editoriali presenti nel Champion.
+   *
+   * Weeks at No. 1 resta editoriale perché
+   * PlayerTrophyStats non calcola ancora
+   * le settimane al numero uno.
+   */
+  const grandSlams =
+    liveStats?.recordedGrandSlams ??
+    champion.trophies.grandSlams;
+
+  const atpTitles =
+    liveStats?.recordedTitles ??
+    champion.trophies.atpTitles;
+
+  const weeksAtNo1 =
+    champion.trophies.weeksAtNo1;
 
   return (
     <section className="relative isolate flex min-h-[calc(100svh-96px)] overflow-hidden border-b border-white/[0.07] bg-[#050B18]">
@@ -124,8 +156,10 @@ export default function ArchiveHero({
                 style={{
                   color:
                     champion.accent,
+
                   borderColor:
                     `${champion.accent}55`,
+
                   backgroundColor:
                     `${champion.accent}12`,
                 }}
@@ -136,6 +170,7 @@ export default function ArchiveHero({
                   style={{
                     backgroundColor:
                       champion.accent,
+
                     boxShadow:
                       `0 0 14px ${champion.accent}`,
                   }}
@@ -163,6 +198,7 @@ export default function ArchiveHero({
                 style={{
                   backgroundColor:
                     champion.accent,
+
                   boxShadow:
                     `0 0 12px ${champion.accent}`,
                 }}
@@ -227,25 +263,28 @@ export default function ArchiveHero({
                   </p>
 
                   {champion.signatureImage ? (
-  <div className="mt-5">
-    <Image
-      src={champion.signatureImage}
-      alt={`${champion.name} signature`}
-      width={220}
-      height={90}
-      className="h-auto w-[150px] opacity-85 brightness-0 invert sm:w-[185px]"
-    />
-  </div>
-) : (
-  <p
-    className="mt-5 text-sm font-semibold tracking-[0.08em]"
-    style={{
-      color: champion.accent,
-    }}
-  >
-    {champion.name}
-  </p>
-)}
+                    <div className="mt-5">
+                      <Image
+                        src={
+                          champion.signatureImage
+                        }
+                        alt={`${champion.name} signature`}
+                        width={220}
+                        height={90}
+                        className="h-auto w-[150px] opacity-85 brightness-0 invert sm:w-[185px]"
+                      />
+                    </div>
+                  ) : (
+                    <p
+                      className="mt-5 text-sm font-semibold tracking-[0.08em]"
+                      style={{
+                        color:
+                          champion.accent,
+                      }}
+                    >
+                      {champion.name}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -265,6 +304,7 @@ export default function ArchiveHero({
                 style={{
                   backgroundColor:
                     champion.accent,
+
                   boxShadow:
                     `0 16px 45px ${champion.accent}20`,
                 }}
@@ -319,8 +359,7 @@ export default function ArchiveHero({
               <HeroStat
                 label="Grand Slams"
                 value={String(
-                  champion.trophies
-                    .grandSlams,
+                  grandSlams,
                 )}
                 accent={
                   champion.accent
@@ -330,8 +369,7 @@ export default function ArchiveHero({
               <HeroStat
                 label="ATP Titles"
                 value={String(
-                  champion.trophies
-                    .atpTitles,
+                  atpTitles,
                 )}
                 accent={
                   champion.accent
@@ -342,8 +380,7 @@ export default function ArchiveHero({
               <HeroStat
                 label="Weeks at No. 1"
                 value={String(
-                  champion.trophies
-                    .weeksAtNo1,
+                  weeksAtNo1,
                 )}
                 accent={
                   champion.accent
@@ -368,12 +405,14 @@ export default function ArchiveHero({
 
           <ArchiveStripItem
             label="Collection"
-            value={champion.name}
+            value={
+              champion.name
+            }
           />
 
           <ArchiveStripItem
             label="Classification"
-            value="Hall of Champions"
+            value="Champion Archive"
           />
 
           <ArchiveStripItem
@@ -394,6 +433,7 @@ export default function ArchiveHero({
         style={{
           background:
             `linear-gradient(90deg, transparent, ${champion.accent}, transparent)`,
+
           boxShadow:
             `0 0 24px ${champion.accent}`,
         }}
@@ -425,7 +465,8 @@ function HeroStat({
       <p
         className="truncate text-2xl font-black tracking-[-0.035em] sm:text-3xl"
         style={{
-          color: accent,
+          color:
+            accent,
         }}
       >
         {value}
@@ -482,7 +523,8 @@ function ArchiveStripItem({
         style={
           accent
             ? {
-                color: accent,
+                color:
+                  accent,
               }
             : undefined
         }
