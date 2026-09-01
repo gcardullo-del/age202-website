@@ -69,7 +69,7 @@ const cards = [
       "AGE202 WTA Archive",
 
     mobilePosition:
-      "58% 45%",
+      "98% 45%",
   },
 ] as const;
 
@@ -79,7 +79,7 @@ export default function LiveTennisArchives() {
     <section className="relative overflow-hidden border-b border-white/10 bg-[#030812] px-4 py-16 sm:px-8 sm:py-24 lg:px-12 lg:py-32">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(215,255,0,.07),transparent_26%),radial-gradient(circle_at_82%_72%,rgba(255,255,255,.035),transparent_26%)]" />
 
-      <div className="relative mx-auto max-w-[1500px]">
+      <div className="relative mx-auto max-w-[1900px]">
         <div className="mb-8 flex flex-col justify-between gap-5 border-t border-white/10 pt-5 sm:mb-10 sm:gap-6 sm:pt-6 lg:mb-14 lg:flex-row lg:items-end">
           <div>
             <div className="mb-3 flex items-center gap-3 sm:mb-4">
@@ -146,7 +146,7 @@ export default function LiveTennisArchives() {
                     index *
                     0.08,
                 }}
-                className="group relative min-h-[500px] overflow-hidden rounded-[28px] border border-white/10 bg-[#07101D] shadow-[0_24px_70px_rgba(0,0,0,.28)] sm:min-h-[560px] sm:rounded-[34px] sm:shadow-[0_28px_90px_rgba(0,0,0,.28)]"
+                className="group relative min-h-[500px] overflow-hidden rounded-[28px] border border-white/10 bg-[#07101D] shadow-[0_24px_70px_rgba(0,0,0,.28)] sm:min-h-[560px] sm:rounded-[34px] sm:shadow-[0_28px_90px_rgba(0,0,0,.28)] lg:min-h-[520px] xl:min-h-[520px] 2xl:min-h-[540px]"
               >
                 <Link
                   href={
@@ -165,8 +165,8 @@ export default function LiveTennisArchives() {
                     card.alt
                   }
                   fill
-                  sizes="(max-width: 1280px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035] sm:object-center"
+                  sizes="(max-width: 1279px) 100vw, (max-width: 1900px) 50vw, 950px"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
                   style={{
                     objectPosition:
                       card.mobilePosition,
