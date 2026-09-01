@@ -46,6 +46,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  async redirects() {
+    return [
+      {
+        source:
+          "/hall-of-fame",
+
+        destination:
+          "/legends",
+
+        permanent:
+          true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

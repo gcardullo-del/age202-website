@@ -1,3 +1,7 @@
+import type {
+  Metadata,
+} from "next";
+
 import {
   TennisHistoryEntryType,
   TennisHistoryEra,
@@ -21,6 +25,45 @@ import {
 
 export const dynamic =
   "force-dynamic";
+
+
+export const metadata: Metadata = {
+  title:
+    "History of Tennis | Origins, Tournaments & Legends | AGE202",
+
+  description:
+    "Explore the history of tennis from its origins and the world's oldest tournaments to the Open Era, legendary players, rivalries and defining moments.",
+
+  alternates: {
+    canonical:
+      "/tennis-history",
+  },
+
+  openGraph: {
+    title:
+      "History of Tennis | AGE202 Digital Tennis Museum",
+
+    description:
+      "Discover world tennis history through its origins, oldest tournaments, legendary players, rivalries and defining eras.",
+
+    url:
+      "/tennis-history",
+
+    type:
+      "website",
+  },
+
+  twitter: {
+    card:
+      "summary_large_image",
+
+    title:
+      "History of Tennis | AGE202",
+
+    description:
+      "Explore world tennis history, from the origins of the sport to legendary tournaments, players and rivalries.",
+  },
+};
 
 
 function mapEra(
