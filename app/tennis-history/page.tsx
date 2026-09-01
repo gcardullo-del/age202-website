@@ -29,7 +29,7 @@ export const dynamic =
 
 export const metadata: Metadata = {
   title:
-    "History of Tennis | Origins, Tournaments & Legends | AGE202",
+    "History of Tennis | Origins, Tournaments & Legends",
 
   description:
     "Explore the history of tennis from its origins and the world's oldest tournaments to the Open Era, legendary players, rivalries and defining moments.",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
       "summary_large_image",
 
     title:
-      "History of Tennis | AGE202",
+      "History of Tennis",
 
     description:
       "Explore world tennis history, from the origins of the sport to legendary tournaments, players and rivalries.",
