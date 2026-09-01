@@ -18,6 +18,7 @@ import {
   LayoutDashboard,
   ListOrdered,
   LogOut,
+  MessageSquareText,
   ReceiptText,
   Settings,
   ShoppingBag,
@@ -61,6 +62,11 @@ const navigationItems = [
     label: "Notifications",
     href: "/admin/notifications",
     icon: Bell,
+  },
+  {
+    label: "Feedback",
+    href: "/admin/feedback",
+    icon: MessageSquareText,
   },
   {
     label: "Players",

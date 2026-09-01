@@ -32,6 +32,7 @@ import LiveTennisArchives from "@/components/home/LiveTennisArchives";
 import MuseumCollections from "@/components/public/MuseumCollections";
 import MuseumHero from "@/components/public/MuseumHero";
 import MuseumTimeline from "@/components/public/MuseumTimeline";
+import MuseumFeedback from "@/components/public/MuseumFeedback";
 import OpeningExperience from "@/components/public/OpeningExperience";
 
 import type {
@@ -450,6 +451,8 @@ export default function MuseumHome({
           </div>
         </section>
 
+        <MuseumFeedback />
+
         <section className="relative overflow-hidden border-t border-white/10 px-6 py-28 text-center sm:px-8 lg:py-40">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(204,255,0,.10),transparent_45%)]" />
 
@@ -499,3 +502,4 @@ export default function MuseumHome({
     </>
   );
 }
+
