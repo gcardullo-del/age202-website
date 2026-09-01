@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+import type {
+  Metadata,
+} from "next";
 
 import Link from "next/link";
 
@@ -22,42 +24,288 @@ import {
   type GrandSlamData,
 } from "@/lib/data/grand-slams";
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const PAGE_URL =
+  `${SITE_URL}/results/grand-slams`;
+
+const PAGE_TITLE =
+  "Grand Slam Tennis: Tournaments, History & Champions";
+
+const PAGE_DESCRIPTION =
+  "Explore Grand Slam tennis through the Australian Open, Roland Garros, Wimbledon and the US Open, with tournament history, champions, editions, records and iconic moments.";
+
 export const metadata: Metadata = {
-  title: "Grand Slam Archive | AGE202",
+  title:
+    PAGE_TITLE,
+
   description:
-    "Explore the complete AGE202 Grand Slam archive, including the Australian Open, Roland Garros, Wimbledon and the US Open.",
+    PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical:
+      "/results/grand-slams",
+  },
+
   keywords: [
     "Grand Slam tennis",
+    "Grand Slam tournaments",
+    "Grand Slam history",
+    "Grand Slam champions",
+    "Grand Slam winners",
+    "tennis Grand Slam",
     "Australian Open",
     "Roland Garros",
+    "French Open",
     "Wimbledon",
     "US Open",
+    "tennis majors",
     "tennis history",
     "tennis champions",
     "AGE202",
   ],
+
   openGraph: {
-    title: "Grand Slam Archive | AGE202",
+    type:
+      "website",
+
+    url:
+      "/results/grand-slams",
+
+    title:
+      `${PAGE_TITLE} | AGE202`,
+
     description:
-      "Explore the history, identity and champions of the four Grand Slam tournaments.",
-    type: "website",
+      PAGE_DESCRIPTION,
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
   },
+
   twitter: {
-    card: "summary_large_image",
-    title: "Grand Slam Archive | AGE202",
+    card:
+      "summary_large_image",
+
+    title:
+      `${PAGE_TITLE} | AGE202`,
+
     description:
-      "Explore the history, identity and champions of the four Grand Slam tournaments.",
+      PAGE_DESCRIPTION,
   },
+
   robots: {
-    index: true,
-    follow: true,
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
   },
-  category: "Grand Slam tennis",
+
+  category:
+    "Grand Slam tennis",
 };
 
+function serializeJsonLd(
+  value: unknown,
+) {
+  return JSON.stringify(
+    value,
+  ).replace(
+    /</g,
+    "\\u003c",
+  );
+}
+
+function getAbsoluteUrl(
+  href: string,
+) {
+  return new URL(
+    href,
+    SITE_URL,
+  ).toString();
+}
+
 export default function GrandSlamsPage() {
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${PAGE_URL}#collectionpage`,
+
+        url:
+          PAGE_URL,
+
+        name:
+          "Grand Slam Tennis Archive",
+
+        headline:
+          PAGE_TITLE,
+
+        description:
+          PAGE_DESCRIPTION,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          url:
+            SITE_URL,
+
+          name:
+            "AGE202",
+
+          alternateName:
+            "AGE202 Digital Tennis Museum",
+        },
+
+        mainEntity: {
+          "@id":
+            `${PAGE_URL}#grand-slams`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${PAGE_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${PAGE_URL}#grand-slams`,
+
+        name:
+          "The Four Grand Slam Tennis Tournaments",
+
+        numberOfItems:
+          grandSlamList.length,
+
+        itemListOrder:
+          "https://schema.org/ItemListOrderAscending",
+
+        itemListElement:
+          grandSlamList.map(
+            (
+              tournament,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              name:
+                tournament.name,
+
+              url:
+                getAbsoluteUrl(
+                  getGrandSlamHref(
+                    tournament.slug,
+                  ),
+                ),
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${PAGE_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "Grand Slams",
+
+            item:
+              PAGE_URL,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#050B18] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            serializeJsonLd(
+              structuredData,
+            ),
+        }}
+      />
+
       <GrandSlamsHero />
 
       <GrandSlamsOverview />
@@ -92,12 +340,20 @@ function GrandSlamsHero() {
             href="/results"
             className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-4 py-2.5 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/45 transition hover:border-[#4EB3FF] hover:text-[#4EB3FF]"
           >
-            <ArrowLeft size={13} aria-hidden="true" />
+            <ArrowLeft
+              size={13}
+              aria-hidden="true"
+            />
+
             Results
           </Link>
 
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-4 py-2.5 font-mono text-[8px] uppercase tracking-[0.18em] text-white/42">
-            <Globe2 size={12} aria-hidden="true" />
+            <Globe2
+              size={12}
+              aria-hidden="true"
+            />
+
             Four majors · One archive
           </span>
         </div>
@@ -136,7 +392,11 @@ function GrandSlamsHero() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#4EB3FF] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#050B18] transition hover:scale-[1.02]"
               >
                 Explore tournaments
-                <ArrowRight size={14} aria-hidden="true" />
+
+                <ArrowRight
+                  size={14}
+                  aria-hidden="true"
+                />
               </a>
 
               <Link
@@ -144,7 +404,11 @@ function GrandSlamsHero() {
                 className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.025] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white/62 transition hover:border-[#4EB3FF] hover:text-[#4EB3FF]"
               >
                 Results archive
-                <Layers3 size={14} aria-hidden="true" />
+
+                <Layers3
+                  size={14}
+                  aria-hidden="true"
+                />
               </Link>
             </div>
           </div>
@@ -165,7 +429,11 @@ function GrandSlamsHero() {
                 </div>
 
                 <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] text-[#4EB3FF]">
-                  <Crown size={20} strokeWidth={1.4} aria-hidden="true" />
+                  <Crown
+                    size={20}
+                    strokeWidth={1.4}
+                    aria-hidden="true"
+                  />
                 </span>
               </div>
 
@@ -203,10 +471,29 @@ function GrandSlamsHero() {
         </div>
 
         <div className="grid gap-px overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/10 sm:grid-cols-2 xl:grid-cols-4">
-          <HeroFact value="4" label="Grand Slam tournaments" index={1} />
-          <HeroFact value="1877" label="Oldest major founded" index={2} />
-          <HeroFact value="3" label="Playing surfaces" index={3} />
-          <HeroFact value="1" label="Complete AGE202 archive" index={4} />
+          <HeroFact
+            value="4"
+            label="Grand Slam tournaments"
+            index={1}
+          />
+
+          <HeroFact
+            value="1877"
+            label="Oldest major founded"
+            index={2}
+          />
+
+          <HeroFact
+            value="3"
+            label="Playing surfaces"
+            index={3}
+          />
+
+          <HeroFact
+            value="1"
+            label="Complete AGE202 archive"
+            index={4}
+          />
         </div>
       </div>
     </section>
@@ -219,11 +506,20 @@ type HeroDetailProps = {
   icon: typeof Trophy;
 };
 
-function HeroDetail({ label, value, icon: Icon }: HeroDetailProps) {
+function HeroDetail({
+  label,
+  value,
+  icon: Icon,
+}: HeroDetailProps) {
   return (
     <div className="flex items-center justify-between gap-5 border-b border-white/10 py-4 last:border-b-0">
       <dt className="inline-flex items-center gap-3 font-mono text-[8px] uppercase tracking-[0.18em] text-white/34">
-        <Icon size={13} className="text-[#4EB3FF]" aria-hidden="true" />
+        <Icon
+          size={13}
+          className="text-[#4EB3FF]"
+          aria-hidden="true"
+        />
+
         {label}
       </dt>
 
@@ -240,7 +536,11 @@ type HeroFactProps = {
   index: number;
 };
 
-function HeroFact({ value, label, index }: HeroFactProps) {
+function HeroFact({
+  value,
+  label,
+  index,
+}: HeroFactProps) {
   return (
     <div className="flex min-h-[112px] items-center justify-between bg-[#071021]/94 px-6 py-5">
       <div>
@@ -322,7 +622,11 @@ function OverviewCard({
   return (
     <article className="group rounded-[1.7rem] border border-white/10 bg-[#07101D] p-6 transition hover:-translate-y-1 hover:border-[#4EB3FF]">
       <span className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[#4EB3FF]">
-        <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
+        <Icon
+          size={18}
+          strokeWidth={1.4}
+          aria-hidden="true"
+        />
       </span>
 
       <p className="mt-7 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/28">
@@ -333,7 +637,9 @@ function OverviewCard({
         {value}
       </h3>
 
-      <p className="mt-4 text-xs leading-6 text-white/35">{description}</p>
+      <p className="mt-4 text-xs leading-6 text-white/35">
+        {description}
+      </p>
     </article>
   );
 }
@@ -352,13 +658,24 @@ function GrandSlamGrid() {
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {grandSlamList.map((tournament, index) => (
-            <GrandSlamCard
-              key={tournament.slug}
-              tournament={tournament}
-              index={index}
-            />
-          ))}
+          {grandSlamList.map(
+            (
+              tournament,
+              index,
+            ) => (
+              <GrandSlamCard
+                key={
+                  tournament.slug
+                }
+                tournament={
+                  tournament
+                }
+                index={
+                  index
+                }
+              />
+            ),
+          )}
         </div>
       </div>
     </section>
@@ -366,8 +683,11 @@ function GrandSlamGrid() {
 }
 
 type GrandSlamCardProps = {
-  tournament: GrandSlamData;
-  index: number;
+  tournament:
+    GrandSlamData;
+
+  index:
+    number;
 };
 
 function GrandSlamCard({
@@ -376,7 +696,9 @@ function GrandSlamCard({
 }: GrandSlamCardProps) {
   return (
     <Link
-      href={getGrandSlamHref(tournament.slug)}
+      href={getGrandSlamHref(
+        tournament.slug,
+      )}
       className="group relative min-h-[460px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D] p-7 transition duration-300 hover:-translate-y-1 hover:border-white/25 sm:p-9"
       style={{
         background: `
@@ -391,7 +713,8 @@ function GrandSlamCard({
       <div
         className="pointer-events-none absolute -bottom-28 -right-28 h-96 w-96 rounded-full opacity-40 blur-3xl"
         style={{
-          backgroundColor: tournament.colors.glow,
+          backgroundColor:
+            tournament.colors.glow,
         }}
       />
 
@@ -405,7 +728,8 @@ function GrandSlamCard({
             <p
               className="font-mono text-[8px] font-black uppercase tracking-[0.2em]"
               style={{
-                color: tournament.colors.primary,
+                color:
+                  tournament.colors.primary,
               }}
             >
               {tournament.code} · Grand Slam 0{index + 1}
@@ -419,10 +743,15 @@ function GrandSlamCard({
           <span
             className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.035]"
             style={{
-              color: tournament.colors.primary,
+              color:
+                tournament.colors.primary,
             }}
           >
-            <Trophy size={19} strokeWidth={1.4} aria-hidden="true" />
+            <Trophy
+              size={19}
+              strokeWidth={1.4}
+              aria-hidden="true"
+            />
           </span>
         </div>
 
@@ -441,9 +770,26 @@ function GrandSlamCard({
         </div>
 
         <div className="mt-auto grid gap-3 pt-10 sm:grid-cols-3">
-          <TournamentFact label="Surface" value={tournament.surface} />
-          <TournamentFact label="Founded" value={tournament.founded} />
-          <TournamentFact label="Calendar" value={tournament.calendar} />
+          <TournamentFact
+            label="Surface"
+            value={
+              tournament.surface
+            }
+          />
+
+          <TournamentFact
+            label="Founded"
+            value={
+              tournament.founded
+            }
+          />
+
+          <TournamentFact
+            label="Calendar"
+            value={
+              tournament.calendar
+            }
+          />
         </div>
 
         <div className="mt-7 flex items-center justify-between border-t border-white/10 pt-6">
@@ -454,10 +800,14 @@ function GrandSlamCard({
           <span
             className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/[0.035] transition group-hover:translate-x-1"
             style={{
-              color: tournament.colors.primary,
+              color:
+                tournament.colors.primary,
             }}
           >
-            <ArrowRight size={17} aria-hidden="true" />
+            <ArrowRight
+              size={17}
+              aria-hidden="true"
+            />
           </span>
         </div>
       </div>
@@ -470,7 +820,10 @@ type TournamentFactProps = {
   value: string;
 };
 
-function TournamentFact({ label, value }: TournamentFactProps) {
+function TournamentFact({
+  label,
+  value,
+}: TournamentFactProps) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-4">
       <span className="block font-mono text-[7px] uppercase tracking-[0.16em] text-white/25">
@@ -487,26 +840,45 @@ function TournamentFact({ label, value }: TournamentFactProps) {
 function GrandSlamArchivePreview() {
   const archiveFeatures = [
     {
-      icon: Crown,
-      title: "Hall of Champions",
+      icon:
+        Crown,
+
+      title:
+        "Champions Archive",
+
       description:
         "Complete tournament winners and championship records across every edition.",
     },
+
     {
-      icon: CalendarDays,
-      title: "Tournament Editions",
+      icon:
+        CalendarDays,
+
+      title:
+        "Tournament Editions",
+
       description:
         "Season-by-season finals, dates, champions and historical context.",
     },
+
     {
-      icon: Sparkles,
-      title: "Iconic Moments",
+      icon:
+        Sparkles,
+
+      title:
+        "Iconic Moments",
+
       description:
         "Matches, rivalries and milestones that became part of tennis history.",
     },
+
     {
-      icon: Layers3,
-      title: "AGE202 Archive",
+      icon:
+        Layers3,
+
+      title:
+        "AGE202 Archive",
+
       description:
         "Memorabilia and apparel connected to tournaments and their champions.",
     },
@@ -540,30 +912,41 @@ function GrandSlamArchivePreview() {
             </div>
 
             <div className="mt-12 grid gap-4 md:grid-cols-2">
-              {archiveFeatures.map((feature) => {
-                const Icon = feature.icon;
+              {archiveFeatures.map(
+                (
+                  feature,
+                ) => {
+                  const Icon =
+                    feature.icon;
 
-                return (
-                  <article
-                    key={feature.title}
-                    className="flex items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6"
-                  >
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[#4EB3FF]">
-                      <Icon size={18} strokeWidth={1.4} aria-hidden="true" />
-                    </span>
+                  return (
+                    <article
+                      key={
+                        feature.title
+                      }
+                      className="flex items-start gap-5 rounded-[1.5rem] border border-white/10 bg-black/15 p-6"
+                    >
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-[#4EB3FF]">
+                        <Icon
+                          size={18}
+                          strokeWidth={1.4}
+                          aria-hidden="true"
+                        />
+                      </span>
 
-                    <div>
-                      <h3 className="text-base font-black uppercase tracking-[-0.02em]">
-                        {feature.title}
-                      </h3>
+                      <div>
+                        <h3 className="text-base font-black uppercase tracking-[-0.02em]">
+                          {feature.title}
+                        </h3>
 
-                      <p className="mt-3 text-xs leading-6 text-white/35">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </article>
-                );
-              })}
+                        <p className="mt-3 text-xs leading-6 text-white/35">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </article>
+                  );
+                },
+              )}
             </div>
           </div>
         </div>
@@ -591,7 +974,10 @@ function BackToResults() {
           </div>
 
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-white/10 bg-white/[0.03] text-white/30 transition group-hover:text-[#4EB3FF]">
-            <ArrowRight size={19} aria-hidden="true" />
+            <ArrowRight
+              size={19}
+              aria-hidden="true"
+            />
           </span>
         </Link>
       </div>
