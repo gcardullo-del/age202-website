@@ -280,8 +280,8 @@ const previewOriginals: PreviewOriginal[] = [
         hex: "#000000",
       },
       {
-        name: "Lime",
-        hex: "#C8FF00",
+        name: "White",
+        hex: "#FFFFFF",
       },
     ],
     label: "Court Collection",
@@ -337,11 +337,30 @@ const previewOriginals: PreviewOriginal[] = [
         hex: "#000000",
       },
       {
-        name: "Lime",
-        hex: "#C8FF00",
+        name: "White",
+        hex: "#FFFFFF",
       },
     ],
     label: "Museum Collection",
+  },
+  {
+    slug: "age202-court-towel",
+    title: "AGE202 Court Towel",
+    category: "Accessories",
+    price: 24.9,
+    currency: "EUR",
+    sizes: [],
+    colours: [
+      {
+        name: "Black",
+        hex: "#000000",
+      },
+      {
+        name: "White",
+        hex: "#FFFFFF",
+      },
+    ],
+    label: "Court Collection",
   },
   {
     slug: "age202-museum-poster",
@@ -378,6 +397,67 @@ function formatPreviewPrice(
       maximumFractionDigits: 2,
     },
   ).format(value);
+}
+
+
+function getProductCatalogImage(
+  product: Awaited<
+    ReturnType<
+      typeof getPublishedOriginalProducts
+    >
+  >[number],
+  index: number,
+) {
+  const lightNames = [
+    "white",
+    "natural",
+    "cream",
+    "off white",
+    "off-white",
+    "ivory",
+  ];
+
+  const darkNames = [
+    "black",
+    "nero",
+  ];
+
+  const forceLightImage =
+    product.slug ===
+    "age202-court-beanie";
+
+  const preferredNames =
+    forceLightImage ||
+    index % 2 !== 0
+      ? lightNames
+      : darkNames;
+
+  const preferredVariant =
+    product.variants.find(
+      (variant) => {
+        const colour =
+          variant.colour
+            .trim()
+            .toLowerCase();
+
+        return (
+          preferredNames.some(
+            (name) =>
+              colour.includes(name),
+          ) &&
+          Boolean(
+            variant.images[0],
+          )
+        );
+      },
+    );
+
+  return (
+    preferredVariant?.images[0] ??
+    getProductPrimaryImage(
+      product,
+    )
+  );
 }
 
 
@@ -421,38 +501,8 @@ export default async function OriginalsPage() {
   const products =
     await getPublishedOriginalProducts();
 
-  const featured =
-    products.find(
-      (product) =>
-        product.featured,
-    ) ??
-    products[0];
-
-  const featuredImage =
-    featured
-      ? getProductPrimaryImage(
-          featured,
-        )
-      : null;
-
-  const heroSecondary =
-    products.find(
-      (product) =>
-        product.id !==
-          featured?.id &&
-        Boolean(
-          getProductPrimaryImage(
-            product,
-          ),
-        ),
-    );
-
-  const heroSecondaryImage =
-    heroSecondary
-      ? getProductPrimaryImage(
-          heroSecondary,
-        )
-      : null;
+  const identityImageUrl =
+    "https://usobdaccetjzdjydqbof.supabase.co/storage/v1/object/public/artifact/media-library/1dc1cf2e-9500-4ba5-b594-9a6ad6442358.png";
 
 
   const publishedSlugs =
@@ -481,12 +531,12 @@ export default async function OriginalsPage() {
           HERO
       ====================================================== */}
 
-      <section className="relative overflow-hidden border-b border-white/10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_82%_24%,rgba(200,255,0,0.16),transparent_31%)]" />
+      <section className="relative overflow-hidden border-b border-white/10 bg-[#07101E]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_28%,rgba(200,255,0,0.16),transparent_28%)]" />
 
-        <div className="absolute inset-0 bg-[linear-gradient(115deg,#050B18_0%,#050B18_48%,rgba(5,11,24,0.72)_72%,rgba(200,255,0,0.04)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(115deg,#050B18_0%,#07101E_50%,#0B1523_100%)]" />
 
-        <div className="relative mx-auto grid min-h-[620px] max-w-[1600px] lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative mx-auto grid min-h-[620px] max-w-[1600px] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative z-20 flex flex-col justify-center px-5 pb-14 pt-32 sm:px-8 lg:px-12 lg:pb-20 lg:pt-40">
             <div className="inline-flex w-fit items-center gap-2 text-[9px] font-black uppercase tracking-[0.26em] text-[#C8FF00] sm:text-[10px]">
               <BadgeCheck className="h-4 w-4" />
@@ -535,59 +585,64 @@ export default async function OriginalsPage() {
           </div>
 
 
-          {/* HERO PRODUCTS */}
+          {/* EDITORIAL HERO — independent from product images */}
 
           <div className="relative hidden min-h-[620px] lg:block">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_42%,rgba(255,255,255,0.08),transparent_38%)]" />
+            <div className="absolute bottom-[8%] left-[7%] right-[4%] top-[13%] overflow-hidden rounded-[2.25rem] border border-black/10 bg-[#F4F5F0] shadow-[-30px_30px_100px_rgba(0,0,0,0.38)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(200,255,0,0.40),transparent_23%),linear-gradient(145deg,#FFFFFF_0%,#F1F2EC_58%,#E7E9E2_100%)]" />
 
-            <div className="absolute bottom-0 left-[4%] right-[3%] top-[14%] overflow-hidden rounded-tl-[2.5rem] border-l border-t border-white/10 bg-[#090E16] shadow-[-30px_20px_90px_rgba(0,0,0,0.45)]">
-              {featured &&
-              featuredImage ? (
-                <Image
-                  src={
-                    featuredImage.url
-                  }
-                  alt={
-                    featuredImage.alt ??
-                    featured.title
-                  }
-                  fill
-                  priority
-                  sizes="58vw"
-                  className="object-cover object-center"
-                />
-              ) : (
-                <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_center,rgba(200,255,0,.13),transparent_34%),#090E16]">
-                  <div className="text-center">
-                    <Sparkles className="mx-auto h-14 w-14 text-[#C8FF00]/60" />
-
-                    <p className="mt-5 text-[9px] font-black uppercase tracking-[0.24em] text-white/30">
-                      AGE202 Originals
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050B18]/50 via-transparent to-black/15" />
-            </div>
-
-            {heroSecondary &&
-            heroSecondaryImage ? (
-              <div className="absolute bottom-8 left-0 z-10 h-[190px] w-[190px] overflow-hidden rounded-2xl border border-white/10 bg-[#101620] shadow-2xl">
-                <Image
-                  src={
-                    heroSecondaryImage.url
-                  }
-                  alt={
-                    heroSecondaryImage.alt ??
-                    heroSecondary.title
-                  }
-                  fill
-                  sizes="190px"
-                  className="object-cover"
-                />
+              <div className="absolute left-9 top-9 text-[9px] font-black uppercase tracking-[0.24em] text-black/45">
+                The Digital Tennis Museum
               </div>
-            ) : null}
+
+              <div className="absolute right-9 top-9 text-right">
+                <p className="text-[8px] font-black uppercase tracking-[0.22em] text-black/40">
+                  Official Collection
+                </p>
+
+                <p className="mt-2 text-[10px] font-black uppercase tracking-[0.18em] text-black">
+                  Edition 01
+                </p>
+              </div>
+
+              <div className="absolute left-[8%] top-[27%]">
+                <p className="text-[clamp(5rem,10vw,10rem)] font-black leading-[0.72] tracking-[-0.09em] text-[#050B18]">
+                  202
+                </p>
+
+                <p className="mt-5 text-[12px] font-black uppercase tracking-[0.32em] text-[#050B18]">
+                  Objects for the court.
+                </p>
+
+                <p className="mt-2 text-[12px] font-black uppercase tracking-[0.32em] text-[#050B18]">
+                  Objects for the archive.
+                </p>
+              </div>
+
+              <div className="absolute bottom-[15%] right-[8%] h-40 w-40 rounded-full bg-[#C8FF00] shadow-[0_20px_60px_rgba(200,255,0,0.22)]" />
+
+              <div className="absolute bottom-[12%] right-[9%] z-10 text-right text-[#050B18]">
+                <p className="text-5xl font-black uppercase leading-[0.82] tracking-[-0.07em]">
+                  AGE
+                </p>
+
+                <p className="text-5xl font-black uppercase leading-[0.82] tracking-[-0.07em]">
+                  202
+                </p>
+              </div>
+
+              <div className="absolute bottom-9 left-9 flex items-center gap-4">
+                <span className="h-px w-14 bg-black/30" />
+
+                <span className="text-[8px] font-black uppercase tracking-[0.22em] text-black/50">
+                  Second Hand. First Set.
+                </span>
+              </div>
+
+              <div className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full border border-black/10" />
+
+              <div className="absolute -bottom-8 -right-4 h-56 w-56 rounded-full border border-black/10" />
+            </div>
           </div>
         </div>
       </section>
@@ -664,10 +719,12 @@ export default async function OriginalsPage() {
               {products.map(
                 (
                   product,
+                  index,
                 ) => {
                   const image =
-                    getProductPrimaryImage(
+                    getProductCatalogImage(
                       product,
+                      index,
                     );
 
                   const category =
@@ -1032,35 +1089,35 @@ export default async function OriginalsPage() {
         id="the-original"
         className="px-5 pb-20 sm:px-8 lg:px-12 lg:pb-28"
       >
-        <div className="relative mx-auto min-h-[360px] max-w-[1600px] overflow-hidden rounded-2xl border border-white/10 bg-[#080E18]">
-          {featured &&
-          featuredImage ? (
-            <div className="absolute inset-y-0 right-0 hidden w-[58%] lg:block">
+        <div className="relative mx-auto min-h-[410px] max-w-[1600px] overflow-hidden rounded-2xl border border-white/10 bg-[#070A0F]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_35%,rgba(200,255,0,0.08),transparent_24%),linear-gradient(110deg,#070A0F_0%,#080C12_48%,#10151D_100%)]" />
+
+          <div className="absolute inset-y-0 right-0 hidden w-[52%] overflow-hidden lg:block">
+            <>
               <Image
-                src={
-                  featuredImage.url
-                }
-                alt={
-                  featuredImage.alt ??
-                  featured.title
-                }
+                src={identityImageUrl}
+                alt="AGE202 Originals embroidered identity detail"
                 fill
-                sizes="58vw"
-                className="object-cover"
+                sizes="52vw"
+                className="object-cover object-center"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-r from-[#080E18] via-[#080E18]/55 to-transparent" />
-            </div>
-          ) : (
-            <div className="absolute inset-y-0 right-0 hidden w-[58%] bg-[radial-gradient(circle_at_center,rgba(200,255,0,.10),transparent_42%)] lg:block" />
-          )}
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,#070A0F_0%,rgba(7,10,15,0.70)_16%,rgba(7,10,15,0.08)_52%,rgba(7,10,15,0.10)_100%)]" />
 
-          <div className="relative z-10 flex min-h-[360px] max-w-2xl flex-col justify-center p-8 sm:p-12 lg:p-14">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_66%_46%,transparent_0%,rgba(0,0,0,0.08)_48%,rgba(0,0,0,0.44)_100%)]" />
+
+              <div className="absolute bottom-8 right-8 rounded-full border border-white/15 bg-black/35 px-4 py-2 text-[7px] font-black uppercase tracking-[0.2em] text-white/55 backdrop-blur-sm">
+                Material / Identity / Detail
+              </div>
+            </>
+          </div>
+
+          <div className="relative z-10 flex min-h-[410px] max-w-2xl flex-col justify-center p-8 sm:p-12 lg:p-14">
             <p className="text-[9px] font-black uppercase tracking-[0.22em] text-[#C8FF00]">
               The AGE202 Original
             </p>
 
-            <h2 className="mt-4 text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-6xl">
+            <h2 className="mt-4 text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] text-white sm:text-6xl">
               The Original.
             </h2>
 
@@ -1079,7 +1136,7 @@ export default async function OriginalsPage() {
             <div className="mt-8">
               <a
                 href="#shop-originals"
-                className="inline-flex items-center gap-3 rounded-md border border-[#C8FF00]/70 px-6 py-4 text-[9px] font-black uppercase tracking-[0.16em] transition hover:bg-[#C8FF00] hover:text-[#050B18]"
+                className="inline-flex items-center gap-3 rounded-md border border-[#C8FF00]/70 px-6 py-4 text-[9px] font-black uppercase tracking-[0.16em] text-white transition hover:bg-[#C8FF00] hover:text-[#050B18]"
               >
                 Discover Originals
 
