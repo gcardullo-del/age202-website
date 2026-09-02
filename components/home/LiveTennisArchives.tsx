@@ -36,10 +36,13 @@ const cards = [
     image:
       "/players/other-players/hero.png",
 
+    mobileImage:
+      "/players/other-players/hero-mobile.png",
+
     alt:
       "AGE202 ATP Archive",
 
-    mobilePosition:
+    desktopPosition:
       "center 42%",
   },
 
@@ -65,10 +68,13 @@ const cards = [
     image:
       "/players/women/wta-archive-hero.png",
 
+    mobileImage:
+  "/players/women/wta-archive-hero-mobile-v2.png?v=3",
+
     alt:
       "AGE202 WTA Archive",
 
-    mobilePosition:
+    desktopPosition:
       "98% 45%",
   },
 ] as const;
@@ -146,7 +152,7 @@ export default function LiveTennisArchives() {
                     index *
                     0.08,
                 }}
-                className="group relative min-h-[500px] overflow-hidden rounded-[28px] border border-white/10 bg-[#07101D] shadow-[0_24px_70px_rgba(0,0,0,.28)] sm:min-h-[560px] sm:rounded-[34px] sm:shadow-[0_28px_90px_rgba(0,0,0,.28)] lg:min-h-[520px] xl:min-h-[520px] 2xl:min-h-[540px]"
+                className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-[#07101D] shadow-[0_24px_70px_rgba(0,0,0,.28)] sm:min-h-[560px] sm:rounded-[34px] sm:shadow-[0_28px_90px_rgba(0,0,0,.28)] lg:min-h-[520px] xl:min-h-[520px] 2xl:min-h-[540px]"
               >
                 <Link
                   href={
@@ -157,6 +163,31 @@ export default function LiveTennisArchives() {
                 />
 
 
+                {/* MOBILE IMAGE — ALWAYS FULL, NEVER CROPPED */}
+
+             {/* MOBILE IMAGE — FULL COMPOSITION, NO CROP */}
+
+<div className="relative w-full bg-[#030812] sm:hidden">
+  <img
+    src={card.mobileImage}
+    alt={card.alt}
+   className={
+  card.title === "WTA Archive"
+    ? "mx-auto -mt-90 block h-auto w-[50%]"
+    : "block h-auto w-full"
+}
+  />
+
+  <div className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-[#d7ff00]/25 bg-[#030812]/75 px-3 py-2 text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff00] backdrop-blur-md">
+    <CircleDot className="h-3.5 w-3.5" />
+
+    {card.eyebrow}
+  </div>
+</div>
+
+
+                {/* TABLET / DESKTOP IMAGE */}
+
                 <Image
                   src={
                     card.image
@@ -166,22 +197,29 @@ export default function LiveTennisArchives() {
                   }
                   fill
                   sizes="(max-width: 1279px) 100vw, (max-width: 1900px) 50vw, 950px"
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
+                  className="hidden object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035] sm:block"
                   style={{
                     objectPosition:
-                      card.mobilePosition,
+                      card.desktopPosition,
                   }}
                 />
 
 
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,8,18,.06)_0%,rgba(3,8,18,.10)_32%,rgba(3,8,18,.64)_67%,#030812_100%)] sm:bg-[linear-gradient(180deg,rgba(3,8,18,.10)_0%,rgba(3,8,18,.12)_32%,rgba(3,8,18,.72)_68%,#030812_100%)]" />
+                {/* TABLET / DESKTOP OVERLAYS */}
 
-                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,8,18,.12)_0%,transparent_56%,rgba(3,8,18,.18)_100%)] sm:bg-[linear-gradient(90deg,rgba(3,8,18,.15)_0%,transparent_56%,rgba(3,8,18,.20)_100%)]" />
+                <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(180deg,rgba(3,8,18,.10)_0%,rgba(3,8,18,.12)_32%,rgba(3,8,18,.72)_68%,#030812_100%)] sm:block" />
 
-                <div className="absolute inset-x-0 top-0 h-1 bg-[#d7ff00] opacity-90" />
+                <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(3,8,18,.15)_0%,transparent_56%,rgba(3,8,18,.20)_100%)] sm:block" />
 
 
-                <div className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-[#d7ff00]/25 bg-[#030812]/70 px-3 py-2 text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff00] backdrop-blur-md sm:left-7 sm:top-7 sm:px-4 sm:text-[9px] sm:tracking-[0.18em]">
+                {/* LIME TOP LINE */}
+
+                <div className="absolute inset-x-0 top-0 z-10 h-1 bg-[#d7ff00] opacity-90" />
+
+
+                {/* TABLET / DESKTOP BADGE */}
+
+                <div className="absolute left-7 top-7 z-10 hidden items-center gap-2 rounded-full border border-[#d7ff00]/25 bg-[#030812]/70 px-4 py-2 text-[9px] font-black uppercase tracking-[0.18em] text-[#d7ff00] backdrop-blur-md sm:inline-flex">
                   <CircleDot className="h-3.5 w-3.5" />
 
                   {
@@ -190,20 +228,22 @@ export default function LiveTennisArchives() {
                 </div>
 
 
-                <div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-9 lg:p-10">
+                {/* CONTENT */}
+
+                <div className="relative z-10 bg-[#07101D] p-5 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-transparent sm:p-9 lg:p-10">
                   <div className="text-[9px] font-black uppercase tracking-[0.2em] text-[#d7ff00] sm:text-[10px] sm:tracking-[0.22em]">
                     {
                       card.kicker
                     }
                   </div>
 
-                  <h3 className="mt-2 text-[2.7rem] font-black uppercase leading-[0.88] tracking-[-0.055em] sm:mt-3 sm:text-6xl sm:leading-[0.86] sm:tracking-[-0.06em] lg:text-7xl">
+                  <h3 className="mt-2 text-[2.45rem] font-black uppercase leading-[0.9] tracking-[-0.055em] sm:mt-3 sm:text-6xl sm:leading-[0.86] sm:tracking-[-0.06em] lg:text-7xl">
                     {
                       card.title
                     }
                   </h3>
 
-                  <p className="mt-4 max-w-2xl text-sm leading-6 text-white/65 sm:mt-5 sm:text-base sm:leading-7">
+                  <p className="mt-4 max-w-2xl text-[13px] leading-6 text-white/65 sm:mt-5 sm:text-base sm:leading-7">
                     {
                       card.description
                     }
