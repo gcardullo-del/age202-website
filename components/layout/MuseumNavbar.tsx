@@ -44,6 +44,7 @@ const primaryLinksBeforeCollaborations = [
 
 const primaryLinksAfterCollaborations = [
   ["Originals", "/age202-originals"],
+    ["About", "/about"],
 ] as const;
 
 
