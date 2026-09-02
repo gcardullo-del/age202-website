@@ -158,6 +158,7 @@ export default function MuseumHero({
 
 
           <h1
+            id="museum-hero-title"
             className="
               max-w-[590px]
               pr-2
@@ -174,15 +175,25 @@ export default function MuseumHero({
               sm:tracking-[-0.07em]
             "
           >
-            {
-              settings.heroTitle
-            }
-
-            <br />
+            <span className="block">
+              {
+                settings.heroTitle
+              }
+            </span>
 
             <span
               className="
+                mt-3
+                block
+                text-[clamp(1.85rem,7.3vw,2.4rem)]
+                leading-[0.92]
+                tracking-[-0.045em]
                 text-[#d7ff00]
+                sm:mt-5
+                sm:whitespace-nowrap
+                sm:text-[clamp(2.25rem,3.5vw,3.35rem)]
+                sm:leading-[0.9]
+                sm:tracking-[-0.05em]
               "
             >
               {
