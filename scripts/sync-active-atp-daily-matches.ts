@@ -1,5 +1,6 @@
 import "dotenv/config";
 
+
 import {
   getActiveAtpTournaments,
 } from "../lib/data/tournaments/atp-active-tournament-selector";
@@ -9,17 +10,65 @@ import {
 } from "../lib/services/atp-tournament-daily-match-sync.service";
 
 import {
+  syncAtpTournamentDraw,
+} from "../lib/services/atp-tournament-draw-sync.service";
+
+import {
   extractAtpTournamentDailyMatches,
 } from "./atp-tournament-daily-matches-extractor";
+
+import {
+  extractAtpTournamentDraw,
+} from "./atp-tournament-matches-extractor";
 
 
 const WRITE_FLAG =
   "--write";
 
+const SCHEDULE_SYNC_MINUTES =
+  new Set([
+    0,
+    30,
+  ]);
+
 
 function hasWriteFlag(): boolean {
   return process.argv.includes(
     WRITE_FLAG,
+  );
+}
+
+
+function shouldSyncSchedule(
+  now: Date,
+): boolean {
+  /*
+   * Il workflow principale gira ogni 6 minuti.
+   *
+   * I risultati completati vanno controllati ad ogni run,
+   * mentre il programma giornaliero cambia molto meno spesso.
+   *
+   * Sincronizziamo quindi la daily schedule soltanto due volte
+   * l'ora (:00 e :30 UTC circa), riducendo le richieste ad ATP.
+   *
+   * GitHub Actions può partire con qualche minuto di ritardo:
+   * consideriamo quindi anche i primi 5 minuti dopo :00/:30.
+   */
+  const minute =
+    now.getUTCMinutes();
+
+  return (
+    SCHEDULE_SYNC_MINUTES.has(
+      minute,
+    ) ||
+    (
+      minute >= 1 &&
+      minute <= 5
+    ) ||
+    (
+      minute >= 31 &&
+      minute <= 35
+    )
   );
 }
 
@@ -98,6 +147,11 @@ async function main() {
         10,
       );
 
+  const syncSchedule =
+    shouldSyncSchedule(
+      now,
+    );
+
 
   console.log("");
   console.log(
@@ -105,7 +159,7 @@ async function main() {
   );
 
   console.log(
-    "🎾 AGE202 · ACTIVE ATP DAILY SYNC",
+    "🎾 AGE202 · ACTIVE ATP LIVE SYNC",
   );
 
   console.log(
@@ -120,6 +174,18 @@ async function main() {
     write
       ? "✍️ WRITE MODE"
       : "🛡️ DRY RUN · DATABASE UNCHANGED",
+  );
+
+  console.log(
+    `📋 Daily schedule: ${
+      syncSchedule
+        ? "SYNC THIS RUN"
+        : "SKIPPED · 30-minute cadence"
+    }`,
+  );
+
+  console.log(
+    "🏁 Completed results: SYNC THIS RUN",
   );
 
   console.log("");
@@ -156,13 +222,22 @@ async function main() {
   console.log("");
 
 
-  let extractedTotal =
+  let scheduleExtractedTotal =
+    0;
+
+  let resultExtractedTotal =
     0;
 
   let writtenCreated =
     0;
 
   let writtenUpdated =
+    0;
+
+  let drawCreated =
+    0;
+
+  let drawUpdated =
     0;
 
   let failed =
@@ -203,8 +278,214 @@ async function main() {
         );
 
 
-      const extracted =
-        await extractAtpTournamentDailyMatches({
+      /*
+       * 1. DAILY SCHEDULE
+       *
+       * Serve a popolare Matches of the Day con orari,
+       * campi e incontri programmati.
+       *
+       * Non è necessario interrogare questa pagina ogni
+       * 6 minuti: due volte l'ora è sufficiente.
+       */
+      if (syncSchedule) {
+        const extracted =
+          await extractAtpTournamentDailyMatches({
+            tournamentSlug:
+              tournament.atpSlug,
+
+            tournamentId:
+              tournament.atpTournamentId,
+
+            year,
+
+            date,
+          });
+
+
+        scheduleExtractedTotal +=
+          extracted.matches.length;
+
+
+        console.log(
+          `📋 Schedule: ${extracted.scheduleLabel ?? date}`,
+        );
+
+        console.log(
+          `🎾 ATP singles scheduled: ${extracted.matches.length}`,
+        );
+
+        console.log("");
+
+
+        for (
+          const match
+          of extracted.matches
+        ) {
+          console.log(
+            formatMatch(
+              match,
+            ),
+          );
+        }
+
+
+        console.log("");
+
+
+        if (write) {
+          const result =
+            await syncAtpTournamentDailyMatches({
+              cmsTournamentSlug:
+                tournament.cmsSlug,
+
+              atpTournamentId:
+                tournament.atpTournamentId,
+
+              year,
+
+              startDate:
+                toDate(
+                  tournament.startDate,
+                ),
+
+              endDate:
+                toDate(
+                  tournament.endDate,
+                ),
+
+              extractedAt:
+                extracted.extractedAt,
+
+              matches:
+                extracted.matches.map(
+                  (match) => ({
+                    externalId:
+                      match.externalId,
+
+                    playerOne: {
+                      name:
+                        match.playerOne.name,
+
+                      profileSlug:
+                        match.playerOne.profileSlug,
+
+                      externalId:
+                        match.playerOne.externalId,
+                    },
+
+                    playerTwo: {
+                      name:
+                        match.playerTwo.name,
+
+                      profileSlug:
+                        match.playerTwo.profileSlug,
+
+                      externalId:
+                        match.playerTwo.externalId,
+                    },
+
+                    status:
+                      match.status,
+
+                    scheduledAt:
+                      match.scheduledAt,
+
+                    court:
+                      match.court,
+
+                    roundLabel:
+                      match.roundLabel,
+
+                    winner:
+                      match.winner
+                        ? {
+                            name:
+                              match.winner.name,
+
+                            profileSlug:
+                              match.winner.profileSlug,
+
+                            externalId:
+                              match.winner.externalId,
+                          }
+                        : null,
+
+                    score:
+                      match.score,
+                  }),
+                ),
+            });
+
+
+          writtenCreated +=
+            result.matches.created;
+
+          writtenUpdated +=
+            result.matches.updated;
+
+
+          console.log(
+            "✅ DAILY SCHEDULE DATABASE SYNC COMPLETE",
+          );
+
+          console.log(
+            `   Edition created: ${result.edition.created ? "yes" : "no"}`,
+          );
+
+          console.log(
+            `   Entries created: ${result.entries.created}`,
+          );
+
+          console.log(
+            `   Entries updated: ${result.entries.updated}`,
+          );
+
+          console.log(
+            `   Matches created: ${result.matches.created}`,
+          );
+
+          console.log(
+            `   Matches updated: ${result.matches.updated}`,
+          );
+
+          console.log(
+            `   Matched by external ID: ${result.matches.matchedByExternalId}`,
+          );
+
+          console.log(
+            `   Matched by players: ${result.matches.matchedByPlayers}`,
+          );
+
+          console.log("");
+        } else {
+          console.log(
+            "🛡️ Daily schedule dry run: no database changes.",
+          );
+
+          console.log("");
+        }
+      } else {
+        console.log(
+          "⏭️ Daily schedule skipped this run.",
+        );
+
+        console.log(
+          "   Next schedule refresh uses the 30-minute cadence.",
+        );
+
+        console.log("");
+      }
+
+
+      /*
+       * 2. CURRENT RESULTS
+       *
+       * Questa è la sorgente che ci interessa per il refresh
+       * ogni 6 minuti. Leggiamo la pagina ATP current/results,
+       * che contiene i match completati del torneo.
+       */
+      const draw =
+        await extractAtpTournamentDraw({
           tournamentSlug:
             tournament.atpSlug,
 
@@ -213,43 +494,29 @@ async function main() {
 
           year,
 
-          date,
+          sourceMode:
+            "current",
         });
 
 
-      extractedTotal +=
-        extracted.matches.length;
+      resultExtractedTotal +=
+        draw.matches.length;
 
 
       console.log(
-        `📋 Schedule: ${extracted.scheduleLabel ?? date}`,
+        `🏁 Completed results extracted: ${draw.matches.length}`,
       );
 
       console.log(
-        `🎾 ATP singles matches: ${extracted.matches.length}`,
+        `👥 Players in progressive draw: ${draw.players.length}`,
       );
-
-      console.log("");
-
-
-      for (
-        const match
-        of extracted.matches
-      ) {
-        console.log(
-          formatMatch(
-            match,
-          ),
-        );
-      }
-
 
       console.log("");
 
 
       if (!write) {
         console.log(
-          "🛡️ Dry run: no database changes.",
+          "🛡️ Progressive results dry run: no database changes.",
         );
 
         console.log("");
@@ -258,8 +525,8 @@ async function main() {
       }
 
 
-      const result =
-        await syncAtpTournamentDailyMatches({
+      const drawResult =
+        await syncAtpTournamentDraw({
           cmsTournamentSlug:
             tournament.cmsSlug,
 
@@ -278,107 +545,56 @@ async function main() {
               tournament.endDate,
             ),
 
+          drawSize:
+            draw.drawSize,
+
           extractedAt:
-            extracted.extractedAt,
+            draw.extractedAt,
+
+          syncMode:
+            "progressive",
+
+          players:
+            draw.players,
 
           matches:
-            extracted.matches.map(
-              (match) => ({
-                externalId:
-                  match.externalId,
-
-                playerOne: {
-                  name:
-                    match.playerOne.name,
-
-                  profileSlug:
-                    match.playerOne.profileSlug,
-
-                  externalId:
-                    match.playerOne.externalId,
-                },
-
-                playerTwo: {
-                  name:
-                    match.playerTwo.name,
-
-                  profileSlug:
-                    match.playerTwo.profileSlug,
-
-                  externalId:
-                    match.playerTwo.externalId,
-                },
-
-                status:
-                  match.status,
-
-                scheduledAt:
-                  match.scheduledAt,
-
-                court:
-                  match.court,
-
-                roundLabel:
-                  match.roundLabel,
-
-                winner:
-                  match.winner
-                    ? {
-                        name:
-                          match.winner.name,
-
-                        profileSlug:
-                          match.winner.profileSlug,
-
-                        externalId:
-                          match.winner.externalId,
-                      }
-                    : null,
-
-                score:
-                  match.score,
-              }),
-            ),
+            draw.matches,
         });
 
 
-      writtenCreated +=
-        result.matches.created;
+      drawCreated +=
+        drawResult.matches.created;
 
-      writtenUpdated +=
-        result.matches.updated;
+      drawUpdated +=
+        drawResult.matches.updated;
 
 
       console.log(
-        "✅ DATABASE SYNC COMPLETE",
+        "✅ PROGRESSIVE RESULTS SYNC COMPLETE",
       );
 
       console.log(
-        `   Edition created: ${result.edition.created ? "yes" : "no"}`,
+        `   Edition created: ${drawResult.edition.created ? "yes" : "no"}`,
       );
 
       console.log(
-        `   Entries created: ${result.entries.created}`,
+        `   Entries created: ${drawResult.entries.created}`,
       );
 
       console.log(
-        `   Entries updated: ${result.entries.updated}`,
+        `   Entries updated: ${drawResult.entries.updated}`,
       );
 
       console.log(
-        `   Matches created: ${result.matches.created}`,
+        `   Matches created: ${drawResult.matches.created}`,
       );
 
       console.log(
-        `   Matches updated: ${result.matches.updated}`,
+        `   Matches updated: ${drawResult.matches.updated}`,
       );
 
       console.log(
-        `   Matched by external ID: ${result.matches.matchedByExternalId}`,
-      );
-
-      console.log(
-        `   Matched by players: ${result.matches.matchedByPlayers}`,
+        `   Progression links: ${drawResult.matches.linkedToNextRound}`,
       );
 
       console.log("");
@@ -411,7 +627,7 @@ async function main() {
   );
 
   console.log(
-    "📊 AGE202 ACTIVE ATP DAILY REPORT",
+    "📊 AGE202 ACTIVE ATP LIVE REPORT",
   );
 
   console.log(
@@ -419,19 +635,31 @@ async function main() {
   );
 
   console.log(
-    `🎾 Extracted: ${extractedTotal}`,
+    `📋 Schedule extracted: ${scheduleExtractedTotal}`,
   );
 
   console.log(
-    `🆕 Created:   ${writtenCreated}`,
+    `🏁 Results extracted:  ${resultExtractedTotal}`,
   );
 
   console.log(
-    `🔄 Updated:   ${writtenUpdated}`,
+    `🆕 Daily created:      ${writtenCreated}`,
   );
 
   console.log(
-    `🔴 Failed:    ${failed}`,
+    `🔄 Daily updated:      ${writtenUpdated}`,
+  );
+
+  console.log(
+    `🆕 Draw created:       ${drawCreated}`,
+  );
+
+  console.log(
+    `🔄 Draw updated:       ${drawUpdated}`,
+  );
+
+  console.log(
+    `🔴 Failed:             ${failed}`,
   );
 
   console.log(
@@ -447,7 +675,7 @@ main()
     (error: unknown) => {
       console.error("");
       console.error(
-        "❌ AGE202 active ATP daily sync crashed.",
+        "❌ AGE202 active ATP live sync crashed.",
       );
 
       console.error(
