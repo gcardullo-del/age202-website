@@ -24,7 +24,7 @@ import TodaysMatches from "@/components/results/TodaysMatches";
 export const metadata: Metadata = {
   title: "Tennis Results | AGE202",
   description:
-    "Explore Grand Slam, ATP Masters 1000, ATP 500 and ATP 250 tournament results through the AGE202 tennis archive.",
+    "Follow today’s ATP matches and explore Grand Slam, ATP Masters 1000, ATP 500 and ATP 250 tournament results through the AGE202 tennis archive.",
   openGraph: {
     title: "Tennis Results | AGE202",
     description:
@@ -129,9 +129,9 @@ const tournamentCategories: TournamentCategory[] = [
 
 const archiveHighlights = [
   {
-    label: "Tournament levels",
-    value: "04",
-    icon: Layers3,
+    label: "Live refresh",
+    value: "06 MIN",
+    icon: Gauge,
   },
   {
     label: "Grand Slam events",
@@ -139,12 +139,12 @@ const archiveHighlights = [
     icon: Crown,
   },
   {
-    label: "Playing surfaces",
-    value: "03",
-    icon: CircleDot,
+    label: "Tournament levels",
+    value: "04",
+    icon: Layers3,
   },
   {
-    label: "Archive vision",
+    label: "Archive status",
     value: "OPEN",
     icon: Orbit,
   },
@@ -174,112 +174,144 @@ export default function ResultsPage() {
         }}
       />
 
-      <section className="relative isolate min-h-[820px] overflow-hidden border-b border-white/10 bg-[#020611]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_26%,rgba(215,255,0,0.14),transparent_28%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_68%,rgba(56,189,248,0.08),transparent_30%)]" />
+      <section className="relative isolate min-h-[780px] overflow-hidden border-b border-white/10 bg-[#020611]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_24%,rgba(215,255,0,0.16),transparent_30%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_72%,rgba(56,189,248,0.07),transparent_30%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(120deg,#020611_0%,#06101d_52%,#020611_100%)]" />
-        <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+        <div className="absolute inset-0 opacity-[0.055] [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
 
         <div className="pointer-events-none absolute -right-24 top-10 hidden select-none text-[22rem] font-black leading-none tracking-[-0.12em] text-white/[0.022] xl:block">
           202
         </div>
 
-        <div className="relative mx-auto flex min-h-[820px] max-w-[1480px] flex-col px-6 pb-14 pt-14 sm:px-10 lg:px-14 lg:pb-20 lg:pt-20">
+        <div className="relative mx-auto flex min-h-[780px] max-w-[1480px] flex-col px-6 pb-14 pt-14 sm:px-10 lg:px-14 lg:pb-20 lg:pt-20">
           <div className="flex flex-wrap items-center justify-between gap-5">
             <div className="inline-flex items-center gap-3">
               <span className="h-px w-10 bg-[#D7FF00]" />
               <span className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-[#D7FF00]">
-                AGE202 competition archive
+                AGE202 results hub
               </span>
             </div>
 
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-4 py-2 font-mono text-[8px] uppercase tracking-[0.18em] text-white/42">
-              <Globe2 size={12} aria-hidden="true" />
-              Global tennis results
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#D7FF00]/20 bg-[#D7FF00]/[0.055] px-4 py-2 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-[#D7FF00]">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D7FF00] opacity-30" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#D7FF00]" />
+              </span>
+              Live archive
             </span>
           </div>
 
-          <div className="my-auto grid gap-14 py-20 lg:grid-cols-[minmax(0,1fr)_430px] lg:items-end">
+          <div className="my-auto grid gap-14 py-16 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-end">
             <div>
               <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/35">
-                Grand Slams · Masters 1000 · ATP 500 · ATP 250
+                Today&apos;s matches · Tournament draws · Historical results
               </p>
 
               <h1 className="mt-7 max-w-5xl text-[clamp(5.2rem,12vw,11rem)] font-black uppercase leading-[0.72] tracking-[-0.09em]">
                 <span className="block text-white">Results.</span>
-                <span className="block text-white/18">Every stage.</span>
+                <span className="block text-[#D7FF00]">Live archive.</span>
               </h1>
 
               <p className="mt-10 max-w-3xl text-base leading-8 text-white/52 sm:text-lg">
-                Explore professional tennis through its tournaments, champions
-                and defining moments. From the four Grand Slams to every level
-                of the ATP Tour.
+                Follow today&apos;s ATP matches as results are synchronized into AGE202,
+                then continue through tournament draws, champions and historical editions.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-3">
                 <a
-                  href="#tournament-levels"
+                  href="#todays-matches"
                   className="inline-flex items-center gap-2 rounded-full bg-[#D7FF00] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#050B18] transition hover:scale-[1.02]"
                 >
-                  Explore tournaments
+                  Today&apos;s matches
                   <ArrowDown size={14} aria-hidden="true" />
                 </a>
 
-                <Link
-                  href="/atp-ranking"
+                <a
+                  href="#tournament-levels"
                   className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.025] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white/62 transition hover:border-[#D7FF00]/35 hover:text-[#D7FF00]"
                 >
-                  ATP Ranking
+                  Explore archive
                   <ArrowRight size={14} aria-hidden="true" />
-                </Link>
+                </a>
               </div>
             </div>
 
-            <aside className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D]/82 p-7 shadow-[0_24px_80px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:p-8">
-              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#D7FF00]/[0.08] blur-3xl" />
+            <aside className="relative overflow-hidden rounded-[2rem] border border-[#D7FF00]/18 bg-[#07101D]/88 p-7 shadow-[0_24px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl sm:p-8">
+              <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#D7FF00]/[0.10] blur-3xl" />
 
               <div className="relative">
                 <div className="flex items-start justify-between gap-5">
                   <div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#D7FF00]">
-                      Results index
+                    <p className="font-mono text-[9px] font-black uppercase tracking-[0.22em] text-[#D7FF00]">
+                      Results system
                     </p>
+
                     <h2 className="mt-4 text-3xl font-black uppercase leading-[0.95] tracking-[-0.045em]">
-                      The complete tournament map
+                      From today&apos;s court to the archive
                     </h2>
                   </div>
 
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#D7FF00]/20 bg-[#D7FF00]/[0.07] text-[#D7FF00]">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#D7FF00]/22 bg-[#D7FF00]/[0.08] text-[#D7FF00]">
                     <Gauge size={20} strokeWidth={1.4} aria-hidden="true" />
                   </span>
                 </div>
 
-                <div className="mt-9 space-y-1">
-                  {tournamentCategories.map((category, index) => (
-                    <div
-                      key={category.title}
-                      className="flex items-center justify-between gap-5 border-b border-white/10 py-4 last:border-b-0"
-                    >
-                      <div className="flex items-center gap-4">
-                        <span className="font-mono text-[8px] text-white/22">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                        <span className="text-sm font-black uppercase tracking-[-0.02em] text-white/72">
-                          {category.title}
-                        </span>
-                      </div>
-
-                      <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-[#D7FF00]">
-                        {category.code}
+                <div className="mt-9 overflow-hidden rounded-[1.4rem] border border-white/10 bg-black/15">
+                  <div className="flex items-center justify-between gap-5 border-b border-white/10 px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <span className="h-2 w-2 rounded-full bg-[#D7FF00]" />
+                      <span className="text-sm font-black uppercase tracking-[-0.02em] text-white/75">
+                        Match schedule
                       </span>
                     </div>
-                  ))}
+
+                    <span className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-[#D7FF00]">
+                      Today
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-5 border-b border-white/10 px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <CircleDot size={12} className="text-[#D7FF00]" aria-hidden="true" />
+                      <span className="text-sm font-black uppercase tracking-[-0.02em] text-white/75">
+                        Tournament draws
+                      </span>
+                    </div>
+
+                    <span className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-white/35">
+                      Progressive
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-5 px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <Layers3 size={12} className="text-[#D7FF00]" aria-hidden="true" />
+                      <span className="text-sm font-black uppercase tracking-[-0.02em] text-white/75">
+                        Historical archive
+                      </span>
+                    </div>
+
+                    <span className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-white/35">
+                      Open
+                    </span>
+                  </div>
                 </div>
 
-                <p className="mt-7 border-t border-white/10 pt-6 text-xs leading-6 text-white/35">
-                  Each category will become a dedicated archive containing
-                  tournaments, editions, champions and historical results.
-                </p>
+                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-6">
+                  <div>
+                    <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-white/28">
+                      Sync cadence
+                    </p>
+                    <p className="mt-1 text-2xl font-black tracking-[-0.05em] text-white">
+                      6 min
+                    </p>
+                  </div>
+
+                  <p className="max-w-[220px] text-right text-xs leading-5 text-white/35">
+                    Periodic result synchronization. No point-by-point live scoring.
+                  </p>
+                </div>
               </div>
             </aside>
           </div>
@@ -454,8 +486,8 @@ export default function ResultsPage() {
                 </h2>
 
                 <p className="mt-7 max-w-3xl text-sm leading-7 text-white/45 sm:text-base">
-                  Every tournament page will combine editions, champions,
-                  finals and historical context within one coherent visual
+                  Tournament pages combine current draws, completed results,
+                  champions and historical context within one coherent visual
                   archive.
                 </p>
               </div>

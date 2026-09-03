@@ -160,17 +160,55 @@ function MatchCard({
 }: {
   match: Masters1000DrawMatch;
 }) {
+  const completed =
+    Boolean(
+      match.winnerEntryId ||
+      match.scoreSummary,
+    );
+
   return (
-    <article className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#091321] shadow-[0_18px_50px_rgba(0,0,0,0.16)]">
-      <div className="flex min-h-9 items-center justify-between gap-3 border-b border-white/10 px-4 py-2">
-        <span className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/25">
-          {match.matchNumber >= 1001
-            ? "Match"
-            : `Match ${match.matchNumber}`}
-        </span>
+    <article
+      className={[
+        "group relative overflow-hidden rounded-[1.4rem] border bg-[#091321] shadow-[0_18px_50px_rgba(0,0,0,0.16)] transition duration-300",
+        completed
+          ? "border-white/10 hover:border-[var(--tournament-primary)]/25"
+          : "border-white/[0.07] bg-[#08111D]",
+      ].join(" ")}
+    >
+      {completed ? (
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--tournament-primary)]/35 to-transparent opacity-0 transition group-hover:opacity-100" />
+      ) : null}
+
+      <div className="flex min-h-10 items-center justify-between gap-3 border-b border-white/10 px-4 py-2">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <span className="font-mono text-[7px] font-black uppercase tracking-[0.16em] text-white/25">
+            {match.matchNumber >= 1001
+              ? "Match"
+              : `Match ${match.matchNumber}`}
+          </span>
+
+          {completed ? (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--tournament-primary)]/20 bg-[var(--tournament-primary)]/[0.08] px-2 py-1 font-mono text-[6px] font-black uppercase tracking-[0.15em] text-[var(--tournament-primary)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--tournament-primary)]" />
+              Final
+            </span>
+          ) : (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.035] px-2 py-1 font-mono text-[6px] font-black uppercase tracking-[0.15em] text-white/35">
+              <span className="h-1.5 w-1.5 rounded-full border border-white/35" />
+              Upcoming
+            </span>
+          )}
+        </div>
 
         {match.court ? (
-          <span className="truncate font-mono text-[7px] uppercase tracking-[0.12em] text-[var(--tournament-primary)]/70">
+          <span
+            className={[
+              "truncate font-mono text-[7px] uppercase tracking-[0.12em]",
+              completed
+                ? "text-[var(--tournament-primary)]/70"
+                : "text-white/30",
+            ].join(" ")}
+          >
             {match.court}
           </span>
         ) : null}
@@ -200,13 +238,20 @@ function MatchCard({
         />
       </div>
 
-      <div className="flex min-h-11 items-center border-t border-white/10 px-4 py-2.5">
+      <div
+        className={[
+          "flex min-h-11 items-center border-t px-4 py-2.5",
+          completed
+            ? "border-white/10 bg-white/[0.015]"
+            : "border-white/[0.07]",
+        ].join(" ")}
+      >
         {match.scoreSummary ? (
-          <p className="font-mono text-[12px] font-black tracking-[0.06em] text-white/80 sm:text-[13px]">
+          <p className="font-mono text-[12px] font-black tracking-[0.06em] text-white/85 sm:text-[13px]">
             {match.scoreSummary}
           </p>
         ) : (
-          <p className="font-mono text-[8px] font-bold uppercase tracking-[0.08em] text-white/30">
+          <p className="font-mono text-[8px] font-bold uppercase tracking-[0.08em] text-white/25">
             Result unavailable
           </p>
         )}
@@ -312,6 +357,19 @@ export default function Masters1000TournamentDraw({
       selectedRoundIndex + 1
     ];
 
+  const completedMatches =
+    matches.filter(
+      (match) =>
+        Boolean(
+          match.winnerEntryId ||
+          match.scoreSummary,
+        ),
+    ).length;
+
+  const upcomingMatches =
+    matches.length -
+    completedMatches;
+
   return (
     <section
       id="current-draw"
@@ -328,16 +386,30 @@ export default function Masters1000TournamentDraw({
       <div className="relative mx-auto max-w-[1440px]">
         <div className="grid gap-8 border-b border-white/10 pb-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
           <div>
-            <div className="flex items-center gap-3">
-              <Trophy
-                size={15}
-                aria-hidden="true"
-                className="text-[var(--tournament-primary)]"
-              />
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-3">
+                <Trophy
+                  size={15}
+                  aria-hidden="true"
+                  className="text-[var(--tournament-primary)]"
+                />
 
-              <p className="font-mono text-[8px] font-black uppercase tracking-[0.24em] text-[var(--tournament-primary)] sm:text-[9px]">
-                {year} Competition Draw
-              </p>
+                <p className="font-mono text-[8px] font-black uppercase tracking-[0.24em] text-[var(--tournament-primary)] sm:text-[9px]">
+                  {year} Competition Draw
+                </p>
+              </div>
+
+              <span className="hidden h-3 w-px bg-white/15 sm:block" />
+
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--tournament-primary)]/20 bg-[var(--tournament-primary)]/[0.06] px-3 py-1.5 font-mono text-[7px] font-black uppercase tracking-[0.16em] text-[var(--tournament-primary)]">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--tournament-primary)] opacity-30" />
+
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--tournament-primary)]" />
+                </span>
+
+                Live archive
+              </span>
             </div>
 
             <h2 className="mt-5 text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-5xl lg:text-7xl">
@@ -349,12 +421,30 @@ export default function Masters1000TournamentDraw({
 
           <div className="lg:text-right">
             <p className="text-sm leading-7 text-white/45 sm:text-base sm:leading-8">
-              Browse every completed round of{" "}
+              Follow the{" "}
               <span className="font-semibold text-white/75">
                 {tournamentName}
-              </span>
-              , from the opening matches to the championship final.
+              </span>{" "}
+              draw as matches and results are progressively synchronized into the AGE202 archive.
             </p>
+
+            <div className="mt-6 flex flex-wrap gap-2.5 lg:justify-end">
+  <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--tournament-primary)]/25 bg-[var(--tournament-primary)]/[0.08] px-4 py-2.5 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-[var(--tournament-primary)] sm:text-[9px]">
+    <span className="h-2 w-2 rounded-full bg-[var(--tournament-primary)]" />
+    {completedMatches} final
+  </span>
+
+  {upcomingMatches > 0 ? (
+    <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2.5 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/45 sm:text-[9px]">
+      <span className="h-2 w-2 rounded-full border border-white/45" />
+      {upcomingMatches} upcoming
+    </span>
+  ) : null}
+
+  <span className="inline-flex min-h-9 items-center rounded-full border border-white/10 bg-white/[0.02] px-4 py-2.5 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-white/35 sm:text-[9px]">
+    Synced periodically
+  </span>
+</div>
 
             {champion ? (
               <p className="mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--tournament-primary)]/25 bg-[var(--tournament-primary)]/[0.08] px-4 py-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] text-[var(--tournament-primary)]">
@@ -375,10 +465,22 @@ export default function Masters1000TournamentDraw({
                 const active =
                   round.key === selectedRound;
 
-                const count =
+                const roundMatches =
                   matches.filter(
                     (match) =>
                       match.round === round.key,
+                  );
+
+                const count =
+                  roundMatches.length;
+
+                const completedCount =
+                  roundMatches.filter(
+                    (match) =>
+                      Boolean(
+                        match.winnerEntryId ||
+                        match.scoreSummary,
+                      ),
                   ).length;
 
                 return (
@@ -389,7 +491,9 @@ export default function Masters1000TournamentDraw({
                     <button
                       type="button"
                       onClick={() =>
-                        setSelectedRound(round.key)
+                        setSelectedRound(
+                          round.key,
+                        )
                       }
                       aria-pressed={active}
                       className={[
@@ -399,8 +503,17 @@ export default function Masters1000TournamentDraw({
                           : "border-white/10 bg-white/[0.025] text-white/45 hover:border-white/25 hover:text-white",
                       ].join(" ")}
                     >
-                      <span className="font-mono text-[7px] font-black uppercase tracking-[0.16em]">
+                      <span className="flex items-center gap-2 font-mono text-[7px] font-black uppercase tracking-[0.16em]">
                         {round.shortLabel} · {count}
+
+                        {completedCount ===
+                          count &&
+                        count > 0 ? (
+                          <CircleCheck
+                            size={11}
+                            aria-hidden="true"
+                          />
+                        ) : null}
                       </span>
                     </button>
 
@@ -422,7 +535,8 @@ export default function Masters1000TournamentDraw({
         <div className="mt-10 flex flex-col gap-5 border-b border-white/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-mono text-[8px] font-black uppercase tracking-[0.2em] text-[var(--tournament-primary)]">
-              {selectedRoundData.shortLabel} · {selectedMatches.length} matches
+              {selectedRoundData.shortLabel} ·{" "}
+              {selectedMatches.length} matches
             </p>
 
             <h3 className="mt-2 text-3xl font-black uppercase tracking-[-0.04em] text-white sm:text-4xl">
@@ -436,7 +550,9 @@ export default function Masters1000TournamentDraw({
               disabled={!previousRound}
               onClick={() =>
                 previousRound &&
-                setSelectedRound(previousRound.key)
+                setSelectedRound(
+                  previousRound.key,
+                )
               }
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/45 transition hover:border-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
             >
@@ -452,11 +568,14 @@ export default function Masters1000TournamentDraw({
               disabled={!nextRound}
               onClick={() =>
                 nextRound &&
-                setSelectedRound(nextRound.key)
+                setSelectedRound(
+                  nextRound.key,
+                )
               }
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/10 px-4 py-2 font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/45 transition hover:border-white/25 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
             >
               Next
+
               <ArrowRight
                 size={13}
                 aria-hidden="true"
@@ -532,9 +651,27 @@ export default function Masters1000TournamentDraw({
           </div>
         )}
 
-        <p className="mt-10 font-mono text-[7px] uppercase tracking-[0.14em] text-white/25">
-          Results are synchronized periodically. AGE202 does not provide point-by-point live scoring.
-        </p>
+        <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/[0.07] pt-6">
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--tournament-primary)]" />
+
+            <span className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/35">
+              Final
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full border border-white/40" />
+
+            <span className="font-mono text-[7px] font-black uppercase tracking-[0.14em] text-white/35">
+              Upcoming
+            </span>
+          </div>
+
+          <p className="font-mono text-[7px] uppercase tracking-[0.14em] text-white/25 sm:ml-auto">
+            Results are synchronized periodically. AGE202 does not provide point-by-point live scoring.
+          </p>
+        </div>
       </div>
     </section>
   );

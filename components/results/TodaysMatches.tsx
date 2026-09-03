@@ -526,9 +526,26 @@ export default async function TodaysMatches() {
               </p>
             </div>
 
-            <h2 className="mt-5 text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-5xl lg:text-6xl">
-              Matches of the day
-            </h2>
+            <div className="mt-5 flex flex-wrap items-center gap-4">
+              <h2 className="text-4xl font-black uppercase leading-[0.9] tracking-[-0.055em] sm:text-5xl lg:text-6xl">
+                Matches of the day
+              </h2>
+
+              <span className="inline-flex min-h-9 items-center gap-2.5 rounded-full border border-[#D7FF00]/25 bg-[#D7FF00]/[0.06] px-4 py-2 font-mono text-[8px] font-black uppercase tracking-[0.16em] sm:text-[9px]">
+                <span className="relative flex h-2 w-2 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#D7FF00] opacity-35" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#D7FF00]" />
+                </span>
+
+                <span className="text-[#D7FF00]">
+                  Live
+                </span>
+
+                <span className="text-white/35">
+                  Every 6 minutes
+                </span>
+              </span>
+            </div>
 
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/42">
               Today’s fixtures and final scores from Grand Slams, ATP
