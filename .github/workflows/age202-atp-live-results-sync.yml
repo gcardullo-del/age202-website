@@ -1,0 +1,53 @@
+name: AGE202 ATP Live Results Sync
+
+on:
+  schedule:
+    - cron: "*/6 * * * *"
+
+  workflow_dispatch:
+
+concurrency:
+  group: age202-atp-live-results-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-atp-live-results:
+    name: Sync ATP Live Results
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 8
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Check active ATP tournament
+        id: active-atp
+        run: npx tsx scripts/check-active-atp-tournament.ts
+
+      - name: No active ATP tournament
+        if: steps.active-atp.outputs.active != 'true'
+        run: echo "No supported ATP tournament is active. Sync skipped."
+
+      - name: Install Playwright Chromium
+        if: steps.active-atp.outputs.active == 'true'
+        run: npx playwright install chromium --with-deps
+
+      - name: Sync active ATP daily matches
+        if: steps.active-atp.outputs.active == 'true'
+        run: npx tsx scripts/sync-active-atp-daily-matches.ts --write

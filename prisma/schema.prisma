@@ -47,6 +47,7 @@ model Player {
   tournamentWins      TournamentEdition[]      @relation("TournamentEditionChampion")
   tournamentRunnerUps TournamentEdition[]      @relation("TournamentEditionRunnerUp")
   tournamentChampions TournamentChampion[]
+  tournamentEntries   TournamentEntry[]
   trophyWins          PlayerTrophyWin[]
   publicPushFollows   PublicPushPlayerFollow[]
 
@@ -1124,6 +1125,13 @@ model TournamentEdition {
 
   drawSize Int?
 
+  drawType TournamentDrawType @default(SINGLES)
+
+  source       String?
+  externalId   String?
+  syncEnabled  Boolean   @default(false)
+  lastSyncedAt DateTime?
+
   championName String?
   runnerUpName String?
 
@@ -1140,11 +1148,14 @@ model TournamentEdition {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  tournament     Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  championPlayer Player?    @relation("TournamentEditionChampion", fields: [championPlayerId], references: [id], onDelete: SetNull)
-  runnerUpPlayer Player?    @relation("TournamentEditionRunnerUp", fields: [runnerUpPlayerId], references: [id], onDelete: SetNull)
+  tournament     Tournament        @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  championPlayer Player?           @relation("TournamentEditionChampion", fields: [championPlayerId], references: [id], onDelete: SetNull)
+  runnerUpPlayer Player?           @relation("TournamentEditionRunnerUp", fields: [runnerUpPlayerId], references: [id], onDelete: SetNull)
+  entries        TournamentEntry[]
+  matches        TournamentMatch[]
 
   @@unique([tournamentId, year, editionKey, circuit])
+  @@unique([source, externalId])
   @@index([tournamentId])
   @@index([year])
   @@index([editionKey])
@@ -1152,6 +1163,122 @@ model TournamentEdition {
   @@index([championPlayerId])
   @@index([runnerUpPlayerId])
   @@index([cancelled])
+  @@index([drawType])
+  @@index([syncEnabled])
+  @@index([lastSyncedAt])
+}
+
+model TournamentEntry {
+  id        String @id @default(cuid())
+  editionId String
+
+  externalId String?
+
+  name        String
+  countryCode String?
+  seed        Int?
+  entryStatus TournamentEntryStatus @default(DIRECT_ACCEPTANCE)
+
+  playerId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  edition TournamentEdition @relation(fields: [editionId], references: [id], onDelete: Cascade)
+  player  Player?           @relation(fields: [playerId], references: [id], onDelete: SetNull)
+
+  playerOneMatches TournamentMatch[] @relation("TournamentMatchPlayerOne")
+  playerTwoMatches TournamentMatch[] @relation("TournamentMatchPlayerTwo")
+  wonMatches       TournamentMatch[] @relation("TournamentMatchWinner")
+
+  @@unique([editionId, externalId])
+  @@index([editionId])
+  @@index([playerId])
+  @@index([name])
+  @@index([seed])
+  @@index([entryStatus])
+}
+
+model TournamentMatch {
+  id        String @id @default(cuid())
+  editionId String
+
+  externalId String?
+
+  round           TournamentRound
+  roundOrder      Int
+  matchNumber     Int
+  bracketPosition Int?
+
+  playerOneEntryId String?
+  playerTwoEntryId String?
+  winnerEntryId    String?
+
+  nextMatchId String?
+  nextSlot    TournamentMatchSlot?
+
+  status     TournamentMatchStatus     @default(SCHEDULED)
+  resultType TournamentMatchResultType @default(STANDARD)
+
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  court  String?
+  bestOf Int     @default(3)
+
+  scoreSummary String?
+
+  source         String?
+  scoreUpdatedAt DateTime?
+  lastSyncedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  edition   TournamentEdition @relation(fields: [editionId], references: [id], onDelete: Cascade)
+  playerOne TournamentEntry?  @relation("TournamentMatchPlayerOne", fields: [playerOneEntryId], references: [id], onDelete: SetNull)
+  playerTwo TournamentEntry?  @relation("TournamentMatchPlayerTwo", fields: [playerTwoEntryId], references: [id], onDelete: SetNull)
+  winner    TournamentEntry?  @relation("TournamentMatchWinner", fields: [winnerEntryId], references: [id], onDelete: SetNull)
+
+  nextMatch       TournamentMatch?  @relation("TournamentMatchProgression", fields: [nextMatchId], references: [id], onDelete: SetNull)
+  previousMatches TournamentMatch[] @relation("TournamentMatchProgression")
+
+  sets TournamentMatchSet[]
+
+  @@unique([editionId, externalId])
+  @@unique([editionId, round, matchNumber])
+  @@index([editionId])
+  @@index([editionId, round, bracketPosition])
+  @@index([scheduledAt])
+  @@index([status])
+  @@index([winnerEntryId])
+  @@index([nextMatchId])
+  @@index([lastSyncedAt])
+}
+
+model TournamentMatchSet {
+  id      String @id @default(cuid())
+  matchId String
+
+  setNumber Int
+
+  playerOneScore Int
+  playerTwoScore Int
+
+  playerOneTiebreak Int?
+  playerTwoTiebreak Int?
+
+  completed Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  match TournamentMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, setNumber])
+  @@index([matchId])
+  @@index([setNumber])
 }
 
 model TournamentChampion {
@@ -1572,6 +1699,7 @@ enum TournamentCategory {
   GRAND_SLAM
   ATP_FINALS
   MASTERS_1000
+  WTA_1000
   ATP_500
   ATP_250
   OLYMPICS
@@ -1582,6 +1710,55 @@ enum TournamentCategory {
 enum TournamentCircuit {
   ATP
   WTA
+}
+
+enum TournamentDrawType {
+  SINGLES
+  DOUBLES
+}
+
+enum TournamentEntryStatus {
+  DIRECT_ACCEPTANCE
+  QUALIFIER
+  WILD_CARD
+  LUCKY_LOSER
+  ALTERNATE
+  PROTECTED_RANKING
+  SPECIAL_EXEMPT
+  BYE
+}
+
+enum TournamentRound {
+  QUALIFYING
+  ROUND_OF_128
+  ROUND_OF_64
+  ROUND_OF_32
+  ROUND_OF_16
+  QUARTERFINAL
+  SEMIFINAL
+  FINAL
+}
+
+enum TournamentMatchStatus {
+  SCHEDULED
+  IN_PROGRESS
+  SUSPENDED
+  POSTPONED
+  COMPLETED
+  CANCELLED
+}
+
+enum TournamentMatchResultType {
+  STANDARD
+  RETIREMENT
+  WALKOVER
+  DEFAULT
+  ABANDONED
+}
+
+enum TournamentMatchSlot {
+  PLAYER_ONE
+  PLAYER_TWO
 }
 
 enum CourtSurface {

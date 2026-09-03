@@ -8,6 +8,7 @@ export type Atp500LiveTournament = {
   endDate: string;
 };
 
+
 export const atp500LiveRegistry: Atp500LiveTournament[] = [
   {
     cmsSlug: "dallas",
@@ -38,8 +39,8 @@ export const atp500LiveRegistry: Atp500LiveTournament[] = [
   },
   {
     cmsSlug: "rio",
-atpSlug: "rio-de-janeiro",
-atpTournamentId: "6932",
+    atpSlug: "rio-de-janeiro",
+    atpTournamentId: "6932",
     name: "Rio Open presented by Claro",
     category: "ATP_500",
     startDate: "2026-02-16",
@@ -101,8 +102,8 @@ atpTournamentId: "6932",
   },
   {
     cmsSlug: "queens",
-atpSlug: "london",
-atpTournamentId: "311",
+    atpSlug: "london",
+    atpTournamentId: "311",
     name: "HSBC Championships",
     category: "ATP_500",
     startDate: "2026-06-15",
@@ -155,24 +156,112 @@ atpTournamentId: "311",
   },
 ];
 
-export function getCompletedAtp500(
-  now = new Date(),
-): Atp500LiveTournament[] {
-  const today = new Date(
+
+function getUtcDayStart(
+  value: Date,
+): Date {
+  return new Date(
     Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
+      value.getUTCFullYear(),
+      value.getUTCMonth(),
+      value.getUTCDate(),
     ),
   );
+}
+
+
+function getTournamentStartDate(
+  tournament: Atp500LiveTournament,
+): Date {
+  return new Date(
+    `${tournament.startDate}T00:00:00.000Z`,
+  );
+}
+
+
+function getTournamentEndDate(
+  tournament: Atp500LiveTournament,
+): Date {
+  return new Date(
+    `${tournament.endDate}T23:59:59.999Z`,
+  );
+}
+
+
+export function getActiveAtp500(
+  now = new Date(),
+): Atp500LiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
 
   return atp500LiveRegistry.filter(
     (tournament) => {
-      const endDate = new Date(
-        `${tournament.endDate}T23:59:59.999Z`,
-      );
+      const startDate =
+        getTournamentStartDate(
+          tournament,
+        );
 
-      return endDate < today;
+      const endDate =
+        getTournamentEndDate(
+          tournament,
+        );
+
+      return (
+        today.getTime() >=
+          startDate.getTime() &&
+        today.getTime() <=
+          endDate.getTime()
+      );
+    },
+  );
+}
+
+
+export function getCompletedAtp500(
+  now = new Date(),
+): Atp500LiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
+
+  return atp500LiveRegistry.filter(
+    (tournament) => {
+      const endDate =
+        getTournamentEndDate(
+          tournament,
+        );
+
+      return (
+        endDate.getTime() <
+        today.getTime()
+      );
+    },
+  );
+}
+
+
+export function getUpcomingAtp500(
+  now = new Date(),
+): Atp500LiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
+
+  return atp500LiveRegistry.filter(
+    (tournament) => {
+      const startDate =
+        getTournamentStartDate(
+          tournament,
+        );
+
+      return (
+        startDate.getTime() >
+        today.getTime()
+      );
     },
   );
 }

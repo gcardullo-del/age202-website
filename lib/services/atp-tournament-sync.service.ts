@@ -1,5 +1,5 @@
 import {
-  Prisma,
+     Prisma,
   TournamentCategory,
   TournamentCircuit,
 } from "@/generated/prisma/client";
@@ -73,11 +73,11 @@ export type AtpTournamentSyncResult = {
 };
 
 
-type TransactionClient =
+export type TransactionClient =
   Prisma.TransactionClient;
 
 
-type ResolvedPlayer = {
+export type ResolvedPlayer = {
   id: string;
   name: string;
   slug: string;
@@ -93,6 +93,31 @@ function normalizeText(
     value?.trim();
 
   return normalized || null;
+}
+
+
+function normalizeComparableName(
+  value: string | null | undefined,
+): string {
+  return (
+    normalizeText(value)
+      ?.toLocaleLowerCase()
+      .normalize("NFD")
+      .replace(
+        /[\u0300-\u036f]/g,
+        "",
+      )
+      .replace(
+        /[^a-z0-9]+/g,
+        " ",
+      )
+      .trim()
+      .replace(
+        /\s+/g,
+        " ",
+      ) ??
+    ""
+  );
 }
 
 
@@ -199,7 +224,7 @@ function getArchiveCollectionType(
 }
 
 
-async function resolvePlayer(
+export async function resolvePlayer(
   transaction: TransactionClient,
   input: {
     name: string;
@@ -347,6 +372,67 @@ async function resolvePlayer(
 
         countryCode:
           atpPlayer.countryCode,
+      };
+    }
+
+
+    /*
+     * Lo slug ATP può identificare già
+     * un Player AGE202 anche quando
+     * non esiste ancora il relativo
+     * record AtpPlayer.
+     *
+     * Esempio:
+     * G. Monfils -> gael-monfils -> Gael Monfils
+     */
+    const existingPlayerByProfileSlug =
+      await transaction.player.findUnique({
+        where: {
+          slug:
+            profileSlug,
+        },
+
+        select: {
+          id:
+            true,
+
+          name:
+            true,
+
+          slug:
+            true,
+
+          country:
+            true,
+
+          atpPlayer: {
+            select: {
+              countryCode:
+                true,
+            },
+          },
+        },
+      });
+
+
+    if (existingPlayerByProfileSlug) {
+      return {
+        id:
+          existingPlayerByProfileSlug.id,
+
+        name:
+          existingPlayerByProfileSlug.name,
+
+        slug:
+          existingPlayerByProfileSlug.slug,
+
+        country:
+          existingPlayerByProfileSlug.country,
+
+        countryCode:
+          existingPlayerByProfileSlug.atpPlayer
+            ?.countryCode ??
+          requestedCountryCode,
       };
     }
   }
@@ -519,15 +605,12 @@ async function resolvePlayer(
 
     if (existingPlayerBySlug) {
       const sameName =
-        existingPlayerBySlug.name.localeCompare(
-          name,
-          undefined,
-          {
-            sensitivity:
-              "base",
-          },
+        normalizeComparableName(
+          existingPlayerBySlug.name,
         ) ===
-        0;
+        normalizeComparableName(
+          name,
+        );
 
 
       if (!sameName) {

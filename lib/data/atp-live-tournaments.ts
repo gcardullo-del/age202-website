@@ -8,6 +8,7 @@ export type AtpLiveTournament = {
   endDate: string;
 };
 
+
 export const atpMasters1000LiveRegistry: AtpLiveTournament[] = [
   {
     cmsSlug: "indian-wells",
@@ -56,7 +57,7 @@ export const atpMasters1000LiveRegistry: AtpLiveTournament[] = [
   },
   {
     cmsSlug: "canada",
-    atpSlug: "canada",
+    atpSlug: "montreal",
     atpTournamentId: "421",
     name: "National Bank Open",
     category: "MASTERS_1000",
@@ -92,24 +93,112 @@ export const atpMasters1000LiveRegistry: AtpLiveTournament[] = [
   },
 ];
 
-export function getCompletedMasters1000(
-  now = new Date(),
-): AtpLiveTournament[] {
-  const today = new Date(
+
+function getUtcDayStart(
+  value: Date,
+): Date {
+  return new Date(
     Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
+      value.getUTCFullYear(),
+      value.getUTCMonth(),
+      value.getUTCDate(),
     ),
   );
+}
+
+
+function getTournamentStartDate(
+  tournament: AtpLiveTournament,
+): Date {
+  return new Date(
+    `${tournament.startDate}T00:00:00.000Z`,
+  );
+}
+
+
+function getTournamentEndDate(
+  tournament: AtpLiveTournament,
+): Date {
+  return new Date(
+    `${tournament.endDate}T23:59:59.999Z`,
+  );
+}
+
+
+export function getActiveMasters1000(
+  now = new Date(),
+): AtpLiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
 
   return atpMasters1000LiveRegistry.filter(
     (tournament) => {
-      const endDate = new Date(
-        `${tournament.endDate}T23:59:59.999Z`,
-      );
+      const startDate =
+        getTournamentStartDate(
+          tournament,
+        );
 
-      return endDate < today;
+      const endDate =
+        getTournamentEndDate(
+          tournament,
+        );
+
+      return (
+        today.getTime() >=
+          startDate.getTime() &&
+        today.getTime() <=
+          endDate.getTime()
+      );
+    },
+  );
+}
+
+
+export function getCompletedMasters1000(
+  now = new Date(),
+): AtpLiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
+
+  return atpMasters1000LiveRegistry.filter(
+    (tournament) => {
+      const endDate =
+        getTournamentEndDate(
+          tournament,
+        );
+
+      return (
+        endDate.getTime() <
+        today.getTime()
+      );
+    },
+  );
+}
+
+
+export function getUpcomingMasters1000(
+  now = new Date(),
+): AtpLiveTournament[] {
+  const today =
+    getUtcDayStart(
+      now,
+    );
+
+  return atpMasters1000LiveRegistry.filter(
+    (tournament) => {
+      const startDate =
+        getTournamentStartDate(
+          tournament,
+        );
+
+      return (
+        startDate.getTime() >
+        today.getTime()
+      );
     },
   );
 }

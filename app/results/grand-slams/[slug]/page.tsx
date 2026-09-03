@@ -17,6 +17,9 @@ import GrandSlamIconicFinalsSection from "@/components/results/GrandSlamIconicFi
 import GrandSlamHeroSection from "@/components/results/GrandSlamHeroSection";
 import GrandSlamArchivePreviewSection from "@/components/results/GrandSlamArchivePreviewSection";
 import GrandSlamNavigation from "@/components/results/GrandSlamNavigation";
+import Masters1000TournamentDraw, {
+  type Masters1000DrawMatch,
+} from "@/components/results/Masters1000TournamentDraw";
 
 import {
   ArrowDown,
@@ -217,6 +220,90 @@ export default async function GrandSlamTournamentPage({
     );
 
   /*
+   * Latest synchronized ATP singles draw.
+   *
+   * During an active Grand Slam this contains the progressive
+   * tournament results already synchronized by AGE202.
+   */
+  const currentDrawEdition =
+    museumTournament
+      ? await prisma.tournamentEdition.findFirst({
+          where: {
+            tournamentId:
+              museumTournament.id,
+
+            circuit:
+              "ATP",
+
+            drawType:
+              "SINGLES",
+
+            cancelled:
+              false,
+
+            matches: {
+              some: {},
+            },
+          },
+
+          orderBy: [
+            {
+              year:
+                "desc",
+            },
+            {
+              updatedAt:
+                "desc",
+            },
+          ],
+
+          select: {
+            year: true,
+
+            matches: {
+              orderBy: [
+                {
+                  roundOrder:
+                    "asc",
+                },
+                {
+                  matchNumber:
+                    "asc",
+                },
+              ],
+
+              select: {
+                id: true,
+                round: true,
+                matchNumber: true,
+                scoreSummary: true,
+                court: true,
+                winnerEntryId: true,
+                playerOneEntryId:
+                  true,
+                playerTwoEntryId:
+                  true,
+
+                playerOne: {
+                  select: {
+                    name: true,
+                    seed: true,
+                  },
+                },
+
+                playerTwo: {
+                  select: {
+                    name: true,
+                    seed: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+      : null;
+
+  /*
    * GRAND SLAM → ARTIFACT
    *
    * Museum Tournament.id
@@ -377,6 +464,26 @@ export default async function GrandSlamTournamentPage({
           0
         }
       />
+
+      {currentDrawEdition ? (
+        <Masters1000TournamentDraw
+          tournamentName={
+            tournament.name
+          }
+          year={
+            currentDrawEdition.year
+          }
+          matches={
+            currentDrawEdition.matches.map(
+              (match) => ({
+                ...match,
+                round:
+                  match.round as Masters1000DrawMatch["round"],
+              }),
+            )
+          }
+        />
+      ) : null}
 
       <TournamentOverview
         tournament={

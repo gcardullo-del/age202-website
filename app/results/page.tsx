@@ -19,6 +19,8 @@ import {
   Trophy,
 } from "lucide-react";
 
+import TodaysMatches from "@/components/results/TodaysMatches";
+
 export const metadata: Metadata = {
   title: "Tennis Results | AGE202",
   description:
@@ -321,10 +323,13 @@ export default function ResultsPage() {
           </span>
 
           <SectionLink href="#tournament-levels" label="Categories" />
+          <SectionLink href="#todays-matches" label="Today's matches" />
           <SectionLink href="#grand-slam-overview" label="Grand Slams" />
           <SectionLink href="#archive-method" label="Archive" />
         </div>
       </nav>
+
+      <TodaysMatches />
 
       <section
         id="tournament-levels"

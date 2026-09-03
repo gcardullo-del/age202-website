@@ -1,5 +1,5 @@
 import type {
-  CSSProperties,
+   CSSProperties,
 } from "react";
 
 import type {
@@ -38,6 +38,9 @@ import Masters1000IconicMoments from "@/components/results/Masters1000IconicMome
 import Masters1000ArchivePreview from "@/components/results/Masters1000ArchivePreview";
 import Masters1000MastersNavigation from "@/components/results/Masters1000MastersNavigation";
 import Masters1000BackToTop from "@/components/results/Masters1000BackToTop";
+import Masters1000TournamentDraw, {
+  type Masters1000DrawMatch,
+} from "@/components/results/Masters1000TournamentDraw";
 
 import {
   MASTERS_1000_SLUGS,
@@ -460,6 +463,90 @@ export default async function Masters1000TournamentPage({
     });
 
   /*
+   * Latest synchronized ATP singles draw.
+   *
+   * Tournaments without synchronized matches remain unchanged:
+   * Masters1000TournamentDraw returns nothing when this list is empty.
+   */
+  const currentDrawEdition =
+    cmsTournament
+      ? await prisma.tournamentEdition.findFirst({
+          where: {
+            tournamentId:
+              cmsTournament.id,
+
+            circuit:
+              "ATP",
+
+            drawType:
+              "SINGLES",
+
+            cancelled:
+              false,
+
+            matches: {
+              some: {},
+            },
+          },
+
+          orderBy: [
+            {
+              year:
+                "desc",
+            },
+            {
+              updatedAt:
+                "desc",
+            },
+          ],
+
+          select: {
+            year: true,
+
+            matches: {
+              orderBy: [
+                {
+                  roundOrder:
+                    "asc",
+                },
+                {
+                  matchNumber:
+                    "asc",
+                },
+              ],
+
+              select: {
+                id: true,
+                round: true,
+                matchNumber: true,
+                scoreSummary: true,
+                court: true,
+                winnerEntryId: true,
+                playerOneEntryId:
+                  true,
+                playerTwoEntryId:
+                  true,
+
+                playerOne: {
+                  select: {
+                    name: true,
+                    seed: true,
+                  },
+                },
+
+                playerTwo: {
+                  select: {
+                    name: true,
+                    seed: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+      : null;
+
+  /*
    * Museum Artifact collection.
    *
    * The production diagnostic already confirmed:
@@ -645,6 +732,26 @@ export default async function Masters1000TournamentPage({
           tournament
         }
       />
+
+      {currentDrawEdition ? (
+        <Masters1000TournamentDraw
+          tournamentName={
+            tournament.name
+          }
+          year={
+            currentDrawEdition.year
+          }
+          matches={
+            currentDrawEdition.matches.map(
+              (match) => ({
+                ...match,
+                round:
+                  match.round as Masters1000DrawMatch["round"],
+              }),
+            )
+          }
+        />
+      ) : null}
 
       <Masters1000TournamentGallery
         slug={
