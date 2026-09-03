@@ -1,7 +1,13 @@
 "use client";
 
+import {
+  useState,
+} from "react";
+
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import {
+  usePathname,
+} from "next/navigation";
 
 import {
   Archive,
@@ -17,6 +23,7 @@ import {
   Layers3,
   LayoutDashboard,
   ListOrdered,
+  LoaderCircle,
   LogOut,
   MessageSquareText,
   ReceiptText,
@@ -26,6 +33,11 @@ import {
   Trophy,
   Users,
 } from "lucide-react";
+
+import {
+  createClient,
+} from "@/lib/supabase/client";
+
 
 const navigationItems = [
   {
@@ -120,6 +132,7 @@ const navigationItems = [
   },
 ];
 
+
 function isRouteActive(
   pathname: string,
   href: string,
@@ -134,8 +147,57 @@ function isRouteActive(
   );
 }
 
+
 export default function AdminSidebar() {
   const pathname = usePathname();
+
+  const [
+    isSigningOut,
+    setIsSigningOut,
+  ] = useState(false);
+
+  const [
+    signOutError,
+    setSignOutError,
+  ] = useState<string | null>(null);
+
+
+  async function handleSignOut() {
+    if (isSigningOut) {
+      return;
+    }
+
+    setIsSigningOut(true);
+    setSignOutError(null);
+
+    try {
+      const supabase = createClient();
+
+      const {
+        error,
+      } = await supabase.auth.signOut();
+
+      if (error) {
+        throw error;
+      }
+
+      window.location.replace(
+        "/admin/login",
+      );
+    } catch (error) {
+      console.error(
+        "AGE202 admin sign-out failed:",
+        error,
+      );
+
+      setSignOutError(
+        "Unable to sign out. Please try again.",
+      );
+
+      setIsSigningOut(false);
+    }
+  }
+
 
   return (
     <aside className="flex h-screen w-[280px] shrink-0 flex-col border-r border-white/10 bg-[#060D1A]">
@@ -255,19 +317,41 @@ export default function AdminSidebar() {
 
         <button
           type="button"
-          className="group mt-1 flex min-h-12 w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left text-white/40 transition-colors hover:bg-red-400/10 hover:text-red-300"
+          onClick={handleSignOut}
+          disabled={isSigningOut}
+          aria-busy={isSigningOut}
+          className="group mt-1 flex min-h-12 w-full items-center gap-3 rounded-2xl px-3.5 py-3 text-left text-white/40 transition-colors hover:bg-red-400/10 hover:text-red-300 disabled:cursor-wait disabled:opacity-60"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-white/[0.05] transition-colors group-hover:bg-red-400/10">
-            <LogOut
-              size={18}
-              strokeWidth={1.8}
-            />
+            {isSigningOut ? (
+              <LoaderCircle
+                size={18}
+                strokeWidth={1.8}
+                className="animate-spin"
+              />
+            ) : (
+              <LogOut
+                size={18}
+                strokeWidth={1.8}
+              />
+            )}
           </span>
 
           <span className="flex-1 text-sm font-medium">
-            Sign out
+            {isSigningOut
+              ? "Signing out..."
+              : "Sign out"}
           </span>
         </button>
+
+        {signOutError ? (
+          <p
+            role="alert"
+            className="mt-2 px-3 text-xs leading-5 text-red-300"
+          >
+            {signOutError}
+          </p>
+        ) : null}
 
         <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.025] px-4 py-3">
           <div className="flex items-center gap-2">
