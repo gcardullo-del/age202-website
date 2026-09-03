@@ -100,6 +100,19 @@ const ATP_TOURNAMENT_TIME_ZONES: Record<string, string> = {
 };
 
 
+const ATP_NAVIGATION_TIMEOUT_MS =
+  30_000;
+
+const ATP_ELEMENT_TIMEOUT_MS =
+  2_500;
+
+const ATP_SCHEDULE_WAIT_TIMEOUT_MS =
+  15_000;
+
+const ATP_DOM_SETTLE_MS =
+  1_500;
+
+
 function resolveTournamentTimeZone(
   tournamentId: string,
 ): string | null {
@@ -716,6 +729,34 @@ function resolveWinner(
 }
 
 
+async function readOptionalText(
+  locator: Locator,
+): Promise<string> {
+  const count =
+    await locator
+      .count()
+      .catch(
+        () => 0,
+      );
+
+  if (count === 0) {
+    return "";
+  }
+
+  return normalizeText(
+    await locator
+      .first()
+      .innerText({
+        timeout:
+          ATP_ELEMENT_TIMEOUT_MS,
+      })
+      .catch(
+        () => "",
+      ),
+  );
+}
+
+
 async function readPlayerLinks(
   candidate: Locator,
 ): Promise<PlayerLinkData[]> {
@@ -820,6 +861,14 @@ export async function extractAtpTournamentDailyMatches(
     const page =
       await context.newPage();
 
+    page.setDefaultTimeout(
+      ATP_ELEMENT_TIMEOUT_MS,
+    );
+
+    page.setDefaultNavigationTimeout(
+      ATP_NAVIGATION_TIMEOUT_MS,
+    );
+
     await page.goto(
       sourceUrl,
       {
@@ -827,12 +876,36 @@ export async function extractAtpTournamentDailyMatches(
           "domcontentloaded",
 
         timeout:
-          60_000,
+          ATP_NAVIGATION_TIMEOUT_MS,
       },
     );
 
+    /*
+     * Evitiamo attese fisse molto lunghe.
+     *
+     * ATP carica il programma dopo il DOM iniziale:
+     * aspettiamo il primo blocco .schedule fino a un
+     * massimo controllato, poi concediamo soltanto un
+     * breve tempo di stabilizzazione al DOM.
+     */
+    await page
+      .locator(
+        ".schedule",
+      )
+      .first()
+      .waitFor({
+        state:
+          "attached",
+
+        timeout:
+          ATP_SCHEDULE_WAIT_TIMEOUT_MS,
+      })
+      .catch(
+        () => undefined,
+      );
+
     await page.waitForTimeout(
-      12_000,
+      ATP_DOM_SETTLE_MS,
     );
 
     const rawBodyText =
@@ -861,16 +934,12 @@ export async function extractAtpTournamentDailyMatches(
     }
 
     const scheduleLabel =
-      normalizeText(
-        await page
-          .locator(
+      (
+        await readOptionalText(
+          page.locator(
             ".tournament-day .day",
-          )
-          .first()
-          .innerText()
-          .catch(
-            () => "",
           ),
+        )
       ) ||
       null;
 
@@ -925,7 +994,10 @@ export async function extractAtpTournamentDailyMatches(
       const sourceText =
         normalizeText(
           await candidate
-            .innerText()
+            .innerText({
+              timeout:
+                ATP_ELEMENT_TIMEOUT_MS,
+            })
             .catch(
               () => "",
             ),
@@ -943,16 +1015,10 @@ export async function extractAtpTournamentDailyMatches(
        * .match-type = WTA.
        */
       const matchType =
-        normalizeText(
-          await candidate
-            .locator(
-              ".match-type",
-            )
-            .first()
-            .innerText()
-            .catch(
-              () => "",
-            ),
+        await readOptionalText(
+          candidate.locator(
+            ".match-type",
+          ),
         );
 
       if (
@@ -998,16 +1064,10 @@ export async function extractAtpTournamentDailyMatches(
       }
 
       const roundText =
-        normalizeText(
-          await candidate
-            .locator(
-              ".schedule-type",
-            )
-            .first()
-            .innerText()
-            .catch(
-              () => "",
-            ),
+        await readOptionalText(
+          candidate.locator(
+            ".schedule-type",
+          ),
         );
 
       const roundLabel =
@@ -1016,16 +1076,10 @@ export async function extractAtpTournamentDailyMatches(
         );
 
       const locationTimestamp =
-        normalizeText(
-          await candidate
-            .locator(
-              ".schedule-location-timestamp",
-            )
-            .first()
-            .innerText()
-            .catch(
-              () => "",
-            ),
+        await readOptionalText(
+          candidate.locator(
+            ".schedule-location-timestamp",
+          ),
         );
 
       /*
@@ -1062,16 +1116,10 @@ export async function extractAtpTournamentDailyMatches(
           : null;
 
       const scoreText =
-        normalizeText(
-          await candidate
-            .locator(
-              ".schedule-cta-score",
-            )
-            .first()
-            .innerText()
-            .catch(
-              () => "",
-            ),
+        await readOptionalText(
+          candidate.locator(
+            ".schedule-cta-score",
+          ),
         );
 
       const score =
