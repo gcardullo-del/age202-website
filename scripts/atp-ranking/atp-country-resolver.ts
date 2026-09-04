@@ -17,6 +17,10 @@ const STATIC_ATP_COUNTRY_MAP =
       "BIH",
       "Bosnia and Herzegovina",
     ],
+    [
+      "CHN",
+      "China",
+    ],
   ]);
 
 
