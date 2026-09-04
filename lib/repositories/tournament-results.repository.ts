@@ -146,10 +146,12 @@ function getDatePartsInTimeZone(
       },
     );
 
+
   const parts =
     formatter.formatToParts(
       date,
     );
+
 
   const values =
     Object.fromEntries(
@@ -158,6 +160,7 @@ function getDatePartsInTimeZone(
         part.value,
       ]),
     );
+
 
   return {
     year:
@@ -198,10 +201,12 @@ function getTimeZoneOffsetMilliseconds(
       },
     );
 
+
   const parts =
     formatter.formatToParts(
       date,
     );
+
 
   const values =
     Object.fromEntries(
@@ -210,6 +215,7 @@ function getTimeZoneOffsetMilliseconds(
         part.value,
       ]),
     );
+
 
   const representedAsUtc =
     Date.UTC(
@@ -220,6 +226,7 @@ function getTimeZoneOffsetMilliseconds(
       Number(values.minute),
       Number(values.second),
     );
+
 
   return (
     representedAsUtc -
@@ -243,8 +250,10 @@ function createUtcDateFromZonedMidnight(
       0,
     );
 
+
   let utcTimestamp =
     wallClockUtc;
+
 
   for (
     let attempt = 0;
@@ -253,13 +262,17 @@ function createUtcDateFromZonedMidnight(
   ) {
     const offset =
       getTimeZoneOffsetMilliseconds(
-        new Date(utcTimestamp),
+        new Date(
+          utcTimestamp,
+        ),
         timeZone,
       );
+
 
     const correctedTimestamp =
       wallClockUtc -
       offset;
+
 
     if (
       correctedTimestamp ===
@@ -268,9 +281,11 @@ function createUtcDateFromZonedMidnight(
       break;
     }
 
+
     utcTimestamp =
       correctedTimestamp;
   }
+
 
   return new Date(
     utcTimestamp,
@@ -287,16 +302,19 @@ function addCalendarDays(
       Date.UTC(
         parts.year,
         parts.month - 1,
-        parts.day + days,
+        parts.day +
+          days,
       ),
     );
+
 
   return {
     year:
       date.getUTCFullYear(),
 
     month:
-      date.getUTCMonth() + 1,
+      date.getUTCMonth() +
+      1,
 
     day:
       date.getUTCDate(),
@@ -305,7 +323,8 @@ function addCalendarDays(
 
 
 export function getResultsDayRange(
-  date = new Date(),
+  date =
+    new Date(),
 ) {
   const dateParts =
     getDatePartsInTimeZone(
@@ -313,11 +332,13 @@ export function getResultsDayRange(
       RESULTS_TIME_ZONE,
     );
 
+
   const nextDateParts =
     addCalendarDays(
       dateParts,
       1,
     );
+
 
   return {
     start:
@@ -341,14 +362,17 @@ export function getResultsDayRange(
 
 
 export async function getTournamentMatchesForDay(
-  date = new Date(),
+  date =
+    new Date(),
 ) {
   const {
     start,
     end,
-  } = getResultsDayRange(
-    date,
-  );
+  } =
+    getResultsDayRange(
+      date,
+    );
+
 
   return prisma.tournamentMatch.findMany({
     where: {
@@ -373,8 +397,15 @@ export async function getTournamentMatchesForDay(
          * scheduledAt = null rather than inventing a time.
          *
          * Daily ATP records use the provisional
-         * "atp:daily:" external ID, so they can still be
-         * shown while their tournament edition is active.
+         * "atp:daily:" external ID.
+         *
+         * IMPORTANT:
+         * A provisional daily record must only be shown
+         * on the day in which it was synchronized.
+         *
+         * Without this lastSyncedAt filter, a match with
+         * scheduledAt = null would remain visible for the
+         * entire active tournament.
          */
         {
           scheduledAt:
@@ -383,6 +414,14 @@ export async function getTournamentMatchesForDay(
           externalId: {
             startsWith:
               "atp:daily:",
+          },
+
+          lastSyncedAt: {
+            gte:
+              start,
+
+            lt:
+              end,
           },
 
           edition: {
@@ -445,6 +484,7 @@ export async function getCurrentTournamentMatches() {
   const now =
     new Date();
 
+
   return prisma.tournamentMatch.findMany({
     where: {
       edition: {
@@ -493,7 +533,8 @@ export async function getTournamentDraw({
   tournamentSlug,
   year,
   circuit,
-  editionKey = "main",
+  editionKey =
+    "main",
 }: {
   tournamentSlug: string;
   year: number;
@@ -505,12 +546,16 @@ export async function getTournamentDraw({
       .trim()
       .toLowerCase();
 
+
   if (
     !normalizedSlug ||
-    !Number.isInteger(year)
+    !Number.isInteger(
+      year,
+    )
   ) {
     return null;
   }
+
 
   return prisma.tournamentEdition.findFirst({
     where: {
@@ -585,7 +630,8 @@ export async function getTournamentDraw({
 export async function getLatestTournamentDraw({
   tournamentSlug,
   circuit,
-  editionKey = "main",
+  editionKey =
+    "main",
 }: {
   tournamentSlug: string;
   circuit: TournamentCircuit;
@@ -596,9 +642,11 @@ export async function getLatestTournamentDraw({
       .trim()
       .toLowerCase();
 
+
   if (!normalizedSlug) {
     return null;
   }
+
 
   return prisma.tournamentEdition.findFirst({
     where: {
