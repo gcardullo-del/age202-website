@@ -1,0 +1,1116 @@
+AGE202 · ATP CURRENT RESULTS DOM DIAGNOSTIC
+==========================================
+
+URL: https://www.atptour.com/en/scores/current/us-open/560/results
+HTTP: 200
+TITLE: US Open | Results | ATP Tour | Tennis
+PLAYER LINKS: 585
+BODY ELEMENTS: 11163
+
+BODY HAS "Game Set and Match": false
+BODY HAS "wins the match": false
+BODY HAS "Round of 16": false
+BODY HAS "Quarter-Final": false
+
+INTERESTING ELEMENTS
+====================
+#308 | tag=div | class=container | text=ATP Tour ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1) Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+#309 | tag=div | class=wrapper | text=ATP Tour ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1) Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+#316 | tag=div | class=atp_layout | text=ATP Tour ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1) Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+#338 | tag=div | class=atp_layout-container | text=ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1) Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+#339 | tag=div | class=atp_layout-content | text=ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1) Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+#359 | tag=div | class=atp_scores-results | text=ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#379 | tag=div | class=tournaments | text=LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#380 | tag=div | class=tournament tournament--expanded | text=LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#406 | tag=div | class=atp_filters | text=Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay
+#407 | tag=div | class=atp_filters-content | text=Singles Doubles Date (All) 2026.09.02 2026.09.01 2026.08.31 2026.08.30 2026.08.28 2026.08.27 2026.08.26 2026.08.25 2026.08.24 Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying Player (All) Adam Walton Adolfo Daniel Vallejo Adrian Mannarino Alejandro Moro Canas Alejandro Tabilo Aleksandar Kovacevic Aleksandar Vukic Aleksandr Shevchenko Alex Bolt Alex de Minaur Alex Michelsen Alex Molcan Alexander Blockx Alexander Bublik Alexander Zverev Alexandre Muller Alexei Popyrin Alexis Galarneau Andre Ilagan Andrea Guerrieri Andrea Pellegrino Andrew Johnson Andrey Rublev Arthur Fery Arthur Fils Arthur Gea Arthur Rinderknech August Holmgren Aziz Dougaz Ben Shelton Benjamin Bonzi Bernard Tomic Billy Harris Borna Gojo Botic van de Zandschulp Braden Shick Brandon Nakashima Cameron Norrie Camilo Ugo Carabelli Carlos Alcaraz Carlos Taberner Christopher O'Connell Clement Chidekh Clement Tabur Coleman Wong Colton Smith Corentin Moutet Cristian Garin Dalibor Svrcina Damir Dzumhur Dan Added Dane Sweeny Daniel Altmaier Daniel Merida Daniel Milavsky Daniel Rincon Daniil Glinka Daniil Medvedev Darwin Blanch David Jorda Sanchis Denis Shapovalov Diego Dedura Dino Prizmic Dusan Lajovic Elias Ymer Elmer Moller Fabian Marozsan Facundo Diaz Acosta Federico Cina Federico Coria Federico Agustin Gomez Felipe Meligeni Alves Felix Auger-Aliassime Felix Gill Filip Misolic Flavio Cobolli Frances Tiafoe Francesco Maestrelli Francesco Passaro Francisco Cerundolo Francisco Comesana Franco Roncadelli Frederico Ferreira Silva Gael Monfils Gauthier Onclin Genaro Alberto Olivieri Gilles Arnaud Bailly Giovanni Mpetshi Perricard Gonzalo Bueno Grigor Dimitrov Guido Ivan Justo Gustavo Heide Guy Den Ouden Hamad Medjedovic Harry Wendelken Henri Squire Henrique Rocha Henry Searle Hubert Hurkacz Hugo Dellien Hugo Gaston Ignacio Buse J.J. Wolf Jack Kennedy Jack Pinnington Jones Jack Secord Jacob Fearnley Jaime Faria Jakub Mensik James Duckworth James McCabe Jan Choinski Jan-Lennard Struff Jaume Munar Jay Clarke Jenson Brooksby Jerome Kym Jesper de Jong Jiri Lehecka Joel Schwaerzler Jordan Lee Juan Carlos Prado Angelo Juan Manuel Cerundolo Juan Pablo Varillas Juncheng Shang Jurij Rodionov Kamil Majchrzak Karen Khachanov Keegan Smith Kei Nishikori Kilian Feldbausch Kimmer Coppejans Kyrian Jacquet Laslo Djere Lautaro Midon Learner Tien Liam Broady Liam Draxl Lloyd Harris Lorenzo Giustino Lorenzo Musetti Lorenzo Sonego Luca Nardi Luca Van Assche Luciano Darderi Luka Mikrut Luka Pavlovic Lukas Neumayer Mackenzie McDonald Maks Kasnikowski Marco Cecchinato Marco Trungelliti Marcos Giron Mariano Navone Mark Lajal Martin Damm Martin Landaluce Marton Fucsovics Matteo Arnaldi Matteo Berrettini Mattia Bellucci Max Alcala Gurri Michael Antonius Michael Mmoh Michael Zheng Miomir Kecmanovic Moez Echargui Moise Kouame Nicolai Budkov Kjaer Nicolas Mejia Nikolas Sanchez Izquierdo Nikoloz Basilashvili Nishesh Basavareddy Novak Djokovic Nuno Borges Otto Virtanen Pablo Carreno Busta Pablo Llamas Ruiz Pedro Martinez Pol Martin Tiffon Quentin Halys Rafael Jodar Raphael Collignon Raul Brancaccio Rei Sakamoto Remy Bertola Rinky Hijikata Rio Noguchi Roberto Carballes Baena Roman Safiullin Roman Andres Burruchaga Sebastian Baez Sebastian Gorzny Sebastian Ofner Seongchan Hong Shintaro Mochizuki Sho Shimabukuro Soonwoo Kwon Spencer Johnson Stan Wawrinka Stefano Napolitano Stefano Travaglia Stefanos Sakellaridis Stefanos Tsitsipas Sumit Nagal Tallon Griekspoor Taro Daniel Taylor Fritz Terence Atmane Thiago Seyboth Wild Thiago Agustin Tirante Timofey Skatov Titouan Droguet Toby Samuel Tom Gentzsch Tomas Barrios Vera Tomas Machac Tomas Martin Etcheverry Tommy Paul Trevor Svajda Tristan Boyer Tristan Schoolkate Ugo Blanchet Valentin Royer Valentin Vacherot Vilius Gaubas Vit Kopriva Vitaliy Sachko Yannick Hanfmann Yibing Wu Yunchaokete Bu Zachary Svajda Zdenek Kolar Zizou Bergs Zsombor Piros Country (All) Argentina Australia Austria Belgium Bolivia Bosnia-Herzegovina Brazil Bulgaria Canada Chile China Colombia Croatia Czechia Denmark Estonia Finland France Georgia Germany Great Britain Greece Hong Kong Hungary India Italy Japan Kazakhstan Lithuania Monaco Netherlands Norway Paraguay Peru Poland Portugal Russia Serbia Slovakia South Africa South Korea Spain Sweden Switzerland Tunisia Ukraine United States Uruguay
+#428 | tag=div | class=atp_filters-dropdown | text=Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying
+#429 | tag=select | class=joiner trigger-change | text=Round (All) 3rd Round Qualifying Round of 64 Round of 128 2nd Round Qualifying 1st Round Qualifying
+#432 | tag=option | class=(none) | text=Round of 64
+#433 | tag=option | class=(none) | text=Round of 128
+#741 | tag=div | class=content content--group | text=Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#742 | tag=div | class=atp_accordion | text=Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#743 | tag=div | class=atp_accordion-items | text=Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats Tue, 01 September, 2026 Day (9) Mon, 31 August, 2026 Day (8) Sun, 30 August, 2026 Day (7) Fri, 28 August, 2026 Day (5) Thu, 27 August, 2026 Day (4) Wed, 26 August, 2026 Day (3) Tue, 25 August, 2026 Day (2) Mon, 24 August, 2026 Day (1)
+#744 | tag=div | class=atp_accordion-item | text=Wed, 02 September, 2026 Day (10) Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats
+#752 | tag=div | class=atp_accordion-content atp_accordion-content--expanded | text=Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats
+#753 | tag=div | class=match-group match-group--active | text=Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats
+#754 | tag=div | class=match-group-content | text=Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats
+#755 | tag=div | class=match | text=Round of 64 - Arthur Ashe Stadium Carlos Alcaraz (2) 4 6 6 6 Jaime Faria 6 0 3 2 H2H Stats
+#756 | tag=div | class=match-header | text=Round of 64 - Arthur Ashe Stadium
+#757 | tag=span | class=(none) | text=Round of 64 - Arthur Ashe Stadium
+#758 | tag=strong | class=(none) | text=Round of 64 - Arthur Ashe Stadium
+#809 | tag=div | class=match | text=Round of 64 - Louis Armstrong Stadium Daniil Medvedev (7) 6 6 7 Sebastian Gorzny (WC) 1 3 5 H2H Stats
+#810 | tag=div | class=match-header | text=Round of 64 - Louis Armstrong Stadium
+#811 | tag=span | class=(none) | text=Round of 64 - Louis Armstrong Stadium
+#812 | tag=strong | class=(none) | text=Round of 64 - Louis Armstrong Stadium
+#859 | tag=div | class=match | text=Round of 64 - Arthur Ashe Stadium Ben Shelton (8) 6 5 7 7 Hubert Hurkacz 3 7 6 3 5 H2H Stats
+#860 | tag=div | class=match-header | text=Round of 64 - Arthur Ashe Stadium
+#861 | tag=span | class=(none) | text=Round of 64 - Arthur Ashe Stadium
+#862 | tag=strong | class=(none) | text=Round of 64 - Arthur Ashe Stadium
+#914 | tag=div | class=match | text=Round of 64 - Louis Armstrong Stadium Frances Tiafoe (11) 6 7 7 Rei Sakamoto (Q) 3 6 2 5 H2H Stats
+#915 | tag=div | class=match-header | text=Round of 64 - Louis Armstrong Stadium
+#916 | tag=span | class=(none) | text=Round of 64 - Louis Armstrong Stadium
+#917 | tag=strong | class=(none) | text=Round of 64 - Louis Armstrong Stadium
+#965 | tag=div | class=match | text=Round of 64 - Court 7 Alexander Bublik (15) 6 6 6 Adrian Mannarino 3 1 1 H2H Stats
+#966 | tag=div | class=match-header | text=Round of 64 - Court 7
+#967 | tag=span | class=(none) | text=Round of 64 - Court 7
+#968 | tag=strong | class=(none) | text=Round of 64 - Court 7
+#1015 | tag=div | class=match | text=Round of 64 - Grandstand Alex Michelsen 6 6 6 Brandon Nakashima (16) 3 4 4 H2H Stats
+#1016 | tag=div | class=match-header | text=Round of 64 - Grandstand
+#1017 | tag=span | class=(none) | text=Round of 64 - Grandstand
+#1018 | tag=strong | class=(none) | text=Round of 64 - Grandstand
+#1065 | tag=div | class=match | text=Round of 64 - Court 5 Jiri Lehecka (18) 6 6 6 Toby Samuel (Q) 4 2 4 H2H Stats
+#1066 | tag=div | class=match-header | text=Round of 64 - Court 5
+#1067 | tag=span | class=(none) | text=Round of 64 - Court 5
+#1068 | tag=strong | class=(none) | text=Round of 64 - Court 5
+#1115 | tag=div | class=match | text=Round of 64 - Grandstand Tommy Paul (20) 6 6 5 6 Dino Prizmic 2 3 7 4 H2H Stats
+#1116 | tag=div | class=match-header | text=Round of 64 - Grandstand
+#1117 | tag=span | class=(none) | text=Round of 64 - Grandstand
+#1118 | tag=strong | class=(none) | text=Round of 64 - Grandstand
+#1169 | tag=div | class=match | text=Round of 64 - Court 10 Valentin Vacherot (22) 6 4 7 6 Kamil Majchrzak 4 6 6 3 2 H2H Stats
+#1170 | tag=div | class=match-header | text=Round of 64 - Court 10
+#1171 | tag=span | class=(none) | text=Round of 64 - Court 10
+#1172 | tag=strong | class=(none) | text=Round of 64 - Court 10
+#1224 | tag=div | class=match | text=Round of 64 - Court 11 Daniel Merida 6 3 6 6 6 Andrey Rublev (23) 7 2 4 4 H2H Stats
+#1225 | tag=div | class=match-header | text=Round of 64 - Court 11
+#1226 | tag=span | class=(none) | text=Round of 64 - Court 11
+#1227 | tag=strong | class=(none) | text=Round of 64 - Court 11
+#1279 | tag=div | class=match | text=Round of 64 - Court 10 Arthur Rinderknech (26) 7 6 7 Jaume Munar 6 4 2 5 H2H Stats
+#1280 | tag=div | class=match-header | text=Round of 64 - Court 10
+#1281 | tag=span | class=(none) | text=Round of 64 - Court 10
+#1282 | tag=strong | class=(none) | text=Round of 64 - Court 10
+#1330 | tag=div | class=match | text=Round of 64 - Court 12 Tomas Martin Etcheverry (27) 6 6 3 6 Jacob Fearnley (LL) 3 3 6 3 H2H Stats
+#1331 | tag=div | class=match-header | text=Round of 64 - Court 12
+#1332 | tag=span | class=(none) | text=Round of 64 - Court 12
+#1333 | tag=strong | class=(none) | text=Round of 64 - Court 12
+#1384 | tag=div | class=match | text=Round of 64 - Court 12 Mariano Navone 3 6 6 7 Matteo Berrettini 6 3 4 6 4 H2H Stats
+#1385 | tag=div | class=match-header | text=Round of 64 - Court 12
+#1386 | tag=span | class=(none) | text=Round of 64 - Court 12
+#1387 | tag=strong | class=(none) | text=Round of 64 - Court 12
+#1439 | tag=div | class=match | text=Round of 64 - Court 13 Denis Shapovalov 6 6 7 Luca Van Assche 0 4 6 7 H2H Stats
+#1440 | tag=div | class=match-header | text=Round of 64 - Court 13
+#1441 | tag=span | class=(none) | text=Round of 64 - Court 13
+#1442 | tag=strong | class=(none) | text=Round of 64 - Court 13
+#1490 | tag=div | class=match | text=Round of 64 - Stadium 17 Stefanos Tsitsipas 6 1 6 7 6 Lloyd Harris (Q) 7 3 6 4 4 H2H Stats
+#1491 | tag=div | class=match-header | text=Round of 64 - Stadium 17
+#1492 | tag=span | class=(none) | text=Round of 64 - Stadium 17
+#1493 | tag=strong | class=(none) | text=Round of 64 - Stadium 17
+#1546 | tag=div | class=match | text=Round of 64 - Court 6 Yibing Wu 7 6 6 James Duckworth 5 3 1 H2H Stats
+#1547 | tag=div | class=match-header | text=Round of 64 - Court 6
+#1548 | tag=span | class=(none) | text=Round of 64 - Court 6
+#1549 | tag=strong | class=(none) | text=Round of 64 - Court 6
+#1596 | tag=div | class=match | text=Round of 128 - Court 11 Alex de Minaur (6) 6 6 6 Andrea Guerrieri (Q) 2 2 4 H2H Stats
+#1597 | tag=div | class=match-header | text=Round of 128 - Court 11
+#1598 | tag=span | class=(none) | text=Round of 128 - Court 11
+#1599 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#1646 | tag=div | class=match | text=Round of 128 - Stadium 17 Yunchaokete Bu (LL) 6 6 6 Rafael Jodar (12) 2 1 1 H2H Stats
+#1647 | tag=div | class=match-header | text=Round of 128 - Stadium 17
+#1648 | tag=span | class=(none) | text=Round of 128 - Stadium 17
+#1649 | tag=strong | class=(none) | text=Round of 128 - Stadium 17
+#1696 | tag=div | class=match | text=Round of 128 - Court 6 Ignacio Buse (32) 3 6 6 6 6 6 Marcos Giron 6 3 3 7 1 H2H Stats
+#1697 | tag=div | class=match-header | text=Round of 128 - Court 6
+#1698 | tag=span | class=(none) | text=Round of 128 - Court 6
+#1699 | tag=strong | class=(none) | text=Round of 128 - Court 6
+#1755 | tag=div | class=match | text=Round of 128 - Court 7 Zachary Svajda 6 6 6 5 6 Daniel Altmaier 3 1 7 2 H2H Stats
+#1756 | tag=div | class=match-header | text=Round of 128 - Court 7
+#1757 | tag=span | class=(none) | text=Round of 128 - Court 7
+#1758 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#1810 | tag=div | class=match | text=Round of 128 - Court 5 Botic van de Zandschulp 6 6 7 Jan Choinski 3 1 6 5 H2H Stats
+#1811 | tag=div | class=match-header | text=Round of 128 - Court 5
+#1812 | tag=span | class=(none) | text=Round of 128 - Court 5
+#1813 | tag=strong | class=(none) | text=Round of 128 - Court 5
+#1861 | tag=div | class=match | text=Round of 128 - Court 10 Michael Zheng (WC) 6 6 6 Fabian Marozsan 4 4 2 H2H Stats
+#1862 | tag=div | class=match-header | text=Round of 128 - Court 10
+#1863 | tag=span | class=(none) | text=Round of 128 - Court 10
+#1864 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#1919 | tag=div | class=atp_accordion-content | text=Round of 128 - Arthur Ashe Stadium Alexander Zverev (1) 6 3 6 7 7 6 Lorenzo Sonego 4 6 7 5 4 H2H Stats
+#1920 | tag=div | class=match-group match-group--active | text=Round of 128 - Arthur Ashe Stadium Alexander Zverev (1) 6 3 6 7 7 6 Lorenzo Sonego 4 6 7 5 4 H2H Stats
+#1921 | tag=div | class=match-group-content | text=Round of 128 - Arthur Ashe Stadium Alexander Zverev (1) 6 3 6 7 7 6 Lorenzo Sonego 4 6 7 5 4 H2H Stats
+#1922 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Alexander Zverev (1) 6 3 6 7 7 6 Lorenzo Sonego 4 6 7 5 4 H2H Stats
+#1923 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#1924 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#1925 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#1989 | tag=div | class=atp_accordion-content | text=Round of 128 - Louis Armstrong Stadium Frances Tiafoe (11) 6 4 3 6 6 Martin Damm 4 6 6 3 4 H2H Stats
+#1990 | tag=div | class=match-group match-group--active | text=Round of 128 - Louis Armstrong Stadium Frances Tiafoe (11) 6 4 3 6 6 Martin Damm 4 6 6 3 4 H2H Stats
+#1991 | tag=div | class=match-group-content | text=Round of 128 - Louis Armstrong Stadium Frances Tiafoe (11) 6 4 3 6 6 Martin Damm 4 6 6 3 4 H2H Stats
+#1992 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Frances Tiafoe (11) 6 4 3 6 6 Martin Damm 4 6 6 3 4 H2H Stats
+#1993 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#1994 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#1995 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#2058 | tag=div | class=atp_accordion-content | text=Round of 128 - Louis Armstrong Stadium Alexander Bublik (15) 6 6 3 6 J.J. Wolf (WC) 4 2 6 1 H2H Stats
+#2059 | tag=div | class=match-group match-group--active | text=Round of 128 - Louis Armstrong Stadium Alexander Bublik (15) 6 6 3 6 J.J. Wolf (WC) 4 2 6 1 H2H Stats
+#2060 | tag=div | class=match-group-content | text=Round of 128 - Louis Armstrong Stadium Alexander Bublik (15) 6 6 3 6 J.J. Wolf (WC) 4 2 6 1 H2H Stats
+#2061 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Alexander Bublik (15) 6 6 3 6 J.J. Wolf (WC) 4 2 6 1 H2H Stats
+#2062 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#2063 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#2064 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#5995 | tag=div | class=atp_accordion-content | text=Round of 128 - Arthur Ashe Stadium Carlos Alcaraz (2) 6 6 6 Roman Safiullin 4 4 4 H2H Stats Round of 128 - Grandstand Felix Auger-Aliassime (3) 7 4 6 7 Rinky Hijikata 5 6 3 5 H2H Stats Round of 128 - Arthur Ashe Stadium Mariano Navone 7 5 4 6 6 Novak Djokovic (4) 6 5 7 6 2 1 H2H Stats Round of 128 - Louis Armstrong Stadium Flavio Cobolli (5) 3 2 6 6 6 Francisco Comesana 6 6 3 4 4 H2H Stats Round of 128 - Arthur Ashe Stadium Daniil Medvedev (7) 6 6 6 Hugo Gaston (Q) 4 2 4 H2H Stats Round of 128 - Arthur Ashe Stadium Ben Shelton (8) 1 6 7 6 Tallon Griekspoor 6 1 6 3 2 H2H Stats Round of 128 - Arthur Ashe Stadium Taylor Fritz (9) 6 6 6 Darwin Blanch (WC) 3 2 4 H2H Stats Round of 128 - Louis Armstrong Stadium Stefanos Tsitsipas 4 7 6 6 Arthur Fils (10) 6 6 3 1 4 H2H Stats Round of 128 - Grandstand Lorenzo Musetti (13) 6 6 7 Arthur Fery 3 3 5 H2H Stats Round of 128 - Stadium 17 Learner Tien (14) 6 6 6 Nuno Borges 4 1 2 H2H Stats Round of 128 - Stadium 17 Brandon Nakashima (16) 6 6 6 Sebastian Baez 2 1 0 H2H Stats Round of 128 - Court 5 Jakub Mensik (17) 6 6 7 Shintaro Mochizuki (LL) 1 4 5 H2H Stats Round of 128 - Grandstand Jiri Lehecka (18) 6 7 4 6 Pablo Carreno Busta 1 6 5 6 2 H2H Stats Round of 128 - Louis Armstrong Stadium Tommy Paul (20) 6 3 6 6 6 Coleman Wong (Q) 7 1 3 3 H2H Stats Round of 128 - Court 5 Luciano Darderi (21) 6 3 6 7 Harry Wendelken (Q) 2 6 2 5 H2H Stats Round of 128 - Court 11 Valentin Vacherot (22) 6 6 7 Aleksandar Kovacevic 2 3 5 H2H Stats Round of 128 - Court 7 Andrey Rublev (23) 6 5 6 0 6 6 7 Otto Virtanen (LL) 7 7 0 2 6 5 H2H Stats Round of 128 - Court 5 Francisco Cerundolo (24) 6 6 7 Filip Misolic 4 3 5 H2H Stats Round of 128 - Court 6 Alejandro Tabilo (25) 6 6 6 7 6 Yannick Hanfmann 3 2 7 3 H2H Stats Round of 128 - Court 7 Arthur Rinderknech (26) 6 4 6 7 6 Sho Shimabukuro 7 2 6 4 2 H2H Stats Round of 128 - Court 10 Tomas Martin Etcheverry (27) 6 6 6 Vit Kopriva 3 4 0 H2H Stats Round of 128 - Court 7 Alexander Blockx (28) 6 6 6 Tomas Barrios Vera (Q) 3 4 2 H2H Stats Round of 128 - Court 5 Luca Van Assche 6 6 6 6 6 Cameron Norrie (29) 7 2 2 3 H2H Stats Round of 128 - Court 10 James Duckworth 5 6 6 7 Matteo Arnaldi (30) 7 3 2 6 8 H2H Stats Round of 128 - Court 12 Zizou Bergs (31) 6 3 6 6 Carlos Taberner 3 6 2 2 H2H Stats Round of 128 - Court 10 Mattia Bellucci 6 6 6 Zsombor Piros (Q) 4 2 0 H2H Stats Round of 128 - Grandstand Matteo Berrettini 7 7 6 Stan Wawrinka (WC) 6 4 6 3 0 H2H Stats Round of 128 - Court 13 Benjamin Bonzi 6 3 6 6 Alex Molcan 4 6 3 2 H2H Stats Round of 128 - Court 4 Jesper de Jong 2 6 4 6 6 Francesco Passaro (Q) 6 2 6 3 2 H2H Stats Round of 128 - Stadium 17 Jaime Faria 6 7 4 1 6 Jenson Brooksby 3 6 4 6 6 2 H2H Stats Round of 128 - Court 12 Jacob Fearnley (LL) 4 6 4 7 6 Martin Landaluce 6 2 6 5 3 H2H Stats Round of 128 - Court 6 Arthur Gea (LL) 6 2 3 6 6 Juan Manuel Cerundolo 3 6 6 3 1 H2H Stats Round of 128 - Court 11 Sebastian Gorzny (WC) 3 6 3 6 7 Raphael Collignon 6 3 6 3 6 9 H2H Stats Round of 128 - Court 4 Quentin Halys 6 7 6 7 6 Facundo Diaz Acosta 4 5 7 1 H2H Stats Round of 128 - Court 12 Lloyd Harris (Q) 6 6 6 Jack Kennedy (WC) 4 2 2 H2H Stats Round of 128 - Court 4 Hubert Hurkacz 6 4 6 6 Damir Dzumhur 4 6 1 1 H2H Stats Round of 128 - Court 11 Karen Khachanov 6 6 6 Roman Andres Burruchaga 3 0 1 H2H Stats Round of 128 - Court 12 Kamil Majchrzak 6 6 6 Hamad Medjedovic 3 3 3 H2H Stats Round of 128 - Court 6 Adrian Mannarino 4 3 6 6 6 Thiago Agustin Tirante 6 6 3 3 3 H2H Stats Round of 128 - Court 13 Daniel Merida 6 6 6 Marton Fucsovics 4 4 2 H2H Stats Round of 128 - Stadium 17 Alex Michelsen 6 6 6 Federico Cina (Q) 4 1 0 H2H Stats Round of 128 - Louis Armstrong Stadium Gael Monfils (WC) 2 6 6 6 Adolfo Daniel Vallejo 6 1 2 0 H2H Stats Round of 128 - Court 13 Jaume Munar 6 5 3 6 7 7 Terence Atmane 7 6 1 6 4 5 H2H Stats Round of 128 - Court 12 Alexei Popyrin 3 6 6 6 Grigor Dimitrov (Q) 6 3 2 4 H2H Stats Round of 128 - Court 10 Dino Prizmic 2 6 6 5 7 Aleksandr Shevchenko 6 3 3 7 5 H2H Stats Round of 128 - Court 6 Jurij Rodionov (Q) 7 6 7 Giovanni Mpetshi Perricard 6 2 0 6 4 H2H Stats Round of 128 - Court 7 Rei Sakamoto (Q) 6 6 5 6 3 6 Aleksandar Vukic 4 7 4 6 4 H2H Stats Round of 128 - Court 10 Toby Samuel (Q) 6 6 6 Tomas Machac 2 3 2 H2H Stats Round of 128 - Court 11 Tristan Schoolkate (Q) 7 3 6 6 Nishesh Basavareddy (Q) 6 4 6 3 4 H2H Stats Round of 128 - Grandstand Denis Shapovalov 6 4 6 6 Miomir Kecmanovic 4 6 4 1 H2H Stats Round of 128 - Court 4 Jan-Lennard Struff 6 6 6 Camilo Ugo Carabelli 4 3 3 H2H Stats Round of 128 - Court 15 Dalibor Svrcina (Q) 6 6 5 5 6 Valentin Royer 4 3 7 7 2 H2H Stats Round of 128 - Court 7 Dane Sweeny (WC) 7 6 3 Corentin Moutet 6 4 4 0 H2H Stats Round of 128 - Court 13 Marco Trungelliti 0 7 1 6 6 Juncheng Shang 6 6 5 6 3 4 H2H Stats Round of 128 - Court 11 Yibing Wu 7 6 7 Adam Walton 6 2 2 5 H2H Stats 1st Round Qualifying - Court 5 Coleman Wong (2) 5 6 6 Elmer Moller 7 3 4 H2H Stats 1st Round Qualifying - Court 5 Jacob Fearnley (4) 7 6 Roberto Carballes Baena 6 3 3 H2H Stats 1st Round Qualifying - Court 6 Daniel Rincon 2 6 7 Titouan Droguet (5) 6 4 6 1 H2H Stats 1st Round Qualifying - Court 7 Toby Samuel (7) 6 2 6 6 Francesco Maestrelli 7 3 1 H2H Stats 1st Round Qualifying - Court 15 Dalibor Svrcina (8) 6 6 Felipe Meligeni Alves 3 4 H2H Stats 1st Round Qualifying - Court 9 Otto Virtanen (9) 6 6 Ugo Blanchet 4 4 H2H Stats 1st Round Qualifying - Court 6 Kyrian Jacquet (10) 6 6 Lautaro Midon 4 3 H2H Stats 1st Round Qualifying - Court 4 Vilius Gaubas (14) 6 7 Kilian Feldbausch 3 6 1 H2H Stats 1st Round Qualifying - Court 10 Joel Schwaerzler 2 6 6 Gustavo Heide (20) 6 4 4 H2H Stats 1st Round Qualifying - Court 9 Jurij Rodionov (21) 6 6 Kimmer Coppejans 1 4 H2H Stats 1st Round Qualifying - Court 12 Alexandre Muller (23) 7 6 Laslo Djere 5 0 H2H Stats 1st Round Qualifying - Stadium 17 Cristian Garin (24) 7 4 7 Spencer Johnson (WC) 6 5 6 6 9 H2H Stats 1st Round Qualifying - Court 6 Harry Wendelken 6 3 6 Stefano Travaglia (26) 4 6 3 H2H Stats 1st Round Qualifying - Stadium 17 Mackenzie McDonald (28) 6 7 Stefano Napolitano 4 5 H2H Stats 1st Round Qualifying - Court 13 Tom Gentzsch (29) 7 6 Pol Martin Tiffon 5 3 H2H Stats 1st Round Qualifying - Court 7 Tomas Barrios Vera (31) 6 5 6 Juan Carlos Prado Angelo 2 7 0 H2H Stats 1st Round Qualifying - Court 9 Remy Bertola 6 6 Alejandro Moro Canas 3 4 H2H Stats 1st Round Qualifying - Court 11 Marco Cecchinato 7 6 Liam Broady 6 4 3 H2H Stats 1st Round Qualifying - Court 15 Aziz Dougaz 6 6 Federico Agustin Gomez 4 2 H2H Stats 1st Round Qualifying - Court 8 Frederico Ferreira Silva 7 6 Diego Dedura 5 2 H2H Stats 1st Round Qualifying - Court 11 Alexis Galarneau 7 6 Keegan Smith 6 4 3 H2H Stats 1st Round Qualifying - Court 16 Andrea Guerrieri 6 6 4 6 August Holmgren 3 7 2 H2H Stats 1st Round Qualifying - Court 4 Billy Harris 6 6 Gonzalo Bueno 1 3 H2H Stats 1st Round Qualifying - Court 11 Jordan Lee (WC) 4 6 6 Mark Lajal 6 3 3 H2H Stats 1st Round Qualifying - Court 8 Lukas Neumayer 6 6 James McCabe (Alt) 1 4 H2H Stats 1st Round Qualifying - Court 8 Genaro Alberto Olivieri 5 6 7 Guy Den Ouden 7 4 5 H2H Stats 1st Round Qualifying - Court 16 Francesco Passaro 7 6 Felix Gill 6 3 2 H2H Stats 1st Round Qualifying - Court 13 Luka Pavlovic 6 6 3 7 Juan Pablo Varillas 3 7 5 H2H Stats 1st Round Qualifying - Grandstand Jack Pinnington Jones 7 6 Trevor Svajda (WC) 6 4 4 H2H Stats 1st Round Qualifying - Court 4 Rei Sakamoto 4 6 6 Jay Clarke (Alt) 6 3 4 H2H Stats 1st Round Qualifying - Court 10 Thiago Seyboth Wild 6 6 Raul Brancaccio 2 1 H2H Stats 1st Round Qualifying - Court 13 Elias Ymer 6 6 Franco Roncadelli 4 3 H2H Stats
+#5996 | tag=div | class=match-group match-group--active | text=Round of 128 - Arthur Ashe Stadium Carlos Alcaraz (2) 6 6 6 Roman Safiullin 4 4 4 H2H Stats Round of 128 - Grandstand Felix Auger-Aliassime (3) 7 4 6 7 Rinky Hijikata 5 6 3 5 H2H Stats Round of 128 - Arthur Ashe Stadium Mariano Navone 7 5 4 6 6 Novak Djokovic (4) 6 5 7 6 2 1 H2H Stats Round of 128 - Louis Armstrong Stadium Flavio Cobolli (5) 3 2 6 6 6 Francisco Comesana 6 6 3 4 4 H2H Stats Round of 128 - Arthur Ashe Stadium Daniil Medvedev (7) 6 6 6 Hugo Gaston (Q) 4 2 4 H2H Stats Round of 128 - Arthur Ashe Stadium Ben Shelton (8) 1 6 7 6 Tallon Griekspoor 6 1 6 3 2 H2H Stats Round of 128 - Arthur Ashe Stadium Taylor Fritz (9) 6 6 6 Darwin Blanch (WC) 3 2 4 H2H Stats Round of 128 - Louis Armstrong Stadium Stefanos Tsitsipas 4 7 6 6 Arthur Fils (10) 6 6 3 1 4 H2H Stats Round of 128 - Grandstand Lorenzo Musetti (13) 6 6 7 Arthur Fery 3 3 5 H2H Stats Round of 128 - Stadium 17 Learner Tien (14) 6 6 6 Nuno Borges 4 1 2 H2H Stats Round of 128 - Stadium 17 Brandon Nakashima (16) 6 6 6 Sebastian Baez 2 1 0 H2H Stats Round of 128 - Court 5 Jakub Mensik (17) 6 6 7 Shintaro Mochizuki (LL) 1 4 5 H2H Stats Round of 128 - Grandstand Jiri Lehecka (18) 6 7 4 6 Pablo Carreno Busta 1 6 5 6 2 H2H Stats Round of 128 - Louis Armstrong Stadium Tommy Paul (20) 6 3 6 6 6 Coleman Wong (Q) 7 1 3 3 H2H Stats Round of 128 - Court 5 Luciano Darderi (21) 6 3 6 7 Harry Wendelken (Q) 2 6 2 5 H2H Stats Round of 128 - Court 11 Valentin Vacherot (22) 6 6 7 Aleksandar Kovacevic 2 3 5 H2H Stats Round of 128 - Court 7 Andrey Rublev (23) 6 5 6 0 6 6 7 Otto Virtanen (LL) 7 7 0 2 6 5 H2H Stats Round of 128 - Court 5 Francisco Cerundolo (24) 6 6 7 Filip Misolic 4 3 5 H2H Stats Round of 128 - Court 6 Alejandro Tabilo (25) 6 6 6 7 6 Yannick Hanfmann 3 2 7 3 H2H Stats Round of 128 - Court 7 Arthur Rinderknech (26) 6 4 6 7 6 Sho Shimabukuro 7 2 6 4 2 H2H Stats Round of 128 - Court 10 Tomas Martin Etcheverry (27) 6 6 6 Vit Kopriva 3 4 0 H2H Stats Round of 128 - Court 7 Alexander Blockx (28) 6 6 6 Tomas Barrios Vera (Q) 3 4 2 H2H Stats Round of 128 - Court 5 Luca Van Assche 6 6 6 6 6 Cameron Norrie (29) 7 2 2 3 H2H Stats Round of 128 - Court 10 James Duckworth 5 6 6 7 Matteo Arnaldi (30) 7 3 2 6 8 H2H Stats Round of 128 - Court 12 Zizou Bergs (31) 6 3 6 6 Carlos Taberner 3 6 2 2 H2H Stats Round of 128 - Court 10 Mattia Bellucci 6 6 6 Zsombor Piros (Q) 4 2 0 H2H Stats Round of 128 - Grandstand Matteo Berrettini 7 7 6 Stan Wawrinka (WC) 6 4 6 3 0 H2H Stats Round of 128 - Court 13 Benjamin Bonzi 6 3 6 6 Alex Molcan 4 6 3 2 H2H Stats Round of 128 - Court 4 Jesper de Jong 2 6 4 6 6 Francesco Passaro (Q) 6 2 6 3 2 H2H Stats Round of 128 - Stadium 17 Jaime Faria 6 7 4 1 6 Jenson Brooksby 3 6 4 6 6 2 H2H Stats Round of 128 - Court 12 Jacob Fearnley (LL) 4 6 4 7 6 Martin Landaluce 6 2 6 5 3 H2H Stats Round of 128 - Court 6 Arthur Gea (LL) 6 2 3 6 6 Juan Manuel Cerundolo 3 6 6 3 1 H2H Stats Round of 128 - Court 11 Sebastian Gorzny (WC) 3 6 3 6 7 Raphael Collignon 6 3 6 3 6 9 H2H Stats Round of 128 - Court 4 Quentin Halys 6 7 6 7 6 Facundo Diaz Acosta 4 5 7 1 H2H Stats Round of 128 - Court 12 Lloyd Harris (Q) 6 6 6 Jack Kennedy (WC) 4 2 2 H2H Stats Round of 128 - Court 4 Hubert Hurkacz 6 4 6 6 Damir Dzumhur 4 6 1 1 H2H Stats Round of 128 - Court 11 Karen Khachanov 6 6 6 Roman Andres Burruchaga 3 0 1 H2H Stats Round of 128 - Court 12 Kamil Majchrzak 6 6 6 Hamad Medjedovic 3 3 3 H2H Stats Round of 128 - Court 6 Adrian Mannarino 4 3 6 6 6 Thiago Agustin Tirante 6 6 3 3 3 H2H Stats Round of 128 - Court 13 Daniel Merida 6 6 6 Marton Fucsovics 4 4 2 H2H Stats Round of 128 - Stadium 17 Alex Michelsen 6 6 6 Federico Cina (Q) 4 1 0 H2H Stats Round of 128 - Louis Armstrong Stadium Gael Monfils (WC) 2 6 6 6 Adolfo Daniel Vallejo 6 1 2 0 H2H Stats Round of 128 - Court 13 Jaume Munar 6 5 3 6 7 7 Terence Atmane 7 6 1 6 4 5 H2H Stats Round of 128 - Court 12 Alexei Popyrin 3 6 6 6 Grigor Dimitrov (Q) 6 3 2 4 H2H Stats Round of 128 - Court 10 Dino Prizmic 2 6 6 5 7 Aleksandr Shevchenko 6 3 3 7 5 H2H Stats Round of 128 - Court 6 Jurij Rodionov (Q) 7 6 7 Giovanni Mpetshi Perricard 6 2 0 6 4 H2H Stats Round of 128 - Court 7 Rei Sakamoto (Q) 6 6 5 6 3 6 Aleksandar Vukic 4 7 4 6 4 H2H Stats Round of 128 - Court 10 Toby Samuel (Q) 6 6 6 Tomas Machac 2 3 2 H2H Stats Round of 128 - Court 11 Tristan Schoolkate (Q) 7 3 6 6 Nishesh Basavareddy (Q) 6 4 6 3 4 H2H Stats Round of 128 - Grandstand Denis Shapovalov 6 4 6 6 Miomir Kecmanovic 4 6 4 1 H2H Stats Round of 128 - Court 4 Jan-Lennard Struff 6 6 6 Camilo Ugo Carabelli 4 3 3 H2H Stats Round of 128 - Court 15 Dalibor Svrcina (Q) 6 6 5 5 6 Valentin Royer 4 3 7 7 2 H2H Stats Round of 128 - Court 7 Dane Sweeny (WC) 7 6 3 Corentin Moutet 6 4 4 0 H2H Stats Round of 128 - Court 13 Marco Trungelliti 0 7 1 6 6 Juncheng Shang 6 6 5 6 3 4 H2H Stats Round of 128 - Court 11 Yibing Wu 7 6 7 Adam Walton 6 2 2 5 H2H Stats 1st Round Qualifying - Court 5 Coleman Wong (2) 5 6 6 Elmer Moller 7 3 4 H2H Stats 1st Round Qualifying - Court 5 Jacob Fearnley (4) 7 6 Roberto Carballes Baena 6 3 3 H2H Stats 1st Round Qualifying - Court 6 Daniel Rincon 2 6 7 Titouan Droguet (5) 6 4 6 1 H2H Stats 1st Round Qualifying - Court 7 Toby Samuel (7) 6 2 6 6 Francesco Maestrelli 7 3 1 H2H Stats 1st Round Qualifying - Court 15 Dalibor Svrcina (8) 6 6 Felipe Meligeni Alves 3 4 H2H Stats 1st Round Qualifying - Court 9 Otto Virtanen (9) 6 6 Ugo Blanchet 4 4 H2H Stats 1st Round Qualifying - Court 6 Kyrian Jacquet (10) 6 6 Lautaro Midon 4 3 H2H Stats 1st Round Qualifying - Court 4 Vilius Gaubas (14) 6 7 Kilian Feldbausch 3 6 1 H2H Stats 1st Round Qualifying - Court 10 Joel Schwaerzler 2 6 6 Gustavo Heide (20) 6 4 4 H2H Stats 1st Round Qualifying - Court 9 Jurij Rodionov (21) 6 6 Kimmer Coppejans 1 4 H2H Stats 1st Round Qualifying - Court 12 Alexandre Muller (23) 7 6 Laslo Djere 5 0 H2H Stats 1st Round Qualifying - Stadium 17 Cristian Garin (24) 7 4 7 Spencer Johnson (WC) 6 5 6 6 9 H2H Stats 1st Round Qualifying - Court 6 Harry Wendelken 6 3 6 Stefano Travaglia (26) 4 6 3 H2H Stats 1st Round Qualifying - Stadium 17 Mackenzie McDonald (28) 6 7 Stefano Napolitano 4 5 H2H Stats 1st Round Qualifying - Court 13 Tom Gentzsch (29) 7 6 Pol Martin Tiffon 5 3 H2H Stats 1st Round Qualifying - Court 7 Tomas Barrios Vera (31) 6 5 6 Juan Carlos Prado Angelo 2 7 0 H2H Stats 1st Round Qualifying - Court 9 Remy Bertola 6 6 Alejandro Moro Canas 3 4 H2H Stats 1st Round Qualifying - Court 11 Marco Cecchinato 7 6 Liam Broady 6 4 3 H2H Stats 1st Round Qualifying - Court 15 Aziz Dougaz 6 6 Federico Agustin Gomez 4 2 H2H Stats 1st Round Qualifying - Court 8 Frederico Ferreira Silva 7 6 Diego Dedura 5 2 H2H Stats 1st Round Qualifying - Court 11 Alexis Galarneau 7 6 Keegan Smith 6 4 3 H2H Stats 1st Round Qualifying - Court 16 Andrea Guerrieri 6 6 4 6 August Holmgren 3 7 2 H2H Stats 1st Round Qualifying - Court 4 Billy Harris 6 6 Gonzalo Bueno 1 3 H2H Stats 1st Round Qualifying - Court 11 Jordan Lee (WC) 4 6 6 Mark Lajal 6 3 3 H2H Stats 1st Round Qualifying - Court 8 Lukas Neumayer 6 6 James McCabe (Alt) 1 4 H2H Stats 1st Round Qualifying - Court 8 Genaro Alberto Olivieri 5 6 7 Guy Den Ouden 7 4 5 H2H Stats 1st Round Qualifying - Court 16 Francesco Passaro 7 6 Felix Gill 6 3 2 H2H Stats 1st Round Qualifying - Court 13 Luka Pavlovic 6 6 3 7 Juan Pablo Varillas 3 7 5 H2H Stats 1st Round Qualifying - Grandstand Jack Pinnington Jones 7 6 Trevor Svajda (WC) 6 4 4 H2H Stats 1st Round Qualifying - Court 4 Rei Sakamoto 4 6 6 Jay Clarke (Alt) 6 3 4 H2H Stats 1st Round Qualifying - Court 10 Thiago Seyboth Wild 6 6 Raul Brancaccio 2 1 H2H Stats 1st Round Qualifying - Court 13 Elias Ymer 6 6 Franco Roncadelli 4 3 H2H Stats
+#5997 | tag=div | class=match-group-content | text=Round of 128 - Arthur Ashe Stadium Carlos Alcaraz (2) 6 6 6 Roman Safiullin 4 4 4 H2H Stats Round of 128 - Grandstand Felix Auger-Aliassime (3) 7 4 6 7 Rinky Hijikata 5 6 3 5 H2H Stats Round of 128 - Arthur Ashe Stadium Mariano Navone 7 5 4 6 6 Novak Djokovic (4) 6 5 7 6 2 1 H2H Stats Round of 128 - Louis Armstrong Stadium Flavio Cobolli (5) 3 2 6 6 6 Francisco Comesana 6 6 3 4 4 H2H Stats Round of 128 - Arthur Ashe Stadium Daniil Medvedev (7) 6 6 6 Hugo Gaston (Q) 4 2 4 H2H Stats Round of 128 - Arthur Ashe Stadium Ben Shelton (8) 1 6 7 6 Tallon Griekspoor 6 1 6 3 2 H2H Stats Round of 128 - Arthur Ashe Stadium Taylor Fritz (9) 6 6 6 Darwin Blanch (WC) 3 2 4 H2H Stats Round of 128 - Louis Armstrong Stadium Stefanos Tsitsipas 4 7 6 6 Arthur Fils (10) 6 6 3 1 4 H2H Stats Round of 128 - Grandstand Lorenzo Musetti (13) 6 6 7 Arthur Fery 3 3 5 H2H Stats Round of 128 - Stadium 17 Learner Tien (14) 6 6 6 Nuno Borges 4 1 2 H2H Stats Round of 128 - Stadium 17 Brandon Nakashima (16) 6 6 6 Sebastian Baez 2 1 0 H2H Stats Round of 128 - Court 5 Jakub Mensik (17) 6 6 7 Shintaro Mochizuki (LL) 1 4 5 H2H Stats Round of 128 - Grandstand Jiri Lehecka (18) 6 7 4 6 Pablo Carreno Busta 1 6 5 6 2 H2H Stats Round of 128 - Louis Armstrong Stadium Tommy Paul (20) 6 3 6 6 6 Coleman Wong (Q) 7 1 3 3 H2H Stats Round of 128 - Court 5 Luciano Darderi (21) 6 3 6 7 Harry Wendelken (Q) 2 6 2 5 H2H Stats Round of 128 - Court 11 Valentin Vacherot (22) 6 6 7 Aleksandar Kovacevic 2 3 5 H2H Stats Round of 128 - Court 7 Andrey Rublev (23) 6 5 6 0 6 6 7 Otto Virtanen (LL) 7 7 0 2 6 5 H2H Stats Round of 128 - Court 5 Francisco Cerundolo (24) 6 6 7 Filip Misolic 4 3 5 H2H Stats Round of 128 - Court 6 Alejandro Tabilo (25) 6 6 6 7 6 Yannick Hanfmann 3 2 7 3 H2H Stats Round of 128 - Court 7 Arthur Rinderknech (26) 6 4 6 7 6 Sho Shimabukuro 7 2 6 4 2 H2H Stats Round of 128 - Court 10 Tomas Martin Etcheverry (27) 6 6 6 Vit Kopriva 3 4 0 H2H Stats Round of 128 - Court 7 Alexander Blockx (28) 6 6 6 Tomas Barrios Vera (Q) 3 4 2 H2H Stats Round of 128 - Court 5 Luca Van Assche 6 6 6 6 6 Cameron Norrie (29) 7 2 2 3 H2H Stats Round of 128 - Court 10 James Duckworth 5 6 6 7 Matteo Arnaldi (30) 7 3 2 6 8 H2H Stats Round of 128 - Court 12 Zizou Bergs (31) 6 3 6 6 Carlos Taberner 3 6 2 2 H2H Stats Round of 128 - Court 10 Mattia Bellucci 6 6 6 Zsombor Piros (Q) 4 2 0 H2H Stats Round of 128 - Grandstand Matteo Berrettini 7 7 6 Stan Wawrinka (WC) 6 4 6 3 0 H2H Stats Round of 128 - Court 13 Benjamin Bonzi 6 3 6 6 Alex Molcan 4 6 3 2 H2H Stats Round of 128 - Court 4 Jesper de Jong 2 6 4 6 6 Francesco Passaro (Q) 6 2 6 3 2 H2H Stats Round of 128 - Stadium 17 Jaime Faria 6 7 4 1 6 Jenson Brooksby 3 6 4 6 6 2 H2H Stats Round of 128 - Court 12 Jacob Fearnley (LL) 4 6 4 7 6 Martin Landaluce 6 2 6 5 3 H2H Stats Round of 128 - Court 6 Arthur Gea (LL) 6 2 3 6 6 Juan Manuel Cerundolo 3 6 6 3 1 H2H Stats Round of 128 - Court 11 Sebastian Gorzny (WC) 3 6 3 6 7 Raphael Collignon 6 3 6 3 6 9 H2H Stats Round of 128 - Court 4 Quentin Halys 6 7 6 7 6 Facundo Diaz Acosta 4 5 7 1 H2H Stats Round of 128 - Court 12 Lloyd Harris (Q) 6 6 6 Jack Kennedy (WC) 4 2 2 H2H Stats Round of 128 - Court 4 Hubert Hurkacz 6 4 6 6 Damir Dzumhur 4 6 1 1 H2H Stats Round of 128 - Court 11 Karen Khachanov 6 6 6 Roman Andres Burruchaga 3 0 1 H2H Stats Round of 128 - Court 12 Kamil Majchrzak 6 6 6 Hamad Medjedovic 3 3 3 H2H Stats Round of 128 - Court 6 Adrian Mannarino 4 3 6 6 6 Thiago Agustin Tirante 6 6 3 3 3 H2H Stats Round of 128 - Court 13 Daniel Merida 6 6 6 Marton Fucsovics 4 4 2 H2H Stats Round of 128 - Stadium 17 Alex Michelsen 6 6 6 Federico Cina (Q) 4 1 0 H2H Stats Round of 128 - Louis Armstrong Stadium Gael Monfils (WC) 2 6 6 6 Adolfo Daniel Vallejo 6 1 2 0 H2H Stats Round of 128 - Court 13 Jaume Munar 6 5 3 6 7 7 Terence Atmane 7 6 1 6 4 5 H2H Stats Round of 128 - Court 12 Alexei Popyrin 3 6 6 6 Grigor Dimitrov (Q) 6 3 2 4 H2H Stats Round of 128 - Court 10 Dino Prizmic 2 6 6 5 7 Aleksandr Shevchenko 6 3 3 7 5 H2H Stats Round of 128 - Court 6 Jurij Rodionov (Q) 7 6 7 Giovanni Mpetshi Perricard 6 2 0 6 4 H2H Stats Round of 128 - Court 7 Rei Sakamoto (Q) 6 6 5 6 3 6 Aleksandar Vukic 4 7 4 6 4 H2H Stats Round of 128 - Court 10 Toby Samuel (Q) 6 6 6 Tomas Machac 2 3 2 H2H Stats Round of 128 - Court 11 Tristan Schoolkate (Q) 7 3 6 6 Nishesh Basavareddy (Q) 6 4 6 3 4 H2H Stats Round of 128 - Grandstand Denis Shapovalov 6 4 6 6 Miomir Kecmanovic 4 6 4 1 H2H Stats Round of 128 - Court 4 Jan-Lennard Struff 6 6 6 Camilo Ugo Carabelli 4 3 3 H2H Stats Round of 128 - Court 15 Dalibor Svrcina (Q) 6 6 5 5 6 Valentin Royer 4 3 7 7 2 H2H Stats Round of 128 - Court 7 Dane Sweeny (WC) 7 6 3 Corentin Moutet 6 4 4 0 H2H Stats Round of 128 - Court 13 Marco Trungelliti 0 7 1 6 6 Juncheng Shang 6 6 5 6 3 4 H2H Stats Round of 128 - Court 11 Yibing Wu 7 6 7 Adam Walton 6 2 2 5 H2H Stats 1st Round Qualifying - Court 5 Coleman Wong (2) 5 6 6 Elmer Moller 7 3 4 H2H Stats 1st Round Qualifying - Court 5 Jacob Fearnley (4) 7 6 Roberto Carballes Baena 6 3 3 H2H Stats 1st Round Qualifying - Court 6 Daniel Rincon 2 6 7 Titouan Droguet (5) 6 4 6 1 H2H Stats 1st Round Qualifying - Court 7 Toby Samuel (7) 6 2 6 6 Francesco Maestrelli 7 3 1 H2H Stats 1st Round Qualifying - Court 15 Dalibor Svrcina (8) 6 6 Felipe Meligeni Alves 3 4 H2H Stats 1st Round Qualifying - Court 9 Otto Virtanen (9) 6 6 Ugo Blanchet 4 4 H2H Stats 1st Round Qualifying - Court 6 Kyrian Jacquet (10) 6 6 Lautaro Midon 4 3 H2H Stats 1st Round Qualifying - Court 4 Vilius Gaubas (14) 6 7 Kilian Feldbausch 3 6 1 H2H Stats 1st Round Qualifying - Court 10 Joel Schwaerzler 2 6 6 Gustavo Heide (20) 6 4 4 H2H Stats 1st Round Qualifying - Court 9 Jurij Rodionov (21) 6 6 Kimmer Coppejans 1 4 H2H Stats 1st Round Qualifying - Court 12 Alexandre Muller (23) 7 6 Laslo Djere 5 0 H2H Stats 1st Round Qualifying - Stadium 17 Cristian Garin (24) 7 4 7 Spencer Johnson (WC) 6 5 6 6 9 H2H Stats 1st Round Qualifying - Court 6 Harry Wendelken 6 3 6 Stefano Travaglia (26) 4 6 3 H2H Stats 1st Round Qualifying - Stadium 17 Mackenzie McDonald (28) 6 7 Stefano Napolitano 4 5 H2H Stats 1st Round Qualifying - Court 13 Tom Gentzsch (29) 7 6 Pol Martin Tiffon 5 3 H2H Stats 1st Round Qualifying - Court 7 Tomas Barrios Vera (31) 6 5 6 Juan Carlos Prado Angelo 2 7 0 H2H Stats 1st Round Qualifying - Court 9 Remy Bertola 6 6 Alejandro Moro Canas 3 4 H2H Stats 1st Round Qualifying - Court 11 Marco Cecchinato 7 6 Liam Broady 6 4 3 H2H Stats 1st Round Qualifying - Court 15 Aziz Dougaz 6 6 Federico Agustin Gomez 4 2 H2H Stats 1st Round Qualifying - Court 8 Frederico Ferreira Silva 7 6 Diego Dedura 5 2 H2H Stats 1st Round Qualifying - Court 11 Alexis Galarneau 7 6 Keegan Smith 6 4 3 H2H Stats 1st Round Qualifying - Court 16 Andrea Guerrieri 6 6 4 6 August Holmgren 3 7 2 H2H Stats 1st Round Qualifying - Court 4 Billy Harris 6 6 Gonzalo Bueno 1 3 H2H Stats 1st Round Qualifying - Court 11 Jordan Lee (WC) 4 6 6 Mark Lajal 6 3 3 H2H Stats 1st Round Qualifying - Court 8 Lukas Neumayer 6 6 James McCabe (Alt) 1 4 H2H Stats 1st Round Qualifying - Court 8 Genaro Alberto Olivieri 5 6 7 Guy Den Ouden 7 4 5 H2H Stats 1st Round Qualifying - Court 16 Francesco Passaro 7 6 Felix Gill 6 3 2 H2H Stats 1st Round Qualifying - Court 13 Luka Pavlovic 6 6 3 7 Juan Pablo Varillas 3 7 5 H2H Stats 1st Round Qualifying - Grandstand Jack Pinnington Jones 7 6 Trevor Svajda (WC) 6 4 4 H2H Stats 1st Round Qualifying - Court 4 Rei Sakamoto 4 6 6 Jay Clarke (Alt) 6 3 4 H2H Stats 1st Round Qualifying - Court 10 Thiago Seyboth Wild 6 6 Raul Brancaccio 2 1 H2H Stats 1st Round Qualifying - Court 13 Elias Ymer 6 6 Franco Roncadelli 4 3 H2H Stats
+#5998 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Carlos Alcaraz (2) 6 6 6 Roman Safiullin 4 4 4 H2H Stats
+#5999 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#6000 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6001 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6048 | tag=div | class=match | text=Round of 128 - Grandstand Felix Auger-Aliassime (3) 7 4 6 7 Rinky Hijikata 5 6 3 5 H2H Stats
+#6049 | tag=div | class=match-header | text=Round of 128 - Grandstand
+#6050 | tag=span | class=(none) | text=Round of 128 - Grandstand
+#6051 | tag=strong | class=(none) | text=Round of 128 - Grandstand
+#6102 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Mariano Navone 7 5 4 6 6 Novak Djokovic (4) 6 5 7 6 2 1 H2H Stats
+#6103 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#6104 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6105 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6161 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Flavio Cobolli (5) 3 2 6 6 6 Francisco Comesana 6 6 3 4 4 H2H Stats
+#6162 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#6163 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6164 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6219 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Daniil Medvedev (7) 6 6 6 Hugo Gaston (Q) 4 2 4 H2H Stats
+#6220 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#6221 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6222 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6269 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Ben Shelton (8) 1 6 7 6 Tallon Griekspoor 6 1 6 3 2 H2H Stats
+#6270 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#6271 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6272 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6324 | tag=div | class=match | text=Round of 128 - Arthur Ashe Stadium Taylor Fritz (9) 6 6 6 Darwin Blanch (WC) 3 2 4 H2H Stats
+#6325 | tag=div | class=match-header | text=Round of 128 - Arthur Ashe Stadium
+#6326 | tag=span | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6327 | tag=strong | class=(none) | text=Round of 128 - Arthur Ashe Stadium
+#6374 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Stefanos Tsitsipas 4 7 6 6 Arthur Fils (10) 6 6 3 1 4 H2H Stats
+#6375 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#6376 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6377 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6429 | tag=div | class=match | text=Round of 128 - Grandstand Lorenzo Musetti (13) 6 6 7 Arthur Fery 3 3 5 H2H Stats
+#6430 | tag=div | class=match-header | text=Round of 128 - Grandstand
+#6431 | tag=span | class=(none) | text=Round of 128 - Grandstand
+#6432 | tag=strong | class=(none) | text=Round of 128 - Grandstand
+#6479 | tag=div | class=match | text=Round of 128 - Stadium 17 Learner Tien (14) 6 6 6 Nuno Borges 4 1 2 H2H Stats
+#6480 | tag=div | class=match-header | text=Round of 128 - Stadium 17
+#6481 | tag=span | class=(none) | text=Round of 128 - Stadium 17
+#6482 | tag=strong | class=(none) | text=Round of 128 - Stadium 17
+#6529 | tag=div | class=match | text=Round of 128 - Stadium 17 Brandon Nakashima (16) 6 6 6 Sebastian Baez 2 1 0 H2H Stats
+#6530 | tag=div | class=match-header | text=Round of 128 - Stadium 17
+#6531 | tag=span | class=(none) | text=Round of 128 - Stadium 17
+#6532 | tag=strong | class=(none) | text=Round of 128 - Stadium 17
+#6579 | tag=div | class=match | text=Round of 128 - Court 5 Jakub Mensik (17) 6 6 7 Shintaro Mochizuki (LL) 1 4 5 H2H Stats
+#6580 | tag=div | class=match-header | text=Round of 128 - Court 5
+#6581 | tag=span | class=(none) | text=Round of 128 - Court 5
+#6582 | tag=strong | class=(none) | text=Round of 128 - Court 5
+#6629 | tag=div | class=match | text=Round of 128 - Grandstand Jiri Lehecka (18) 6 7 4 6 Pablo Carreno Busta 1 6 5 6 2 H2H Stats
+#6630 | tag=div | class=match-header | text=Round of 128 - Grandstand
+#6631 | tag=span | class=(none) | text=Round of 128 - Grandstand
+#6632 | tag=strong | class=(none) | text=Round of 128 - Grandstand
+#6684 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Tommy Paul (20) 6 3 6 6 6 Coleman Wong (Q) 7 1 3 3 H2H Stats
+#6685 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#6686 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6687 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#6739 | tag=div | class=match | text=Round of 128 - Court 5 Luciano Darderi (21) 6 3 6 7 Harry Wendelken (Q) 2 6 2 5 H2H Stats
+#6740 | tag=div | class=match-header | text=Round of 128 - Court 5
+#6741 | tag=span | class=(none) | text=Round of 128 - Court 5
+#6742 | tag=strong | class=(none) | text=Round of 128 - Court 5
+#6793 | tag=div | class=match | text=Round of 128 - Court 11 Valentin Vacherot (22) 6 6 7 Aleksandar Kovacevic 2 3 5 H2H Stats
+#6794 | tag=div | class=match-header | text=Round of 128 - Court 11
+#6795 | tag=span | class=(none) | text=Round of 128 - Court 11
+#6796 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#6843 | tag=div | class=match | text=Round of 128 - Court 7 Andrey Rublev (23) 6 5 6 0 6 6 7 Otto Virtanen (LL) 7 7 0 2 6 5 H2H Stats
+#6844 | tag=div | class=match-header | text=Round of 128 - Court 7
+#6845 | tag=span | class=(none) | text=Round of 128 - Court 7
+#6846 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#6904 | tag=div | class=match | text=Round of 128 - Court 5 Francisco Cerundolo (24) 6 6 7 Filip Misolic 4 3 5 H2H Stats
+#6905 | tag=div | class=match-header | text=Round of 128 - Court 5
+#6906 | tag=span | class=(none) | text=Round of 128 - Court 5
+#6907 | tag=strong | class=(none) | text=Round of 128 - Court 5
+#6954 | tag=div | class=match | text=Round of 128 - Court 6 Alejandro Tabilo (25) 6 6 6 7 6 Yannick Hanfmann 3 2 7 3 H2H Stats
+#6955 | tag=div | class=match-header | text=Round of 128 - Court 6
+#6956 | tag=span | class=(none) | text=Round of 128 - Court 6
+#6957 | tag=strong | class=(none) | text=Round of 128 - Court 6
+#7009 | tag=div | class=match | text=Round of 128 - Court 7 Arthur Rinderknech (26) 6 4 6 7 6 Sho Shimabukuro 7 2 6 4 2 H2H Stats
+#7010 | tag=div | class=match-header | text=Round of 128 - Court 7
+#7011 | tag=span | class=(none) | text=Round of 128 - Court 7
+#7012 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#7065 | tag=div | class=match | text=Round of 128 - Court 10 Tomas Martin Etcheverry (27) 6 6 6 Vit Kopriva 3 4 0 H2H Stats
+#7066 | tag=div | class=match-header | text=Round of 128 - Court 10
+#7067 | tag=span | class=(none) | text=Round of 128 - Court 10
+#7068 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#7115 | tag=div | class=match | text=Round of 128 - Court 7 Alexander Blockx (28) 6 6 6 Tomas Barrios Vera (Q) 3 4 2 H2H Stats
+#7116 | tag=div | class=match-header | text=Round of 128 - Court 7
+#7117 | tag=span | class=(none) | text=Round of 128 - Court 7
+#7118 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#7165 | tag=div | class=match | text=Round of 128 - Court 5 Luca Van Assche 6 6 6 6 6 Cameron Norrie (29) 7 2 2 3 H2H Stats
+#7166 | tag=div | class=match-header | text=Round of 128 - Court 5
+#7167 | tag=span | class=(none) | text=Round of 128 - Court 5
+#7168 | tag=strong | class=(none) | text=Round of 128 - Court 5
+#7220 | tag=div | class=match | text=Round of 128 - Court 10 James Duckworth 5 6 6 7 Matteo Arnaldi (30) 7 3 2 6 8 H2H Stats
+#7221 | tag=div | class=match-header | text=Round of 128 - Court 10
+#7222 | tag=span | class=(none) | text=Round of 128 - Court 10
+#7223 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#7275 | tag=div | class=match | text=Round of 128 - Court 12 Zizou Bergs (31) 6 3 6 6 Carlos Taberner 3 6 2 2 H2H Stats
+#7276 | tag=div | class=match-header | text=Round of 128 - Court 12
+#7277 | tag=span | class=(none) | text=Round of 128 - Court 12
+#7278 | tag=strong | class=(none) | text=Round of 128 - Court 12
+#7329 | tag=div | class=match | text=Round of 128 - Court 10 Mattia Bellucci 6 6 6 Zsombor Piros (Q) 4 2 0 H2H Stats
+#7330 | tag=div | class=match-header | text=Round of 128 - Court 10
+#7331 | tag=span | class=(none) | text=Round of 128 - Court 10
+#7332 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#7379 | tag=div | class=match | text=Round of 128 - Grandstand Matteo Berrettini 7 7 6 Stan Wawrinka (WC) 6 4 6 3 0 H2H Stats
+#7380 | tag=div | class=match-header | text=Round of 128 - Grandstand
+#7381 | tag=span | class=(none) | text=Round of 128 - Grandstand
+#7382 | tag=strong | class=(none) | text=Round of 128 - Grandstand
+#7431 | tag=div | class=match | text=Round of 128 - Court 13 Benjamin Bonzi 6 3 6 6 Alex Molcan 4 6 3 2 H2H Stats
+#7432 | tag=div | class=match-header | text=Round of 128 - Court 13
+#7433 | tag=span | class=(none) | text=Round of 128 - Court 13
+#7434 | tag=strong | class=(none) | text=Round of 128 - Court 13
+#7485 | tag=div | class=match | text=Round of 128 - Court 4 Jesper de Jong 2 6 4 6 6 Francesco Passaro (Q) 6 2 6 3 2 H2H Stats
+#7486 | tag=div | class=match-header | text=Round of 128 - Court 4
+#7487 | tag=span | class=(none) | text=Round of 128 - Court 4
+#7488 | tag=strong | class=(none) | text=Round of 128 - Court 4
+#7543 | tag=div | class=match | text=Round of 128 - Stadium 17 Jaime Faria 6 7 4 1 6 Jenson Brooksby 3 6 4 6 6 2 H2H Stats
+#7544 | tag=div | class=match-header | text=Round of 128 - Stadium 17
+#7545 | tag=span | class=(none) | text=Round of 128 - Stadium 17
+#7546 | tag=strong | class=(none) | text=Round of 128 - Stadium 17
+#7602 | tag=div | class=match | text=Round of 128 - Court 12 Jacob Fearnley (LL) 4 6 4 7 6 Martin Landaluce 6 2 6 5 3 H2H Stats
+#7603 | tag=div | class=match-header | text=Round of 128 - Court 12
+#7604 | tag=span | class=(none) | text=Round of 128 - Court 12
+#7605 | tag=strong | class=(none) | text=Round of 128 - Court 12
+#7660 | tag=div | class=match | text=Round of 128 - Court 6 Arthur Gea (LL) 6 2 3 6 6 Juan Manuel Cerundolo 3 6 6 3 1 H2H Stats
+#7661 | tag=div | class=match-header | text=Round of 128 - Court 6
+#7662 | tag=span | class=(none) | text=Round of 128 - Court 6
+#7663 | tag=strong | class=(none) | text=Round of 128 - Court 6
+#7718 | tag=div | class=match | text=Round of 128 - Court 11 Sebastian Gorzny (WC) 3 6 3 6 7 Raphael Collignon 6 3 6 3 6 9 H2H Stats
+#7719 | tag=div | class=match-header | text=Round of 128 - Court 11
+#7720 | tag=span | class=(none) | text=Round of 128 - Court 11
+#7721 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#7777 | tag=div | class=match | text=Round of 128 - Court 4 Quentin Halys 6 7 6 7 6 Facundo Diaz Acosta 4 5 7 1 H2H Stats
+#7778 | tag=div | class=match-header | text=Round of 128 - Court 4
+#7779 | tag=span | class=(none) | text=Round of 128 - Court 4
+#7780 | tag=strong | class=(none) | text=Round of 128 - Court 4
+#7832 | tag=div | class=match | text=Round of 128 - Court 12 Lloyd Harris (Q) 6 6 6 Jack Kennedy (WC) 4 2 2 H2H Stats
+#7833 | tag=div | class=match-header | text=Round of 128 - Court 12
+#7834 | tag=span | class=(none) | text=Round of 128 - Court 12
+#7835 | tag=strong | class=(none) | text=Round of 128 - Court 12
+#7882 | tag=div | class=match | text=Round of 128 - Court 4 Hubert Hurkacz 6 4 6 6 Damir Dzumhur 4 6 1 1 H2H Stats
+#7883 | tag=div | class=match-header | text=Round of 128 - Court 4
+#7884 | tag=span | class=(none) | text=Round of 128 - Court 4
+#7885 | tag=strong | class=(none) | text=Round of 128 - Court 4
+#7936 | tag=div | class=match | text=Round of 128 - Court 11 Karen Khachanov 6 6 6 Roman Andres Burruchaga 3 0 1 H2H Stats
+#7937 | tag=div | class=match-header | text=Round of 128 - Court 11
+#7938 | tag=span | class=(none) | text=Round of 128 - Court 11
+#7939 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#7986 | tag=div | class=match | text=Round of 128 - Court 12 Kamil Majchrzak 6 6 6 Hamad Medjedovic 3 3 3 H2H Stats
+#7987 | tag=div | class=match-header | text=Round of 128 - Court 12
+#7988 | tag=span | class=(none) | text=Round of 128 - Court 12
+#7989 | tag=strong | class=(none) | text=Round of 128 - Court 12
+#8036 | tag=div | class=match | text=Round of 128 - Court 6 Adrian Mannarino 4 3 6 6 6 Thiago Agustin Tirante 6 6 3 3 3 H2H Stats
+#8037 | tag=div | class=match-header | text=Round of 128 - Court 6
+#8038 | tag=span | class=(none) | text=Round of 128 - Court 6
+#8039 | tag=strong | class=(none) | text=Round of 128 - Court 6
+#8094 | tag=div | class=match | text=Round of 128 - Court 13 Daniel Merida 6 6 6 Marton Fucsovics 4 4 2 H2H Stats
+#8095 | tag=div | class=match-header | text=Round of 128 - Court 13
+#8096 | tag=span | class=(none) | text=Round of 128 - Court 13
+#8097 | tag=strong | class=(none) | text=Round of 128 - Court 13
+#8144 | tag=div | class=match | text=Round of 128 - Stadium 17 Alex Michelsen 6 6 6 Federico Cina (Q) 4 1 0 H2H Stats
+#8145 | tag=div | class=match-header | text=Round of 128 - Stadium 17
+#8146 | tag=span | class=(none) | text=Round of 128 - Stadium 17
+#8147 | tag=strong | class=(none) | text=Round of 128 - Stadium 17
+#8194 | tag=div | class=match | text=Round of 128 - Louis Armstrong Stadium Gael Monfils (WC) 2 6 6 6 Adolfo Daniel Vallejo 6 1 2 0 H2H Stats
+#8195 | tag=div | class=match-header | text=Round of 128 - Louis Armstrong Stadium
+#8196 | tag=span | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#8197 | tag=strong | class=(none) | text=Round of 128 - Louis Armstrong Stadium
+#8248 | tag=div | class=match | text=Round of 128 - Court 13 Jaume Munar 6 5 3 6 7 7 Terence Atmane 7 6 1 6 4 5 H2H Stats
+#8249 | tag=div | class=match-header | text=Round of 128 - Court 13
+#8250 | tag=span | class=(none) | text=Round of 128 - Court 13
+#8251 | tag=strong | class=(none) | text=Round of 128 - Court 13
+#8308 | tag=div | class=match | text=Round of 128 - Court 12 Alexei Popyrin 3 6 6 6 Grigor Dimitrov (Q) 6 3 2 4 H2H Stats
+#8309 | tag=div | class=match-header | text=Round of 128 - Court 12
+#8310 | tag=span | class=(none) | text=Round of 128 - Court 12
+#8311 | tag=strong | class=(none) | text=Round of 128 - Court 12
+#8362 | tag=div | class=match | text=Round of 128 - Court 10 Dino Prizmic 2 6 6 5 7 Aleksandr Shevchenko 6 3 3 7 5 H2H Stats
+#8363 | tag=div | class=match-header | text=Round of 128 - Court 10
+#8364 | tag=span | class=(none) | text=Round of 128 - Court 10
+#8365 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#8420 | tag=div | class=match | text=Round of 128 - Court 6 Jurij Rodionov (Q) 7 6 7 Giovanni Mpetshi Perricard 6 2 0 6 4 H2H Stats
+#8421 | tag=div | class=match-header | text=Round of 128 - Court 6
+#8422 | tag=span | class=(none) | text=Round of 128 - Court 6
+#8423 | tag=strong | class=(none) | text=Round of 128 - Court 6
+#8472 | tag=div | class=match | text=Round of 128 - Court 7 Rei Sakamoto (Q) 6 6 5 6 3 6 Aleksandar Vukic 4 7 4 6 4 H2H Stats
+#8473 | tag=div | class=match-header | text=Round of 128 - Court 7
+#8474 | tag=span | class=(none) | text=Round of 128 - Court 7
+#8475 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#8531 | tag=div | class=match | text=Round of 128 - Court 10 Toby Samuel (Q) 6 6 6 Tomas Machac 2 3 2 H2H Stats
+#8532 | tag=div | class=match-header | text=Round of 128 - Court 10
+#8533 | tag=span | class=(none) | text=Round of 128 - Court 10
+#8534 | tag=strong | class=(none) | text=Round of 128 - Court 10
+#8581 | tag=div | class=match | text=Round of 128 - Court 11 Tristan Schoolkate (Q) 7 3 6 6 Nishesh Basavareddy (Q) 6 4 6 3 4 H2H Stats
+#8582 | tag=div | class=match-header | text=Round of 128 - Court 11
+#8583 | tag=span | class=(none) | text=Round of 128 - Court 11
+#8584 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#8636 | tag=div | class=match | text=Round of 128 - Grandstand Denis Shapovalov 6 4 6 6 Miomir Kecmanovic 4 6 4 1 H2H Stats
+#8637 | tag=div | class=match-header | text=Round of 128 - Grandstand
+#8638 | tag=span | class=(none) | text=Round of 128 - Grandstand
+#8639 | tag=strong | class=(none) | text=Round of 128 - Grandstand
+#8690 | tag=div | class=match | text=Round of 128 - Court 4 Jan-Lennard Struff 6 6 6 Camilo Ugo Carabelli 4 3 3 H2H Stats
+#8691 | tag=div | class=match-header | text=Round of 128 - Court 4
+#8692 | tag=span | class=(none) | text=Round of 128 - Court 4
+#8693 | tag=strong | class=(none) | text=Round of 128 - Court 4
+#8740 | tag=div | class=match | text=Round of 128 - Court 15 Dalibor Svrcina (Q) 6 6 5 5 6 Valentin Royer 4 3 7 7 2 H2H Stats
+#8741 | tag=div | class=match-header | text=Round of 128 - Court 15
+#8742 | tag=span | class=(none) | text=Round of 128 - Court 15
+#8743 | tag=strong | class=(none) | text=Round of 128 - Court 15
+#8798 | tag=div | class=match | text=Round of 128 - Court 7 Dane Sweeny (WC) 7 6 3 Corentin Moutet 6 4 4 0 H2H Stats
+#8799 | tag=div | class=match-header | text=Round of 128 - Court 7
+#8800 | tag=span | class=(none) | text=Round of 128 - Court 7
+#8801 | tag=strong | class=(none) | text=Round of 128 - Court 7
+#8849 | tag=div | class=match | text=Round of 128 - Court 13 Marco Trungelliti 0 7 1 6 6 Juncheng Shang 6 6 5 6 3 4 H2H Stats
+#8850 | tag=div | class=match-header | text=Round of 128 - Court 13
+#8851 | tag=span | class=(none) | text=Round of 128 - Court 13
+#8852 | tag=strong | class=(none) | text=Round of 128 - Court 13
+#8908 | tag=div | class=match | text=Round of 128 - Court 11 Yibing Wu 7 6 7 Adam Walton 6 2 2 5 H2H Stats
+#8909 | tag=div | class=match-header | text=Round of 128 - Court 11
+#8910 | tag=span | class=(none) | text=Round of 128 - Court 11
+#8911 | tag=strong | class=(none) | text=Round of 128 - Court 11
+#10494 | tag=div | class=atp_player-latest-news | text=Latest news View all Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+#10499 | tag=div | class=news | text=Player News Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature No 1 Club 20 years on: Agassi's final stand in New York Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+#10509 | tag=div | class=news-content | text=No 1 Club 20 years on: Agassi's final stand in New York
+#10510 | tag=div | class=atp_card small | text=No 1 Club 20 years on: Agassi's final stand in New York
+#10511 | tag=a | class=card-link | text=No 1 Club 20 years on: Agassi's final stand in New York
+#10515 | tag=div | class=content | text=No 1 Club 20 years on: Agassi's final stand in New York
+#10517 | tag=h3 | class=title | text=20 years on: Agassi's final stand in New York
+#10531 | tag=div | class=atp_layout-sidebar | text=NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+#10532 | tag=div | class=atp_related-news | text=NEWS View All 20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence
+#10538 | tag=ul | class=tabsContent | text=20 years on: Agassi's final stand in New York Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence
+#10539 | tag=li | class=(none) | text=20 years on: Agassi's final stand in New York
+#10540 | tag=div | class=atp_card small | text=20 years on: Agassi's final stand in New York
+#10541 | tag=a | class=card-link | text=20 years on: Agassi's final stand in New York
+#10545 | tag=div | class=content | text=20 years on: Agassi's final stand in New York
+#10546 | tag=h3 | class=title | text=20 years on: Agassi's final stand in New York
+
+RAW BODY TEXT
+=============
+DIGITAL INNOVATION PARTNER
+EN
+Scores
+Latest
+H2H
+Stats
+Rankings
+Players
+Tournaments
+Challenger
+More
+Shop
+ATP Tour
+ATP Tour
+Challenger
+Scores
+Prev
+New York (1 of 1)
+Next
+LIVE
+US Open
+NY, U.S.A. | 30 Aug - 13 Sep, 2026
+Live
+Results
+Schedule
+Draws
+Seeds
+Singles
+Doubles
+Date (All)
+2026.09.02
+2026.09.01
+2026.08.31
+2026.08.30
+2026.08.28
+2026.08.27
+2026.08.26
+2026.08.25
+2026.08.24
+Round (All)
+3rd Round Qualifying
+Round of 64
+Round of 128
+2nd Round Qualifying
+1st Round Qualifying
+Player (All)
+Adam Walton
+Adolfo Daniel Vallejo
+Adrian Mannarino
+Alejandro Moro Canas
+Alejandro Tabilo
+Aleksandar Kovacevic
+Aleksandar Vukic
+Aleksandr Shevchenko
+Alex Bolt
+Alex de Minaur
+Alex Michelsen
+Alex Molcan
+Alexander Blockx
+Alexander Bublik
+Alexander Zverev
+Alexandre Muller
+Alexei Popyrin
+Alexis Galarneau
+Andre Ilagan
+Andrea Guerrieri
+Andrea Pellegrino
+Andrew Johnson
+Andrey Rublev
+Arthur Fery
+Arthur Fils
+Arthur Gea
+Arthur Rinderknech
+August Holmgren
+Aziz Dougaz
+Ben Shelton
+Benjamin Bonzi
+Bernard Tomic
+Billy Harris
+Borna Gojo
+Botic van de Zandschulp
+Braden Shick
+Brandon Nakashima
+Cameron Norrie
+Camilo Ugo Carabelli
+Carlos Alcaraz
+Carlos Taberner
+Christopher O'Connell
+Clement Chidekh
+Clement Tabur
+Coleman Wong
+Colton Smith
+Corentin Moutet
+Cristian Garin
+Dalibor Svrcina
+Damir Dzumhur
+Dan Added
+Dane Sweeny
+Daniel Altmaier
+Daniel Merida
+Daniel Milavsky
+Daniel Rincon
+Daniil Glinka
+Daniil Medvedev
+Darwin Blanch
+David Jorda Sanchis
+Denis Shapovalov
+Diego Dedura
+Dino Prizmic
+Dusan Lajovic
+Elias Ymer
+Elmer Moller
+Fabian Marozsan
+Facundo Diaz Acosta
+Federico Cina
+Federico Coria
+Federico Agustin Gomez
+Felipe Meligeni Alves
+Felix Auger-Aliassime
+Felix Gill
+Filip Misolic
+Flavio Cobolli
+Frances Tiafoe
+Francesco Maestrelli
+Francesco Passaro
+Francisco Cerundolo
+Francisco Comesana
+Franco Roncadelli
+Frederico Ferreira Silva
+Gael Monfils
+Gauthier Onclin
+Genaro Alberto Olivieri
+Gilles Arnaud Bailly
+Giovanni Mpetshi Perricard
+Gonzalo Bueno
+Grigor Dimitrov
+Guido Ivan Justo
+Gustavo Heide
+Guy Den Ouden
+Hamad Medjedovic
+Harry Wendelken
+Henri Squire
+Henrique Rocha
+Henry Searle
+Hubert Hurkacz
+Hugo Dellien
+Hugo Gaston
+Ignacio Buse
+J.J. Wolf
+Jack Kennedy
+Jack Pinnington Jones
+Jack Secord
+Jacob Fearnley
+Jaime Faria
+Jakub Mensik
+James Duckworth
+James McCabe
+Jan Choinski
+Jan-Lennard Struff
+Jaume Munar
+Jay Clarke
+Jenson Brooksby
+Jerome Kym
+Jesper de Jong
+Jiri Lehecka
+Joel Schwaerzler
+Jordan Lee
+Juan Carlos Prado Angelo
+Juan Manuel Cerundolo
+Juan Pablo Varillas
+Juncheng Shang
+Jurij Rodionov
+Kamil Majchrzak
+Karen Khachanov
+Keegan Smith
+Kei Nishikori
+Kilian Feldbausch
+Kimmer Coppejans
+Kyrian Jacquet
+Laslo Djere
+Lautaro Midon
+Learner Tien
+Liam Broady
+Liam Draxl
+Lloyd Harris
+Lorenzo Giustino
+Lorenzo Musetti
+Lorenzo Sonego
+Luca Nardi
+Luca Van Assche
+Luciano Darderi
+Luka Mikrut
+Luka Pavlovic
+Lukas Neumayer
+Mackenzie McDonald
+Maks Kasnikowski
+Marco Cecchinato
+Marco Trungelliti
+Marcos Giron
+Mariano Navone
+Mark Lajal
+Martin Damm
+Martin Landaluce
+Marton Fucsovics
+Matteo Arnaldi
+Matteo Berrettini
+Mattia Bellucci
+Max Alcala Gurri
+Michael Antonius
+Michael Mmoh
+Michael Zheng
+Miomir Kecmanovic
+Moez Echargui
+Moise Kouame
+Nicolai Budkov Kjaer
+Nicolas Mejia
+Nikolas Sanchez Izquierdo
+Nikoloz Basilashvili
+Nishesh Basavareddy
+Novak Djokovic
+Nuno Borges
+Otto Virtanen
+Pablo Carreno Busta
+Pablo Llamas Ruiz
+Pedro Martinez
+Pol Martin Tiffon
+Quentin Halys
+Rafael Jodar
+Raphael Collignon
+Raul Brancaccio
+Rei Sakamoto
+Remy Bertola
+Rinky Hijikata
+Rio Noguchi
+Roberto Carballes Baena
+Roman Safiullin
+Roman Andres Burruchaga
+Sebastian Baez
+Sebastian Gorzny
+Sebastian Ofner
+Seongchan Hong
+Shintaro Mochizuki
+Sho Shimabukuro
+Soonwoo Kwon
+Spencer Johnson
+Stan Wawrinka
+Stefano Napolitano
+Stefano Travaglia
+Stefanos Sakellaridis
+Stefanos Tsitsipas
+Sumit Nagal
+Tallon Griekspoor
+Taro Daniel
+Taylor Fritz
+Terence Atmane
+Thiago Seyboth Wild
+Thiago Agustin Tirante
+Timofey Skatov
+Titouan Droguet
+Toby Samuel
+Tom Gentzsch
+Tomas Barrios Vera
+Tomas Machac
+Tomas Martin Etcheverry
+Tommy Paul
+Trevor Svajda
+Tristan Boyer
+Tristan Schoolkate
+Ugo Blanchet
+Valentin Royer
+Valentin Vacherot
+Vilius Gaubas
+Vit Kopriva
+Vitaliy Sachko
+Yannick Hanfmann
+Yibing Wu
+Yunchaokete Bu
+Zachary Svajda
+Zdenek Kolar
+Zizou Bergs
+Zsombor Piros
+Country (All)
+Argentina
+Australia
+Austria
+Belgium
+Bolivia
+Bosnia-Herzegovina
+Brazil
+Bulgaria
+Canada
+Chile
+China
+Colombia
+Croatia
+Czechia
+Denmark
+Estonia
+Finland
+France
+Georgia
+Germany
+Great Britain
+Greece
+Hong Kong
+Hungary
+India
+Italy
+Japan
+Kazakhstan
+Lithuania
+Monaco
+Netherlands
+Norway
+Paraguay
+Peru
+Poland
+Portugal
+Russia
+Serbia
+Slovakia
+South Africa
+South Korea
+Spain
+Sweden
+Switzerland
+Tunisia
+Ukraine
+United States
+Uruguay
+Wed, 02 September, 2026 Day (10)
+Round of 64 - Arthur Ashe Stadium
+Carlos Alcaraz (2)
+4
+6
+6
+6
+Jaime Faria
+6
+0
+3
+2
+H2H
+Stats
+Round of 64 - Louis Armstrong Stadium
+Daniil Medvedev (7)
+6
+6
+7
+Sebastian Gorzny (WC)
+1
+3
+5
+H2H
+Stats
+Round of 64 - Arthur Ashe Stadium
+Ben Shelton (8)
+6
+5
+7
+7
+Hubert Hurkacz
+3
+7
+6
+3
+5
+H2H
+Stats
+Round of 64 - Louis Armstrong Stadium
+Frances Tiafoe (11)
+6
+7
+7
+Rei Sakamoto (Q)
+3
+6
+2
+5
+H2H
+Stats
+Round of 64 - Court 7
+Alexander Bublik (15)
+6
+6
+6
+Adrian Mannarino
+3
+1
+1
+H2H
+Stats
+Round of 64 - Grandstand
+Alex Michelsen
+6
+6
+6
+Brandon Nakashima (16)
+3
+4
+4
+H2H
+Stats
+Round of 64 - Court 5
+Jiri Lehecka (18)
+6
+6
+6
+Toby Samuel (Q)
+4
+2
+4
+H2H
+Stats
+Round of 64 - Grandstand
+Tommy Paul (20)
+6
+6
+5
+6
+Dino Prizmic
+2
+3
+7
+4
+H2H
+Stats
+Round of 64 - Court 10
+Valentin Vacherot (22)
+6
+4
+7
+6
+Kamil Majchrzak
+4
+6
+6
+3
+2
+H2H
+Stats
+Round of 64 - Court 11
+Daniel Merida
+6
+3
+6
+6
+6
+Andrey Rublev (23)
+7
+2
+4
+4
+H2H
+Stats
+Round of 64 - Court 10
+Arthur Rinderknech (26)
+7
+6
+7
+Jaume Munar
+6
+4
+2
+5
+H2H
+Stats
+Round of 64 - Court 12
+Tomas Martin Etcheverry (27)
+6
+6
+3
+6
+Jacob Fearnley (LL)
+3
+3
+6
+3
+H2H
+Stats
+Round of 64 - Court 12
+Mariano Navone
+3
+6
+6
+7
+Matteo Berrettini
+6
+3
+4
+6
+4
+H2H
+Stats
+Round of 64 - Court 13
+Denis Shapovalov
+6
+6
+7
+Luca Van Assche
+0
+4
+6
+7
+H2H
+Stats
+Round of 64 - Stadium 17
+Stefanos Tsitsipas
+6
+1
+6
+7
+6
+Lloyd Harris (Q)
+7
+3
+6
+4
+4
+H2H
+Stats
+Round of 64 - Court 6
+Yibing Wu
+7
+6
+6
+James Duckworth
+5
+3
+1
+H2H
+Stats
+Round of 128 - Court 11
+Alex de Minaur (6)
+6
+6
+6
+Andrea Guerrieri (Q)
+2
+2
+4
+H2H
+Stats
+Round of 128 - Stadium 17
+Yunchaokete Bu (LL)
+6
+6
+6
+Rafael Jodar (12)
+2
+1
+1
+H2H
+Stats
+Round of 128 - Court 6
+Ignacio Buse (32)
+3
+6
+6
+6
+6
+6
+Marcos Giron
+6
+3
+3
+7
+1
+H2H
+Stats
+Round of 128 - Court 7
+Zachary Svajda
+6
+6
+6
+5
+6
+Daniel Altmaier
+3
+1
+7
+2
+H2H
+Stats
+Round of 128 - Court 5
+Botic van de Zandschulp
+6
+6
+7
+Jan Choinski
+3
+1
+6
+5
+H2H
+Stats
+Round of 128 - Court 10
+Michael Zheng (WC)
+6
+6
+6
+Fabian Marozsan
+4
+4
+2
+H2H
+Stats
+Tue, 01 September, 2026 Day (9)
+Mon, 31 August, 2026 Day (8)
+Sun, 30 August, 2026 Day (7)
+Fri, 28 August, 2026 Day (5)
+Thu, 27 August, 2026 Day (4)
+Wed, 26 August, 2026 Day (3)
+Tue, 25 August, 2026 Day (2)
+Mon, 24 August, 2026 Day (1)
+Latest news
+View all
+Player News
+Who is on the Tokyo entry list? Alcaraz, Shelton, Jodar feature
+No 1 Club
+20 years on: Agassi's final stand in New York
+Player Features
+Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+NEWS
+View All
+20 years on: Agassi's final stand in New York
+Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+What is the US Open schedule?
+What were the US Open results?
+Alcaraz drops first set, then cruises to continue US Open title defence
+Felix
+Auger-Aliassime
+CAN
+2
+Vs
+2
+Karen
+Khachanov
+PROFILE
+View All 
+CARLOS
+ALCARAZ
+Rank
+3
+1st Serve points won
+72%
+Aces
+1584
+Career Win/Loss
+82%
+Service Games Won
+85%
+See all 
+Serve
+Return
+Pressure
+1
+Jannik Sinner
+303.1
+2
+Ben Shelton
+299.6
+3
+Taylor Fritz
+299.6
+4
+Alexander Zverev
+299.1
+5
+Giovanni Mpetshi Perricard
+297.7
+NEWSLETTERS
+Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more.
+Email address
+SUBSCRIBE
+
+Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+
+DOWNLOAD OFFICIAL ATP WTA LIVE APP
+Premier Partner
+Platinum Partners
+Gold Partners
+Official Ball, Racquet and Tennis Accessory
+Official Partners & Suppliers
+Sign up for ATP Tour newsletters
+
+Get official marketing communications from the ATP and WTA! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more.
+
+Email address
+Subscribe
+
+Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy.
+
+Corporate
+About
+People & Culture
+Careers 
+Contract Opportunities
+ATP Serves 
+One Vision 
+Media
+News Releases
+Newsletters 
+Rulebook
+Media Guide
+Daily Media Notes
+Rankings and Info Reports
+Partnerships
+Official ATP Tennis Club
+ATP Partners
+Partnership Opportunities
+Related links
+ATP Media 
+Tennis Results (TDI) 
+GPTCA 
+Women's Tennis Association 
+World Tennis 
+Intl. Tennis Hall of Fame 
+Intl. Tennis Integrity Agency 
+
+© Copyright 1994 - 2026 ATP Tour, Inc. All Rights Reserved. No part of this site may be reproduced, stored in a retrieval system or transmitted in any way or by any means (including photocopying, recording or storing it in any medium by electronic means), without the written permission of ATP Tour, Inc.. Terms & Conditions | Privacy  | Community Social Media Policy | Modern Slavery Statement | Feedback | Cookies | Your Privacy Choices 
+
+
+
+
+By clicking "Accept All Cookies", you agree to the storing of cookies on your device and the use of similar technologies, such as tracking pixels, to enhance site navigation, analyse site usage, and assist ATP and ATP partners in their marketing efforts. We also share information about your use of our site with our social media, advertising and analytics partners, and with selected ATP commercial partners, to deliver targeted advertising on third-party platforms on behalf of ATP and those partners.Privacy PolicyTerms & Conditions
+Cookies Settings
+Essential Cookies Only
+Accept All Cookies

@@ -1,0 +1,1363 @@
+AGE202 · ATP DAILY SCHEDULE DOM DIAGNOSTIC
+==========================================
+
+Requested URL: https://www.atptour.com/en/scores/current/us-open/560/daily-schedule
+Final URL: https://www.atptour.com/en/scores/current/us-open/560/daily-schedule
+HTTP status: 200
+Title: US Open | Daily Schedule | ATP Tour | Tennis
+
+HEADINGS
+--------
+H1 | 
+ATP Tour
+
+H2 | hide-text
+Header 2
+
+H3 | title
+US Open
+
+H4 | day
+Thu, 03 September, 2026 (Day 11)
+
+H3 | 
+Latest news
+
+H3 | title
+Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+
+H3 | title
+What is the US Open schedule?
+
+H3 | title
+What were the US Open results?
+
+H2 | hide-text
+Header 2
+
+H3 | 
+News
+
+H3 | title
+Mattia Bellucci: Armed with the Japanese gods of thunder & wind
+
+H3 | title
+What is the US Open schedule?
+
+H3 | title
+What were the US Open results?
+
+H3 | title
+Alcaraz drops first set, then cruises to continue US Open title defence
+
+H3 | title
+What is the US Open doubles draw?
+
+H4 | 
+PROFILE
+
+H3 | 
+CarlosAlcaraz
+
+H2 | hide-text
+Header 2
+
+H3 | primary-heading
+Stats widget
+
+H3 | 
+DOWNLOAD OFFICIAL ATP WTA LIVE APP
+
+H2 | hide-text
+Partners
+
+H3 | 
+Premier Partner
+
+H3 | 
+Platinum Partners
+
+H3 | 
+Gold Partners
+
+H3 | 
+Official Ball, Racquet and Tennis Accessory
+
+H3 | 
+Official Partners & Suppliers
+
+H4 | 
+Corporate
+
+H4 | 
+Media
+
+H4 | 
+Partnerships
+
+H4 | 
+Related links
+
+H2 | 
+Privacy Preference Center
+
+H3 | 
+Manage Consent Preferences
+
+H4 | ot-cat-header
+Essential Cookies
+
+H4 | ot-cat-header
+Performance Cookies
+
+H4 | ot-cat-header
+Advertising Cookies
+
+H4 | ot-cat-header
+Functional Cookies
+
+H3 | 
+Cookie List
+
+
+PLAYER LINKS
+------------
+Count: 57
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head
+CLASS: 
+
+TEXT: ATP Coach Members
+HREF: /en/players/coaches
+CLASS: 
+
+TEXT: T. Fritz
+HREF: /en/players/taylor-fritz/fb98/overview
+CLASS: 
+
+TEXT: M. Bellucci
+HREF: /en/players/mattia-bellucci/b0gg/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/taylor-fritz-vs-mattia-bellucci/fb98/b0gg
+CLASS: 
+
+TEXT: A. Zverev
+HREF: /en/players/alexander-zverev/z355/overview
+CLASS: 
+
+TEXT: Q. Halys
+HREF: /en/players/quentin-halys/hb64/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/alexander-zverev-vs-quentin-halys/z355/hb64
+CLASS: 
+
+TEXT: F. Auger-Aliassime
+HREF: /en/players/felix-auger-aliassime/ag37/overview
+CLASS: 
+
+TEXT: K. Khachanov
+HREF: /en/players/karen-khachanov/ke29/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/felix-auger-aliassime-vs-karen-khachanov/ag37/ke29
+CLASS: 
+
+TEXT: G. Monfils
+HREF: /en/players/gael-monfils/mc65/overview
+CLASS: 
+
+TEXT: L. Tien
+HREF: /en/players/learner-tien/t0ha/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/gael-monfils-vs-learner-tien/mc65/t0ha
+CLASS: 
+
+TEXT: T. Schoolkate
+HREF: /en/players/tristan-schoolkate/s0n0/overview
+CLASS: 
+
+TEXT: F. Cobolli
+HREF: /en/players/flavio-cobolli/c0e9/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/tristan-schoolkate-vs-flavio-cobolli/s0n0/c0e9
+CLASS: 
+
+TEXT: B. Van de Zandschulp
+HREF: /en/players/botic-van-de-zandschulp/v812/overview
+CLASS: 
+
+TEXT: A. de Minaur
+HREF: /en/players/alex-de-minaur/dh58/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/botic-van-de-zandschulp-vs-alex-de-minaur/v812/dh58
+CLASS: 
+
+TEXT: D. Sweeny
+HREF: /en/players/dane-sweeny/s0ia/overview
+CLASS: 
+
+TEXT: L. Musetti
+HREF: /en/players/lorenzo-musetti/m0ej/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/dane-sweeny-vs-lorenzo-musetti/s0ia/m0ej
+CLASS: 
+
+TEXT: J. Struff
+HREF: /en/players/jan-lennard-struff/sl28/overview
+CLASS: 
+
+TEXT: F. Cerundolo
+HREF: /en/players/francisco-cerundolo/c0au/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/jan-lennard-struff-vs-francisco-cerundolo/sl28/c0au
+CLASS: 
+
+TEXT: A. Blockx
+HREF: /en/players/alexander-blockx/b0pg/overview
+CLASS: 
+
+TEXT: M. Trungelliti
+HREF: /en/players/marco-trungelliti/ta29/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/alexander-blockx-vs-marco-trungelliti/b0pg/ta29
+CLASS: 
+
+TEXT: Z. Svajda
+HREF: /en/players/zachary-svajda/s0k7/overview
+CLASS: 
+
+TEXT: A. Gea
+HREF: /en/players/arthur-gea/g0ix/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/zachary-svajda-vs-arthur-gea/s0k7/g0ix
+CLASS: 
+
+TEXT: A. Popyrin
+HREF: /en/players/alexei-popyrin/p09z/overview
+CLASS: 
+
+TEXT: A. Tabilo
+HREF: /en/players/alejandro-tabilo/te30/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/alexei-popyrin-vs-alejandro-tabilo/p09z/te30
+CLASS: 
+
+TEXT: Z. Bergs
+HREF: /en/players/zizou-bergs/bu13/overview
+CLASS: 
+
+TEXT: J. De Jong
+HREF: /en/players/jesper-de-jong/d0c1/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/zizou-bergs-vs-jesper-de-jong/bu13/d0c1
+CLASS: 
+
+TEXT: J. Mensik
+HREF: /en/players/jakub-mensik/m0ni/overview
+CLASS: 
+
+TEXT: J. Rodionov
+HREF: /en/players/jurij-rodionov/r09x/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/jakub-mensik-vs-jurij-rodionov/m0ni/r09x
+CLASS: 
+
+TEXT: L. Darderi
+HREF: /en/players/luciano-darderi/d0fj/overview
+CLASS: 
+
+TEXT: D. Svrcina
+HREF: /en/players/dalibor-svrcina/s0gd/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/luciano-darderi-vs-dalibor-svrcina/d0fj/s0gd
+CLASS: 
+
+TEXT: Y. Bu
+HREF: /en/players/yunchaokete-bu/y09v/overview
+CLASS: 
+
+TEXT: M. Zheng
+HREF: /en/players/michael-zheng/z0bz/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/yunchaokete-bu-vs-michael-zheng/y09v/z0bz
+CLASS: 
+
+TEXT: B. Bonzi
+HREF: /en/players/benjamin-bonzi/bm95/overview
+CLASS: 
+
+TEXT: I. Buse
+HREF: /en/players/ignacio-buse/b0id/overview
+CLASS: 
+
+TEXT: H2H
+HREF: /en/players/atp-head-2-head/benjamin-bonzi-vs-ignacio-buse/bm95/b0id
+CLASS: 
+
+TEXT: FelixAuger-Aliassime CAN2Vs2KarenKhachanov
+HREF: /en/players/atp-head-2-head
+CLASS: h2h-compact__link
+
+TEXT: View All
+HREF: /en/players/carlos-alcaraz/a0e2/overview
+CLASS: 
+
+TEXT: Jannik Sinner
+HREF: /en/players/jannik-sinner/s0ag/overview
+CLASS: player-name
+
+TEXT: Ben Shelton
+HREF: /en/players/ben-shelton/s0s1/overview
+CLASS: player-name
+
+TEXT: Taylor Fritz
+HREF: /en/players/taylor-fritz/fb98/overview
+CLASS: player-name
+
+TEXT: Alexander Zverev
+HREF: /en/players/alexander-zverev/z355/overview
+CLASS: player-name
+
+TEXT: Giovanni Mpetshi Perricard
+HREF: /en/players/giovanni-mpetshi-perricard/m0gz/overview
+CLASS: player-name
+
+
+INTERESTING ELEMENTS
+--------------------
+Count: 250
+
+TAG: DIV
+CLASS: atp_ad atp_ad--bordered-bottom  atp_ad-size-90--desktop atp_ad-size-50--mobile
+TEXT: 
+
+TAG: DIV
+CLASS: separator bordered
+TEXT: 
+
+TAG: DIV
+CLASS: atp_scores-schedule
+TEXT: ATP Tour Challenger Scores Prev New York (1 of 1) Next Header 2 Live US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Day 11 Day 10 Day Use Local Time Zone Switch Refresh Thu, 03 September, 2026 (Day 11) Arthur Ashe Stadium Starts at 11:30 AM R64 R64 N. Osaka (13) Vs K. Siniakova WTA R64 R64 T. Fritz (9) Vs M. Bellucci ––– H2H R64 R64 P. Badosa Vs C. Gauff (4) WTA R64 R64 A. Zverev (1) Vs Q. Halys ––– H2H Louis Armstrong Stadium Starts at 11:00 AM R64 R64 F. Auger-Ali
+
+TAG: DIV
+CLASS: schedule
+TEXT: Header 2 Live US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026
+
+TAG: DIV
+CLASS: tournament-day
+TEXT: Thu, 03 September, 2026 (Day 11)
+
+TAG: H4
+CLASS: day
+TEXT: Thu, 03 September, 2026 (Day 11)
+
+TAG: DIV
+CLASS: schedule
+TEXT: Arthur Ashe Stadium Starts at 11:30 AM R64 R64 N. Osaka (13) Vs K. Siniakova WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Arthur Ashe Stadium Starts at 11:30 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Arthur Ashe Stadium Starts at 11:30 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:30 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 N. Osaka (13) Vs K. Siniakova WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: N. Osaka (13) Vs K. Siniakova
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 T. Fritz (9) Vs M. Bellucci ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 T. Fritz (9) Vs M. Bellucci ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: T. Fritz (9) Vs M. Bellucci
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 P. Badosa Vs C. Gauff (4) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 P. Badosa Vs C. Gauff (4) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: P. Badosa Vs C. Gauff (4)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 A. Zverev (1) Vs Q. Halys ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 A. Zverev (1) Vs Q. Halys ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: A. Zverev (1) Vs Q. Halys
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: Louis Armstrong Stadium Starts at 11:00 AM R64 R64 F. Auger-Aliassime (3) Vs K. Khachanov ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Louis Armstrong Stadium Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Louis Armstrong Stadium Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 F. Auger-Aliassime (3) Vs K. Khachanov ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: F. Auger-Aliassime (3) Vs K. Khachanov
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 O. Oliynykova Vs A. Eala (17) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 O. Oliynykova Vs A. Eala (17) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: O. Oliynykova Vs A. Eala (17)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 G. Monfils (WC) Vs (14) L. Tien ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 G. Monfils (WC) Vs (14) L. Tien ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: G. Monfils (WC) Vs (14) L. Tien
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 J. Bouzas Maneiro Vs E. Rybakina (2) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 J. Bouzas Maneiro Vs E. Rybakina (2) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: J. Bouzas Maneiro Vs E. Rybakina (2)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: Grandstand Starts at 11:00 AM R64 R64 I. Swiatek (8) Vs N. Podoroska WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Grandstand Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Grandstand Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 I. Swiatek (8) Vs N. Podoroska WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: I. Swiatek (8) Vs N. Podoroska
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 L. Tagger Vs A. Anisimova (10) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 L. Tagger Vs A. Anisimova (10) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: L. Tagger Vs A. Anisimova (10)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 T. Schoolkate (Q) Vs (5) F. Cobolli ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 T. Schoolkate (Q) Vs (5) F. Cobolli ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: T. Schoolkate (Q) Vs (5) F. Cobolli
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 B. Van de Zandschulp Vs (6) A. de Minaur ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 B. Van de Zandschulp Vs (6) A. de Minaur ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: B. Van de Zandschulp Vs (6) A. de Minaur
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: Stadium 17 Starts at 11:00 AM R64 R64 M. Keys (22) Vs A. Bondar WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Stadium 17 Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Stadium 17 Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 M. Keys (22) Vs A. Bondar WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: M. Keys (22) Vs A. Bondar
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 D. Sweeny (WC) Vs (13) L. Musetti ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 D. Sweeny (WC) Vs (13) L. Musetti ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: D. Sweeny (WC) Vs (13) L. Musetti
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 M. Andreeva (5) Vs E. Lys WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 M. Andreeva (5) Vs E. Lys WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: M. Andreeva (5) Vs E. Lys
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 I. Jovic (14) Vs F. Jones (Q) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 I. Jovic (14) Vs F. Jones (Q) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: I. Jovic (14) Vs F. Jones (Q)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: Court 5 Starts at 11:00 AM R64 R64 J. Struff Vs (24) F. Cerundolo ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Court 5 Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Court 5 Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 J. Struff Vs (24) F. Cerundolo ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: J. Struff Vs (24) F. Cerundolo
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 A. Blockx (28) Vs M. Trungelliti ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 A. Blockx (28) Vs M. Trungelliti ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: A. Blockx (28) Vs M. Trungelliti
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 M. Sakkari (32) Vs Y. Starodubtseva WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 M. Sakkari (32) Vs Y. Starodubtseva WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: M. Sakkari (32) Vs Y. Starodubtseva
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 A. Krueger R. Montgomery (WC) Vs L. Noskova R. Sramkova WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 A. Krueger R. Montgomery (WC) Vs L. Noskova R. Sramkova WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: A. Krueger R. Montgomery (WC) Vs L. Noskova R. Sramkova
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: Court 6 Starts at 11:00 AM R64 R64 A. Potapova (24) Vs L. Jeanjean (WC) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Court 6 Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Court 6 Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 A. Potapova (24) Vs L. Jeanjean (WC) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: A. Potapova (24) Vs L. Jeanjean (WC)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 A. Detiuc I. Khromacheva Vs (2) G. Dabrowski L. Stefani WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 A. Detiuc I. Khromacheva Vs (2) G. Dabrowski L. Stefani WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: A. Detiuc I. Khromacheva Vs (2) G. Dabrowski L. Stefani
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 C. Bucsa Vs H. Sakatsume (Q) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 C. Bucsa Vs H. Sakatsume (Q) WTA
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: C. Bucsa Vs H. Sakatsume (Q)
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: WTA
+
+TAG: SPAN
+CLASS: match-type
+TEXT: WTA
+
+TAG: DIV
+CLASS: schedule
+TEXT: R64 R64 Z. Svajda Vs (LL) A. Gea ––– H2H
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: 
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: 
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-content
+TEXT: R64 Z. Svajda Vs (LL) A. Gea ––– H2H
+
+TAG: DIV
+CLASS: schedule-type
+TEXT: R64
+
+TAG: DIV
+CLASS: schedule-players
+TEXT: Z. Svajda Vs (LL) A. Gea
+
+TAG: DIV
+CLASS: schedule-cta
+TEXT: ––– H2H
+
+TAG: SPAN
+CLASS: schedule-cta-score
+TEXT: –––
+
+TAG: DIV
+CLASS: schedule
+TEXT: Court 7 Starts at 11:00 AM R64 R64 M. Timofeeva Vs E. Mertens (23) WTA
+
+TAG: DIV
+CLASS: schedule-header
+TEXT: Court 7 Starts at 11:00 AM R64
+
+TAG: DIV
+CLASS: schedule-location-timestamp
+TEXT: Court 7 Starts at 11:00 AM
+
+TAG: SPAN
+CLASS: matchtime
+TEXT: Starts at 11:00 AM
+
+
+BODY TEXT
+---------
+DIGITAL INNOVATION PARTNER EN Scores Latest H2H Stats Rankings Players Tournaments Challenger More Shop ATP Tour ATP Tour Challenger Scores Prev New York (1 of 1) Next LIVE US Open NY, U.S.A. | 30 Aug - 13 Sep, 2026 Live Results Schedule Draws Seeds Day 11 Day 10 Use Local Time Zone Thu, 03 September, 2026 (Day 11) Arthur Ashe Stadium Starts at 11:30 AM R64 N. Osaka (13) Vs K. Siniakova WTA R64 T. Fritz (9) Vs M. Bellucci ––– H2H R64 P. Badosa Vs C. Gauff (4) WTA R64 A. Zverev (1) Vs Q. Halys ––– H2H Louis Armstrong Stadium Starts at 11:00 AM R64 F. Auger-Aliassime (3) Vs K. Khachanov ––– H2H R64 O. Oliynykova Vs A. Eala (17) WTA R64 G. Monfils (WC) Vs (14) L. Tien ––– H2H R64 J. Bouzas Maneiro Vs E. Rybakina (2) WTA Grandstand Starts at 11:00 AM R64 I. Swiatek (8) Vs N. Podoroska WTA R64 L. Tagger Vs A. Anisimova (10) WTA R64 T. Schoolkate (Q) Vs (5) F. Cobolli ––– H2H R64 B. Van de Zandschulp Vs (6) A. de Minaur ––– H2H Stadium 17 Starts at 11:00 AM R64 M. Keys (22) Vs A. Bondar WTA R64 D. Sweeny (WC) Vs (13) L. Musetti ––– H2H R64 M. Andreeva (5) Vs E. Lys WTA R64 I. Jovic (14) Vs F. Jones (Q) WTA Court 5 Starts at 11:00 AM R64 J. Struff Vs (24) F. Cerundolo ––– H2H R64 A. Blockx (28) Vs M. Trungelliti ––– H2H R64 M. Sakkari (32) Vs Y. Starodubtseva WTA R64 A. Krueger R. Montgomery (WC) Vs L. Noskova R. Sramkova WTA Court 6 Starts at 11:00 AM R64 A. Potapova (24) Vs L. Jeanjean (WC) WTA R64 A. Detiuc I. Khromacheva Vs (2) G. Dabrowski L. Stefani WTA R64 C. Bucsa Vs H. Sakatsume (Q) WTA R64 Z. Svajda Vs (LL) A. Gea ––– H2H Court 7 Starts at 11:00 AM R64 M. Timofeeva Vs E. Mertens (23) WTA R64 E. Perez D. Schuurs (10) Vs A. Tikhonova R. Zarazua WTA R64 A. Popyrin Vs (25) A. Tabilo ––– H2H R64 Z. Bergs (31) Vs J. De Jong ––– H2H Court 10 Starts at 11:00 AM R64 M. Kostyuk E. Ruse Vs L. Pigossi P. Udvardy WTA R64 U. Eikeri Q. Gleason (15) Vs M. Uchijima X. Wang WTA R64 A. Li C. Tauson Vs (9) E. Routliffe A. Sutjiadi WTA R64 K. Birrell P. Stearns Vs E. Shibahara L. Tararudee WTA Court 11 Starts at 11:00 AM R64 C. Liu J. Pareja (WC) Vs X. Wang Y. Xu WTA R64 H. Dart (Q) Vs M. Bouzkova (25) WTA R64 J. Mensik (17) Vs (Q) J. Rodionov ––– H2H R64 M. Bouzkova S. Sorribes Tormo Vs M. Kessler C. McNally WTA Court 12 Starts at 11:00 AM R64 L. Darderi (21) Vs (Q) D. Svrcina ––– H2H R64 Q. Zheng (Q) Vs Y. Putintseva WTA R64 K. Siniakova T. Townsend (1) Vs (WC) R. Brantmeier S. Broadus WTA R64 Y. Bu (LL) Vs (WC) M. Zheng ––– H2H Court 13 Starts at 11:00 AM R64 L. Fernandez J. Tjen Vs I. Haverlag N. Radisic WTA R64 D. Bennett A. Esposito Cogan (WC) Vs (13) S. Hunter D. Krawczyk WTA R64 N. Bartunkova Vs T. Maria WTA R64 B. Bonzi Vs (32) I. Buse ––– H2H Court 15 Starts at 11:00 AM R64 M. Kozyreva M. Ninomiya Vs M. Kempen A. Panova WTA R64 S. Aoyama E. Liang (11) Vs I. Neel G. Olmos WTA R64 K. Piter A. Siskova Vs E. Pridankina Q. Tang WTA R64 H. Guo K. Mladenovic (5) Vs M. Chwalinska M. Linette WTA Latest news View all Player Features Mattia Bellucci: Armed with the Japanese gods of thunder & wind US Open What is the US Open schedule? US Open What were the US Open results? NEWS View All Mattia Bellucci: Armed with the Japanese gods of thunder & wind What is the US Open schedule? What were the US Open results? Alcaraz drops first set, then cruises to continue US Open title defence What is the US Open doubles draw? Felix Auger-Aliassime CAN 2 Vs 2 Karen Khachanov PROFILE View All CARLOS ALCARAZ Rank 3 1st Serve points won 72% Aces 1584 Career Win/Loss 82% Service Games Won 85% See all Serve Return Pressure 1 Jannik Sinner 303.1 2 Ben Shelton 299.6 3 Taylor Fritz 299.6 4 Alexander Zverev 299.1 5 Giovanni Mpetshi Perricard 297.7 NEWSLETTERS Get official marketing communications from the ATP and WTA, delivered straight to your inbox! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address SUBSCRIBE Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy. DOWNLOAD OFFICIAL ATP WTA LIVE APP Premier Partner Platinum Partners Gold Partners Official Ball, Racquet and Tennis Accessory Official Partners & Suppliers Sign up for ATP Tour newsletters Get official marketing communications from the ATP and WTA! We'll send you newsletters keeping you informed about news, tournaments, competitions, ticketing, partner offers and more. Email address Subscribe Your data will be used in accordance with the ATP Privacy Policy and WTA Privacy Policy. Corporate About People & Culture Careers Contract Opportunities ATP Serves One Vision Media News Releases Newsletters Rulebook Media Guide Daily Media Notes Rankings and Info Reports Partnerships Official ATP Tennis Club ATP Partners Partnership Opportunities Related links ATP Media Tennis Results (TDI) GPTCA Women's Tennis Association World Tennis Intl. Tennis Hall of Fame Intl. Tennis Integrity Agency © Copyright 1994 - 2026 ATP Tour, Inc. All Rights Reserved. No part of this site may be reproduced, stored in a retrieval system or transmitted in any way or by any means (including photocopying, recording or storing it in any medium by electronic means), without the written permission of ATP Tour, Inc.. Terms & Conditions | Privacy | Community Social Media Policy | Modern Slavery Statement | Feedback | Cookies | Your Privacy Choices By clicking "Accept All Cookies", you agree to the storing of cookies on your device and the use of similar technologies, such as tracking pixels, to enhance site navigation, analyse site usage, and assist ATP and ATP partners in their marketing efforts. We also share information about your use of our site with our social media, advertising and analytics partners, and with selected ATP commercial partners, to deliver targeted advertising on third-party platforms on behalf of ATP and those partners.Privacy PolicyTerms & Conditions Cookies Settings Essential Cookies Only Accept All Cookies

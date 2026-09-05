@@ -138,7 +138,7 @@ const tournamentCategories: TournamentCategory[] = [
 const archiveHighlights = [
   {
     label: "Live refresh",
-    value: "06 MIN",
+    value: "05 MIN",
     icon: Gauge,
   },
   {
@@ -312,7 +312,7 @@ export default function ResultsPage() {
                       Sync cadence
                     </p>
                     <p className="mt-1 text-2xl font-black tracking-[-0.05em] text-white">
-                      6 min
+                      5 min
                     </p>
                   </div>
 
