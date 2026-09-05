@@ -21,6 +21,14 @@ import {
 
 import TodaysMatches from "@/components/results/TodaysMatches";
 
+
+export const dynamic =
+  "force-dynamic";
+
+export const revalidate =
+  0;
+
+
 export const metadata: Metadata = {
   title: "Tennis Results | AGE202",
   description:
@@ -563,7 +571,10 @@ type SectionLinkProps = {
   label: string;
 };
 
-function SectionLink({ href, label }: SectionLinkProps) {
+function SectionLink({
+  href,
+  label,
+}: SectionLinkProps) {
   return (
     <a
       href={href}
@@ -583,7 +594,8 @@ function TournamentCategoryCard({
   category,
   index,
 }: TournamentCategoryCardProps) {
-  const Icon = category.icon;
+  const Icon =
+    category.icon;
 
   return (
     <Link
@@ -679,8 +691,16 @@ function GrandSlamCard({
       </h3>
 
       <dl className="mt-8 space-y-4 border-t border-white/10 pt-6">
-        <GrandSlamDetail icon={Flag} label="Location" value={location} />
-        <GrandSlamDetail icon={CircleDot} label="Surface" value={surface} />
+        <GrandSlamDetail
+          icon={Flag}
+          label="Location"
+          value={location}
+        />
+        <GrandSlamDetail
+          icon={CircleDot}
+          label="Surface"
+          value={surface}
+        />
         <GrandSlamDetail
           icon={CalendarDays}
           label="Season"
@@ -705,7 +725,11 @@ function GrandSlamDetail({
   return (
     <div className="flex items-center justify-between gap-4">
       <dt className="inline-flex items-center gap-2 font-mono text-[7px] uppercase tracking-[0.17em] text-white/28">
-        <Icon size={11} className="text-[#D7FF00]" aria-hidden="true" />
+        <Icon
+          size={11}
+          className="text-[#D7FF00]"
+          aria-hidden="true"
+        />
         {label}
       </dt>
 
@@ -737,6 +761,7 @@ function ArchiveStep({
         <h3 className="text-sm font-black uppercase tracking-[0.04em]">
           {title}
         </h3>
+
         <p className="mt-2 text-xs leading-6 text-white/36">
           {description}
         </p>
