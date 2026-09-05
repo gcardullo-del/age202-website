@@ -542,7 +542,7 @@ export default async function TodaysMatches() {
                 </span>
 
                 <span className="text-white/35">
-                  Every 6 minutes
+                  Every 5 minutes
                 </span>
               </span>
             </div>

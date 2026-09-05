@@ -1129,24 +1129,63 @@ export async function syncAtpTournamentDailyMatches(
         }
 
 
-        const currentCounter =
-          (
-            provisionalCounters.get(
-              round,
-            ) ??
-            0
-          ) + 1;
+        /*
+         * Troviamo un matchNumber provvisorio realmente libero
+         * per questa edizione + round.
+         *
+         * I daily match dei giorni precedenti possono avere già
+         * occupato 1001, 1002, ecc.
+         */
+        let currentCounter =
+          provisionalCounters.get(
+            round,
+          ) ??
+          0;
 
+        let provisionalMatchNumber =
+          PROVISIONAL_MATCH_NUMBER_BASE +
+          currentCounter +
+          1;
+
+        while (true) {
+          const occupiedMatch =
+            await transaction.tournamentMatch.findUnique({
+              where: {
+                editionId_round_matchNumber: {
+                  editionId:
+                    edition.id,
+
+                  round,
+
+                  matchNumber:
+                    provisionalMatchNumber,
+                },
+              },
+
+              select: {
+                id:
+                  true,
+              },
+            });
+
+          if (!occupiedMatch) {
+            break;
+          }
+
+          currentCounter +=
+            1;
+
+          provisionalMatchNumber =
+            PROVISIONAL_MATCH_NUMBER_BASE +
+            currentCounter +
+            1;
+        }
 
         provisionalCounters.set(
           round,
-          currentCounter,
+          provisionalMatchNumber -
+            PROVISIONAL_MATCH_NUMBER_BASE,
         );
-
-
-        const provisionalMatchNumber =
-          PROVISIONAL_MATCH_NUMBER_BASE +
-          currentCounter;
 
 
         await transaction.tournamentMatch.create({

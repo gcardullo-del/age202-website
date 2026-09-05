@@ -2,7 +2,7 @@ name: AGE202 ATP Live Results Sync
 
 on:
   schedule:
-    - cron: "*/6 * * * *"
+    - cron: "*/5 * * * *"
 
   workflow_dispatch:
 
@@ -15,7 +15,7 @@ jobs:
     name: Sync ATP Live Results
     runs-on: ubuntu-latest
 
-    timeout-minutes: 8
+    timeout-minutes: 10
 
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -51,3 +51,7 @@ jobs:
       - name: Sync active ATP daily matches
         if: steps.active-atp.outputs.active == 'true'
         run: npx tsx scripts/sync-active-atp-daily-matches.ts --write
+
+      - name: Sync ATP live scores
+        if: steps.active-atp.outputs.active == 'true'
+        run: npx tsx scripts/sync-active-atp-live-scores.ts --write
