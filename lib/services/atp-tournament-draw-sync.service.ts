@@ -887,7 +887,7 @@ export async function syncAtpTournamentDraw(
       maxWait:
         20_000,
       timeout:
-        120_000,
+        180_000,
     },
   );
 }
