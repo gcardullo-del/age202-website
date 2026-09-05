@@ -1,4 +1,4 @@
-name: AGE202 ATP Live Results Sync
+name: AGE202 ATP Live Sync
 
 on:
   schedule:
@@ -7,15 +7,15 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: age202-atp-live-results-sync
+  group: age202-atp-live-sync
   cancel-in-progress: false
 
 jobs:
-  sync-atp-live-results:
-    name: Sync ATP Live Results
+  sync-atp-live:
+    name: Sync ATP Live Data
     runs-on: ubuntu-latest
 
-    timeout-minutes: 10
+    timeout-minutes: 12
 
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -48,7 +48,7 @@ jobs:
         if: steps.active-atp.outputs.active == 'true'
         run: npx playwright install chromium --with-deps
 
-      - name: Sync active ATP daily matches
+      - name: Sync active ATP daily matches and completed results
         if: steps.active-atp.outputs.active == 'true'
         run: npx tsx scripts/sync-active-atp-daily-matches.ts --write
 
