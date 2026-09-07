@@ -1,5 +1,5 @@
 import {
-  TournamentCircuit,
+   TournamentCircuit,
   TournamentDrawType,
   TournamentEntryStatus,
   TournamentMatchStatus,
@@ -798,6 +798,83 @@ export async function syncAtpTournamentDailyMatches(
         >();
 
 
+      /*
+       * DAILY SCHEDULE RECONCILIATION
+       *
+       * La schedule ATP corrente è la fonte autorevole per
+       * MATCHES OF THE DAY. I record provvisori atp:daily:
+       * appartenenti alla stessa edizione ma assenti dalla
+       * schedule corrente non devono più essere considerati
+       * record daily attivi.
+       *
+       * Non cancelliamo nulla: archiviamo soltanto il loro
+       * externalId provvisorio. In questo modo:
+       *
+       * - il match storico resta nel database;
+       * - il draw può continuare a riconciliarlo tramite
+       *   round + coppia di giocatori;
+       * - eventuali sync successivi del draw non possono
+       *   farlo ricomparire in MATCHES OF THE DAY soltanto
+       *   aggiornando lastSyncedAt.
+       */
+      const currentDailyExternalIds =
+        input.matches.map(
+          (match) =>
+            match.externalId,
+        );
+
+
+      const staleDailyMatches =
+        await transaction.tournamentMatch.findMany({
+          where: {
+            editionId:
+              edition.id,
+
+            externalId: {
+              startsWith:
+                "atp:daily:",
+
+              notIn:
+                currentDailyExternalIds,
+            },
+          },
+
+          select: {
+            id:
+              true,
+
+            externalId:
+              true,
+          },
+        });
+
+
+      for (
+        const staleMatch
+        of staleDailyMatches
+      ) {
+        if (!staleMatch.externalId) {
+          continue;
+        }
+
+
+        await transaction.tournamentMatch.update({
+          where: {
+            id:
+              staleMatch.id,
+          },
+
+          data: {
+            externalId:
+              staleMatch.externalId.replace(
+                /^atp:daily:/,
+                "atp:daily-archive:",
+              ),
+          },
+        });
+      }
+
+
       for (
         const matchInput
         of input.matches
@@ -1072,7 +1149,27 @@ export async function syncAtpTournamentDailyMatches(
            * È importante: il daily sync non deve
            * trasformare un ID storico del draw
            * in un ID provvisorio daily.
+           *
+           * Inoltre, un match storico già COMPLETED con
+           * externalId ufficiale del draw non deve ricevere
+           * un nuovo scheduledAt dal Daily Schedule corrente.
+           *
+           * Questo evita che un incontro concluso nei giorni
+           * precedenti venga accidentalmente spostato nella
+           * giornata odierna e ricompaia in MATCHES OF THE DAY.
            */
+          const preserveHistoricalScheduledAt =
+            existingMatch.status ===
+              TournamentMatchStatus.COMPLETED &&
+            !(
+              existingMatch.externalId
+                ?.startsWith(
+                  "atp:daily:",
+                ) ??
+              false
+            );
+
+
           await transaction.tournamentMatch.update({
             where: {
               id:
@@ -1091,8 +1188,12 @@ export async function syncAtpTournamentDailyMatches(
                 finalStatus,
 
               scheduledAt:
-                 matchInput.scheduledAt ??
-                 existingMatch.scheduledAt,
+                preserveHistoricalScheduledAt
+                  ? existingMatch.scheduledAt
+                  : (
+                      matchInput.scheduledAt ??
+                      existingMatch.scheduledAt
+                    ),
 
               startedAt,
 

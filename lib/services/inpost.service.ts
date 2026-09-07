@@ -1,5 +1,7 @@
 type InPostEnvironment = "stage" | "production";
 
+
+
 type InPostTokenResponse = {
   access_token: string;
   token_type: string;
@@ -66,6 +68,10 @@ export type SearchInPostPointsResult = {
  */
 export type CreateInPostShipmentPayload =
   Record<string, unknown>;
+
+export type CreateInPostShipmentOptions = {
+  deduplicationId?: string;
+};
 
 export type InPostShipmentResponse = {
   trackingNumber?: string;
@@ -783,9 +789,6 @@ export async function getInPostTrackingHistory(
 
         headers: {
           ...headers,
-
-          "x-inpost-event-version":
-            "v1",
         },
 
         cache:
@@ -896,7 +899,10 @@ export async function getInPostShipmentLabel(
             `Bearer ${accessToken}`,
 
           Accept:
-            "application/pdf",
+            "application/pdf;format=A4",
+
+          "Content-Type":
+            "application/json",
         },
 
         cache:
@@ -930,6 +936,7 @@ export async function getInPostShipmentLabel(
       ?.trim()
       .toLowerCase() ||
     "application/pdf";
+  
 
   if (
     contentType !==
@@ -992,6 +999,7 @@ export async function getInPostShipmentLabel(
  */
 export async function createInPostShipment(
   payload: CreateInPostShipmentPayload,
+  options: CreateInPostShipmentOptions = {},
 ): Promise<InPostShipmentResponse> {
   if (
     !payload ||
@@ -1014,6 +1022,30 @@ export async function createInPostShipment(
 
   const headers =
     await createInPostAuthorizationHeaders();
+
+  const deduplicationId =
+    options.deduplicationId
+      ?.trim();
+
+  if (deduplicationId) {
+    const uuidPattern =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    if (
+      !uuidPattern.test(
+        deduplicationId,
+      )
+    ) {
+      throw new Error(
+        "Invalid InPost X-Deduplication-Id. Expected a UUID.",
+      );
+    }
+
+    headers[
+      "X-Deduplication-Id"
+    ] =
+      deduplicationId;
+  }
 
   const url =
     new URL(

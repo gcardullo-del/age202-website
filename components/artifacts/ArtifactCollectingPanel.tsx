@@ -163,8 +163,8 @@ export default function ArtifactCollectingPanel({
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_38%,rgba(190,242,100,0.10),transparent_31%),radial-gradient(circle_at_12%_85%,rgba(255,255,255,0.025),transparent_30%)]" />
 
 
-      <div className="relative mx-auto max-w-[1440px] px-6 py-20 sm:px-8 lg:px-12 lg:py-32">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-stretch lg:gap-20">
+      <div className="relative mx-auto max-w-[1600px] px-6 py-20 sm:px-8 lg:px-12 xl:px-16 lg:py-32">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_560px] lg:items-stretch lg:gap-14 xl:grid-cols-[minmax(0,1fr)_620px] xl:gap-16">
 
 
           <div className="flex flex-col justify-center">

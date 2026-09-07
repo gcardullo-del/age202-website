@@ -1,4 +1,8 @@
 import {
+   createHash,
+} from "node:crypto";
+
+import {
   prisma,
 } from "@/lib/prisma";
 
@@ -84,6 +88,114 @@ const DEFAULT_PARCEL: InPostParcelInput = {
   weightKg:
     1,
 };
+
+
+/*
+ * Namespace UUID standard DNS.
+ *
+ * Lo usiamo come namespace stabile per generare
+ * un UUID v5 deterministico per ogni ordine AGE202.
+ *
+ * Stesso orderId = stesso X-Deduplication-Id,
+ * anche dopo riavvii o retry del server.
+ */
+const INPOST_DEDUPLICATION_NAMESPACE_HEX =
+  "6ba7b8109dad11d180b400c04fd430c8";
+
+
+export function createInPostDeduplicationId(
+  orderId: string,
+): string {
+  const normalizedOrderId =
+    orderId.trim();
+
+  if (!normalizedOrderId) {
+    throw new Error(
+      "orderId mancante per generare X-Deduplication-Id InPost.",
+    );
+  }
+
+  const namespaceBytes =
+    Buffer.from(
+      INPOST_DEDUPLICATION_NAMESPACE_HEX,
+      "hex",
+    );
+
+  const nameBytes =
+    Buffer.from(
+      `age202:inpost:shipment:${normalizedOrderId}`,
+      "utf8",
+    );
+
+  const hash =
+    createHash(
+      "sha1",
+    )
+      .update(
+        namespaceBytes,
+      )
+      .update(
+        nameBytes,
+      )
+      .digest();
+
+  const uuidBytes =
+    Buffer.from(
+      hash.subarray(
+        0,
+        16,
+      ),
+    );
+
+  /*
+   * RFC UUID v5:
+   * - version = 5
+   * - variant = RFC 4122 / RFC 9562
+   */
+  uuidBytes[6] =
+    (
+      uuidBytes[6] &
+      0x0f
+    ) |
+    0x50;
+
+  uuidBytes[8] =
+    (
+      uuidBytes[8] &
+      0x3f
+    ) |
+    0x80;
+
+  const hex =
+    uuidBytes.toString(
+      "hex",
+    );
+
+  return [
+    hex.slice(
+      0,
+      8,
+    ),
+    hex.slice(
+      8,
+      12,
+    ),
+    hex.slice(
+      12,
+      16,
+    ),
+    hex.slice(
+      16,
+      20,
+    ),
+    hex.slice(
+      20,
+      32,
+    ),
+  ].join(
+    "-",
+  );
+}
 
 
 export function isInPostShippingEnabled(): boolean {
@@ -548,12 +660,30 @@ export async function createInPostShipmentForOrder({
   }
 
   /*
+   * Idempotenza InPost:
+   *
+   * lo stesso ordine AGE202 genera sempre
+   * lo stesso UUID v5.
+   *
+   * Se la POST viene ritentata dopo un timeout
+   * o una perdita di rete, InPost riceve lo stesso
+   * X-Deduplication-Id invece di una nuova chiave.
+   */
+  const deduplicationId =
+    createInPostDeduplicationId(
+      currentOrder.id,
+    );
+
+  /*
    * SOLO DA QUI IN POI
    * può partire la vera POST InPost.
    */
   const response =
     await createInPostShipment(
       prepared.payload,
+      {
+        deduplicationId,
+      },
     );
 
   const trackingNumber =

@@ -5,11 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 
 import {
-  createInPostShipmentForOrder,
-  isInPostShippingEnabled,
-} from "@/lib/server/inpost/inpost-shipping.service";
-
-import {
   sendSalePushNotification,
 } from "@/lib/push/sendPushNotification";
 
@@ -767,97 +762,6 @@ async function handleCompletedCheckout(
   }
 
 
-  /*
-   * ========================================
-   * INPOST AUTOMATIC SHIPPING
-   * ========================================
-   *
-   * REGOLA 1:
-   * gli ordini Stripe TEST
-   * NON possono creare spedizioni.
-   *
-   * REGOLA 2:
-   * se INPOST_SHIPPING_ENABLED
-   * non è "true", non chiamiamo
-   * nemmeno createInPostShipmentForOrder().
-   */
-  if (
-    createdOrder
-      .isTest
-  ) {
-    console.log(
-      `Ordine ${createdOrder.orderNumber}: spedizione InPost NON creata perché si tratta di un ordine Stripe TEST.`,
-    );
-
-    return;
-  }
-
-
-  if (
-    !isInPostShippingEnabled()
-  ) {
-    console.log(
-      `Ordine ${createdOrder.orderNumber}: InPost pronto ma creazione automatica disabilitata.`,
-    );
-
-    console.log(
-      "INPOST_SHIPPING_ENABLED=false",
-    );
-
-    return;
-  }
-
-
-  /*
-   * Da qui in poi siamo:
-   *
-   * - ordine LIVE
-   * - pagamento PAID
-   * - punto InPost presente
-   * - ordine READY_TO_CREATE
-   * - INPOST_SHIPPING_ENABLED=true
-   *
-   * Solo in queste condizioni
-   * tentiamo la spedizione reale.
-   *
-   * IMPORTANTE:
-   * eventuali errori InPost
-   * NON devono invalidare
-   * il webhook Stripe.
-   *
-   * L'ordine resterà
-   * READY_TO_CREATE e potrà
-   * essere ritentato manualmente.
-   */
-  try {
-    const shipment =
-      await createInPostShipmentForOrder({
-        orderId:
-          createdOrder.id,
-      });
-
-
-    console.log(
-      `✅ Spedizione InPost creata per ordine ${createdOrder.orderNumber}`,
-    );
-
-    console.log(
-      `Tracking: ${shipment.trackingNumber}`,
-    );
-  } catch (error) {
-    console.error(
-      `⚠️ Impossibile creare automaticamente la spedizione InPost per ordine ${createdOrder.orderNumber}:`,
-      error,
-    );
-
-    /*
-     * NON rilanciamo l'errore.
-     *
-     * Il pagamento Stripe
-     * è già valido e l'ordine
-     * deve rimanere registrato.
-     */
-  }
 }
 
 

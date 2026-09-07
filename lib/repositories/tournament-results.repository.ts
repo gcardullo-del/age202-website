@@ -1,6 +1,7 @@
 import {
-  TournamentCategory,
+   TournamentCategory,
   TournamentCircuit,
+  TournamentMatchStatus,
 } from "@/generated/prisma/client";
 
 import {
@@ -378,13 +379,63 @@ export async function getTournamentMatchesForDay(
     where: {
       OR: [
         {
-          scheduledAt: {
-            gte:
-              start,
+          /*
+           * MATCH CON ORARIO ESPLICITO
+           *
+           * Per WTA preserviamo il comportamento storico.
+           *
+           * Per ATP, invece, un match COMPLETED deve anche
+           * risultare iniziato nella stessa giornata dei
+           * risultati. Questo protegge MATCHES OF THE DAY
+           * da scheduledAt storici contaminati da una
+           * successiva Daily Schedule.
+           *
+           * I match ATP SCHEDULED / IN_PROGRESS restano
+           * normalmente visibili tramite scheduledAt.
+           */
+          AND: [
+            {
+              scheduledAt: {
+                gte:
+                  start,
 
-            lt:
-              end,
-          },
+                lt:
+                  end,
+              },
+            },
+
+            {
+              OR: [
+                {
+                  edition: {
+                    is: {
+                      circuit: {
+                        not:
+                          TournamentCircuit.ATP,
+                      },
+                    },
+                  },
+                },
+
+                {
+                  status: {
+                    not:
+                      TournamentMatchStatus.COMPLETED,
+                  },
+                },
+
+                {
+                  startedAt: {
+                    gte:
+                      start,
+
+                    lt:
+                      end,
+                  },
+                },
+              ],
+            },
+          ],
         },
 
         /*

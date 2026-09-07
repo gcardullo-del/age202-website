@@ -48,6 +48,8 @@ export type BuildInPostShipmentPayloadInput = {
 
 type InPostSender = {
   companyName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   countryCode: string;
@@ -75,6 +77,16 @@ function getSender(): InPostSender {
     companyName:
       getRequiredEnv(
         "INPOST_SENDER_NAME",
+      ),
+
+    firstName:
+      getRequiredEnv(
+        "INPOST_SENDER_FIRST_NAME",
+      ),
+
+    lastName:
+      getRequiredEnv(
+        "INPOST_SENDER_LAST_NAME",
       ),
 
     email:
@@ -274,14 +286,25 @@ export function buildInPostShipmentPayload({
     );
 
   /*
-   * ATTENZIONE:
-   * questa funzione costruisce soltanto il payload.
-   * Non effettua alcuna chiamata POST verso InPost.
+   * Questa funzione costruisce soltanto il payload.
+   * Non effettua chiamate POST verso InPost.
+   *
+   * Le unità seguono lo schema OpenAPI
+   * ufficiale InPost Shipping API:
+   *
+   * dimensions.unit = "CM"
+   * weight.unit = "KG"
    */
   return {
     sender: {
       companyName:
         sender.companyName,
+
+      firstName:
+        sender.firstName,
+
+      lastName:
+        sender.lastName,
 
       email:
         sender.email,
@@ -315,9 +338,6 @@ export function buildInPostShipmentPayload({
           .trim()
           .toUpperCase(),
 
-      shippingMethod:
-        destinationMethod,
-
       pointId:
         order.inpostPointId.trim(),
     },
@@ -329,32 +349,24 @@ export function buildInPostShipmentPayload({
 
         dimensions: {
           length:
-            String(
-              parcel.lengthCm,
-            ),
+            parcel.lengthCm,
 
           width:
-            String(
-              parcel.widthCm,
-            ),
+            parcel.widthCm,
 
           height:
-            String(
-              parcel.heightCm,
-            ),
+            parcel.heightCm,
 
           unit:
-            "cm",
+            "CM",
         },
 
         weight: {
           amount:
-            String(
-              parcel.weightKg,
-            ),
+            parcel.weightKg,
 
           unit:
-            "kg",
+            "KG",
         },
       },
     ],
