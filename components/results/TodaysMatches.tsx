@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import {
+  ArrowRight,
   CalendarDays,
   CircleDot,
   Clock3,
@@ -34,16 +37,12 @@ function formatResultsDate(
     {
       timeZone:
         RESULTS_TIME_ZONE,
-
       weekday:
         "long",
-
       day:
         "2-digit",
-
       month:
         "long",
-
       year:
         "numeric",
     },
@@ -63,13 +62,10 @@ function formatMatchTime(
     {
       timeZone:
         RESULTS_TIME_ZONE,
-
       hour:
         "2-digit",
-
       minute:
         "2-digit",
-
       hour12:
         false,
     },
@@ -86,25 +82,18 @@ function formatRound(
   > = {
     QUALIFYING:
       "Qualifying",
-
     ROUND_OF_128:
       "First round",
-
     ROUND_OF_64:
       "Second round",
-
     ROUND_OF_32:
       "Third round",
-
     ROUND_OF_16:
       "Round of 16",
-
     QUARTERFINAL:
       "Quarter-final",
-
     SEMIFINAL:
       "Semi-final",
-
     FINAL:
       "Final",
   };
@@ -223,6 +212,33 @@ function groupMatchesByEdition(
   return Array.from(
     groups.values(),
   );
+}
+
+
+function getTournamentArchiveHref(
+  match: DailyMatch,
+) {
+  const tournament =
+    match.edition.tournament;
+
+  const slug =
+    tournament.slug;
+
+  switch (
+    tournament.category
+  ) {
+    case "GRAND_SLAM":
+      return `/results/grand-slams/${slug}`;
+
+    case "MASTERS_1000":
+      return `/results/masters-1000/${slug}`;
+
+    case "ATP_500":
+      return `/results/atp-500/${slug}`;
+
+    default:
+      return null;
+  }
 }
 
 
@@ -396,6 +412,11 @@ function TournamentGroup({
     edition,
   } = firstMatch;
 
+  const archiveHref =
+    getTournamentArchiveHref(
+      firstMatch,
+    );
+
   return (
     <section className="overflow-hidden rounded-[2rem] border border-white/10 bg-[#07101D]">
       <header className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
@@ -451,6 +472,38 @@ function TournamentGroup({
           ),
         )}
       </div>
+
+      {archiveHref ? (
+        <div className="border-t border-white/10 px-4 pb-4 sm:px-6 sm:pb-6">
+          <Link
+            href={archiveHref}
+            className="group relative flex min-h-20 items-center justify-between gap-6 overflow-hidden rounded-[1.4rem] border border-[#D7FF00]/20 bg-[#D7FF00]/[0.055] px-5 py-4 transition duration-300 hover:border-[#D7FF00]/45 hover:bg-[#D7FF00]/[0.09] sm:px-6"
+          >
+            <div className="pointer-events-none absolute -right-10 top-1/2 h-32 w-32 -translate-y-1/2 rounded-full bg-[#D7FF00]/[0.07] blur-3xl" />
+
+            <div className="relative min-w-0">
+              <p className="font-mono text-[7px] font-black uppercase tracking-[0.18em] text-[#D7FF00]/70">
+                Tournament archive
+              </p>
+
+              <p className="mt-1.5 truncate text-sm font-black uppercase tracking-[-0.02em] text-white sm:text-base">
+                View the {edition.tournament.name} draw
+              </p>
+
+              <p className="mt-1 text-xs text-white/32">
+                Explore every round, result and the road to the final.
+              </p>
+            </div>
+
+            <span className="relative grid size-11 shrink-0 place-items-center rounded-full bg-[#D7FF00] text-[#050B18] transition duration-300 group-hover:translate-x-1">
+              <ArrowRight
+                size={16}
+                aria-hidden="true"
+              />
+            </span>
+          </Link>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -463,14 +516,14 @@ function EmptyMatchesState() {
 
       <div className="relative">
         <div className="flex w-full justify-center">
-  <span className="flex size-14 items-center justify-center rounded-2xl border border-[#D7FF00]/20 bg-[#D7FF00]/[0.06] text-[#D7FF00]">
-    <CalendarDays
-      size={22}
-      strokeWidth={1.5}
-      aria-hidden="true"
-    />
-  </span>
-</div>
+          <span className="flex size-14 items-center justify-center rounded-2xl border border-[#D7FF00]/20 bg-[#D7FF00]/[0.06] text-[#D7FF00]">
+            <CalendarDays
+              size={22}
+              strokeWidth={1.5}
+              aria-hidden="true"
+            />
+          </span>
+        </div>
 
         <h3 className="mt-6 text-2xl font-black uppercase tracking-[-0.035em]">
           No matches scheduled
