@@ -17,9 +17,9 @@ import GrandSlamIconicFinalsSection from "@/components/results/GrandSlamIconicFi
 import GrandSlamHeroSection from "@/components/results/GrandSlamHeroSection";
 import GrandSlamArchivePreviewSection from "@/components/results/GrandSlamArchivePreviewSection";
 import GrandSlamNavigation from "@/components/results/GrandSlamNavigation";
-import Masters1000TournamentDraw, {
-  type Masters1000DrawMatch,
-} from "@/components/results/Masters1000TournamentDraw";
+import GrandSlamProgressiveDraw, {
+  type GrandSlamDrawMatch,
+} from "@/components/results/GrandSlamProgressiveDraw";
 
 import {
   ArrowDown,
@@ -466,7 +466,7 @@ export default async function GrandSlamTournamentPage({
       />
 
       {currentDrawEdition ? (
-        <Masters1000TournamentDraw
+        <GrandSlamProgressiveDraw
           tournamentName={
             tournament.name
           }
@@ -478,7 +478,7 @@ export default async function GrandSlamTournamentPage({
               (match) => ({
                 ...match,
                 round:
-                  match.round as Masters1000DrawMatch["round"],
+                  match.round as GrandSlamDrawMatch["round"],
               }),
             )
           }
