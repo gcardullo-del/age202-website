@@ -5,6 +5,7 @@ import {
   BellOff,
   CheckCircle2,
   Loader2,
+  Share,
   Smartphone,
 } from "lucide-react";
 import {
@@ -14,6 +15,7 @@ import {
 
 type PushState =
   | "loading"
+  | "ios-install-required"
   | "unsupported"
   | "denied"
   | "inactive"
@@ -43,9 +45,43 @@ function urlBase64ToUint8Array(
   );
 }
 
+function isIOSDevice() {
+  const userAgent =
+    window.navigator.userAgent;
+
+  const platform =
+    window.navigator.platform;
+
+  const maxTouchPoints =
+    window.navigator.maxTouchPoints ?? 0;
+
+  return (
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    (
+      platform === "MacIntel" &&
+      maxTouchPoints > 1
+    )
+  );
+}
+
+function isStandaloneMode() {
+  const navigatorWithStandalone =
+    window.navigator as Navigator & {
+      standalone?: boolean;
+    };
+
+  return (
+    window.matchMedia(
+      "(display-mode: standalone)",
+    ).matches ||
+    navigatorWithStandalone.standalone === true
+  );
+}
+
 export default function PushNotificationsControl() {
   const [state, setState] =
     useState<PushState>("loading");
+
   const [message, setMessage] =
     useState<string>("");
 
@@ -54,6 +90,32 @@ export default function PushNotificationsControl() {
   }, []);
 
   async function refreshState() {
+    const isIOS =
+      isIOSDevice();
+
+    const isStandalone =
+      isStandaloneMode();
+
+    /*
+     * Su iPhone/iPad le Web Push devono essere
+     * utilizzate dalla web app aggiunta alla
+     * schermata Home.
+     *
+     * Se AGE202 è aperto come normale pagina
+     * del browser, mostriamo quindi le
+     * istruzioni di installazione invece del
+     * generico "Browser non supportato".
+     */
+    if (
+      isIOS &&
+      !isStandalone
+    ) {
+      setState(
+        "ios-install-required",
+      );
+      return;
+    }
+
     if (
       !("serviceWorker" in navigator) ||
       !("PushManager" in window) ||
@@ -63,7 +125,10 @@ export default function PushNotificationsControl() {
       return;
     }
 
-    if (Notification.permission === "denied") {
+    if (
+      Notification.permission ===
+      "denied"
+    ) {
       setState("denied");
       return;
     }
@@ -78,11 +143,15 @@ export default function PushNotificationsControl() {
         await registration.pushManager.getSubscription();
 
       setState(
-        subscription ? "active" : "inactive",
+        subscription
+          ? "active"
+          : "inactive",
       );
     } catch (error) {
       console.error(error);
+
       setState("error");
+
       setMessage(
         "Impossibile inizializzare le notifiche.",
       );
@@ -97,12 +166,15 @@ export default function PushNotificationsControl() {
       const permission =
         await Notification.requestPermission();
 
-      if (permission !== "granted") {
+      if (
+        permission !== "granted"
+      ) {
         setState(
           permission === "denied"
             ? "denied"
             : "inactive",
         );
+
         return;
       }
 
@@ -131,23 +203,28 @@ export default function PushNotificationsControl() {
           await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey:
-              urlBase64ToUint8Array(publicKey),
+              urlBase64ToUint8Array(
+                publicKey,
+              ),
           });
       }
 
-      const response = await fetch(
-        "/api/push/subscribe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json",
+      const response =
+        await fetch(
+          "/api/push/subscribe",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify(
+              subscription.toJSON(),
+            ),
           },
-          body: JSON.stringify(
-            subscription.toJSON(),
-          ),
-        },
-      );
+        );
 
       if (!response.ok) {
         throw new Error(
@@ -156,12 +233,15 @@ export default function PushNotificationsControl() {
       }
 
       setState("active");
+
       setMessage(
         "Questo dispositivo riceverà le notifiche delle vendite LIVE.",
       );
     } catch (error) {
       console.error(error);
+
       setState("error");
+
       setMessage(
         "Non è stato possibile attivare le notifiche.",
       );
@@ -180,34 +260,45 @@ export default function PushNotificationsControl() {
         await registration.pushManager.getSubscription();
 
       if (subscription) {
-        await fetch("/api/push/subscribe", {
-          method: "DELETE",
-          headers: {
-            "Content-Type":
-              "application/json",
+        await fetch(
+          "/api/push/subscribe",
+          {
+            method: "DELETE",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify({
+              endpoint:
+                subscription.endpoint,
+            }),
           },
-          body: JSON.stringify({
-            endpoint: subscription.endpoint,
-          }),
-        });
+        );
 
         await subscription.unsubscribe();
       }
 
       setState("inactive");
+
       setMessage(
         "Notifiche disattivate su questo dispositivo.",
       );
     } catch (error) {
       console.error(error);
+
       setState("error");
+
       setMessage(
         "Non è stato possibile disattivare le notifiche.",
       );
     }
   }
 
-  const isActive = state === "active";
+  const isActive =
+    state === "active";
+
   const isWorking =
     state === "working" ||
     state === "loading";
@@ -257,7 +348,64 @@ export default function PushNotificationsControl() {
             ) : null}
           </div>
 
-          {state === "unsupported" ? (
+          {state ===
+          "ios-install-required" ? (
+            <div className="w-full max-w-md rounded-[22px] border border-[#c8ff00]/20 bg-[#c8ff00]/[0.05] p-5 lg:w-auto">
+              <div className="flex items-start gap-3">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#c8ff00]/10">
+                  <Share className="size-5 text-[#c8ff00]" />
+                </div>
+
+                <div>
+                  <p className="text-sm font-bold text-white">
+                    Aggiungi AGE202 alla Home
+                  </p>
+
+                  <p className="mt-2 text-sm leading-6 text-white/55">
+                    Su iPhone, per ricevere
+                    le notifiche push aggiungi
+                    AGE202 alla schermata Home.
+                  </p>
+
+                  <div className="mt-4 space-y-2 text-sm leading-6 text-white/70">
+                    <p>
+                      1. Tocca il pulsante
+                      {" "}
+                      <strong className="text-white">
+                        Condividi
+                      </strong>
+                      {" "}
+                      del browser.
+                    </p>
+
+                    <p>
+                      2. Seleziona
+                      {" "}
+                      <strong className="text-white">
+                        Aggiungi alla schermata Home
+                      </strong>
+                      .
+                    </p>
+
+                    <p>
+                      3. Apri AGE202 dalla nuova
+                      icona sulla Home.
+                    </p>
+
+                    <p>
+                      4. Torna in
+                      {" "}
+                      <strong className="text-white">
+                        Admin → Notifications
+                      </strong>
+                      {" "}
+                      e attiva le notifiche.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : state === "unsupported" ? (
             <div className="rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-amber-200">
               Browser non supportato
             </div>
