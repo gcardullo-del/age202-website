@@ -1,9 +1,41 @@
+import type {
+  Metadata,
+} from "next";
+
 import {
-  BellRing,
   ShieldCheck,
 } from "lucide-react";
 
 import PushNotificationsControl from "@/components/admin/PushNotificationsControl";
+
+
+export const metadata: Metadata = {
+  title:
+    "Notifications | AGE202 Admin",
+
+  manifest:
+    "/admin-notifications.webmanifest",
+
+  robots: {
+    index:
+      false,
+
+    follow:
+      false,
+  },
+
+  appleWebApp: {
+    capable:
+      true,
+
+    title:
+      "AGE202 Admin",
+
+    statusBarStyle:
+      "black-translucent",
+  },
+};
+
 
 export default function AdminNotificationsPage() {
   return (
