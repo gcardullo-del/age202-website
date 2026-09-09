@@ -7,138 +7,403 @@ import {
 } from "@/lib/repositories/artifact.repository";
 
 import {
+  getPublishedLegends,
+} from "@/lib/repositories/legend.repository";
+
+import {
+  getPublishedMemorabiliaSlugs,
+} from "@/lib/repositories/memorabilia.repository";
+
+import {
+  getPublishedMuseumCollections,
+} from "@/lib/repositories/museum-collection.repository";
+
+import {
+  getPublishedOriginalProductSlugs,
+} from "@/lib/repositories/original-product.repository";
+
+import {
   getAllActivePlayers,
   getArchivePlayers,
   getWomenArchiveRanking,
 } from "@/lib/repositories/player.repository";
+
+import {
+  getPublishedTennisHistoryEntries,
+} from "@/lib/repositories/tennis-history.repository";
+
+import {
+  getAllTournaments,
+} from "@/lib/repositories/tournament.repository";
 
 
 const siteUrl =
   "https://www.age202.com";
 
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function extractSlug(
+  value: unknown,
+): string | null {
+  if (
+    typeof value ===
+    "string"
+  ) {
+    const slug =
+      value.trim();
+
+    return slug.length >
+      0
+      ? slug
+      : null;
+  }
+
+
+  if (
+    typeof value !==
+      "object" ||
+    value === null
+  ) {
+    return null;
+  }
+
+
+  if (
+    !(
+      "slug" in
+      value
+    )
+  ) {
+    return null;
+  }
+
+
+  const slug =
+    (
+      value as {
+        slug?: unknown;
+      }
+    ).slug;
+
+
+  if (
+    typeof slug !==
+    "string"
+  ) {
+    return null;
+  }
+
+
+  const normalized =
+    slug.trim();
+
+
+  return normalized.length >
+    0
+    ? normalized
+    : null;
+}
+
+
+function extractTournamentCategory(
+  value: unknown,
+): string | null {
+  if (
+    typeof value !==
+      "object" ||
+    value === null ||
+    !(
+      "category" in
+      value
+    )
+  ) {
+    return null;
+  }
+
+
+  const category =
+    (
+      value as {
+        category?: unknown;
+      }
+    ).category;
+
+
+  return typeof category ===
+    "string"
+    ? category
+        .trim()
+        .toUpperCase()
+    : null;
+}
+
+
+/* =========================================================
+   STATIC PUBLIC ROUTES
+========================================================= */
+
 const staticRoutes = [
   {
-    path: "",
-    changeFrequency: "weekly",
-    priority: 1,
+    path:
+      "",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      1,
   },
 
   {
-    path: "/about",
-    changeFrequency: "monthly",
-    priority: 0.7,
+    path:
+      "/about",
+
+    changeFrequency:
+      "monthly",
+
+    priority:
+      0.7,
   },
 
   {
-    path: "/players/other-players",
-    changeFrequency: "daily",
-    priority: 0.95,
+    path:
+      "/players",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/players/women",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/players/other-players",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/players/women/archive",
-    changeFrequency: "daily",
-    priority: 0.95,
+    path:
+      "/players/women",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.85,
   },
 
   {
-    path: "/legends",
-    changeFrequency: "weekly",
-    priority: 0.9,
+    path:
+      "/players/women/archive",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/next-gen",
-    changeFrequency: "weekly",
-    priority: 0.9,
+    path:
+      "/legends",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/age202-originals",
-    changeFrequency: "weekly",
-    priority: 0.9,
+    path:
+      "/next-gen",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/memorabilia",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/age202-originals",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/collections",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/memorabilia",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/atp-ranking",
-    changeFrequency: "daily",
-    priority: 0.95,
+    path:
+      "/collections",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.85,
   },
 
   {
-    path: "/tennis-history",
-    changeFrequency: "weekly",
-    priority: 0.9,
+    path:
+      "/atp-ranking",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/collaborations",
-    changeFrequency: "monthly",
-    priority: 0.75,
+    path:
+      "/tennis-history",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/contribute",
-    changeFrequency: "monthly",
-    priority: 0.8,
+    path:
+      "/collaborations",
+
+    changeFrequency:
+      "monthly",
+
+    priority:
+      0.75,
   },
 
   {
-    path: "/results",
-    changeFrequency: "daily",
-    priority: 0.95,
+    path:
+      "/contribute",
+
+    changeFrequency:
+      "monthly",
+
+    priority:
+      0.8,
   },
 
   {
-    path: "/results/grand-slams",
-    changeFrequency: "weekly",
-    priority: 0.9,
+    path:
+      "/results",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/results/grand-slams/australian-open",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/results/atp-500",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.9,
   },
 
   {
-    path: "/results/grand-slams/roland-garros",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/results/masters-1000",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/results/grand-slams/wimbledon",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/results/grand-slams",
+
+    changeFrequency:
+      "daily",
+
+    priority:
+      0.95,
   },
 
   {
-    path: "/results/grand-slams/us-open",
-    changeFrequency: "weekly",
-    priority: 0.85,
+    path:
+      "/results/grand-slams/australian-open",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
+  },
+
+  {
+    path:
+      "/results/grand-slams/roland-garros",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
+  },
+
+  {
+    path:
+      "/results/grand-slams/wimbledon",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
+  },
+
+  {
+    path:
+      "/results/grand-slams/us-open",
+
+    changeFrequency:
+      "weekly",
+
+    priority:
+      0.9,
   },
 ] as const;
 
+
+/* =========================================================
+   SITEMAP
+========================================================= */
 
 export default async function sitemap():
   Promise<MetadataRoute.Sitemap> {
@@ -147,13 +412,39 @@ export default async function sitemap():
     atpPlayers,
     wtaRanking,
     artifacts,
-  ] = await Promise.all([
-    getAllActivePlayers(),
-    getArchivePlayers(),
-    getWomenArchiveRanking(),
-    getPublishedArtifactSlugs(),
-  ]);
+    legends,
+    memorabilia,
+    museumCollections,
+    originalProducts,
+    tennisHistoryEntries,
+    tournaments,
+  ] =
+    await Promise.all([
+      getAllActivePlayers(),
 
+      getArchivePlayers(),
+
+      getWomenArchiveRanking(),
+
+      getPublishedArtifactSlugs(),
+
+      getPublishedLegends(),
+
+      getPublishedMemorabiliaSlugs(),
+
+      getPublishedMuseumCollections(),
+
+      getPublishedOriginalProductSlugs(),
+
+      getPublishedTennisHistoryEntries(),
+
+      getAllTournaments(),
+    ]);
+
+
+  /* =======================================================
+     STATIC
+  ======================================================= */
 
   const staticEntries:
     MetadataRoute.Sitemap =
@@ -171,13 +462,10 @@ export default async function sitemap():
     );
 
 
-  /*
-   * AGE202 Champion Archives
-   *
-   * Permanent featured museum exhibitions
-   * such as Federer, Nadal, Djokovic,
-   * Sinner and Alcaraz.
-   */
+  /* =======================================================
+     CHAMPION ARCHIVES
+  ======================================================= */
+
   const featuredPlayerEntries:
     MetadataRoute.Sitemap =
     allPlayers
@@ -200,27 +488,10 @@ export default async function sitemap():
       );
 
 
-  /*
-   * ATP Player Dossiers
-   *
-   * Standard ATP players use
-   * /players/[slug].
-   *
-   * FEATURED players are also included
-   * here when they still have an active
-   * ATP ranking record.
-   *
-   * This allows active featured players
-   * such as Sinner, Alcaraz and Djokovic
-   * to keep both:
-   *
-   * /archives/[slug]
-   * /players/[slug]
-   *
-   * Retired featured players without
-   * an active ATP ranking remain only
-   * in the permanent museum archive.
-   */
+  /* =======================================================
+     ATP PLAYERS
+  ======================================================= */
+
   const atpPlayerEntries:
     MetadataRoute.Sitemap =
     atpPlayers
@@ -241,20 +512,18 @@ export default async function sitemap():
 
           priority:
             player.atpPlayer?.rank &&
-            player.atpPlayer.rank <= 50
+            player.atpPlayer.rank <=
+              50
               ? 0.85
               : 0.75,
         }),
       );
 
 
-  /*
-   * WTA Player Dossiers
-   *
-   * Only ranking entries already linked
-   * to an active AGE202 Player receive a
-   * profile URL in the sitemap.
-   */
+  /* =======================================================
+     WTA PLAYERS
+  ======================================================= */
+
   const wtaPlayerEntries:
     MetadataRoute.Sitemap =
     wtaRanking
@@ -274,44 +543,394 @@ export default async function sitemap():
             "weekly",
 
           priority:
-            entry.rank <= 50
+            entry.rank <=
+            50
               ? 0.85
               : 0.75,
         }),
       );
 
 
+  /* =======================================================
+     ARTIFACTS
+  ======================================================= */
+
   const artifactEntries:
     MetadataRoute.Sitemap =
-    artifacts.map(
-      (artifact) => ({
-        url:
-          `${siteUrl}/artifacts/${artifact.slug}`,
+    artifacts
+      .map(
+        (
+          artifact,
+        ) =>
+          extractSlug(
+            artifact,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/artifacts/${slug}`,
 
-        changeFrequency:
-          "monthly",
+          changeFrequency:
+            "monthly",
 
-        priority:
-          0.8,
-      }),
+          priority:
+            0.8,
+        }),
+      );
+
+
+  /* =======================================================
+     LEGENDS
+  ======================================================= */
+
+  const legendEntries:
+    MetadataRoute.Sitemap =
+    legends
+      .map(
+        (
+          legend,
+        ) =>
+          extractSlug(
+            legend,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/legends/${slug}`,
+
+          changeFrequency:
+            "monthly",
+
+          priority:
+            0.85,
+        }),
+      );
+
+
+  /* =======================================================
+     MEMORABILIA
+  ======================================================= */
+
+  const memorabiliaEntries:
+    MetadataRoute.Sitemap =
+    memorabilia
+      .map(
+        (
+          item,
+        ) =>
+          extractSlug(
+            item,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/memorabilia/${slug}`,
+
+          changeFrequency:
+            "monthly",
+
+          priority:
+            0.85,
+        }),
+      );
+
+
+  /* =======================================================
+     MUSEUM COLLECTIONS
+  ======================================================= */
+
+  const collectionEntries:
+    MetadataRoute.Sitemap =
+    museumCollections
+      .map(
+        (
+          collection,
+        ) =>
+          extractSlug(
+            collection,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/collections/${slug}`,
+
+          changeFrequency:
+            "monthly",
+
+          priority:
+            0.85,
+        }),
+      );
+
+
+  /* =======================================================
+     AGE202 ORIGINALS
+  ======================================================= */
+
+  const originalProductEntries:
+    MetadataRoute.Sitemap =
+    originalProducts
+      .map(
+        (
+          product,
+        ) =>
+          extractSlug(
+            product,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/age202-originals/${slug}`,
+
+          changeFrequency:
+            "weekly",
+
+          priority:
+            0.8,
+        }),
+      );
+
+
+  /* =======================================================
+     TENNIS HISTORY
+  ======================================================= */
+
+  const tennisHistoryEntriesMap:
+    MetadataRoute.Sitemap =
+    tennisHistoryEntries
+      .map(
+        (
+          entry,
+        ) =>
+          extractSlug(
+            entry,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/tennis-history/${slug}`,
+
+          changeFrequency:
+            "monthly",
+
+          priority:
+            0.8,
+        }),
+      );
+
+
+  /* =======================================================
+     TOURNAMENTS
+  ======================================================= */
+
+  const tournamentEntries:
+    MetadataRoute.Sitemap =
+    tournaments
+      .map(
+        (
+          tournament,
+        ) =>
+          extractSlug(
+            tournament,
+          ),
+      )
+      .filter(
+        (
+          slug,
+        ): slug is string =>
+          slug !== null,
+      )
+      .map(
+        (slug) => ({
+          url:
+            `${siteUrl}/tournaments/${slug}`,
+
+          changeFrequency:
+            "weekly",
+
+          priority:
+            0.85,
+        }),
+      );
+
+
+  /* =======================================================
+     RESULT PAGES FROM TOURNAMENT CATEGORY
+  ======================================================= */
+
+  const tournamentResultEntries:
+    MetadataRoute.Sitemap =
+    tournaments.flatMap(
+      (
+        tournament,
+      ) => {
+        const slug =
+          extractSlug(
+            tournament,
+          );
+
+        const category =
+          extractTournamentCategory(
+            tournament,
+          );
+
+
+        if (
+          !slug ||
+          !category
+        ) {
+          return [];
+        }
+
+
+        if (
+          category ===
+            "ATP_500" ||
+          category ===
+            "ATP500"
+        ) {
+          return [
+            {
+              url:
+                `${siteUrl}/results/atp-500/${slug}`,
+
+              changeFrequency:
+                "daily" as const,
+
+              priority:
+                0.85,
+            },
+          ];
+        }
+
+
+        if (
+          category ===
+            "MASTERS_1000" ||
+          category ===
+            "ATP_MASTERS_1000" ||
+          category ===
+            "ATP_1000"
+        ) {
+          return [
+            {
+              url:
+                `${siteUrl}/results/masters-1000/${slug}`,
+
+              changeFrequency:
+                "daily" as const,
+
+              priority:
+                0.9,
+            },
+          ];
+        }
+
+
+        if (
+          category ===
+            "GRAND_SLAM"
+        ) {
+          return [
+            {
+              url:
+                `${siteUrl}/results/grand-slams/${slug}`,
+
+              changeFrequency:
+                "daily" as const,
+
+              priority:
+                0.9,
+            },
+          ];
+        }
+
+
+        return [];
+      },
     );
+
+
+  /* =======================================================
+     MERGE + DEDUPLICATE
+  ======================================================= */
+
+  const entries = [
+    ...staticEntries,
+
+    ...featuredPlayerEntries,
+
+    ...atpPlayerEntries,
+
+    ...wtaPlayerEntries,
+
+    ...artifactEntries,
+
+    ...legendEntries,
+
+    ...memorabiliaEntries,
+
+    ...collectionEntries,
+
+    ...originalProductEntries,
+
+    ...tennisHistoryEntriesMap,
+
+    ...tournamentEntries,
+
+    ...tournamentResultEntries,
+  ];
 
 
   /*
    * Safety net:
-   * prevent duplicate URLs if the same
-   * destination is returned by more than
-   * one data source.
+   *
+   * If the same public URL is returned
+   * by more than one source, only one
+   * entry is emitted.
    */
-  const entries = [
-    ...staticEntries,
-    ...featuredPlayerEntries,
-    ...atpPlayerEntries,
-    ...wtaPlayerEntries,
-    ...artifactEntries,
-  ];
-
-
   return Array.from(
     new Map(
       entries.map(
