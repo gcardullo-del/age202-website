@@ -112,6 +112,12 @@ function getArchiveScoreLabel(score: number): string {
   return "Emerging";
 }
 
+const LIVE_PROFILE_SLUGS = new Set([
+  "jannik-sinner",
+  "carlos-alcaraz",
+  "novak-djokovic",
+]);
+
 export async function generateMetadata({
   params,
 }: PlayerPageProps): Promise<Metadata> {
@@ -120,40 +126,74 @@ export async function generateMetadata({
 
   if (!player) {
     return {
-      title: "Player not found | AGE202",
+      title: "Player not found",
+      description:
+        "The requested AGE202 ATP player profile could not be found.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
   const profile = player.playerProfile;
+  const ranking = player.atpPlayer;
+
+  const canonical =
+    `/players/${player.slug}`;
+
+  const isLiveProfile =
+    LIVE_PROFILE_SLUGS.has(
+      player.slug,
+    );
+
+  const title =
+    isLiveProfile
+      ? `${player.name}: ATP Ranking, Live Profile, Results & Stats`
+      : `${player.name}: ATP Ranking, Career, Titles & Tennis Profile`;
+
+  const fallbackDescription =
+    ranking?.rank
+      ? `${player.name} ATP profile on AGE202: current ranking No. ${ranking.rank}, career information, titles, tournament results and digital tennis archive.`
+      : `Explore ${player.name}'s ATP profile on AGE202, including career information, titles, tournament results and digital tennis archive.`;
 
   const description =
     profile?.biographyShort ??
     player.biography ??
-    `Explore the AGE202 ATP Archive profile dedicated to ${player.name}.`;
+    fallbackDescription;
 
   const socialImage =
     player.heroImage ??
     getLocalHeroImage(player.slug);
 
   return {
-    title: `${player.name} | ATP Archive | AGE202`,
+    title,
     description,
 
+    alternates: {
+      canonical,
+    },
+
     openGraph: {
-      title: `${player.name} | ATP Archive | AGE202`,
+      title:
+        `${title} | AGE202`,
       description,
       type: "profile",
+      url: canonical,
+      siteName: "AGE202",
+      locale: "en_US",
       images: [
         {
           url: socialImage,
-          alt: `${player.name} — AGE202 ATP Archive`,
+          alt: `${player.name} — AGE202 ATP Profile`,
         },
       ],
     },
 
     twitter: {
       card: "summary_large_image",
-      title: `${player.name} | ATP Archive | AGE202`,
+      title:
+        `${title} | AGE202`,
       description,
       images: [socialImage],
     },
@@ -161,6 +201,14 @@ export async function generateMetadata({
     robots: {
       index: true,
       follow: true,
+
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
 
     category: "Tennis archive",
@@ -359,15 +407,22 @@ export default async function PlayerPage({
       : [],
   );
 
+  const playerCanonicalUrl =
+    `https://www.age202.com/players/${player.slug}`;
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id":
+      `${playerCanonicalUrl}#person`,
     name: player.name,
+    url:
+      playerCanonicalUrl,
 
     description:
       profile?.biographyShort ??
       player.biography ??
-      `AGE202 ATP Archive profile dedicated to ${player.name}.`,
+      `AGE202 ATP profile dedicated to ${player.name}.`,
 
     nationality: countryLabel,
     image: heroImage,
@@ -396,13 +451,20 @@ export default async function PlayerPage({
     knowsAbout: [
       "Tennis",
       "ATP Tour",
+      "Tennis rankings",
+      "Tennis results",
       "Tennis memorabilia",
       "Collectible tennis apparel",
     ],
 
     mainEntityOfPage: {
       "@type": "WebPage",
-      name: `${player.name} | ATP Archive | AGE202`,
+      "@id":
+        playerCanonicalUrl,
+      url:
+        playerCanonicalUrl,
+      name:
+        `${player.name} ATP Profile | AGE202`,
     },
   };
 

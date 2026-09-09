@@ -61,12 +61,6 @@ const staticRoutes = [
   },
 
   {
-    path: "/brands",
-    changeFrequency: "weekly",
-    priority: 0.8,
-  },
-
-  {
     path: "/age202-originals",
     changeFrequency: "weekly",
     priority: 0.9,
@@ -180,9 +174,9 @@ export default async function sitemap():
   /*
    * AGE202 Champion Archives
    *
-   * These are the permanent featured
-   * exhibitions such as Federer, Nadal,
-   * Djokovic, Sinner and Alcaraz.
+   * Permanent featured museum exhibitions
+   * such as Federer, Nadal, Djokovic,
+   * Sinner and Alcaraz.
    */
   const featuredPlayerEntries:
     MetadataRoute.Sitemap =
@@ -209,12 +203,23 @@ export default async function sitemap():
   /*
    * ATP Player Dossiers
    *
-   * Current ATP players with a complete
-   * AGE202 Player record use /players/[slug].
+   * Standard ATP players use
+   * /players/[slug].
    *
-   * FEATURED players are excluded here
-   * because their canonical museum
-   * destination is /archives/[slug].
+   * FEATURED players are also included
+   * here when they still have an active
+   * ATP ranking record.
+   *
+   * This allows active featured players
+   * such as Sinner, Alcaraz and Djokovic
+   * to keep both:
+   *
+   * /archives/[slug]
+   * /players/[slug]
+   *
+   * Retired featured players without
+   * an active ATP ranking remain only
+   * in the permanent museum archive.
    */
   const atpPlayerEntries:
     MetadataRoute.Sitemap =
@@ -222,7 +227,9 @@ export default async function sitemap():
       .filter(
         (player) =>
           player.collectionType !==
-          "FEATURED",
+            "FEATURED" ||
+          player.atpPlayer?.rank !=
+            null,
       )
       .map(
         (player) => ({

@@ -1,3 +1,6 @@
+
+import type { Metadata } from "next";
+
 import Link from "next/link";
 
 import {
@@ -300,7 +303,7 @@ function formatDate(
 
 export async function generateMetadata({
   params,
-}: WomenPlayerPageProps) {
+}: WomenPlayerPageProps): Promise<Metadata> {
   const {
     slug,
   } =
@@ -317,35 +320,98 @@ export async function generateMetadata({
   ) {
     return {
       title:
-        "WTA Player not found | AGE202",
+        "WTA Player not found",
+
+      description:
+        "The requested WTA player profile could not be found in the AGE202 archive.",
+
+      robots: {
+        index:
+          false,
+
+        follow:
+          false,
+      },
     };
   }
+
+  const ranking =
+    player.wtaPlayer;
+
+  const canonical =
+    `/players/women/${player.slug}`;
+
+  const title =
+    `${player.name}: WTA Ranking, Career, Titles & Tennis Profile`;
 
   const description =
     player.playerProfile
       ?.biographyShort ??
     player.biography ??
-    `Explore the AGE202 WTA Archive dossier dedicated to ${player.name}.`;
+    `${player.name} WTA profile on AGE202: current ranking No. ${ranking.rank}, career information, Grand Slam and WTA 1000 titles, and tennis archive.`;
+
+  const socialImage =
+    player.heroImage ??
+    player.portraitImage ??
+    ranking.imageUrl ??
+    undefined;
 
   return {
-    title:
-      `${player.name} | WTA Archive | AGE202`,
+    title,
 
     description,
 
     alternates: {
-      canonical:
-        `/players/women/${player.slug}`,
+      canonical,
     },
 
     openGraph: {
       title:
-        `${player.name} | WTA Archive | AGE202`,
+        `${title} | AGE202`,
 
       description,
 
       type:
         "profile",
+
+      url:
+        canonical,
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
+
+      images:
+        socialImage
+          ? [
+              {
+                url:
+                  socialImage,
+
+                alt:
+                  `${player.name} — AGE202 WTA Profile`,
+              },
+            ]
+          : undefined,
+    },
+
+    twitter: {
+      card:
+        "summary_large_image",
+
+      title:
+        `${title} | AGE202`,
+
+      description,
+
+      images:
+        socialImage
+          ? [
+              socialImage,
+            ]
+          : undefined,
     },
 
     robots: {
@@ -354,7 +420,27 @@ export async function generateMetadata({
 
       follow:
         true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
+
+    category:
+      "Tennis archive",
   };
 }
 
@@ -529,6 +615,9 @@ export default async function WomenPlayerPage({
     wta1000Total;
 
 
+  const playerCanonicalUrl =
+    `https://www.age202.com/players/women/${player.slug}`;
+
   const structuredData = {
     "@context":
       "https://schema.org",
@@ -536,13 +625,19 @@ export default async function WomenPlayerPage({
     "@type":
       "Person",
 
+    "@id":
+      `${playerCanonicalUrl}#person`,
+
     name:
       player.name,
+
+    url:
+      playerCanonicalUrl,
 
     description:
       profile?.biographyShort ??
       player.biography ??
-      `AGE202 WTA Archive dossier dedicated to ${player.name}.`,
+      `${player.name} WTA profile on AGE202 with current ranking, career information, titles and tennis history.`,
 
     nationality:
       countryLabel,
@@ -565,8 +660,26 @@ export default async function WomenPlayerPage({
       "Tennis",
       "WTA Tour",
       "Women's tennis",
+      "Tennis rankings",
+      "Tennis results",
+      "Grand Slam tennis",
+      "WTA 1000",
       "Tennis history",
     ],
+
+    mainEntityOfPage: {
+      "@type":
+        "WebPage",
+
+      "@id":
+        playerCanonicalUrl,
+
+      url:
+        playerCanonicalUrl,
+
+      name:
+        `${player.name} WTA Profile | AGE202`,
+    },
   };
 
   return (

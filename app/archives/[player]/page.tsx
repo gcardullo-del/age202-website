@@ -101,6 +101,30 @@ const CHAMPION_SEO: Record<
 };
 
 /* =========================================================
+   CANONICAL ROUTES
+========================================================= */
+
+const ARCHIVE_CANONICAL_SLUGS: Record<
+  string,
+  string
+> = {
+  sinner:
+    "jannik-sinner",
+
+  alcaraz:
+    "carlos-alcaraz",
+
+  federer:
+    "roger-federer",
+
+  nadal:
+    "rafael-nadal",
+
+  djokovic:
+    "novak-djokovic",
+};
+
+/* =========================================================
    STATIC ROUTES
 ========================================================= */
 
@@ -160,8 +184,14 @@ export async function generateMetadata({
     seo?.description ??
     champion.description;
 
+  const canonicalSlug =
+    ARCHIVE_CANONICAL_SLUGS[
+      champion.slug
+    ] ??
+    champion.slug;
+
   const canonical =
-    `/archives/${champion.slug}`;
+    `/archives/${canonicalSlug}`;
 
   return {
     title,
