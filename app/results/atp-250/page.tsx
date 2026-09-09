@@ -1,5 +1,5 @@
 import type {
-  Metadata,
+   Metadata,
 } from "next";
 
 import {
@@ -26,43 +26,113 @@ import {
 export const dynamic =
   "force-dynamic";
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const PAGE_URL =
+  `${SITE_URL}/results/atp-250`;
+
+const PAGE_TITLE =
+  "ATP 250 Tournaments, Champions & Latest Finals";
+
+const PAGE_DESCRIPTION =
+  "Explore the AGE202 ATP 250 tournament index with locations, surfaces, tournament history, record leaders, champions and the latest finals across the ATP Tour.";
+
 export const metadata: Metadata = {
-  title: "ATP 250 World Archive | AGE202",
+  title:
+    PAGE_TITLE,
+
   description:
-    "Explore the complete AGE202 ATP 250 tournament index with location, surface, foundation year, tournament history, record leaders and latest finals.",
+    PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical:
+      "/results/atp-250",
+  },
+
   keywords: [
     "ATP 250",
+    "ATP 250 tournaments",
+    "ATP 250 champions",
+    "ATP 250 latest finals",
     "ATP Tour",
     "tennis tournaments",
     "tennis history",
     "ATP champions",
+    "tennis results",
     "AGE202",
   ],
+
   openGraph: {
-    title:
-      "ATP 250 World Archive | AGE202",
-    description:
-      "A complete AGE202 index of ATP 250 tournaments, record leaders and latest finals.",
     type:
       "website",
+
+    url:
+      PAGE_URL,
+
+    title:
+      `${PAGE_TITLE} | AGE202`,
+
+    description:
+      PAGE_DESCRIPTION,
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
   },
+
   twitter: {
     card:
       "summary_large_image",
+
     title:
-      "ATP 250 World Archive | AGE202",
+      `${PAGE_TITLE} | AGE202`,
+
     description:
-      "A complete AGE202 index of ATP 250 tournaments, record leaders and latest finals.",
+      PAGE_DESCRIPTION,
   },
+
   robots: {
     index:
       true,
+
     follow:
       true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
   },
+
   category:
     "ATP 250 tennis",
 };
+
+function serializeJsonLd(
+  value: unknown,
+) {
+  return JSON.stringify(
+    value,
+  ).replace(
+    /</g,
+    "\\u003c",
+  );
+}
 
 export default async function ATP250Page() {
   const cmsTournaments =
@@ -130,8 +200,160 @@ export default async function ATP250Page() {
       cmsTournaments,
     );
 
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${PAGE_URL}#webpage`,
+
+        url:
+          PAGE_URL,
+
+        name:
+          PAGE_TITLE,
+
+        headline:
+          PAGE_TITLE,
+
+        description:
+          PAGE_DESCRIPTION,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        mainEntity: {
+          "@id":
+            `${PAGE_URL}#tournaments`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${PAGE_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${PAGE_URL}#tournaments`,
+
+        name:
+          "ATP 250 tournaments",
+
+        numberOfItems:
+          atp250Tournaments.length,
+
+        itemListElement:
+          atp250Tournaments.map(
+            (
+              tournament,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              item: {
+                "@type":
+                  "SportsEvent",
+
+                name:
+                  tournament.name,
+
+                sport:
+                  "Tennis",
+              },
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${PAGE_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "ATP 250",
+
+            item:
+              PAGE_URL,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen overflow-hidden bg-[#050B18] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            serializeJsonLd(
+              structuredData,
+            ),
+        }}
+      />
+
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-14 pt-24 sm:px-8 lg:px-12 lg:pb-20 lg:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_12%,rgba(184,255,74,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.025),transparent_48%)]" />
 

@@ -322,8 +322,8 @@ export default function PlayersExperience({
               }}
               className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8"
             >
-              Discover legendary champions, rising stars and authentic tennis
-              collectibles inside the complete AGE202 players universe.
+              Explore legendary champions, current ATP and WTA players, rising stars
+              and authentic tennis collectibles across the AGE202 player archives.
             </motion.p>
 
             <motion.div
@@ -656,7 +656,7 @@ export default function PlayersExperience({
                 index="01"
                 eyebrow="The wider tour"
                 title="ATP Archive"
-                description="Discover established champions and current tour players through the living AGE202 ATP archive."
+                description="Explore current ATP rankings, player profiles, careers and established champions through the living AGE202 ATP archive."
                 href="/players/other-players"
                 cta="Enter ATP Archive"
                 visual="ATP"
@@ -751,9 +751,9 @@ export default function PlayersExperience({
               </h2>
 
               <p className="mt-6 max-w-2xl text-sm leading-7 text-white/60 sm:text-base">
-                Sprint 5.1 establishes the new Players experience. Premium dynamic
-                profiles and advanced archive tools follow in the next stages of
-                Sprint 5.
+                From legendary champions to today&apos;s ATP and WTA tours, AGE202 connects
+                player careers, rankings, memorabilia and emerging talent inside one
+                evolving digital tennis museum.
               </p>
             </div>
 

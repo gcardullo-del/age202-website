@@ -91,9 +91,9 @@ export default function PlayerCard({
           </span>
         </div>
 
-        <h2 className="mt-4 text-3xl font-black uppercase leading-[0.86] tracking-[-0.055em] sm:text-4xl">
-          {player.name}
-        </h2>
+       <h3 className="mt-4 text-3xl font-black uppercase leading-[0.86] tracking-[-0.055em] sm:text-4xl">
+  {player.name}
+</h3>
 
         <div className="mt-6 grid grid-cols-[1fr_auto] items-center gap-4 border-t border-white/10 pt-5">
           <span className="inline-flex items-center gap-2 font-mono text-[7px] uppercase tracking-[0.16em] text-white/38">

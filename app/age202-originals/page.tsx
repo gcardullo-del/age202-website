@@ -1,5 +1,5 @@
 import type {
-  Metadata,
+   Metadata,
 } from "next";
 
 import Image from "next/image";
@@ -25,12 +25,83 @@ export const dynamic =
   "force-dynamic";
 
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const ORIGINALS_URL =
+  `${SITE_URL}/age202-originals`;
+
+
 export const metadata: Metadata = {
   title:
-    "AGE202 Originals | Official Collection",
+    "AGE202 Originals: Official Tennis Apparel & Accessories",
 
   description:
-    "Discover the official AGE202 Originals collection: apparel, accessories and objects created for The Digital Tennis Museum.",
+    "Discover AGE202 Originals, the official collection of tennis apparel, headwear, accessories and objects created for The Digital Tennis Museum.",
+
+  alternates: {
+    canonical:
+      "/age202-originals",
+  },
+
+  openGraph: {
+    type:
+      "website",
+
+    url:
+      "/age202-originals",
+
+    title:
+      "AGE202 Originals: Official Tennis Apparel & Accessories",
+
+    description:
+      "Discover AGE202 Originals, the official collection of tennis apparel, headwear, accessories and objects created for The Digital Tennis Museum.",
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
+  },
+
+  twitter: {
+    card:
+      "summary_large_image",
+
+    title:
+      "AGE202 Originals: Official Tennis Apparel & Accessories",
+
+    description:
+      "Official AGE202 tennis apparel, headwear, accessories and objects created for The Digital Tennis Museum.",
+  },
+
+  robots: {
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
+  },
+
+  category:
+    "Tennis Apparel and Accessories",
 };
 
 
@@ -525,8 +596,144 @@ export default async function OriginalsPage() {
     products.length +
     previewProducts.length;
 
+
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${ORIGINALS_URL}#webpage`,
+
+        url:
+          ORIGINALS_URL,
+
+        name:
+          "AGE202 Originals",
+
+        description:
+          "The official AGE202 collection of tennis apparel, headwear, accessories and objects created for The Digital Tennis Museum.",
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        mainEntity: {
+          "@id":
+            `${ORIGINALS_URL}#products`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${ORIGINALS_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${ORIGINALS_URL}#products`,
+
+        name:
+          "AGE202 Originals",
+
+        numberOfItems:
+          products.length,
+
+        itemListElement:
+          products.map(
+            (
+              product,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              url:
+                `${SITE_URL}/age202-originals/${product.slug}`,
+
+              name:
+                product.title,
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${ORIGINALS_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "AGE202 Originals",
+
+            item:
+              ORIGINALS_URL,
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
-    <main className="min-h-screen overflow-hidden bg-[#050B18] text-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            JSON.stringify(
+              structuredData,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
+        }}
+      />
+
+      <main className="min-h-screen overflow-hidden bg-[#050B18] text-white">
       {/* =====================================================
           HERO
       ====================================================== */}
@@ -1146,6 +1353,7 @@ export default async function OriginalsPage() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

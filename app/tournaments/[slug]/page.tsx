@@ -1,5 +1,5 @@
 import type {
-  Metadata,
+   Metadata,
 } from "next";
 
 import Image from "next/image";
@@ -39,6 +39,9 @@ export const dynamic =
 
 export const revalidate =
   0;
+
+const SITE_URL =
+  "https://www.age202.com";
 
 const getCachedTournamentBySlug =
   cache(
@@ -130,26 +133,73 @@ export async function generateMetadata({
     return {
       title:
         "Tournament not found | AGE202",
+
+      robots: {
+        index:
+          false,
+
+        follow:
+          false,
+      },
     };
   }
 
+  const pageUrl =
+    `${SITE_URL}/tournaments/${slug}`;
+
+  const fallbackTitle =
+    `${tournament.shortName ?? tournament.name}: Results, Champions & Tennis History | AGE202`;
+
   const title =
     tournament.metaTitle ??
-    `${tournament.shortName ?? tournament.name} | Tournament Archive | AGE202`;
+    fallbackTitle;
 
   const description =
     tournament.metaDescription ??
     tournament.description ??
-    `Explore the AGE202 tournament archive dedicated to ${tournament.name}.`;
+    `Explore ${tournament.name} results, champions, tournament history, editions and museum artifacts in the AGE202 tennis archive.`;
 
   return {
     title,
+
     description,
 
+    alternates: {
+      canonical:
+        `/tournaments/${slug}`,
+    },
+
+    keywords: [
+      tournament.name,
+      tournament.shortName ??
+        tournament.name,
+      `${tournament.name} results`,
+      `${tournament.name} champions`,
+      `${tournament.name} history`,
+      `${tournament.name} tournament`,
+      `${tournament.name} archive`,
+      "tennis tournaments",
+      "tennis results",
+      "tennis history",
+      "AGE202",
+    ],
+
     openGraph: {
+      type:
+        "website",
+
+      url:
+        pageUrl,
+
       title,
+
       description,
-      type: "website",
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
 
       images:
         tournament.heroImage
@@ -170,6 +220,7 @@ export async function generateMetadata({
         "summary_large_image",
 
       title,
+
       description,
 
       images:
@@ -181,8 +232,28 @@ export async function generateMetadata({
     },
 
     robots: {
-      index: true,
-      follow: true,
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
 
     category:
@@ -300,57 +371,164 @@ export default async function TournamentPage({
     .filter(Boolean)
     .join(", ");
 
+  const pageUrl =
+    `${SITE_URL}/tournaments/${slug}`;
+
   const structuredData = {
     "@context":
       "https://schema.org",
 
-    "@type":
-      "SportsEvent",
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
 
-    name:
-      tournament.name,
+        "@id":
+          `${pageUrl}#webpage`,
 
-    description:
-      tournament.description ??
-      undefined,
+        url:
+          pageUrl,
 
-    location:
-      tournament.venue
-        ? {
+        name:
+          `${tournament.name} Tournament Archive`,
+
+        headline:
+          `${tournament.name} Tournament Archive`,
+
+        description:
+          tournament.description ??
+          `Explore the AGE202 tournament archive dedicated to ${tournament.name}.`,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        mainEntity: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${pageUrl}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "SportsEvent",
+
+        "@id":
+          `${pageUrl}#tournament`,
+
+        name:
+          tournament.name,
+
+        description:
+          tournament.description ??
+          undefined,
+
+        url:
+          pageUrl,
+
+        image:
+          tournament.heroImage ??
+          undefined,
+
+        sport:
+          "Tennis",
+
+        location:
+          tournament.venue
+            ? {
+                "@type":
+                  "Place",
+
+                name:
+                  tournament.venue,
+
+                address: {
+                  "@type":
+                    "PostalAddress",
+
+                  addressLocality:
+                    tournament.city ??
+                    undefined,
+
+                  addressCountry:
+                    tournament.country ??
+                    undefined,
+                },
+              }
+            : undefined,
+
+        organizer: {
+          "@type":
+            "Organization",
+
+          name:
+            "AGE202",
+        },
+
+        mainEntityOfPage: {
+          "@id":
+            `${pageUrl}#webpage`,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
             "@type":
-              "Place",
+              "ListItem",
+
+            position:
+              1,
 
             name:
-              tournament.venue,
+              "AGE202",
 
-            address:
-              location ||
-              tournament.country,
-          }
-        : undefined,
+            item:
+              SITE_URL,
+          },
 
-    image:
-      tournament.heroImage ??
-      undefined,
+          {
+            "@type":
+              "ListItem",
 
-    sport:
-      "Tennis",
+            position:
+              2,
 
-    organizer: {
-      "@type":
-        "Organization",
+            name:
+              tournament.name,
 
-      name:
-        "AGE202",
-    },
-
-    mainEntityOfPage: {
-      "@type":
-        "WebPage",
-
-      name:
-        `${tournament.name} | AGE202 Tournament Archive`,
-    },
+            item:
+              pageUrl,
+          },
+        ],
+      },
+    ],
   };
 
   return (

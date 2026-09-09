@@ -1,5 +1,5 @@
 import type {
-  CSSProperties,
+   CSSProperties,
 } from "react";
 
 import type {
@@ -57,6 +57,9 @@ export const dynamic =
 
 export const revalidate =
   0;
+
+const SITE_URL =
+  "https://www.age202.com";
 
 export function generateStaticParams() {
   return ATP_500_SLUGS.map(
@@ -116,51 +119,102 @@ export async function generateMetadata({
         "Tournament not found | AGE202",
 
       robots: {
-        index: false,
-        follow: false,
+        index:
+          false,
+
+        follow:
+          false,
       },
     };
   }
 
+  const pageUrl =
+    `${SITE_URL}/results/atp-500/${tournament.slug}`;
+
   const title =
-    `${tournament.name} | ATP 500 Archive | AGE202`;
+    `${tournament.name} Results, Champions & Tennis History | AGE202`;
 
   const description =
-    `${tournament.introduction} Explore the history, iconic moments, legends and recent finals of ${tournament.name}.`;
+    `Explore ${tournament.name} results, recent finals, champions, legends, iconic moments and tournament history in the AGE202 ATP 500 archive.`;
 
   return {
     title,
+
     description,
+
+    alternates: {
+      canonical:
+        `/results/atp-500/${tournament.slug}`,
+    },
 
     keywords: [
       tournament.name,
       tournament.officialName,
       tournament.city,
       tournament.country,
-      `${tournament.name} history`,
-      `${tournament.name} champions`,
       `${tournament.name} results`,
+      `${tournament.name} champions`,
+      `${tournament.name} winners`,
+      `${tournament.name} finals`,
+      `${tournament.name} history`,
+      `${tournament.name} archive`,
+      "ATP 500 results",
       "ATP 500",
+      "tennis results",
       "tennis history",
       "AGE202",
     ],
 
     openGraph: {
+      type:
+        "website",
+
+      url:
+        pageUrl,
+
       title,
+
       description,
-      type: "website",
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
     },
 
     twitter: {
       card:
         "summary_large_image",
+
       title,
+
       description,
     },
 
     robots: {
-      index: true,
-      follow: true,
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
 
     category:
@@ -425,51 +479,179 @@ export default async function Atp500TournamentPage({
       staticTournament.colors.glow,
   };
 
+  const pageUrl =
+    `${SITE_URL}/results/atp-500/${staticTournament.slug}`;
+
   const structuredData = {
     "@context":
       "https://schema.org",
 
-    "@type":
-      "SportsEvent",
-
-    name:
-      identity.officialName,
-
-    alternateName:
-      identity.name,
-
-    description:
-      identity.introduction,
-
-    sport:
-      "Tennis",
-
-    location: {
-      "@type":
-        "Place",
-
-      name:
-        identity.venue,
-
-      address: {
+    "@graph": [
+      {
         "@type":
-          "PostalAddress",
+          "CollectionPage",
 
-        addressLocality:
-          identity.city,
+        "@id":
+          `${pageUrl}#webpage`,
 
-        addressCountry:
-          identity.country,
+        url:
+          pageUrl,
+
+        name:
+          `${identity.name} Results, Champions & Tennis History`,
+
+        headline:
+          `${identity.name} Results, Champions & Tennis History`,
+
+        description:
+          identity.introduction,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        mainEntity: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${pageUrl}#breadcrumb`,
+        },
       },
-    },
 
-    organizer: {
-      "@type":
-        "Organization",
+      {
+        "@type":
+          "SportsEvent",
 
-      name:
-        identity.officialName,
-    },
+        "@id":
+          `${pageUrl}#tournament`,
+
+        name:
+          identity.officialName,
+
+        alternateName:
+          identity.name,
+
+        description:
+          identity.introduction,
+
+        url:
+          pageUrl,
+
+        sport:
+          "Tennis",
+
+        location: {
+          "@type":
+            "Place",
+
+          name:
+            identity.venue,
+
+          address: {
+            "@type":
+              "PostalAddress",
+
+            addressLocality:
+              identity.city,
+
+            addressCountry:
+              identity.country,
+          },
+        },
+
+        organizer: {
+          "@type":
+            "Organization",
+
+          name:
+            identity.officialName,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "ATP 500",
+
+            item:
+              `${SITE_URL}/results/atp-500`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              4,
+
+            name:
+              identity.name,
+
+            item:
+              pageUrl,
+          },
+        ],
+      },
+    ],
   };
 
   return (

@@ -59,6 +59,9 @@ export const dynamic =
 export const revalidate =
   0;
 
+const SITE_URL =
+  "https://www.age202.com";
+
 type GrandSlamPageProps = {
   params: Promise<{
     slug: string;
@@ -132,8 +135,11 @@ export async function generateMetadata({
         "Tournament not found | AGE202",
 
       robots: {
-        index: false,
-        follow: false,
+        index:
+          false,
+
+        follow:
+          false,
       },
     };
   }
@@ -149,42 +155,90 @@ export async function generateMetadata({
       museumTournament,
     );
 
+  const pageUrl =
+    `${SITE_URL}/results/grand-slams/${tournament.slug}`;
+
   const title =
-    `${tournament.name} Archive | AGE202`;
+    `${tournament.name} Results, Draw, Champions & Tennis History | AGE202`;
 
   const description =
-    `${tournament.introduction} Explore the history, timeline, identity and records of ${tournament.name}.`;
+    `Explore ${tournament.name} results, current and historical draws, champions, editions, records, iconic finals and tournament history in the AGE202 Grand Slam archive.`;
 
   return {
     title,
+
     description,
+
+    alternates: {
+      canonical:
+        `/results/grand-slams/${tournament.slug}`,
+    },
 
     keywords: [
       tournament.name,
-      `${tournament.name} history`,
-      `${tournament.name} champions`,
       `${tournament.name} results`,
+      `${tournament.name} draw`,
+      `${tournament.name} champions`,
+      `${tournament.name} winners`,
+      `${tournament.name} history`,
+      `${tournament.name} records`,
       `${tournament.name} archive`,
+      "Grand Slam results",
       "Grand Slam tennis",
+      "tennis results",
       "AGE202",
     ],
 
     openGraph: {
+      type:
+        "website",
+
+      url:
+        pageUrl,
+
       title,
+
       description,
-      type: "website",
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
     },
 
     twitter: {
       card:
         "summary_large_image",
+
       title,
+
       description,
     },
 
     robots: {
-      index: true,
-      follow: true,
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
 
     category:
@@ -385,48 +439,176 @@ export default async function GrandSlamTournamentPage({
       tournament.colors.glow,
   };
 
+  const pageUrl =
+    `${SITE_URL}/results/grand-slams/${tournament.slug}`;
+
   const structuredData = {
     "@context":
       "https://schema.org",
 
-    "@type":
-      "SportsEvent",
-
-    name:
-      tournament.name,
-
-    description:
-      tournament.introduction,
-
-    sport:
-      "Tennis",
-
-    location: {
-      "@type":
-        "Place",
-
-      name:
-        tournament.venue,
-
-      address: {
+    "@graph": [
+      {
         "@type":
-          "PostalAddress",
+          "CollectionPage",
 
-        addressLocality:
-          tournament.city,
+        "@id":
+          `${pageUrl}#webpage`,
 
-        addressCountry:
-          tournament.country,
+        url:
+          pageUrl,
+
+        name:
+          `${tournament.name} Results, Draw, Champions & Tennis History`,
+
+        headline:
+          `${tournament.name} Results, Draw, Champions & Tennis History`,
+
+        description:
+          tournament.introduction,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        mainEntity: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${pageUrl}#breadcrumb`,
+        },
       },
-    },
 
-    organizer: {
-      "@type":
-        "Organization",
+      {
+        "@type":
+          "SportsEvent",
 
-      name:
-        tournament.name,
-    },
+        "@id":
+          `${pageUrl}#tournament`,
+
+        name:
+          tournament.name,
+
+        description:
+          tournament.introduction,
+
+        url:
+          pageUrl,
+
+        sport:
+          "Tennis",
+
+        location: {
+          "@type":
+            "Place",
+
+          name:
+            tournament.venue,
+
+          address: {
+            "@type":
+              "PostalAddress",
+
+            addressLocality:
+              tournament.city,
+
+            addressCountry:
+              tournament.country,
+          },
+        },
+
+        organizer: {
+          "@type":
+            "Organization",
+
+          name:
+            tournament.name,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "Grand Slams",
+
+            item:
+              `${SITE_URL}/results/grand-slams`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              4,
+
+            name:
+              tournament.name,
+
+            item:
+              pageUrl,
+          },
+        ],
+      },
+    ],
   };
 
   return (

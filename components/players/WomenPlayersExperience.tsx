@@ -300,8 +300,8 @@ export default function WomenPlayersExperience({
               }}
               className="mt-6 max-w-2xl text-base leading-7 text-white/70 sm:text-lg sm:leading-8"
             >
-              Explore the women shaping professional tennis today through a
-              living AGE202 archive connected to the current WTA ranking.
+              Discover the women shaping professional tennis today through AGE202
+player profiles, careers, memorabilia and stories from the current WTA Tour.
             </motion.p>
 
 

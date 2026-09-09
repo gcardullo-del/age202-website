@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import {
   ArrowDown,
   Camera,
@@ -829,6 +830,117 @@ function PlayerSection({
 export const dynamic =
   "force-dynamic";
 
+
+const SITE_URL =
+  "https://www.age202.com";
+
+const PAGE_URL =
+  `${SITE_URL}/next-gen`;
+
+const PAGE_TITLE =
+  "Next Gen Tennis Players: Rising ATP Stars & Future Champions | AGE202";
+
+const PAGE_DESCRIPTION =
+  "Discover AGE202 Next Gen: emerging ATP tennis players, live rankings, career milestones, breakthrough results and the young talents shaping the future of men's tennis.";
+
+
+export const metadata: Metadata = {
+  title:
+    PAGE_TITLE,
+
+  description:
+    PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical:
+      "/next-gen",
+  },
+
+  keywords: [
+    "next gen tennis players",
+    "young tennis players",
+    "rising ATP players",
+    "future tennis stars",
+    "ATP Next Gen",
+    "tennis prospects",
+    "young ATP players",
+    "next generation tennis",
+    "AGE202 Next Gen",
+  ],
+
+  openGraph: {
+    type:
+      "website",
+
+    url:
+      PAGE_URL,
+
+    title:
+      PAGE_TITLE,
+
+    description:
+      PAGE_DESCRIPTION,
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
+  },
+
+  twitter: {
+    card:
+      "summary_large_image",
+
+    title:
+      PAGE_TITLE,
+
+    description:
+      PAGE_DESCRIPTION,
+  },
+
+  robots: {
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
+  },
+
+  category:
+    "Next Gen Tennis",
+};
+
+
+function serializeJsonLd(
+  value: unknown,
+) {
+  return JSON.stringify(
+    value,
+  ).replace(
+    /</g,
+    "\\u003c",
+  );
+}
+
+
 export default async function NextGenPage() {
   const [
     rankingByPlayerKey,
@@ -928,8 +1040,157 @@ export default async function NextGenPage() {
           b.currentRankValue,
       );
 
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${PAGE_URL}#webpage`,
+
+        url:
+          PAGE_URL,
+
+        name:
+          PAGE_TITLE,
+
+        headline:
+          "Next Gen Tennis Players",
+
+        description:
+          PAGE_DESCRIPTION,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@type":
+            "Thing",
+
+          name:
+            "Emerging professional tennis players",
+        },
+
+        mainEntity: {
+          "@id":
+            `${PAGE_URL}#players`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${PAGE_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${PAGE_URL}#players`,
+
+        name:
+          "AGE202 Next Gen Tennis Players",
+
+        numberOfItems:
+          rankedPlayers.length,
+
+        itemListElement:
+          rankedPlayers.map(
+            (
+              player,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index +
+                1,
+
+              item: {
+                "@type":
+                  "Person",
+
+                name:
+                  player.name,
+
+                nationality:
+                  player.country,
+
+                description:
+                  player.story[0],
+              },
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${PAGE_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Next Gen",
+
+            item:
+              PAGE_URL,
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
     <main className="min-h-screen bg-[#030914] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(
+            structuredData,
+          ),
+        }}
+      ></script>
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-10 pt-10 sm:px-8 sm:pb-16 sm:pt-16 lg:px-12 lg:pb-28 lg:pt-28">
         <div
           aria-hidden="true"

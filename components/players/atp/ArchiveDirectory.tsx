@@ -173,12 +173,9 @@ export default function ArchiveDirectory({
 
           <div className="max-w-xl lg:text-right">
             <p className="text-sm leading-7 text-white/45">
-              Players ranked 51–100
-              remain visible even before
-              their complete AGE202 profile
-              is created. Existing pages
-              remain clickable when ranking
-              positions change.
+             Explore ATP players ranked 51–100 with current rankings,
+  ATP points and available AGE202 player profiles.
+  Existing profiles remain accessible as ranking positions change.
             </p>
 
             <p className="mt-3 font-mono text-[8px] font-black uppercase tracking-[0.18em] text-white/30">

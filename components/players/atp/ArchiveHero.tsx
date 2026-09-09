@@ -78,8 +78,8 @@ export default function ArchiveHero({
           </h1>
 
           <p className="mt-7 max-w-2xl text-base leading-7 text-white/68 sm:text-lg sm:leading-8">
-            Explore every player ranked from ATP No. 1 to No. 50,
-            including AGE202 Champion Collection players.
+             Explore ATP players ranked from No. 1 to No. 50,
+  with live rankings, player profiles, careers, titles and AGE202 Champion Collection connections.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">

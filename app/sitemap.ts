@@ -1,5 +1,5 @@
 import type {
-  MetadataRoute,
+     MetadataRoute,
 } from "next";
 
 import {
@@ -13,10 +13,6 @@ import {
 import {
   getPublishedMemorabiliaSlugs,
 } from "@/lib/repositories/memorabilia.repository";
-
-import {
-  getPublishedMuseumCollections,
-} from "@/lib/repositories/museum-collection.repository";
 
 import {
   getPublishedOriginalProductSlugs,
@@ -39,6 +35,58 @@ import {
 
 const siteUrl =
   "https://www.age202.com";
+
+
+/* =========================================================
+   CHAMPION ARCHIVE ROUTES
+========================================================= */
+
+const CHAMPION_ARCHIVE_SLUGS: Record<
+  string,
+  string
+> = {
+  "roger-federer":
+    "federer",
+
+  federer:
+    "federer",
+
+  "rafael-nadal":
+    "nadal",
+
+  nadal:
+    "nadal",
+
+  "novak-djokovic":
+    "djokovic",
+
+  djokovic:
+    "djokovic",
+
+  "jannik-sinner":
+    "sinner",
+
+  sinner:
+    "sinner",
+
+  "carlos-alcaraz":
+    "alcaraz",
+
+  alcaraz:
+    "alcaraz",
+};
+
+
+function getChampionArchiveSlug(
+  slug: string,
+): string {
+  return (
+    CHAMPION_ARCHIVE_SLUGS[
+      slug
+    ] ??
+    slug
+  );
+}
 
 
 /* =========================================================
@@ -258,17 +306,6 @@ const staticRoutes = [
 
   {
     path:
-      "/collections",
-
-    changeFrequency:
-      "weekly",
-
-    priority:
-      0.85,
-  },
-
-  {
-    path:
       "/atp-ranking",
 
     changeFrequency:
@@ -414,7 +451,6 @@ export default async function sitemap():
     artifacts,
     legends,
     memorabilia,
-    museumCollections,
     originalProducts,
     tennisHistoryEntries,
     tournaments,
@@ -431,8 +467,6 @@ export default async function sitemap():
       getPublishedLegends(),
 
       getPublishedMemorabiliaSlugs(),
-
-      getPublishedMuseumCollections(),
 
       getPublishedOriginalProductSlugs(),
 
@@ -477,7 +511,9 @@ export default async function sitemap():
       .map(
         (player) => ({
           url:
-            `${siteUrl}/archives/${player.slug}`,
+            `${siteUrl}/archives/${getChampionArchiveSlug(
+              player.slug,
+            )}`,
 
           changeFrequency:
             "weekly",
@@ -657,41 +693,6 @@ export default async function sitemap():
 
 
   /* =======================================================
-     MUSEUM COLLECTIONS
-  ======================================================= */
-
-  const collectionEntries:
-    MetadataRoute.Sitemap =
-    museumCollections
-      .map(
-        (
-          collection,
-        ) =>
-          extractSlug(
-            collection,
-          ),
-      )
-      .filter(
-        (
-          slug,
-        ): slug is string =>
-          slug !== null,
-      )
-      .map(
-        (slug) => ({
-          url:
-            `${siteUrl}/collections/${slug}`,
-
-          changeFrequency:
-            "monthly",
-
-          priority:
-            0.85,
-        }),
-      );
-
-
-  /* =======================================================
      AGE202 ORIGINALS
   ======================================================= */
 
@@ -730,35 +731,14 @@ export default async function sitemap():
      TENNIS HISTORY
   ======================================================= */
 
-  const tennisHistoryEntriesMap:
-    MetadataRoute.Sitemap =
-    tennisHistoryEntries
-      .map(
-        (
-          entry,
-        ) =>
-          extractSlug(
-            entry,
-          ),
-      )
-      .filter(
-        (
-          slug,
-        ): slug is string =>
-          slug !== null,
-      )
-      .map(
-        (slug) => ({
-          url:
-            `${siteUrl}/tennis-history/${slug}`,
-
-          changeFrequency:
-            "monthly",
-
-          priority:
-            0.8,
-        }),
-      );
+  /*
+   * Tennis History currently has a public hub at
+   * /tennis-history, but no public [slug] route.
+   *
+   * Published history entries are therefore intentionally
+   * not emitted as standalone sitemap URLs.
+   */
+  void tennisHistoryEntries;
 
 
   /* =======================================================
@@ -912,11 +892,7 @@ export default async function sitemap():
 
     ...memorabiliaEntries,
 
-    ...collectionEntries,
-
     ...originalProductEntries,
-
-    ...tennisHistoryEntriesMap,
 
     ...tournamentEntries,
 

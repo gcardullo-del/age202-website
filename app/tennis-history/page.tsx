@@ -1,5 +1,5 @@
 import type {
-  Metadata,
+ Metadata,
 } from "next";
 
 import {
@@ -27,12 +27,19 @@ export const dynamic =
   "force-dynamic";
 
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const TENNIS_HISTORY_URL =
+  `${SITE_URL}/tennis-history`;
+
+
 export const metadata: Metadata = {
   title:
-    "History of Tennis | Origins, Tournaments & Legends",
+    "Tennis History: Origins, Legends, Rivalries & Eras | AGE202",
 
   description:
-    "Explore the history of tennis from its origins and the world's oldest tournaments to the Open Era, legendary players, rivalries and defining moments.",
+    "Explore tennis history from the origins of the sport and historic tournaments to the Open Era, legendary players, iconic rivalries and defining moments.",
 
   alternates: {
     canonical:
@@ -41,16 +48,22 @@ export const metadata: Metadata = {
 
   openGraph: {
     title:
-      "History of Tennis | AGE202 Digital Tennis Museum",
+      "Tennis History: Origins, Legends, Rivalries & Eras | AGE202",
 
     description:
-      "Discover world tennis history through its origins, oldest tournaments, legendary players, rivalries and defining eras.",
+      "Explore tennis history from the origins of the sport and historic tournaments to the Open Era, legendary players, iconic rivalries and defining moments.",
 
     url:
       "/tennis-history",
 
     type:
       "website",
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
   },
 
   twitter: {
@@ -58,11 +71,39 @@ export const metadata: Metadata = {
       "summary_large_image",
 
     title:
-      "History of Tennis",
+      "Tennis History: Origins, Legends, Rivalries & Eras | AGE202",
 
     description:
-      "Explore world tennis history, from the origins of the sport to legendary tournaments, players and rivalries.",
+      "Explore tennis history from the origins of the sport to legendary players, iconic rivalries, historic tournaments and defining eras.",
   },
+
+  robots: {
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
+  },
+
+  category:
+    "Tennis History",
 };
 
 
@@ -353,20 +394,125 @@ export default async function TennisHistoryPage() {
       );
 
 
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${TENNIS_HISTORY_URL}#webpage`,
+
+        url:
+          TENNIS_HISTORY_URL,
+
+        name:
+          "Tennis History: Origins, Legends, Rivalries & Eras",
+
+        description:
+          "Explore tennis history from the origins of the sport and historic tournaments to the Open Era, legendary players, iconic rivalries and defining moments.",
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@type":
+            "Thing",
+
+          name:
+            "History of tennis",
+        },
+
+        breadcrumb: {
+          "@id":
+            `${TENNIS_HISTORY_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${TENNIS_HISTORY_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Tennis History",
+
+            item:
+              TENNIS_HISTORY_URL,
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
-    <TennisHistoryClient
-      milestones={
-        milestones
-      }
-      legends={
-        legends
-      }
-      rivalries={
-        rivalries
-      }
-      generations={
-        generations
-      }
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            JSON.stringify(
+              structuredData,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
+        }}
+      />
+
+      <TennisHistoryClient
+        milestones={
+          milestones
+        }
+        legends={
+          legends
+        }
+        rivalries={
+          rivalries
+        }
+        generations={
+          generations
+        }
+      />
+    </>
   );
 }

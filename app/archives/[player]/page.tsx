@@ -30,8 +30,10 @@ import {
   getMuseumPlayerBySlug,
 } from "@/lib/services/museum/player-museum.service";
 
+
 export const dynamic =
   "force-dynamic";
+
 
 type ArchivePageProps = {
   params: Promise<{
@@ -39,12 +41,14 @@ type ArchivePageProps = {
   }>;
 };
 
+
 const LIVE_ARCHIVE_SLUGS =
   new Set([
     "sinner",
     "alcaraz",
     "djokovic",
   ]);
+
 
 /* =========================================================
    SEO
@@ -54,6 +58,7 @@ type ChampionSeoConfig = {
   title: string;
   description: string;
 };
+
 
 const CHAMPION_SEO: Record<
   string,
@@ -100,29 +105,6 @@ const CHAMPION_SEO: Record<
   },
 };
 
-/* =========================================================
-   CANONICAL ROUTES
-========================================================= */
-
-const ARCHIVE_CANONICAL_SLUGS: Record<
-  string,
-  string
-> = {
-  sinner:
-    "jannik-sinner",
-
-  alcaraz:
-    "carlos-alcaraz",
-
-  federer:
-    "roger-federer",
-
-  nadal:
-    "rafael-nadal",
-
-  djokovic:
-    "novak-djokovic",
-};
 
 /* =========================================================
    STATIC ROUTES
@@ -130,12 +112,15 @@ const ARCHIVE_CANONICAL_SLUGS: Record<
 
 export function generateStaticParams() {
   return champions.map(
-    (champion) => ({
+    (
+      champion,
+    ) => ({
       player:
         champion.slug,
     }),
   );
 }
+
 
 /* =========================================================
    PAGE METADATA
@@ -148,10 +133,12 @@ export async function generateMetadata({
     player,
   } = await params;
 
+
   const champion =
     getChampionBySlug(
       player,
     );
+
 
   if (!champion) {
     return {
@@ -171,27 +158,26 @@ export async function generateMetadata({
     };
   }
 
+
   const seo =
     CHAMPION_SEO[
       champion.slug
     ];
 
+
   const title =
     seo?.title ??
     `${champion.name}: Career & Tennis Archive`;
+
 
   const description =
     seo?.description ??
     champion.description;
 
-  const canonicalSlug =
-    ARCHIVE_CANONICAL_SLUGS[
-      champion.slug
-    ] ??
-    champion.slug;
 
   const canonical =
-    `/archives/${canonicalSlug}`;
+    `/archives/${champion.slug}`;
+
 
   return {
     title,
@@ -258,6 +244,7 @@ export async function generateMetadata({
   };
 }
 
+
 /* =========================================================
    ARCHIVE PAGE
 ========================================================= */
@@ -269,14 +256,17 @@ export default async function ArchivePage({
     player,
   } = await params;
 
+
   const champion =
     getChampionBySlug(
       player,
     );
 
+
   if (!champion) {
     notFound();
   }
+
 
   /*
    * Durante la migrazione, i contenuti narrativi
@@ -297,10 +287,12 @@ export default async function ArchivePage({
    * I trofei Davis Cup vengono invece letti dai
    * PlayerCareerEvent con categoria DAVIS_CUP.
    */
+
   const shouldLoadTournamentArchive =
     LIVE_ARCHIVE_SLUGS.has(
       champion.slug,
     );
+
 
   const [
     museumPlayer,
@@ -318,6 +310,7 @@ export default async function ArchivePage({
           null,
         ),
   ]);
+
 
   const [
     tournamentEditions,
@@ -353,18 +346,23 @@ export default async function ArchivePage({
         [],
       ];
 
+
   /*
    * La Davis Cup viene conteggiata per anno unico.
    * Questo impedisce a eventuali eventi narrativi duplicati
    * dello stesso anno di gonfiare il numero dei trofei.
    */
+
   const davisCupTitles =
     new Set(
       davisCupCareerEvents.map(
-        (event) =>
+        (
+          event,
+        ) =>
           event.year,
       ),
     ).size;
+
 
   /* =======================================================
      NEXT CHAMPION
@@ -372,17 +370,23 @@ export default async function ArchivePage({
 
   const currentChampionIndex =
     champions.findIndex(
-      (item) =>
+      (
+        item,
+      ) =>
         item.slug ===
         champion.slug,
     );
 
+
   const nextChampion =
     champions[
-      (currentChampionIndex +
-        1) %
+      (
+        currentChampionIndex +
+        1
+      ) %
         champions.length
     ];
+
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#050b18] text-white">

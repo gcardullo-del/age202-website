@@ -10,15 +10,22 @@ import Card from "@/components/ui/Card";
 import Reveal from "@/components/ui/Reveal";
 import SectionTitle from "@/components/ui/SectionTitle";
 
+
 const museumRooms = [
   {
     title: "WTA Archive",
+
     description:
       "Explore the women's game through rankings, player profiles, careers, titles and the stories shaping today's WTA Tour.",
+
     badge: "Women's Archive",
+
     status: "open" as const,
+
     href: "/players/women/archive",
+
     accent: "#C8FF00",
+
     icon: (
       <Users
         size={24}
@@ -26,14 +33,21 @@ const museumRooms = [
       />
     ),
   },
+
   {
     title: "ATP Archive",
+
     description:
       "Explore the living archive of today's tour, with rankings, player profiles, careers, titles and museum connections.",
+
     badge: "Living Archive",
+
     status: "open" as const,
+
     href: "/players/other-players",
+
     accent: "#4F8CFF",
+
     icon: (
       <LibraryBig
         size={24}
@@ -41,14 +55,21 @@ const museumRooms = [
       />
     ),
   },
+
   {
     title: "History of Tennis",
+
     description:
       "Travel through the Open Era, defining rivalries, legendary champions and the evolution of tennis culture.",
+
     badge: "Historical Wing",
+
     status: "open" as const,
+
     href: "/tennis-history",
+
     accent: "#D4AF37",
+
     icon: (
       <BookOpen
         size={24}
@@ -56,14 +77,21 @@ const museumRooms = [
       />
     ),
   },
+
   {
     title: "Grand Slam Museum",
+
     description:
       "Discover the history, champions and iconic moments of the Australian Open, Roland Garros, Wimbledon and US Open.",
+
     badge: "Major Championships",
+
     status: "open" as const,
-    href: "/results",
+
+    href: "/results/grand-slams",
+
     accent: "#E85D75",
+
     icon: (
       <Trophy
         size={24}
@@ -71,14 +99,21 @@ const museumRooms = [
       />
     ),
   },
+
   {
     title: "Next Gen Archive",
+
     description:
       "Meet the emerging players shaping the next chapter of tennis and follow their careers as they develop on the professional tour.",
+
     badge: "Careers in Progress",
+
     status: "open" as const,
+
     href: "/next-gen",
+
     accent: "#C8FF00",
+
     icon: (
       <Sparkles
         size={24}
@@ -87,6 +122,7 @@ const museumRooms = [
     ),
   },
 ];
+
 
 export default function ExploreTheMuseum() {
   return (
@@ -105,7 +141,9 @@ export default function ExploreTheMuseum() {
         style={{
           backgroundImage:
             "linear-gradient(rgba(255,255,255,.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.7) 1px, transparent 1px)",
-          backgroundSize: "88px 88px",
+
+          backgroundSize:
+            "88px 88px",
         }}
       />
 
@@ -148,15 +186,27 @@ export default function ExploreTheMuseum() {
                   }
                 >
                   <Card
-                    title={room.title}
+                    title={
+                      room.title
+                    }
                     description={
                       room.description
                     }
-                    href={room.href}
-                    badge={room.badge}
-                    status={room.status}
-                    accent={room.accent}
-                    icon={room.icon}
+                    href={
+                      room.href
+                    }
+                    badge={
+                      room.badge
+                    }
+                    status={
+                      room.status
+                    }
+                    accent={
+                      room.accent
+                    }
+                    icon={
+                      room.icon
+                    }
                     className="
                       h-auto
                       min-h-0

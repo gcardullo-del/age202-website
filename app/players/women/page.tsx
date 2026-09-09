@@ -16,8 +16,8 @@ export const dynamic =
   "force-dynamic";
 
 
-const WTA_ARCHIVE_URL =
-  "https://www.age202.com/players/women/archive";
+const WOMEN_PLAYERS_URL =
+  "https://www.age202.com/players/women";
 
 
 /* =========================================================
@@ -26,14 +26,14 @@ const WTA_ARCHIVE_URL =
 
 export const metadata: Metadata = {
   title:
-    "WTA Players Archive: Rankings, Profiles & Careers | AGE202",
+    "Women's Tennis Players, Champions & Profiles | AGE202",
 
   description:
-    "Explore the AGE202 WTA Players Archive with current rankings, player profiles, careers, titles and the women shaping professional tennis today.",
+    "Explore women's tennis at AGE202 through player profiles, champions, careers, memorabilia and the stories shaping the past, present and future of the WTA Tour.",
 
   alternates: {
     canonical:
-      "/players/women/archive",
+      "/players/women",
   },
 
   openGraph: {
@@ -41,13 +41,13 @@ export const metadata: Metadata = {
       "website",
 
     title:
-      "WTA Players Archive: Rankings, Profiles & Careers | AGE202",
+      "Women's Tennis Players, Champions & Profiles | AGE202",
 
     description:
-      "Explore the AGE202 WTA Players Archive with current rankings, player profiles, careers, titles and the women shaping professional tennis today.",
+      "Explore women's tennis through AGE202 player profiles, champions, careers, memorabilia and stories from the WTA Tour.",
 
     url:
-      "/players/women/archive",
+      "/players/women",
 
     siteName:
       "AGE202",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
           630,
 
         alt:
-          "AGE202 WTA Players Archive",
+          "AGE202 Women's Tennis Players",
       },
     ],
   },
@@ -77,10 +77,10 @@ export const metadata: Metadata = {
       "summary_large_image",
 
     title:
-      "WTA Players Archive: Rankings, Profiles & Careers | AGE202",
+      "Women's Tennis Players, Champions & Profiles | AGE202",
 
     description:
-      "Explore the AGE202 WTA Players Archive with current rankings, player profiles, careers, titles and the women shaping professional tennis today.",
+      "Explore women's tennis through AGE202 player profiles, champions, careers, memorabilia and WTA stories.",
 
     images: [
       "/players/players-trophies-hero.png",
@@ -113,7 +113,7 @@ export const metadata: Metadata = {
   },
 
   category:
-    "Tennis archive",
+    "Women's tennis",
 };
 
 
@@ -307,19 +307,19 @@ export default async function WomenPlayersPage() {
           "CollectionPage",
 
         "@id":
-          `${WTA_ARCHIVE_URL}#collection`,
+          `${WOMEN_PLAYERS_URL}#collection`,
 
         url:
-          WTA_ARCHIVE_URL,
+          WOMEN_PLAYERS_URL,
 
         name:
-          "WTA Players Archive",
+          "AGE202 Women's Tennis",
 
         headline:
-          "WTA Players Archive: Rankings, Profiles & Careers",
+          "Women's Tennis Players, Champions & Profiles",
 
         description:
-          "The AGE202 WTA Players Archive featuring current rankings, player profiles, careers, titles and digital tennis history.",
+          "Explore women's tennis at AGE202 through player profiles, champions, careers, memorabilia and stories from the WTA Tour.",
 
         isPartOf: {
           "@type":
@@ -337,7 +337,7 @@ export default async function WomenPlayersPage() {
 
         mainEntity: {
           "@id":
-            `${WTA_ARCHIVE_URL}#players`,
+            `${WOMEN_PLAYERS_URL}#featured-players`,
         },
       },
 
@@ -346,19 +346,16 @@ export default async function WomenPlayersPage() {
           "ItemList",
 
         "@id":
-          `${WTA_ARCHIVE_URL}#players`,
+          `${WOMEN_PLAYERS_URL}#featured-players`,
 
         name:
-          "AGE202 WTA Player Directory",
+          "Featured AGE202 Women's Tennis Players",
 
         numberOfItems:
-          womenPlayers.length,
-
-        itemListOrder:
-          "https://schema.org/ItemListOrderAscending",
+          featuredPlayers.length,
 
         itemListElement:
-          womenPlayers.map(
+          featuredPlayers.map(
             (
               player,
               index,
@@ -371,7 +368,7 @@ export default async function WomenPlayersPage() {
                 1,
 
               url:
-                `https://www.age202.com/players/women/${player.slug}`,
+                `https://www.age202.com${player.href}`,
 
               name:
                 player.name,
@@ -381,13 +378,13 @@ export default async function WomenPlayersPage() {
                   "Person",
 
                 "@id":
-                  `https://www.age202.com/players/women/${player.slug}#person`,
+                  `https://www.age202.com${player.href}#person`,
 
                 name:
                   player.name,
 
                 url:
-                  `https://www.age202.com/players/women/${player.slug}`,
+                  `https://www.age202.com${player.href}`,
               },
             }),
           ),
@@ -398,7 +395,7 @@ export default async function WomenPlayersPage() {
           "BreadcrumbList",
 
         "@id":
-          `${WTA_ARCHIVE_URL}#breadcrumb`,
+          `${WOMEN_PLAYERS_URL}#breadcrumb`,
 
         itemListElement: [
           {
@@ -437,10 +434,10 @@ export default async function WomenPlayersPage() {
               3,
 
             name:
-              "WTA Players Archive",
+              "Women's Tennis",
 
             item:
-              WTA_ARCHIVE_URL,
+              WOMEN_PLAYERS_URL,
           },
         ],
       },

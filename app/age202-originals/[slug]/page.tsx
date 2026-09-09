@@ -1,5 +1,5 @@
 import type {
-   Metadata,
+    Metadata,
 } from "next";
 
 import Link from "next/link";
@@ -23,6 +23,10 @@ import DynamicProductColour from "./DynamicProductColour";
 
 export const dynamic =
   "force-dynamic";
+
+
+const SITE_URL =
+  "https://www.age202.com";
 
 
 function formatPrice(
@@ -76,16 +80,115 @@ export async function generateMetadata({
     };
   }
 
+  const canonical =
+    `/age202-originals/${product.slug}`;
+
+  const description =
+    product.metaDescription ??
+    product.description ??
+    product.subtitle ??
+    `Discover ${product.title}, an official AGE202 Original created for tennis culture and The Digital Tennis Museum.`;
+
+  const defaultVariant =
+    product.variants.find(
+      (variant) =>
+        variant.isDefault,
+    ) ??
+    product.variants[0] ??
+    null;
+
+  const socialImage =
+    defaultVariant?.images[0] ??
+    product.images[0] ??
+    null;
+
   return {
     title:
       product.metaTitle ??
       `${product.title} | AGE202 Originals`,
 
-    description:
-      product.metaDescription ??
-      product.description ??
-      product.subtitle ??
-      "Official AGE202 Original product.",
+    description,
+
+    alternates: {
+      canonical,
+    },
+
+    openGraph: {
+      type:
+        "website",
+
+      url:
+        canonical,
+
+      title:
+        product.metaTitle ??
+        product.title,
+
+      description,
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
+
+      images:
+        socialImage
+          ? [
+              {
+                url:
+                  socialImage.url,
+
+                alt:
+                  socialImage.alt ??
+                  product.title,
+              },
+            ]
+          : undefined,
+    },
+
+    twitter: {
+      card:
+        "summary_large_image",
+
+      title:
+        product.metaTitle ??
+        product.title,
+
+      description,
+
+      images:
+        socialImage
+          ? [
+              socialImage.url,
+            ]
+          : undefined,
+    },
+
+    robots: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
+    },
   };
 }
 
@@ -155,8 +258,167 @@ export default async function OriginalProductPage({
       "true";
 
 
+  const canonicalUrl =
+    `${SITE_URL}/age202-originals/${product.slug}`;
+
+  const primaryImage =
+    defaultVariant?.images[0] ??
+    product.images[0] ??
+    null;
+
+  const productDescription =
+    product.metaDescription ??
+    product.description ??
+    product.subtitle ??
+    "Official AGE202 Original product.";
+
+  const productJsonLd = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "Product",
+
+        "@id":
+          `${canonicalUrl}#product`,
+
+        name:
+          product.title,
+
+        description:
+          productDescription,
+
+        url:
+          canonicalUrl,
+
+        image:
+          primaryImage
+            ? [
+                primaryImage.url,
+              ]
+            : undefined,
+
+        brand: {
+          "@type":
+            "Brand",
+
+          name:
+            "AGE202",
+        },
+
+        category:
+          product.category,
+
+        material:
+          product.material ??
+          undefined,
+
+        color:
+          displayColour !==
+          "Not specified"
+            ? displayColour
+            : undefined,
+
+        offers:
+          product.price
+            ? {
+                "@type":
+                  "Offer",
+
+                url:
+                  canonicalUrl,
+
+                priceCurrency:
+                  product.currency,
+
+                price:
+                  product.price.toString(),
+
+                availability:
+                  product.availability ===
+                  "AVAILABLE"
+                    ? "https://schema.org/InStock"
+                    : product.availability ===
+                        "SOLD"
+                      ? "https://schema.org/SoldOut"
+                      : "https://schema.org/OutOfStock",
+              }
+            : undefined,
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${canonicalUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "AGE202 Originals",
+
+            item:
+              `${SITE_URL}/age202-originals`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              product.title,
+
+            item:
+              canonicalUrl,
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
-    <main className="min-h-screen bg-[#050B18] text-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            JSON.stringify(
+              productJsonLd,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
+        }}
+      />
+
+      <main className="min-h-screen bg-[#050B18] text-white">
       <section className="px-5 pb-16 pt-28 sm:px-8 lg:px-12 lg:pb-24 lg:pt-36">
         <div className="mx-auto max-w-[1500px]">
           <Link
@@ -403,6 +665,7 @@ export default async function OriginalProductPage({
           </div>
         </section>
       ) : null}
-    </main>
+      </main>
+    </>
   );
 }

@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+
 import Link from "next/link";
 
 import {
@@ -12,6 +15,86 @@ import {
 import {
   getPublishedLegends,
 } from "@/lib/repositories/legend.repository";
+
+const SITE_URL =
+  "https://www.age202.com";
+
+const LEGENDS_URL =
+  `${SITE_URL}/legends`;
+
+
+export const metadata: Metadata = {
+  title:
+    "Tennis Legends: Greatest Players & Careers | AGE202",
+
+  description:
+    "Explore the greatest tennis legends, their Grand Slam titles, careers, rivalries and lasting impact on men's and women's tennis history.",
+
+  alternates: {
+    canonical:
+      "/legends",
+  },
+
+  openGraph: {
+    type:
+      "website",
+
+    url:
+      "/legends",
+
+    title:
+      "Tennis Legends: Greatest Players & Careers | AGE202",
+
+    description:
+      "Explore the greatest tennis legends, their Grand Slam titles, careers, rivalries and lasting impact on men's and women's tennis history.",
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
+  },
+
+  twitter: {
+    card:
+      "summary_large_image",
+
+    title:
+      "Tennis Legends: Greatest Players & Careers | AGE202",
+
+    description:
+      "Discover legendary men's and women's tennis champions, their careers, titles, rivalries and impact on the history of the sport.",
+  },
+
+  robots: {
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
+  },
+
+  category:
+    "Tennis History",
+};
+
 
 export const dynamic =
   "force-dynamic";
@@ -48,7 +131,142 @@ export default async function LegendsPage() {
     legends[0] ??
     null;
 
+
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${LEGENDS_URL}#webpage`,
+
+        url:
+          LEGENDS_URL,
+
+        name:
+          "Tennis Legends: Greatest Players & Careers",
+
+        description:
+          "Explore the greatest tennis legends, their Grand Slam titles, careers, rivalries and lasting impact on men's and women's tennis history.",
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        mainEntity: {
+          "@id":
+            `${LEGENDS_URL}#legends`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${LEGENDS_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${LEGENDS_URL}#legends`,
+
+        name:
+          "AGE202 Tennis Legends",
+
+        numberOfItems:
+          legends.length,
+
+        itemListElement:
+          legends.map(
+            (
+              legend,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              url:
+                `${SITE_URL}/legends/${legend.slug}`,
+
+              name:
+                legend.name,
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${LEGENDS_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Legends",
+
+            item:
+              LEGENDS_URL,
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            JSON.stringify(
+              structuredData,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
+        }}
+      />
     <main className="min-h-screen bg-[#050B18] text-white">
       <section className="relative isolate min-h-[72svh] overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
@@ -210,7 +428,8 @@ export default async function LegendsPage() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
 

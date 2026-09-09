@@ -36,6 +36,31 @@ type PageProps = {
   }>;
 };
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const CHAMPION_ARCHIVE_SLUGS: Record<string, string> = {
+  "roger-federer": "federer",
+  federer: "federer",
+  "rafael-nadal": "nadal",
+  nadal: "nadal",
+  "novak-djokovic": "djokovic",
+  djokovic: "djokovic",
+  "jannik-sinner": "sinner",
+  sinner: "sinner",
+  "carlos-alcaraz": "alcaraz",
+  alcaraz: "alcaraz",
+};
+
+function getPlayerArchiveSlug(
+  slug: string,
+): string {
+  return (
+    CHAMPION_ARCHIVE_SLUGS[slug] ??
+    slug
+  );
+}
+
 function formatPrice(
   price: unknown,
   currency: string | null,
@@ -154,52 +179,154 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const {
+    slug,
+  } = await params;
 
   const artifact =
-    await getPublishedArtifactBySlug(slug);
+    await getPublishedArtifactBySlug(
+      slug,
+    );
 
   if (!artifact) {
     return {
       title:
         "Artifact non trovato | AGE202",
+
+      robots: {
+        index:
+          false,
+
+        follow:
+          false,
+      },
     };
   }
 
+  const pageUrl =
+    `${SITE_URL}/artifacts/${artifact.slug}`;
+
   const coverImage =
     artifact.images.find(
-      (image) => image.isCover,
-    ) ?? artifact.images[0];
+      (image) =>
+        image.isCover,
+    ) ??
+    artifact.images[0];
+
+  const title =
+    `${artifact.title}: ${artifact.player.name} Tennis Artifact | AGE202`;
 
   const description =
     artifact.subtitle ??
     artifact.description ??
-    `${artifact.title}, reperto dell’archivio digitale AGE202 dedicato a ${artifact.player.name}.`;
+    `${artifact.title}, authentic tennis artifact from the AGE202 digital museum archive dedicated to ${artifact.player.name}.`;
+
+  const imageUrl =
+    coverImage
+      ? coverImage.heroUrl ??
+        coverImage.galleryUrl ??
+        coverImage.url
+      : undefined;
 
   return {
-    title: `${artifact.title} | AGE202 Museum`,
+    title,
+
     description,
+
     alternates: {
-      canonical: `/artifacts/${artifact.slug}`,
+      canonical:
+        `/artifacts/${artifact.slug}`,
     },
+
+    keywords: [
+      artifact.title,
+      artifact.player.name,
+      artifact.brand.name,
+      `${artifact.player.name} memorabilia`,
+      `${artifact.player.name} tennis artifact`,
+      `${artifact.brand.name} tennis`,
+      "tennis memorabilia",
+      "tennis artifacts",
+      "tennis collectibles",
+      "digital tennis museum",
+      "AGE202",
+    ],
+
     openGraph: {
-      title: artifact.title,
+      type:
+        "article",
+
+      url:
+        pageUrl,
+
+      title,
+
       description,
-      type: "article",
-      images: coverImage
-        ? [
-            {
-              url:
-                coverImage.heroUrl ??
-                coverImage.galleryUrl ??
-                coverImage.url,
-              alt:
-                coverImage.alt ??
-                artifact.title,
-            },
-          ]
-        : [],
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
+
+      images:
+        imageUrl
+          ? [
+              {
+                url:
+                  imageUrl,
+
+                alt:
+                  coverImage?.alt ??
+                  artifact.title,
+              },
+            ]
+          : undefined,
     },
+
+    twitter: {
+      card:
+        "summary_large_image",
+
+      title,
+
+      description,
+
+      images:
+        imageUrl
+          ? [
+              imageUrl,
+            ]
+          : undefined,
+    },
+
+    robots: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
+    },
+
+    category:
+      "Tennis memorabilia",
   };
 }
 
@@ -354,52 +481,205 @@ export default async function ArtifactPage({
       artifact.curatorNote,
   );
 
+  const pageUrl =
+    `${SITE_URL}/artifacts/${artifact.slug}`;
+
+  const playerArchiveSlug =
+    getPlayerArchiveSlug(
+      artifact.player.slug,
+    );
+
+  const playerArchivePath =
+    `/archives/${playerArchiveSlug}`;
+
+  const playerArchiveUrl =
+    `${SITE_URL}${playerArchivePath}`;
+
+  const artifactImages =
+    artifact.images.map(
+      (image) =>
+        image.detailUrl ??
+        image.galleryUrl ??
+        image.url,
+    );
+
   const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
+    "@context":
+      "https://schema.org",
 
-    name:
-      artifact.title,
+    "@graph": [
+      {
+        "@type":
+          "WebPage",
 
-    description:
-      artifact.description ??
-      artifact.subtitle ??
-      `Reperto dell’archivio digitale AGE202 dedicato a ${artifact.player.name}.`,
+        "@id":
+          `${pageUrl}#webpage`,
 
-    identifier:
-      artifact.archiveNumber ??
-      artifact.id,
+        url:
+          pageUrl,
 
-    image:
-      artifact.images.map(
-        (image) =>
-          image.detailUrl ??
-          image.galleryUrl ??
-          image.url,
-      ),
+        name:
+          artifact.title,
 
-    creator: {
-      "@type": "Organization",
-      name: "AGE202 Digital Museum",
-    },
+        description:
+          artifact.description ??
+          artifact.subtitle ??
+          `Tennis artifact from the AGE202 digital museum archive dedicated to ${artifact.player.name}.`,
 
-    about: [
-      artifact.player.name,
-      artifact.brand.name,
-      getCategoryLabel(
-        artifact.category,
-      ),
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        mainEntity: {
+          "@id":
+            `${pageUrl}#artifact`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${pageUrl}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "CreativeWork",
+
+        "@id":
+          `${pageUrl}#artifact`,
+
+        name:
+          artifact.title,
+
+        description:
+          artifact.description ??
+          artifact.subtitle ??
+          `Tennis artifact from the AGE202 digital museum archive dedicated to ${artifact.player.name}.`,
+
+        identifier:
+          artifact.archiveNumber ??
+          artifact.id,
+
+        image:
+          artifactImages,
+
+        url:
+          pageUrl,
+
+        creator: {
+          "@type":
+            "Organization",
+
+          name:
+            "AGE202 Digital Museum",
+
+          url:
+            SITE_URL,
+        },
+
+        about: [
+          {
+            "@type":
+              "Person",
+
+            name:
+              artifact.player.name,
+          },
+
+          {
+            "@type":
+              "Brand",
+
+            name:
+              artifact.brand.name,
+          },
+
+          {
+            "@type":
+              "Thing",
+
+            name:
+              getCategoryLabel(
+                artifact.category,
+              ),
+          },
+        ],
+
+        dateCreated:
+          artifact.year
+            ? String(
+                artifact.year,
+              )
+            : undefined,
+
+        mainEntityOfPage: {
+          "@id":
+            `${pageUrl}#webpage`,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              artifact.player.name,
+
+            item:
+              playerArchiveUrl,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              artifact.title,
+
+            item:
+              pageUrl,
+          },
+        ],
+      },
     ],
-
-    dateCreated:
-      artifact.year
-        ? String(
-            artifact.year,
-          )
-        : undefined,
-
-    url:
-      `/artifacts/${artifact.slug}`,
   };
 
   return (
@@ -410,6 +690,9 @@ export default async function ArtifactPage({
           __html:
             JSON.stringify(
               jsonLd,
+            ).replace(
+              /</g,
+              "\\u003c",
             ),
         }}
       />
@@ -435,7 +718,7 @@ export default async function ArtifactPage({
           <ChevronRight className="h-3.5 w-3.5 shrink-0" />
 
           <Link
-            href={`/archives/${artifact.player.slug}`}
+            href={playerArchivePath}
             className="whitespace-nowrap transition hover:text-lime-300"
           >
             {
@@ -1282,7 +1565,7 @@ export default async function ArtifactPage({
               />
 
               <Link
-                href={`/archives/${artifact.player.slug}`}
+                href={playerArchivePath}
                 className="inline-flex w-fit items-center gap-2 text-sm font-bold uppercase tracking-[0.16em] text-white/55 transition hover:text-lime-300"
               >
                 Vedi tutta la
@@ -1476,14 +1759,14 @@ export default async function ArtifactPage({
 
               <div className="mt-5 flex flex-col gap-3 text-sm text-white/55">
                 <Link
-                  href="/archive"
+                  href="/players"
                   className="transition hover:text-lime-300"
                 >
-                  Archivio
+                  Players Archive
                 </Link>
 
                 <Link
-                  href={`/archives/${artifact.player.slug}`}
+                  href={playerArchivePath}
                   className="transition hover:text-lime-300"
                 >
                   Collezione{" "}

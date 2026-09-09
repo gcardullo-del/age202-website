@@ -1,5 +1,5 @@
 import type {
-   CSSProperties,
+  CSSProperties,
 } from "react";
 
 import type {
@@ -79,6 +79,9 @@ export const dynamic =
 export const revalidate =
   0;
 
+const SITE_URL =
+  "https://www.age202.com";
+
 export function generateStaticParams() {
   return MASTERS_1000_SLUGS.map(
     (slug) => ({
@@ -146,38 +149,67 @@ export async function generateMetadata({
         "Tournament not found | AGE202",
 
       robots: {
-        index: false,
-        follow: false,
+        index:
+          false,
+
+        follow:
+          false,
       },
     };
   }
 
+  const pageUrl =
+    `${SITE_URL}/results/masters-1000/${publicSlug}`;
+
   const title =
-    `${tournament.name} Archive | AGE202`;
+    `${tournament.name} Results, Draw, Champions & Tennis History | AGE202`;
 
   const description =
-    `${tournament.introduction} Explore the history, identity, timeline, records and defining moments of ${tournament.name}.`;
+    `Explore ${tournament.name} results, current and historical draws, champions, editions, records, iconic moments and tournament history in the AGE202 ATP Masters 1000 archive.`;
 
   return {
     title,
+
     description,
+
+    alternates: {
+      canonical:
+        `/results/masters-1000/${publicSlug}`,
+    },
 
     keywords: [
       tournament.name,
       tournament.officialName,
-      `${tournament.name} history`,
-      `${tournament.name} champions`,
       `${tournament.name} results`,
+      `${tournament.name} draw`,
+      `${tournament.name} champions`,
+      `${tournament.name} winners`,
+      `${tournament.name} history`,
+      `${tournament.name} records`,
       `${tournament.name} archive`,
+      "ATP Masters 1000 results",
       "ATP Masters 1000",
+      "tennis results",
       "tennis history",
       "AGE202",
     ],
 
     openGraph: {
+      type:
+        "website",
+
+      url:
+        pageUrl,
+
       title,
+
       description,
-      type: "website",
+
+      siteName:
+        "AGE202",
+
+      locale:
+        "en_US",
     },
 
     twitter: {
@@ -185,12 +217,33 @@ export async function generateMetadata({
         "summary_large_image",
 
       title,
+
       description,
     },
 
     robots: {
-      index: true,
-      follow: true,
+      index:
+        true,
+
+      follow:
+        true,
+
+      googleBot: {
+        index:
+          true,
+
+        follow:
+          true,
+
+        "max-image-preview":
+          "large",
+
+        "max-snippet":
+          -1,
+
+        "max-video-preview":
+          -1,
+      },
     },
 
     category:
@@ -651,51 +704,179 @@ export default async function Masters1000TournamentPage({
       tournament.colors.glow,
   };
 
+  const pageUrl =
+    `${SITE_URL}/results/masters-1000/${publicSlug}`;
+
   const structuredData = {
     "@context":
       "https://schema.org",
 
-    "@type":
-      "SportsEvent",
-
-    name:
-      tournament.officialName,
-
-    alternateName:
-      tournament.name,
-
-    description:
-      tournament.introduction,
-
-    sport:
-      "Tennis",
-
-    location: {
-      "@type":
-        "Place",
-
-      name:
-        tournament.venue,
-
-      address: {
+    "@graph": [
+      {
         "@type":
-          "PostalAddress",
+          "CollectionPage",
 
-        addressLocality:
-          tournament.city,
+        "@id":
+          `${pageUrl}#webpage`,
 
-        addressCountry:
-          tournament.country,
+        url:
+          pageUrl,
+
+        name:
+          `${tournament.name} Results, Draw, Champions & Tennis History`,
+
+        headline:
+          `${tournament.name} Results, Draw, Champions & Tennis History`,
+
+        description:
+          tournament.introduction,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        mainEntity: {
+          "@id":
+            `${pageUrl}#tournament`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${pageUrl}#breadcrumb`,
+        },
       },
-    },
 
-    organizer: {
-      "@type":
-        "Organization",
+      {
+        "@type":
+          "SportsEvent",
 
-      name:
-        tournament.officialName,
-    },
+        "@id":
+          `${pageUrl}#tournament`,
+
+        name:
+          tournament.officialName,
+
+        alternateName:
+          tournament.name,
+
+        description:
+          tournament.introduction,
+
+        url:
+          pageUrl,
+
+        sport:
+          "Tennis",
+
+        location: {
+          "@type":
+            "Place",
+
+          name:
+            tournament.venue,
+
+          address: {
+            "@type":
+              "PostalAddress",
+
+            addressLocality:
+              tournament.city,
+
+            addressCountry:
+              tournament.country,
+          },
+        },
+
+        organizer: {
+          "@type":
+            "Organization",
+
+          name:
+            tournament.officialName,
+        },
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "ATP Masters 1000",
+
+            item:
+              `${SITE_URL}/results/masters-1000`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              4,
+
+            name:
+              tournament.name,
+
+            item:
+              pageUrl,
+          },
+        ],
+      },
+    ],
   };
 
   return (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 import {
   ArrowLeft,
   ArrowRight,
@@ -319,8 +320,8 @@ export default function WomenArchiveExperience({
 
 
             <p className="mt-7 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-              A living directory of the current WTA Top 100, connecting the
-              leading women&apos;s players to AGE202 profiles as the archive grows.
+              Explore the current WTA Top 100 with live rankings, WTA points,
+              player profiles, careers and the women shaping today&apos;s professional tennis tour.
             </p>
 
 
@@ -478,11 +479,24 @@ export default function WomenArchiveExperience({
 
 
                   <div className="min-w-0">
-                    <div className="truncate text-lg font-black uppercase tracking-[-0.025em]">
-                      {
-                        player.name
-                      }
-                    </div>
+                    {player.href ? (
+                      <Link
+                        href={
+                          player.href
+                        }
+                        className="block truncate text-lg font-black uppercase tracking-[-0.025em] transition hover:text-[#C8FF00]"
+                      >
+                        {
+                          player.name
+                        }
+                      </Link>
+                    ) : (
+                      <div className="truncate text-lg font-black uppercase tracking-[-0.025em]">
+                        {
+                          player.name
+                        }
+                      </div>
+                    )}
 
                     <div className="mt-1 text-[9px] font-black uppercase tracking-[0.15em] text-white/24">
                       Age{" "}
@@ -619,11 +633,26 @@ export default function WomenArchiveExperience({
                     </div>
 
 
-                    <h3 className="mt-4 truncate text-lg font-black uppercase tracking-[-0.025em]">
-                      {
-                        player.name
-                      }
-                    </h3>
+                    {player.href ? (
+                      <h3 className="mt-4 truncate text-lg font-black uppercase tracking-[-0.025em]">
+                        <Link
+                          href={
+                            player.href
+                          }
+                          className="transition hover:text-[#C8FF00]"
+                        >
+                          {
+                            player.name
+                          }
+                        </Link>
+                      </h3>
+                    ) : (
+                      <h3 className="mt-4 truncate text-lg font-black uppercase tracking-[-0.025em]">
+                        {
+                          player.name
+                        }
+                      </h3>
+                    )}
 
 
                     <div className="mt-3">
@@ -681,5 +710,8 @@ export default function WomenArchiveExperience({
     </main>
   );
 }
+
+
+
 
 

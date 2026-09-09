@@ -1,5 +1,5 @@
 import type {
-  CSSProperties,
+    CSSProperties,
 } from "react";
 import type {
   Metadata,
@@ -21,12 +21,36 @@ import {
   getAtp500Href,
 } from "@/lib/data/atp-500";
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const PAGE_URL =
+  `${SITE_URL}/results/atp-500`;
+
+const PAGE_TITLE =
+  "ATP 500 Results, Tournaments, Champions & Tennis History";
+
+const PAGE_DESCRIPTION =
+  "Explore ATP 500 results, tournaments, champions, recent finals and tennis history across the global ATP 500 calendar in the AGE202 tournament archive.";
+
 export const metadata: Metadata = {
-  title: "ATP 500 Archive | AGE202",
+  title:
+    PAGE_TITLE,
+
   description:
-    "Explore the AGE202 ATP 500 archive: sixteen tournaments across hard, clay and grass, each with its own identity, history, legends and recent champions.",
+    PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical:
+      "/results/atp-500",
+  },
+
   keywords: [
     "ATP 500",
+    "ATP 500 results",
+    "ATP 500 tournaments",
+    "ATP 500 champions",
+    "ATP 500 history",
     "Rotterdam Open",
     "Dallas Open",
     "Qatar Open",
@@ -43,26 +67,69 @@ export const metadata: Metadata = {
     "Japan Open",
     "Swiss Indoors Basel",
     "Vienna Open",
+    "tennis results",
     "tennis history",
     "AGE202",
   ],
+
   openGraph: {
-    title: "ATP 500 Archive | AGE202",
+    type:
+      "website",
+
+    url:
+      PAGE_URL,
+
+    title:
+      `${PAGE_TITLE} | AGE202`,
+
     description:
-      "Sixteen tournaments. Three surfaces. One global ATP 500 archive.",
-    type: "website",
+      PAGE_DESCRIPTION,
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
   },
+
   twitter: {
-    card: "summary_large_image",
-    title: "ATP 500 Archive | AGE202",
+    card:
+      "summary_large_image",
+
+    title:
+      `${PAGE_TITLE} | AGE202`,
+
     description:
-      "Sixteen tournaments. Three surfaces. One global ATP 500 archive.",
+      PAGE_DESCRIPTION,
   },
+
   robots: {
-    index: true,
-    follow: true,
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
   },
-  category: "ATP 500 tennis",
+
+  category:
+    "ATP 500 tennis",
 };
 
 type TournamentStyle =
@@ -72,8 +139,159 @@ type TournamentStyle =
   };
 
 export default function Atp500Page() {
+  const structuredData = {
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${PAGE_URL}#webpage`,
+
+        url:
+          PAGE_URL,
+
+        name:
+          PAGE_TITLE,
+
+        headline:
+          PAGE_TITLE,
+
+        description:
+          PAGE_DESCRIPTION,
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        mainEntity: {
+          "@id":
+            `${PAGE_URL}#tournaments`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${PAGE_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${PAGE_URL}#tournaments`,
+
+        name:
+          "ATP 500 tournaments",
+
+        numberOfItems:
+          atp500Tournaments.length,
+
+        itemListElement:
+          atp500Tournaments.map(
+            (
+              tournament,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              name:
+                tournament.name,
+
+              url:
+                `${SITE_URL}${getAtp500Href(
+                  tournament.slug,
+                )}`,
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${PAGE_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Results",
+
+            item:
+              `${SITE_URL}/results`,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              3,
+
+            name:
+              "ATP 500",
+
+            item:
+              PAGE_URL,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-[#050B18] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            JSON.stringify(
+              structuredData,
+            ).replace(
+              /</g,
+              "\\u003c",
+            ),
+        }}
+      />
       <section className="relative overflow-hidden border-b border-white/10 px-5 pb-14 pt-24 sm:px-8 lg:px-12 lg:pb-20 lg:pt-28">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_10%,rgba(255,255,255,0.08),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.025),transparent_45%)]" />
 

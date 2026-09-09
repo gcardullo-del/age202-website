@@ -8,12 +8,48 @@ import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 
 
+const SITE_URL = "https://www.age202.com";
+const ABOUT_URL = `${SITE_URL}/about`;
+
 export const metadata: Metadata = {
-  title: "About AGE202",
+  title: "About AGE202: The Digital Tennis Museum",
   description:
-    "Discover AGE202, The Digital Tennis Museum dedicated to preserving, documenting and exploring the past, present and future of tennis.",
+    "Discover AGE202, an independent digital tennis museum preserving and documenting tennis history, players, tournaments, memorabilia and the future of the sport.",
   alternates: {
     canonical: "/about",
+  },
+  openGraph: {
+    type: "website",
+    url: "/about",
+    title: "About AGE202: The Digital Tennis Museum",
+    description:
+      "Discover AGE202, an independent digital tennis museum preserving and documenting tennis history, players, tournaments, memorabilia and the future of the sport.",
+    siteName: "AGE202",
+    locale: "en_US",
+    images: [
+      {
+        url: "/about/about-hero.jpg",
+        alt: "AGE202 — The Digital Tennis Museum",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About AGE202: The Digital Tennis Museum",
+    description:
+      "Discover AGE202, an independent digital tennis museum preserving and documenting tennis history, players, tournaments, memorabilia and the future of the sport.",
+    images: ["/about/about-hero.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -118,8 +154,66 @@ const values = [
 
 
 export default function AboutPage() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": `${ABOUT_URL}#webpage`,
+        url: ABOUT_URL,
+        name: "About AGE202: The Digital Tennis Museum",
+        description:
+          "AGE202 is an independent digital museum dedicated to preserving, documenting and exploring the history, culture and evolution of tennis.",
+        isPartOf: {
+          "@type": "WebSite",
+          "@id": `${SITE_URL}/#website`,
+          name: "AGE202",
+          url: SITE_URL,
+        },
+        about: {
+          "@id": `${SITE_URL}/#organization`,
+        },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "AGE202",
+        url: SITE_URL,
+        description:
+          "An independent digital tennis museum dedicated to preserving, documenting and exploring tennis history, culture and evolution.",
+        email: "curator@age202.com",
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${ABOUT_URL}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "AGE202",
+            item: SITE_URL,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "About",
+            item: ABOUT_URL,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
-    <main className="overflow-hidden bg-[#050B18] text-white">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+
+      <main className="overflow-hidden bg-[#050B18] text-white">
       {/* HERO */}
 
       <section className="relative min-h-[78vh] overflow-hidden">
@@ -476,6 +570,7 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

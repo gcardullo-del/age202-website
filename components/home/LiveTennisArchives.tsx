@@ -19,13 +19,13 @@ const cards = [
       "Live Top 50 Index",
 
     kicker:
-      "02 · The wider tour",
+      "01 · The men's tour",
 
     title:
       "ATP Archive",
 
     description:
-      "Discover established champions, rising stars and the next generation through a dynamic archive connected to the current ATP Top 50.",
+      "Explore ATP players, rankings, careers, titles, rising stars and established champions through a dynamic archive connected to the current ATP Top 50.",
 
     href:
       "/players/other-players",
@@ -57,7 +57,7 @@ const cards = [
       "WTA Archive",
 
     description:
-      "Discover the current generation through a dynamic AGE202 archive connected to the WTA Top 50.",
+      "Explore WTA players, rankings, careers, titles and the current generation through a dynamic AGE202 archive connected to the WTA Top 50.",
 
     href:
       "/players/women/archive",
@@ -69,7 +69,7 @@ const cards = [
       "/players/women/wta-archive-hero.png",
 
     mobileImage:
-  "/players/women/wta-archive-hero-mobile-v2.png?v=3",
+      "/players/women/wta-archive-hero-mobile-v2.png?v=3",
 
     alt:
       "AGE202 WTA Archive",
@@ -163,27 +163,32 @@ export default function LiveTennisArchives() {
                 />
 
 
-                {/* MOBILE IMAGE — ALWAYS FULL, NEVER CROPPED */}
+                {/* MOBILE IMAGE — FULL COMPOSITION, NO CROP */}
 
-             {/* MOBILE IMAGE — FULL COMPOSITION, NO CROP */}
+                <div className="relative w-full bg-[#030812] sm:hidden">
+                  <img
+                    src={
+                      card.mobileImage
+                    }
+                    alt={
+                      card.alt
+                    }
+                    className={
+                      card.title ===
+                      "WTA Archive"
+                        ? "mx-auto -mt-90 block h-auto w-[50%]"
+                        : "block h-auto w-full"
+                    }
+                  />
 
-<div className="relative w-full bg-[#030812] sm:hidden">
-  <img
-    src={card.mobileImage}
-    alt={card.alt}
-   className={
-  card.title === "WTA Archive"
-    ? "mx-auto -mt-90 block h-auto w-[50%]"
-    : "block h-auto w-full"
-}
-  />
+                  <div className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-[#d7ff00]/25 bg-[#030812]/75 px-3 py-2 text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff00] backdrop-blur-md">
+                    <CircleDot className="h-3.5 w-3.5" />
 
-  <div className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-full border border-[#d7ff00]/25 bg-[#030812]/75 px-3 py-2 text-[8px] font-black uppercase tracking-[0.16em] text-[#d7ff00] backdrop-blur-md">
-    <CircleDot className="h-3.5 w-3.5" />
-
-    {card.eyebrow}
-  </div>
-</div>
+                    {
+                      card.eyebrow
+                    }
+                  </div>
+                </div>
 
 
                 {/* TABLET / DESKTOP IMAGE */}
@@ -269,14 +274,17 @@ export default function LiveTennisArchives() {
               "100",
               "Players indexed",
             ],
+
             [
               "02",
               "Live tours",
             ],
+
             [
               "ATP + WTA",
               "Dynamic rankings",
             ],
+
             [
               "24/7",
               "Living archives",

@@ -29,27 +29,83 @@ export const revalidate =
   0;
 
 
+const SITE_URL =
+  "https://www.age202.com";
+
+const RESULTS_URL =
+  `${SITE_URL}/results`;
+
+
 export const metadata: Metadata = {
-  title: "Tennis Results | AGE202",
+  title:
+    "Tennis Results Today: Live ATP Matches, Scores & Draws | AGE202",
+
   description:
-    "Follow today’s ATP matches and explore Grand Slam, ATP Masters 1000, ATP 500 and ATP 250 tournament results through the AGE202 tennis archive.",
+    "Follow today’s tennis matches and ATP results on AGE202. Explore current tournament scores, completed matches, draws, Grand Slams, Masters 1000 and ATP events.",
+
+  alternates: {
+    canonical:
+      "/results",
+  },
+
   openGraph: {
-    title: "Tennis Results | AGE202",
+    type:
+      "website",
+
+    url:
+      "/results",
+
+    title:
+      "Tennis Results Today: Live ATP Matches, Scores & Draws",
+
     description:
-      "Explore the major tournaments of professional tennis through the AGE202 digital archive.",
-    type: "website",
+      "Follow today’s tennis matches, current ATP tournament results, completed matches and draws, then explore the AGE202 historical results archive.",
+
+    siteName:
+      "AGE202",
+
+    locale:
+      "en_US",
   },
+
   twitter: {
-    card: "summary_large_image",
-    title: "Tennis Results | AGE202",
+    card:
+      "summary_large_image",
+
+    title:
+      "Tennis Results Today: Live ATP Matches, Scores & Draws",
+
     description:
-      "Grand Slam, ATP Masters 1000, ATP 500 and ATP 250 tournament results.",
+      "Today’s tennis matches, current ATP tournament results, completed matches, draws and historical tournament archives on AGE202.",
   },
+
   robots: {
-    index: true,
-    follow: true,
+    index:
+      true,
+
+    follow:
+      true,
+
+    googleBot: {
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
+    },
   },
-  category: "Tennis results",
+
+  category:
+    "Tennis Results",
 };
 
 type TournamentCategory = {
@@ -160,17 +216,152 @@ const archiveHighlights = [
 
 export default function ResultsPage() {
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Tennis Results | AGE202",
-    description:
-      "AGE202 archive hub for Grand Slam, ATP Masters 1000, ATP 500 and ATP 250 tournament results.",
-    mainEntity: tournamentCategories.map((category) => ({
-      "@type": "ItemList",
-      name: category.title,
-      description: category.description,
-      url: category.href,
-    })),
+    "@context":
+      "https://schema.org",
+
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
+
+        "@id":
+          `${RESULTS_URL}#webpage`,
+
+        url:
+          RESULTS_URL,
+
+        name:
+          "Tennis Results Today: Live ATP Matches, Scores & Draws",
+
+        description:
+          "Follow today’s tennis matches, current ATP tournament results, completed matches and draws, with access to Grand Slam, Masters 1000, ATP 500 and ATP 250 archives.",
+
+        isPartOf: {
+          "@type":
+            "WebSite",
+
+          "@id":
+            `${SITE_URL}/#website`,
+
+          name:
+            "AGE202",
+
+          url:
+            SITE_URL,
+        },
+
+        about: [
+          {
+            "@type":
+              "Thing",
+
+            name:
+              "Tennis results",
+          },
+
+          {
+            "@type":
+              "Thing",
+
+            name:
+              "ATP Tour",
+          },
+
+          {
+            "@type":
+              "Thing",
+
+            name:
+              "Grand Slam tennis",
+          },
+        ],
+
+        mainEntity: {
+          "@id":
+            `${RESULTS_URL}#tournament-categories`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${RESULTS_URL}#breadcrumb`,
+        },
+      },
+
+      {
+        "@type":
+          "ItemList",
+
+        "@id":
+          `${RESULTS_URL}#tournament-categories`,
+
+        name:
+          "Tennis tournament results archives",
+
+        numberOfItems:
+          tournamentCategories.length,
+
+        itemListElement:
+          tournamentCategories.map(
+            (
+              category,
+              index,
+            ) => ({
+              "@type":
+                "ListItem",
+
+              position:
+                index + 1,
+
+              name:
+                category.title,
+
+              description:
+                category.description,
+
+              url:
+                `${SITE_URL}${category.href}`,
+            }),
+          ),
+      },
+
+      {
+        "@type":
+          "BreadcrumbList",
+
+        "@id":
+          `${RESULTS_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "AGE202",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Tennis Results",
+
+            item:
+              RESULTS_URL,
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -213,7 +404,7 @@ export default function ResultsPage() {
           <div className="my-auto grid gap-14 py-16 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-end">
             <div>
               <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/35">
-                Today&apos;s matches · Tournament draws · Historical results
+                Tennis results today · ATP matches · Tournament draws · Historical results
               </p>
 
               <h1 className="mt-7 max-w-5xl text-[clamp(5.2rem,12vw,11rem)] font-black uppercase leading-[0.72] tracking-[-0.09em]">
@@ -222,8 +413,9 @@ export default function ResultsPage() {
               </h1>
 
               <p className="mt-10 max-w-3xl text-base leading-8 text-white/52 sm:text-lg">
-                Follow today&apos;s ATP matches as results are synchronized into AGE202,
-                then continue through tournament draws, champions and historical editions.
+                Follow today&apos;s tennis matches and ATP results as they are synchronized
+                into AGE202, with current scores and completed matches alongside tournament
+                draws, champions and historical editions.
               </p>
 
               <div className="mt-10 flex flex-wrap gap-3">
@@ -390,8 +582,8 @@ export default function ResultsPage() {
             </div>
 
             <p className="text-sm leading-7 text-white/44 lg:text-right">
-              Enter one of the four main tournament categories and continue
-              through the AGE202 results archive.
+              Explore today&apos;s tennis results across the major ATP tournament levels,
+              then continue through current draws, completed matches and the AGE202 archive.
             </p>
           </div>
 
@@ -494,9 +686,9 @@ export default function ResultsPage() {
                 </h2>
 
                 <p className="mt-7 max-w-3xl text-sm leading-7 text-white/45 sm:text-base">
-                  Tournament pages combine current draws, completed results,
-                  champions and historical context within one coherent visual
-                  archive.
+                  Tournament pages connect current draws and completed match results
+                  with champions, previous editions and historical context, turning
+                  today&apos;s tennis results into a permanent AGE202 archive.
                 </p>
               </div>
 
