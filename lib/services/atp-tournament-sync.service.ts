@@ -1,5 +1,5 @@
 import {
-     Prisma,
+    Prisma,
   TournamentCategory,
   TournamentCircuit,
 } from "@/generated/prisma/client";
@@ -10,6 +10,7 @@ import {
 
 
 const SUPPORTED_TOUR_CATEGORIES = new Set<TournamentCategory>([
+  TournamentCategory.GRAND_SLAM,
   TournamentCategory.ATP_250,
   TournamentCategory.ATP_500,
   TournamentCategory.MASTERS_1000,
@@ -1102,7 +1103,7 @@ export async function syncAtpTournamentResult(
         )
       ) {
         throw new Error(
-          `${tournament.name} is ${tournament.category}; ATP Tournament Sync currently supports only ATP_250, ATP_500 and MASTERS_1000.`,
+          `${tournament.name} is ${tournament.category}; ATP Tournament Sync currently supports only GRAND_SLAM, ATP_250, ATP_500 and MASTERS_1000.`,
         );
       }
 
