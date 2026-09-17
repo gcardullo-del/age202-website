@@ -1,5 +1,5 @@
 import type {
-   Page,
+  Page,
 } from "playwright";
 
 import {
@@ -149,15 +149,32 @@ function assertReadableDataset(
 }
 
 
+async function resolveSourceText(
+  source: string | Page,
+): Promise<string> {
+  if (
+    typeof source ===
+    "string"
+  ) {
+    return source;
+  }
+
+  return source
+    .locator("body")
+    .innerText();
+}
+
+
 export async function parseAtpLiveRanking(
-  page: Page,
+  source: string | Page,
 ): Promise<AtpLiveRankingEntry[]> {
+  const sourceText =
+    await resolveSourceText(
+      source,
+    );
+
   const content =
-    (
-      await page
-        .locator("body")
-        .innerText()
-    )
+    sourceText
       .replace(/\r/g, "");
 
   assertReadableDataset(
