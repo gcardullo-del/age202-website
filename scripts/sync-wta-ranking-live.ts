@@ -1,5 +1,5 @@
 import {
-    config as loadEnv,
+       config as loadEnv,
 } from "dotenv";
 
 import {
@@ -42,9 +42,75 @@ const USER_AGENT =
   "Chrome/151.0.0.0 Safari/537.36";
 
 
+const REQUEST_HEADERS = {
+  Accept:
+    "application/json,text/plain;q=0.9,*/*;q=0.8",
+
+  "User-Agent":
+    "AGE202-Ranking-Sync/1.0",
+};
+
+
 let prismaForShutdown:
   | (typeof import("@/lib/prisma"))["prisma"]
   | undefined;
+
+
+async function fetchRankingSource():
+  Promise<string> {
+  const controller =
+    new AbortController();
+
+  const timeout =
+    setTimeout(
+      () => controller.abort(),
+      60_000,
+    );
+
+  try {
+    const response =
+      await fetch(
+        WTA_LIVE_RANKING_URL,
+        {
+          headers:
+            REQUEST_HEADERS,
+
+          redirect:
+            "follow",
+
+          signal:
+            controller.signal,
+        },
+      );
+
+    console.log(
+      `📡 HTTP: ${response.status}`,
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `La sorgente WTA ha risposto con HTTP ${response.status}.`,
+      );
+    }
+
+    const content =
+      await response.text();
+
+    if (!content.trim()) {
+      throw new Error(
+        "La sorgente WTA ha restituito una risposta vuota.",
+      );
+    }
+
+    console.log(
+      `📄 Risposta ricevuta: ${content.length} caratteri.`,
+    );
+
+    return content;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 
 function normalizeSlug(
@@ -743,42 +809,29 @@ async function main() {
     );
 
 
-    const response =
-      await page.goto(
-        WTA_LIVE_RANKING_URL,
-        {
-          waitUntil:
-            "domcontentloaded",
+    const sourceText =
+      await fetchRankingSource();
 
-          timeout:
-            60_000,
+
+    /*
+     * Il parser storico riceve una Page Playwright.
+     * Inseriamo il JSON scaricato da Node in un elemento di testo,
+     * evitando che Chromium navighi direttamente sull'endpoint ESPN.
+     */
+    await page.setContent(
+      "<pre id=\"ranking-source\"></pre>",
+    );
+
+
+    await page
+      .locator("#ranking-source")
+      .evaluate(
+        (element, content) => {
+          element.textContent =
+            content;
         },
+        sourceText,
       );
-
-
-    const httpStatus =
-      response?.status() ??
-      null;
-
-
-    console.log(
-      `📡 HTTP: ${httpStatus ?? "unknown"}`,
-    );
-
-
-    if (
-      httpStatus !== null &&
-      httpStatus >= 400
-    ) {
-      throw new Error(
-        `WTA ha risposto con HTTP ${httpStatus}.`,
-      );
-    }
-
-
-    await page.waitForTimeout(
-      8_000,
-    );
 
 
     /*
