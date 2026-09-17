@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-
 import {
   chromium,
   type Page,
@@ -211,6 +210,17 @@ function normalizeSlug(
       /^-+|-+$/g,
       "",
     );
+}
+
+
+function buildSlugTokenKey(
+  value: string,
+): string {
+  return normalizeSlug(value)
+    .split("-")
+    .filter(Boolean)
+    .sort()
+    .join("|");
 }
 
 
@@ -695,6 +705,30 @@ function resolveProfileLink(
 
   if (byName) {
     return byName;
+  }
+
+  /*
+   * Alcune fonti espongono i nomi asiatici con ordine diverso.
+   * Esempio: ESPN può produrre "wang-xinyu", mentre WTA usa
+   * "xinyu-wang". Confrontiamo quindi anche le stesse parole
+   * indipendentemente dall'ordine, senza usare match parziali.
+   */
+  const tokenKeys =
+    new Set([
+      buildSlugTokenKey(playerSlug),
+      buildSlugTokenKey(nameSlug),
+    ]);
+
+  const byTokenSet =
+    links.find(
+      (link) =>
+        tokenKeys.has(
+          buildSlugTokenKey(link.slug),
+        ),
+    );
+
+  if (byTokenSet) {
+    return byTokenSet;
   }
 
   const relaxed =
