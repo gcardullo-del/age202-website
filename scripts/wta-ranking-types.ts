@@ -1,7 +1,8 @@
 export const WTA_RANKING_LIMIT = 100;
 
+
 export const WTA_LIVE_RANKING_URL =
-  "https://www.wtatennis.com/rankings/singles";
+  "https://site.api.espn.com/apis/site/v2/sports/tennis/wta/rankings";
 
 export const WTA_RANKING_SOURCE =
   "WTA_LIVE";

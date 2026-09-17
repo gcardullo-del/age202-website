@@ -1,5 +1,5 @@
 import {
-  config as loadEnv,
+   config as loadEnv,
 } from "dotenv";
 
 import {
@@ -376,6 +376,44 @@ async function expandWtaRanking(
   console.log(
     "📖 Espansione classifica WTA...",
   );
+
+
+  /*
+   * Il feed JSON ESPN contiene già l'intera Top 100.
+   * In questo caso non esistono righe HTML né un pulsante
+   * Load More: verifichiamo direttamente il numero di rank.
+   */
+  const sourceText =
+    await page
+      .locator("body")
+      .innerText()
+      .catch(() => "");
+
+
+  try {
+    const payload =
+      JSON.parse(sourceText) as {
+        rankings?: Array<{
+          ranks?: unknown[];
+        }>;
+      };
+
+    const jsonRanks =
+      payload.rankings?.[0]?.ranks;
+
+    if (
+      Array.isArray(jsonRanks) &&
+      jsonRanks.length >= WTA_RANKING_LIMIT
+    ) {
+      console.log(
+        `✅ Record JSON disponibili: ${jsonRanks.length}`,
+      );
+
+      return;
+    }
+  } catch {
+    /* La sorgente non è JSON: usiamo il fallback HTML storico. */
+  }
 
 
   await dismissCookieConsent(

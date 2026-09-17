@@ -9,6 +9,176 @@ import {
 } from "./wta-ranking-types";
 
 
+type EspnAthlete = {
+  firstName?: unknown;
+  lastName?: unknown;
+  displayName?: unknown;
+  age?: unknown;
+  citizenshipCountry?: unknown;
+  links?: Array<{
+    href?: unknown;
+    rel?: unknown;
+  }>;
+};
+
+
+type EspnRank = {
+  current?: unknown;
+  previous?: unknown;
+  points?: unknown;
+  athlete?: EspnAthlete;
+};
+
+
+type EspnResponse = {
+  rankings?: Array<{
+    ranks?: EspnRank[];
+  }>;
+};
+
+
+function buildProfileSlug(
+  name: string,
+): string {
+  return name
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/Đ/g, "D")
+    .replace(/đ/g, "d")
+    .replace(/Ł/g, "L")
+    .replace(/ł/g, "l")
+    .replace(/Ø/g, "O")
+    .replace(/ø/g, "o")
+    .replace(/Æ/g, "AE")
+    .replace(/æ/g, "ae")
+    .replace(/Œ/g, "OE")
+    .replace(/œ/g, "oe")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+
+function parseEspnDataset(
+  content: string,
+): WtaLiveRankingEntry[] | null {
+  let payload: EspnResponse;
+
+  try {
+    payload =
+      JSON.parse(content) as EspnResponse;
+  } catch {
+    return null;
+  }
+
+  const ranks =
+    payload.rankings?.[0]?.ranks;
+
+  if (!Array.isArray(ranks)) {
+    return null;
+  }
+
+  const entries: WtaLiveRankingEntry[] = [];
+
+  for (const item of ranks) {
+    const athlete =
+      item.athlete;
+
+    const rank =
+      typeof item.current === "number"
+        ? item.current
+        : null;
+
+    const previousRank =
+      typeof item.previous === "number"
+        ? item.previous
+        : null;
+
+    const points =
+      typeof item.points === "number"
+        ? item.points
+        : null;
+
+    const name =
+      typeof athlete?.displayName === "string"
+        ? normalizeText(athlete.displayName)
+        : "";
+
+    const firstName =
+      typeof athlete?.firstName === "string"
+        ? normalizeText(athlete.firstName) || null
+        : null;
+
+    const lastName =
+      typeof athlete?.lastName === "string"
+        ? normalizeText(athlete.lastName) || null
+        : null;
+
+    const age =
+      typeof athlete?.age === "number"
+        ? athlete.age
+        : null;
+
+    const countryCode =
+      typeof athlete?.citizenshipCountry === "string"
+        ? normalizeCountryCode(
+            athlete.citizenshipCountry,
+          )
+        : null;
+
+    if (
+      rank === null ||
+      rank < 1 ||
+      rank > WTA_RANKING_LIMIT ||
+      points === null ||
+      points < 0 ||
+      !name ||
+      !countryCode
+    ) {
+      continue;
+    }
+
+    const profileSlug =
+      buildProfileSlug(name);
+
+    if (!profileSlug) {
+      continue;
+    }
+
+    const playerCard =
+      athlete?.links?.find(
+        (link) =>
+          Array.isArray(link.rel) &&
+          link.rel.includes("playercard"),
+      );
+
+    const profileHref =
+      typeof playerCard?.href === "string"
+        ? playerCard.href
+        : null;
+
+    entries.push({
+      rank,
+      name,
+      firstName,
+      lastName,
+      country: null,
+      countryCode,
+      age,
+      points,
+      rankMovement:
+        previousRank === null
+          ? null
+          : previousRank - rank,
+      profileHref,
+      profileSlug,
+    });
+  }
+
+  return entries;
+}
+
+
 function parseInteger(
   value: string,
 ): number | null {
@@ -766,6 +936,29 @@ async function parseRankingRows(
 export async function parseWtaLiveRanking(
   page: Page,
 ): Promise<WtaLiveRankingEntry[]> {
+  const sourceText =
+    await page
+      .locator("body")
+      .innerText()
+      .catch(() => "");
+
+
+  const espnEntries =
+    parseEspnDataset(sourceText);
+
+
+  if (espnEntries) {
+    return deduplicateEntries(
+      espnEntries,
+    )
+      .sort(
+        (first, second) =>
+          first.rank - second.rank,
+      )
+      .slice(0, WTA_RANKING_LIMIT);
+  }
+
+
   /*
    * Prima raccogliamo i profili.
    */
