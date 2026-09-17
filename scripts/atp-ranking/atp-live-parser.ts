@@ -1,5 +1,5 @@
 import type {
-  Page,
+    Page,
 } from "playwright";
 
 import {
@@ -10,6 +10,34 @@ import {
 
 const LIVE_TENNIS_ROW_PATTERN =
   /(?:^|\n)(\d{1,4})\t[\s\S]{0,100}?\t([^\t\n]+)\t(\d{1,2})\t([A-Z]{3})\t([\d,.]+)(?=\t|\n)/g;
+
+
+type EspnAthlete = {
+  firstName?: unknown;
+  lastName?: unknown;
+  displayName?: unknown;
+  age?: unknown;
+  citizenshipCountry?: unknown;
+  links?: Array<{
+    href?: unknown;
+    rel?: unknown;
+  }>;
+};
+
+
+type EspnRank = {
+  current?: unknown;
+  previous?: unknown;
+  points?: unknown;
+  athlete?: EspnAthlete;
+};
+
+
+type EspnResponse = {
+  rankings?: Array<{
+    ranks?: EspnRank[];
+  }>;
+};
 
 
 function parseInteger(
@@ -149,6 +177,143 @@ function assertReadableDataset(
 }
 
 
+function parseEspnDataset(
+  content: string,
+): AtpLiveRankingEntry[] | null {
+  let payload:
+    EspnResponse;
+
+  try {
+    payload =
+      JSON.parse(
+        content,
+      ) as EspnResponse;
+  } catch {
+    return null;
+  }
+
+  const ranks =
+    payload.rankings?.[0]
+      ?.ranks;
+
+  if (!Array.isArray(ranks)) {
+    return null;
+  }
+
+  const entries:
+    AtpLiveRankingEntry[] = [];
+
+  for (const item of ranks) {
+    const athlete =
+      item.athlete;
+
+    const rank =
+      typeof item.current === "number"
+        ? item.current
+        : null;
+
+    const previousRank =
+      typeof item.previous === "number"
+        ? item.previous
+        : null;
+
+    const points =
+      typeof item.points === "number"
+        ? item.points
+        : null;
+
+    const name =
+      typeof athlete?.displayName === "string"
+        ? normalizeName(
+            athlete.displayName,
+          )
+        : "";
+
+    const firstName =
+      typeof athlete?.firstName === "string"
+        ? normalizeName(
+            athlete.firstName,
+          )
+        : null;
+
+    const lastName =
+      typeof athlete?.lastName === "string"
+        ? normalizeName(
+            athlete.lastName,
+          )
+        : null;
+
+    const age =
+      typeof athlete?.age === "number"
+        ? athlete.age
+        : null;
+
+    const countryCode =
+      typeof athlete?.citizenshipCountry === "string"
+        ? athlete.citizenshipCountry
+            .trim()
+            .toUpperCase()
+        : null;
+
+    if (
+      rank === null ||
+      rank < 1 ||
+      rank > ATP_RANKING_LIMIT ||
+      points === null ||
+      points < 0 ||
+      !name ||
+      !countryCode ||
+      !/^[A-Z]{3}$/.test(
+        countryCode,
+      )
+    ) {
+      continue;
+    }
+
+    const profileSlug =
+      buildProfileSlug(
+        name,
+      );
+
+    const playerCard =
+      athlete?.links?.find(
+        (link) =>
+          Array.isArray(
+            link.rel,
+          ) &&
+          link.rel.includes(
+            "playercard",
+          ),
+      );
+
+    const profileHref =
+      typeof playerCard?.href === "string"
+        ? playerCard.href
+        : null;
+
+    entries.push({
+      rank,
+      name,
+      firstName,
+      lastName,
+      country:
+        null,
+      countryCode,
+      age,
+      points,
+      rankMovement:
+        previousRank === null
+          ? null
+          : previousRank - rank,
+      profileHref,
+      profileSlug,
+    });
+  }
+
+  return entries;
+}
+
+
 async function resolveSourceText(
   source: string | Page,
 ): Promise<string> {
@@ -177,21 +342,31 @@ export async function parseAtpLiveRanking(
     sourceText
       .replace(/\r/g, "");
 
-  assertReadableDataset(
-    content,
-  );
+  const espnEntries =
+    parseEspnDataset(
+      content,
+    );
 
   const rawEntries:
-    AtpLiveRankingEntry[] = [];
+    AtpLiveRankingEntry[] =
+      espnEntries ?? [];
+
+  if (!espnEntries) {
+    assertReadableDataset(
+      content,
+    );
+  }
 
   LIVE_TENNIS_ROW_PATTERN.lastIndex =
     0;
 
   for (
     const match
-    of content.matchAll(
-      LIVE_TENNIS_ROW_PATTERN,
-    )
+    of espnEntries
+      ? []
+      : content.matchAll(
+          LIVE_TENNIS_ROW_PATTERN,
+        )
   ) {
     const rank =
       parseInteger(
@@ -323,7 +498,7 @@ export async function parseAtpLiveRanking(
 
     throw new Error(
       [
-        "Dataset Live Tennis incompleto.",
+        "Dataset ATP incompleto.",
         `Attesi ${ATP_RANKING_LIMIT} giocatori, trovati ${entries.length}.`,
         `Rank mancanti: ${missingRanks.join(", ") || "nessuno"}.`,
       ].join(" "),

@@ -1,15 +1,11 @@
 export const ATP_RANKING_LIMIT = 100;
-
 /*
- * live-tennis.eu applica Cloudflare alle richieste
- * provenienti dai server GitHub Actions.
- *
- * Il reader restituisce la stessa pagina in formato
- * testuale, permettendo al parser di estrarre la Top 100
- * senza tentare di aggirare la protezione del sito.
+ * Endpoint JSON pubblico usato dal sync automatico.
+ * Evita il rendering HTML e i blocchi Cloudflare che
+ * colpiscono i browser eseguiti da GitHub Actions.
  */
 export const ATP_LIVE_RANKING_URL =
-  "https://r.jina.ai/http://live-tennis.eu/it/classifica-atp-live";
+  "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/rankings";
 
 /*
  * Conserviamo il valore già utilizzato da AGE202 per
