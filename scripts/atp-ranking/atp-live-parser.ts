@@ -1,12 +1,15 @@
 import type {
-  Locator,
-  Page,
+   Page,
 } from "playwright";
 
 import {
   ATP_RANKING_LIMIT,
   type AtpLiveRankingEntry,
 } from "./types";
+
+
+const LIVE_TENNIS_ROW_PATTERN =
+  /(?:^|\n)(\d{1,4})\t[\s\S]{0,100}?\t([^\t\n]+)\t(\d{1,2})\t([A-Z]{3})\t([\d,.]+)(?=\t|\n)/g;
 
 
 function parseInteger(
@@ -33,179 +36,34 @@ function parseInteger(
 }
 
 
-function extractProfileSlug(
-  href: string | null,
-): string | null {
-  if (!href) {
-    return null;
-  }
-
-  const match =
-    href.match(
-      /\/players\/([^/]+)\/[^/]+\/overview/i,
-    );
-
-  return match?.[1] ?? null;
-}
-
-
-function humanizeProfileSlug(
-  slug: string,
+function normalizeName(
+  value: string,
 ): string {
-  return slug
-    .split("-")
-    .filter(Boolean)
-    .map(
-      (part) =>
-        part.length > 0
-          ? `${part[0].toUpperCase()}${part.slice(1)}`
-          : part,
-    )
-    .join(" ");
+  return value
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 
-function normalizeProfileHref(
-  href: string | null,
-): string | null {
-  if (!href) {
-    return null;
-  }
-
-  try {
-    const url =
-      new URL(
-        href,
-        "https://www.atptour.com",
-      );
-
-    return `${url.pathname}${url.search}`;
-  } catch {
-    return href;
-  }
-}
-
-
-function normalizeCountryCode(
-  value: string | null,
-): string | null {
-  if (!value) {
-    return null;
-  }
-
-  const normalized =
-    value
-      .trim()
-      .toUpperCase();
-
-  if (
-    !/^[A-Z]{3}$/.test(
-      normalized,
-    )
-  ) {
-    return null;
-  }
-
-  return normalized;
-}
-
-
-async function extractCountryCode(
-  row: Locator,
-): Promise<string | null> {
-  /*
-   * ATP rappresenta la nazione tramite uno sprite SVG.
-   *
-   * Esempio osservato:
-   *
-   * <svg class="atp-flag flag-usa">
-   *   <use
-   *     href="/assets/atptour/assets/flags.svg#flag-usa"
-   *   />
-   * </svg>
-   *
-   * Proviamo prima l'href del <use>, perché contiene
-   * direttamente il codice della bandiera.
-   */
-  const flagUse =
-    row
-      .locator(
-        'svg.atp-flag use[href*="#flag-"], svg.atp-flag use[xlink\\:href*="#flag-"]',
-      )
-      .first();
-
-  if (
-    await flagUse.count() >
-    0
-  ) {
-    const href =
-      (
-        await flagUse.getAttribute(
-          "href",
-        )
-      ) ??
-      (
-        await flagUse.getAttribute(
-          "xlink:href",
-        )
-      );
-
-    const match =
-      href?.match(
-        /#flag-([a-z]{3})(?:$|[^a-z])/i,
-      );
-
-    const countryCode =
-      normalizeCountryCode(
-        match?.[1] ?? null,
-      );
-
-    if (countryCode) {
-      return countryCode;
-    }
-  }
-
-  /*
-   * Fallback:
-   *
-   * <svg class="atp-flag flag-usa">
-   *
-   * Se ATP modifica il riferimento allo sprite ma
-   * mantiene la classe della bandiera, continuiamo
-   * comunque a poter recuperare il codice.
-   */
-  const flagSvg =
-    row
-      .locator(
-        "svg.atp-flag",
-      )
-      .first();
-
-  if (
-    await flagSvg.count() >
-    0
-  ) {
-    const className =
-      await flagSvg.getAttribute(
-        "class",
-      );
-
-    const match =
-      className?.match(
-        /(?:^|\s)flag-([a-z]{3})(?:\s|$)/i,
-      );
-
-    const countryCode =
-      normalizeCountryCode(
-        match?.[1] ?? null,
-      );
-
-    if (countryCode) {
-      return countryCode;
-    }
-  }
-
-  return null;
+function buildProfileSlug(
+  name: string,
+): string {
+  return name
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/Đ/g, "D")
+    .replace(/đ/g, "d")
+    .replace(/Ł/g, "L")
+    .replace(/ł/g, "l")
+    .replace(/Ø/g, "O")
+    .replace(/ø/g, "o")
+    .replace(/Æ/g, "AE")
+    .replace(/æ/g, "ae")
+    .replace(/Œ/g, "OE")
+    .replace(/œ/g, "oe")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 
@@ -218,13 +76,11 @@ function deduplicateEntries(
       AtpLiveRankingEntry
     >();
 
-
   for (const entry of entries) {
     const existing =
       byRank.get(
         entry.rank,
       );
-
 
     if (!existing) {
       byRank.set(
@@ -235,15 +91,6 @@ function deduplicateEntries(
       continue;
     }
 
-
-    /*
-     * ATP può renderizzare nel DOM più versioni
-     * della stessa classifica, ad esempio desktop
-     * e responsive/mobile.
-     *
-     * Se rank e profilo coincidono, si tratta
-     * semplicemente della stessa riga duplicata.
-     */
     if (
       existing.profileSlug ===
       entry.profileSlug
@@ -251,23 +98,13 @@ function deduplicateEntries(
       continue;
     }
 
-
-    /*
-     * Due giocatori differenti con lo stesso rank
-     * sono invece un'anomalia che NON vogliamo
-     * nascondere.
-     */
     throw new Error(
       [
-        `Conflitto ATP sul rank ${entry.rank}.`,
-        `"${existing.name}" (${existing.profileSlug})`,
-        "e",
-        `"${entry.name}" (${entry.profileSlug})`,
-        "occupano lo stesso rank.",
+        `Conflitto nella sorgente live sul rank ${entry.rank}.`,
+        `"${existing.name}" e "${entry.name}" occupano lo stesso rank.`,
       ].join(" "),
     );
   }
-
 
   return Array.from(
     byRank.values(),
@@ -275,178 +112,123 @@ function deduplicateEntries(
 }
 
 
+function assertReadableDataset(
+  content: string,
+) {
+  const normalized =
+    content.toLowerCase();
+
+  if (
+    normalized.includes(
+      "just a moment",
+    ) ||
+    normalized.includes(
+      "enable javascript and cookies to continue",
+    ) ||
+    normalized.includes(
+      "cf-mitigated",
+    )
+  ) {
+    throw new Error(
+      "La sorgente live è stata bloccata da Cloudflare.",
+    );
+  }
+
+  if (
+    !content.includes(
+      "Classifica ATP Live",
+    ) ||
+    !content.includes(
+      "Giocatore",
+    )
+  ) {
+    throw new Error(
+      "La risposta non contiene una classifica ATP Live riconoscibile.",
+    );
+  }
+}
+
+
 export async function parseAtpLiveRanking(
   page: Page,
 ): Promise<AtpLiveRankingEntry[]> {
-  const rows =
-    page.locator(
-      "tr",
-    );
+  const content =
+    (
+      await page
+        .locator("body")
+        .innerText()
+    )
+      .replace(/\r/g, "");
 
-
-  const rowCount =
-    await rows.count();
-
+  assertReadableDataset(
+    content,
+  );
 
   const rawEntries:
     AtpLiveRankingEntry[] = [];
 
+  LIVE_TENNIS_ROW_PATTERN.lastIndex =
+    0;
 
   for (
-    let index = 0;
-    index < rowCount;
-    index += 1
+    const match
+    of content.matchAll(
+      LIVE_TENNIS_ROW_PATTERN,
+    )
   ) {
-    const row =
-      rows.nth(
-        index,
-      );
-
-
-    const playerLink =
-      row
-        .locator(
-          'a[href*="/players/"][href*="/overview"]',
-        )
-        .first();
-
-
-    if (
-      await playerLink.count() ===
-      0
-    ) {
-      continue;
-    }
-
-
-    const cells =
-      row.locator(
-        "td",
-      );
-
-
-    const cellCount =
-      await cells.count();
-
-
-    if (
-      cellCount < 3
-    ) {
-      continue;
-    }
-
-
-    const rankText =
-      (
-        await cells
-          .nth(0)
-          .innerText()
-      )
-        .replace(
-          /\s+/g,
-          " ",
-        )
-        .trim();
-
-
     const rank =
       parseInteger(
-        rankText,
+        match[1] ?? "",
       );
 
+    const name =
+      normalizeName(
+        match[2] ?? "",
+      );
+
+    const age =
+      parseInteger(
+        match[3] ?? "",
+      );
+
+    const countryCode =
+      (
+        match[4] ??
+        ""
+      )
+        .trim()
+        .toUpperCase();
+
+    const points =
+      parseInteger(
+        match[5] ?? "",
+      );
 
     if (
       rank === null ||
-      rank < 1
-    ) {
-      continue;
-    }
-
-
-    const href =
-      await playerLink.getAttribute(
-        "href",
-      );
-
-
-    const profileSlug =
-      extractProfileSlug(
-        href,
-      );
-
-
-    if (!profileSlug) {
-      continue;
-    }
-
-
-    const pointsText =
-      (
-        await cells
-          .nth(2)
-          .innerText()
-      )
-        .replace(
-          /\s+/g,
-          " ",
-        )
-        .trim();
-
-
-    const pointsMatch =
-      pointsText.match(
-        /[\d,.]+/,
-      );
-
-
-    const points =
-      pointsMatch
-        ? parseInteger(
-            pointsMatch[0],
-          )
-        : null;
-
-
-    if (
+      rank < 1 ||
+      rank > ATP_RANKING_LIMIT ||
+      !name ||
+      age === null ||
+      age < 14 ||
+      age > 60 ||
+      !/^[A-Z]{3}$/.test(
+        countryCode,
+      ) ||
       points === null ||
       points < 0
     ) {
       continue;
     }
 
-
-    const linkText =
-      (
-        await playerLink.innerText()
-      )
-        .replace(
-          /\s+/g,
-          " ",
-        )
-        .trim();
-
-
-    const name =
-      linkText &&
-      !/^[A-Z]\.\s+/i.test(
-        linkText,
-      )
-        ? linkText
-        : humanizeProfileSlug(
-            profileSlug,
-          );
-
-
-    /*
-     * Nuovo metadato ATP:
-     * estraiamo il codice nazione direttamente
-     * dalla bandiera presente nella stessa riga.
-     */
-    const countryCode =
-      await extractCountryCode(
-        row,
+    const profileSlug =
+      buildProfileSlug(
+        name,
       );
 
+    if (!profileSlug) {
+      continue;
+    }
 
     rawEntries.push({
       rank,
@@ -459,19 +241,12 @@ export async function parseAtpLiveRanking(
       lastName:
         null,
 
-      /*
-       * Il nome esteso della nazione verrà risolto
-       * separatamente dal countryCode.
-       *
-       * Il parser non inventa dati.
-       */
       country:
         null,
 
       countryCode,
 
-      age:
-        null,
+      age,
 
       points,
 
@@ -479,37 +254,64 @@ export async function parseAtpLiveRanking(
         null,
 
       profileHref:
-        normalizeProfileHref(
-          href,
-        ),
+        null,
 
       profileSlug,
     });
   }
 
-
-  const uniqueEntries =
+  const entries =
     deduplicateEntries(
       rawEntries,
-    );
-
-
-  return uniqueEntries
-    .sort(
-      (
-        first,
-        second,
-      ) =>
-        first.rank -
-        second.rank,
     )
-    .filter(
-      (entry) =>
-        entry.rank <=
-        ATP_RANKING_LIMIT,
-    )
-    .slice(
-      0,
-      ATP_RANKING_LIMIT,
+      .sort(
+        (
+          first,
+          second,
+        ) =>
+          first.rank -
+          second.rank,
+      );
+
+  if (
+    entries.length !==
+    ATP_RANKING_LIMIT
+  ) {
+    const receivedRanks =
+      new Set(
+        entries.map(
+          (entry) =>
+            entry.rank,
+        ),
+      );
+
+    const missingRanks:
+      number[] = [];
+
+    for (
+      let rank = 1;
+      rank <= ATP_RANKING_LIMIT;
+      rank += 1
+    ) {
+      if (
+        !receivedRanks.has(
+          rank,
+        )
+      ) {
+        missingRanks.push(
+          rank,
+        );
+      }
+    }
+
+    throw new Error(
+      [
+        "Dataset Live Tennis incompleto.",
+        `Attesi ${ATP_RANKING_LIMIT} giocatori, trovati ${entries.length}.`,
+        `Rank mancanti: ${missingRanks.join(", ") || "nessuno"}.`,
+      ].join(" "),
     );
+  }
+
+  return entries;
 }
