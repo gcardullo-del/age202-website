@@ -1,5 +1,5 @@
 import {
-   config as loadEnv,
+    config as loadEnv,
 } from "dotenv";
 
 import {
