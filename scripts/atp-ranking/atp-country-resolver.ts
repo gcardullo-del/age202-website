@@ -3,26 +3,17 @@ export type AtpCountryRecord = {
   countryCode: string;
 };
 
-
 export type AtpCountryResolution = {
   countryCode: string;
   country: string | null;
   resolved: boolean;
 };
 
-
-const STATIC_ATP_COUNTRY_MAP =
-  new Map<string, string>([
-    [
-      "BIH",
-      "Bosnia and Herzegovina",
-    ],
-    [
-      "CHN",
-      "China",
-    ],
-  ]);
-
+const STATIC_ATP_COUNTRY_MAP = new Map<string, string>([
+  ["BIH", "Bosnia and Herzegovina"],
+  ["CHN", "China"],
+  ["HKG", "Hong Kong"],
+]);
 
 function normalizeCountryCode(
   value: string | null | undefined,
@@ -31,22 +22,14 @@ function normalizeCountryCode(
     return null;
   }
 
-  const normalized =
-    value
-      .trim()
-      .toUpperCase();
+  const normalized = value.trim().toUpperCase();
 
-  if (
-    !/^[A-Z]{3}$/.test(
-      normalized,
-    )
-  ) {
+  if (!/^[A-Z]{3}$/.test(normalized)) {
     return null;
   }
 
   return normalized;
 }
-
 
 function normalizeCountry(
   value: string | null | undefined,
@@ -55,197 +38,83 @@ function normalizeCountry(
     return null;
   }
 
-  const normalized =
-    value
-      .replace(
-        /\s+/g,
-        " ",
-      )
-      .trim();
+  const normalized = value.replace(/\s+/g, " ").trim();
 
-  return normalized ||
-    null;
+  return normalized || null;
 }
-
 
 export function buildAtpCountryMap(
   records: AtpCountryRecord[],
 ): Map<string, string> {
-  const candidates =
-    new Map<
-      string,
-      Set<string>
-    >();
+  const candidates = new Map<string, Set<string>>();
 
+  for (const record of records) {
+    const countryCode = normalizeCountryCode(record.countryCode);
+    const country = normalizeCountry(record.country);
 
-  for (
-    const record
-    of records
-  ) {
-    const countryCode =
-      normalizeCountryCode(
-        record.countryCode,
-      );
-
-    const country =
-      normalizeCountry(
-        record.country,
-      );
-
-
-    if (
-      !countryCode ||
-      !country
-    ) {
+    if (!countryCode || !country) {
       continue;
     }
 
-
-    const existing =
-      candidates.get(
-        countryCode,
-      );
-
+    const existing = candidates.get(countryCode);
 
     if (existing) {
-      existing.add(
-        country,
-      );
-
+      existing.add(country);
       continue;
     }
 
-
-    candidates.set(
-      countryCode,
-      new Set([
-        country,
-      ]),
-    );
+    candidates.set(countryCode, new Set([country]));
   }
 
+  const countryMap = new Map<string, string>();
 
-  const countryMap =
-    new Map<
-      string,
-      string
-    >();
-
-
-  for (
-    const [
-      countryCode,
-      countries,
-    ]
-    of candidates
-  ) {
+  for (const [countryCode, countries] of candidates) {
     /*
-     * Sicurezza fondamentale:
-     *
-     * uno stesso countryCode non deve risolvere
+     * Uno stesso countryCode non deve risolvere
      * verso due nomi differenti.
-     *
-     * In presenza di conflitto NON scegliamo
-     * arbitrariamente un valore.
      */
-    if (
-      countries.size !==
-      1
-    ) {
+    if (countries.size !== 1) {
       continue;
     }
 
-
-    const country =
-      Array.from(
-        countries,
-      )[0];
-
+    const country = Array.from(countries)[0];
 
     if (!country) {
       continue;
     }
 
-
-    countryMap.set(
-      countryCode,
-      country,
-    );
+    countryMap.set(countryCode, country);
   }
-
 
   /*
-   * Fallback statici verificati.
-   *
-   * Servono per nuovi ingressi ATP il cui
-   * countryCode non è ancora presente nello
-   * snapshot AGE202.
-   *
-   * Non sovrascriviamo mai un valore già
-   * conosciuto dal database.
+   * Fallback per nuovi ingressi ATP il cui codice
+   * non è ancora presente nello snapshot AGE202.
+   * I valori già risolti dal database hanno precedenza.
    */
-  for (
-    const [
-      countryCode,
-      country,
-    ]
-    of STATIC_ATP_COUNTRY_MAP
-  ) {
-    if (
-      !countryMap.has(
-        countryCode,
-      )
-    ) {
-      countryMap.set(
-        countryCode,
-        country,
-      );
+  for (const [countryCode, country] of STATIC_ATP_COUNTRY_MAP) {
+    if (!countryMap.has(countryCode)) {
+      countryMap.set(countryCode, country);
     }
   }
-
 
   return countryMap;
 }
 
-
 export function resolveAtpCountry(
-  countryCode:
-    | string
-    | null
-    | undefined,
-  countryMap:
-    Map<
-      string,
-      string
-    >,
+  countryCode: string | null | undefined,
+  countryMap: Map<string, string>,
 ): AtpCountryResolution | null {
-  const normalizedCountryCode =
-    normalizeCountryCode(
-      countryCode,
-    );
+  const normalizedCountryCode = normalizeCountryCode(countryCode);
 
-
-  if (
-    !normalizedCountryCode
-  ) {
+  if (!normalizedCountryCode) {
     return null;
   }
 
-
-  const country =
-    countryMap.get(
-      normalizedCountryCode,
-    ) ??
-    null;
-
+  const country = countryMap.get(normalizedCountryCode) ?? null;
 
   return {
-    countryCode:
-      normalizedCountryCode,
-
+    countryCode: normalizedCountryCode,
     country,
-
-    resolved:
-      country !== null,
+    resolved: country !== null,
   };
 }
