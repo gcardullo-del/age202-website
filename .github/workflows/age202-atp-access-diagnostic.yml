@@ -15,6 +15,7 @@ jobs:
     name: ATP access (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 12
+
     strategy:
       fail-fast: false
       matrix:
@@ -48,16 +49,15 @@ jobs:
             { slug: 'tokyo', id: '329' },
             { slug: 'beijing', id: '747' },
           ];
-          const userAgent = [
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-            'AppleWebKit/537.36 (KHTML, like Gecko)',
-            'Chrome/152.0.0.0 Safari/537.36',
-          ].join(' ');
-          const verification = /verify you are human|verifying you are human|security verification|access denied|request blocked|pardon our interruption|just a moment/i;
+
+          const verification =
+            /verify you are human|verifying you are human|security verification|access denied|request blocked|pardon our interruption|just a moment/i;
 
           async function main() {
             const output = 'atp-access-diagnostic';
+
             await fs.mkdir(output, { recursive: true });
+
             const reports = [];
 
             for (const target of targets) {
@@ -67,50 +67,108 @@ jobs:
                 platform: process.platform,
                 url: `https://www.atptour.com/en/scores/current/${target.slug}/${target.id}/live-scores`,
               };
+
               let browser;
+
               try {
-                browser = await chromium.launch({ headless: true });
-                const page = await browser.newPage({
-                  viewport: { width: 1440, height: 1200 },
-                  locale: 'en-US',
-                  userAgent,
+                browser = await chromium.launch({
+                  headless: true,
                 });
+
+                const page = await browser.newPage({
+                  viewport: {
+                    width: 1440,
+                    height: 1200,
+                  },
+                  locale: 'en-US',
+                });
+
                 const response = await page.goto(report.url, {
                   waitUntil: 'domcontentloaded',
                   timeout: 60000,
                 });
+
                 report.httpStatus = response?.status() ?? null;
                 report.browserVersion = browser.version();
+
+                report.userAgent = await page.evaluate(
+                  () => navigator.userAgent
+                );
+
                 if (response) {
                   const headers = await response.allHeaders();
+
                   report.headers = Object.fromEntries(
                     ['server', 'content-type', 'retry-after']
                       .filter(key => headers[key] !== undefined)
                       .map(key => [key, headers[key]])
                   );
                 }
-                if (report.httpStatus === 200) await page.waitForTimeout(5000);
+
+                if (report.httpStatus === 200) {
+                  await page.waitForTimeout(5000);
+                }
+
                 report.finalUrl = page.url();
                 report.title = await page.title();
-                const body = await page.locator('body').innerText({ timeout: 10000 });
-                report.bodyPreview = body.replace(/\s+/g, ' ').trim().slice(0, 2500);
-                report.verificationDetected = verification.test(report.title)
-                  || (body.length < 12000 && verification.test(body));
-                report.scoreContainers = await page.locator('.scores').count();
-                await fs.writeFile(path.join(output, `${target.slug}.html`), await page.content());
-                await page.screenshot({ path: path.join(output, `${target.slug}.png`), timeout: 15000 });
+
+                const body = await page.locator('body').innerText({
+                  timeout: 10000,
+                });
+
+                report.bodyPreview = body
+                  .replace(/\s+/g, ' ')
+                  .trim()
+                  .slice(0, 2500);
+
+                report.verificationDetected =
+                  verification.test(report.title)
+                  || (
+                    body.length < 12000
+                    && verification.test(body)
+                  );
+
+                report.scoreContainers = await page
+                  .locator('.scores')
+                  .count();
+
+                await fs.writeFile(
+                  path.join(output, `${target.slug}.html`),
+                  await page.content()
+                );
+
+                await page.screenshot({
+                  path: path.join(output, `${target.slug}.png`),
+                  timeout: 15000,
+                });
               } catch (error) {
-                report.error = error instanceof Error ? error.message : String(error);
+                report.error = error instanceof Error
+                  ? error.message
+                  : String(error);
               } finally {
-                if (browser) await browser.close().catch(() => {});
+                if (browser) {
+                  await browser.close().catch(() => {});
+                }
               }
+
               reports.push(report);
+
               console.log(JSON.stringify(report, null, 2));
             }
 
-            await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(reports, null, 2));
-            if (reports.some(report => report.error || report.httpStatus !== 200
-              || report.verificationDetected)) {
+            await fs.writeFile(
+              path.join(output, 'report.json'),
+              JSON.stringify(reports, null, 2)
+            );
+
+            const failed = reports.some(
+              report =>
+                report.error
+                || report.httpStatus !== 200
+                || report.verificationDetected
+            );
+
+            if (failed) {
               process.exitCode = 1;
             }
           }
@@ -120,6 +178,7 @@ jobs:
             process.exitCode = 1;
           });
           NODE
+
           node atp-access-diagnostic.cjs
 
       - name: Save ATP diagnostic pages and reports
