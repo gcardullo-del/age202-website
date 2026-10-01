@@ -1,0 +1,132 @@
+name: AGE202 ATP Access Diagnostic
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: age202-atp-access-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  diagnose-access:
+    name: ATP access (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies without project lifecycle scripts
+        run: npm ci --ignore-scripts
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Diagnose ATP access without database
+        shell: bash
+        run: |
+          cat > atp-access-diagnostic.cjs <<'NODE'
+          const { chromium } = require('playwright');
+          const fs = require('node:fs/promises');
+          const path = require('node:path');
+
+          const targets = [
+            { slug: 'tokyo', id: '329' },
+            { slug: 'beijing', id: '747' },
+          ];
+          const userAgent = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+            'AppleWebKit/537.36 (KHTML, like Gecko)',
+            'Chrome/152.0.0.0 Safari/537.36',
+          ].join(' ');
+          const verification = /verify you are human|verifying you are human|security verification|access denied|request blocked|pardon our interruption|just a moment/i;
+
+          async function main() {
+            const output = 'atp-access-diagnostic';
+            await fs.mkdir(output, { recursive: true });
+            const reports = [];
+
+            for (const target of targets) {
+              const report = {
+                tournament: target.slug,
+                timestamp: new Date().toISOString(),
+                platform: process.platform,
+                url: `https://www.atptour.com/en/scores/current/${target.slug}/${target.id}/live-scores`,
+              };
+              let browser;
+              try {
+                browser = await chromium.launch({ headless: true });
+                const page = await browser.newPage({
+                  viewport: { width: 1440, height: 1200 },
+                  locale: 'en-US',
+                  userAgent,
+                });
+                const response = await page.goto(report.url, {
+                  waitUntil: 'domcontentloaded',
+                  timeout: 60000,
+                });
+                report.httpStatus = response?.status() ?? null;
+                report.browserVersion = browser.version();
+                if (response) {
+                  const headers = await response.allHeaders();
+                  report.headers = Object.fromEntries(
+                    ['server', 'content-type', 'retry-after']
+                      .filter(key => headers[key] !== undefined)
+                      .map(key => [key, headers[key]])
+                  );
+                }
+                if (report.httpStatus === 200) await page.waitForTimeout(5000);
+                report.finalUrl = page.url();
+                report.title = await page.title();
+                const body = await page.locator('body').innerText({ timeout: 10000 });
+                report.bodyPreview = body.replace(/\s+/g, ' ').trim().slice(0, 2500);
+                report.verificationDetected = verification.test(report.title)
+                  || (body.length < 12000 && verification.test(body));
+                report.scoreContainers = await page.locator('.scores').count();
+                await fs.writeFile(path.join(output, `${target.slug}.html`), await page.content());
+                await page.screenshot({ path: path.join(output, `${target.slug}.png`), timeout: 15000 });
+              } catch (error) {
+                report.error = error instanceof Error ? error.message : String(error);
+              } finally {
+                if (browser) await browser.close().catch(() => {});
+              }
+              reports.push(report);
+              console.log(JSON.stringify(report, null, 2));
+            }
+
+            await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(reports, null, 2));
+            if (reports.some(report => report.error || report.httpStatus !== 200
+              || report.verificationDetected)) {
+              process.exitCode = 1;
+            }
+          }
+
+          main().catch(error => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
+          node atp-access-diagnostic.cjs
+
+      - name: Save ATP diagnostic pages and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atp-access-${{ matrix.os }}
+          path: atp-access-diagnostic/
+          if-no-files-found: warn
+          retention-days: 7
