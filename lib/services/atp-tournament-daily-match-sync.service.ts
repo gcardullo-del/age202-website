@@ -5,93 +5,64 @@ import {
   TournamentMatchStatus,
   TournamentCategory,
 } from "@/generated/prisma/client";
-
 import {
   prisma,
 } from "@/lib/prisma";
-
 import {
   resolvePlayer,
 } from "@/lib/services/atp-tournament-sync.service";
-
-
 type DailyPlayerInput = {
   name: string;
   profileSlug?: string | null;
   externalId?: string | null;
 };
-
-
 type DailyMatchStatus =
   | "SCHEDULED"
   | "LIVE"
   | "COMPLETED";
-
-
 type DailyMatchInput = {
   externalId: string;
-
   playerOne:
     DailyPlayerInput;
-
   playerTwo:
     DailyPlayerInput;
-
   status:
     DailyMatchStatus;
-
   scheduledAt:
     Date | null;
-
   court:
     string | null;
-
   roundLabel:
     string | null;
-
   winner:
     DailyPlayerInput | null;
-
   score:
     string | null;
 };
-
-
 export type SyncAtpTournamentDailyMatchesInput = {
   cmsTournamentSlug: string;
-
   atpTournamentId: string;
-
   year: number;
-
   startDate?: Date | null;
-
   endDate?: Date | null;
-
   extractedAt: Date;
-
   matches:
     DailyMatchInput[];
 };
-
-
 export type SyncAtpTournamentDailyMatchesResult = {
   tournament: {
     id: string;
     name: string;
     slug: string;
   };
-
   edition: {
     id: string;
     created: boolean;
   };
-
   entries: {
     created: number;
     updated: number;
   };
-
   matches: {
     created: number;
     updated: number;
@@ -99,8 +70,6 @@ export type SyncAtpTournamentDailyMatchesResult = {
     matchedByPlayers: number;
   };
 };
-
-
 type TournamentRoundValue =
   | "ROUND_OF_128"
   | "ROUND_OF_64"
@@ -109,16 +78,12 @@ type TournamentRoundValue =
   | "QUARTERFINAL"
   | "SEMIFINAL"
   | "FINAL";
-
-
 const SUPPORTED_CATEGORIES =
   new Set<TournamentCategory>([
     TournamentCategory.GRAND_SLAM,
     TournamentCategory.MASTERS_1000,
     TournamentCategory.ATP_500,
   ]);
-
-
 const ROUND_ORDER: Record<
   TournamentRoundValue,
   number
@@ -131,12 +96,8 @@ const ROUND_ORDER: Record<
   SEMIFINAL: 6,
   FINAL: 7,
 };
-
-
 const PROVISIONAL_MATCH_NUMBER_BASE =
   1000;
-
-
 function normalizeText(
   value:
     | string
@@ -150,12 +111,9 @@ function normalizeText(
         /\s+/g,
         " ",
       );
-
   return normalized ||
     null;
 }
-
-
 function normalizeSlug(
   value:
     | string
@@ -182,12 +140,9 @@ function normalizeSlug(
         /^-+|-+$/g,
         "",
       );
-
   return normalized ||
     null;
 }
-
-
 function getPlayerKey(
   player:
     DailyPlayerInput,
@@ -197,38 +152,27 @@ function getPlayerKey(
       player.externalId,
     )
       ?.toUpperCase();
-
   if (externalId) {
     return `atp:${externalId}`;
   }
-
-
   const profileSlug =
     normalizeSlug(
       player.profileSlug,
     );
-
   if (profileSlug) {
     return `atp-slug:${profileSlug}`;
   }
-
-
   const nameSlug =
     normalizeSlug(
       player.name,
     );
-
   if (!nameSlug) {
     throw new Error(
       "Unable to generate ATP daily player key.",
     );
   }
-
-
   return `atp-name:${nameSlug}`;
 }
-
-
 function parseRound(
   value:
     | string
@@ -239,12 +183,9 @@ function parseRound(
     normalizeText(
       value,
     );
-
   if (!text) {
     return null;
   }
-
-
   if (
     /\b(?:R128|Round of 128)\b/i.test(
       text,
@@ -252,8 +193,6 @@ function parseRound(
   ) {
     return "ROUND_OF_128";
   }
-
-
   if (
     /\b(?:R64|Round of 64)\b/i.test(
       text,
@@ -261,8 +200,6 @@ function parseRound(
   ) {
     return "ROUND_OF_64";
   }
-
-
   if (
     /\b(?:R32|Round of 32)\b/i.test(
       text,
@@ -270,8 +207,6 @@ function parseRound(
   ) {
     return "ROUND_OF_32";
   }
-
-
   if (
     /\b(?:R16|Round of 16)\b/i.test(
       text,
@@ -279,8 +214,6 @@ function parseRound(
   ) {
     return "ROUND_OF_16";
   }
-
-
   if (
     /\b(?:QF|Quarter[- ]?Finals?)\b/i.test(
       text,
@@ -288,8 +221,6 @@ function parseRound(
   ) {
     return "QUARTERFINAL";
   }
-
-
   if (
     /\b(?:SF|Semi[- ]?Finals?)\b/i.test(
       text,
@@ -297,8 +228,6 @@ function parseRound(
   ) {
     return "SEMIFINAL";
   }
-
-
   if (
     /\bFinal\b/i.test(
       text,
@@ -306,12 +235,8 @@ function parseRound(
   ) {
     return "FINAL";
   }
-
-
   return null;
 }
-
-
 function toPrismaStatus(
   value:
     DailyMatchStatus,
@@ -319,17 +244,13 @@ function toPrismaStatus(
   switch (value) {
     case "COMPLETED":
       return TournamentMatchStatus.COMPLETED;
-
     case "LIVE":
       return TournamentMatchStatus.IN_PROGRESS;
-
     case "SCHEDULED":
     default:
       return TournamentMatchStatus.SCHEDULED;
   }
 }
-
-
 function getStatusRank(
   value:
     TournamentMatchStatus,
@@ -337,31 +258,23 @@ function getStatusRank(
   switch (value) {
     case TournamentMatchStatus.COMPLETED:
       return 3;
-
     case TournamentMatchStatus.IN_PROGRESS:
       return 2;
-
     case TournamentMatchStatus.SCHEDULED:
       return 1;
-
     default:
       return 0;
   }
 }
-
-
 function keepMostAdvancedStatus(
   existing:
     TournamentMatchStatus | null,
-
   incoming:
     TournamentMatchStatus,
 ): TournamentMatchStatus {
   if (!existing) {
     return incoming;
   }
-
-
   return (
     getStatusRank(
       existing,
@@ -373,8 +286,6 @@ function keepMostAdvancedStatus(
     ? existing
     : incoming;
 }
-
-
 function validateInput(
   input:
     SyncAtpTournamentDailyMatchesInput,
@@ -390,8 +301,6 @@ function validateInput(
       `Invalid tournament year: ${input.year}.`,
     );
   }
-
-
   if (
     input.matches.length ===
     0
@@ -400,8 +309,6 @@ function validateInput(
       "ATP daily schedule does not contain matches.",
     );
   }
-
-
   const externalIds =
     new Set(
       input.matches.map(
@@ -409,8 +316,6 @@ function validateInput(
           match.externalId,
       ),
     );
-
-
   if (
     externalIds.size !==
     input.matches.length
@@ -420,8 +325,6 @@ function validateInput(
     );
   }
 }
-
-
 export async function syncAtpTournamentDailyMatches(
   input:
     SyncAtpTournamentDailyMatchesInput,
@@ -429,21 +332,15 @@ export async function syncAtpTournamentDailyMatches(
   validateInput(
     input,
   );
-
-
   const cmsTournamentSlug =
     normalizeSlug(
       input.cmsTournamentSlug,
     );
-
-
   if (!cmsTournamentSlug) {
     throw new Error(
       "CMS tournament slug is required.",
     );
   }
-
-
   return prisma.$transaction(
     async (transaction) => {
       const tournament =
@@ -452,40 +349,29 @@ export async function syncAtpTournamentDailyMatches(
             slug:
               cmsTournamentSlug,
           },
-
           select: {
             id:
               true,
-
             name:
               true,
-
             slug:
               true,
-
             category:
               true,
-
             active:
               true,
           },
         });
-
-
       if (!tournament) {
         throw new Error(
           `Tournament not found in AGE202: ${cmsTournamentSlug}.`,
         );
       }
-
-
       if (!tournament.active) {
         throw new Error(
           `Tournament is inactive in AGE202: ${cmsTournamentSlug}.`,
         );
       }
-
-
       if (
         !SUPPORTED_CATEGORIES.has(
           tournament.category,
@@ -495,69 +381,49 @@ export async function syncAtpTournamentDailyMatches(
           `${tournament.name} is ${tournament.category}; daily sync supports only ATP Grand Slams, Masters 1000 and ATP 500.`,
         );
       }
-
-
       const editionExternalId =
         `atp:${input.atpTournamentId}:${input.year}:singles`;
-
-
       const existingEdition =
         await transaction.tournamentEdition.findUnique({
           where: {
             tournamentId_year_editionKey_circuit: {
               tournamentId:
                 tournament.id,
-
               year:
                 input.year,
-
               editionKey:
                 "main",
-
               circuit:
                 TournamentCircuit.ATP,
             },
           },
-
           select: {
             id:
               true,
-
             drawSize:
               true,
           },
         });
-
-
       const editionData = {
         startDate:
           input.startDate ??
           undefined,
-
         endDate:
           input.endDate ??
           undefined,
-
         drawType:
           TournamentDrawType.SINGLES,
-
         source:
           "ATP",
-
         externalId:
           editionExternalId,
-
         syncEnabled:
           true,
-
         lastSyncedAt:
           input.extractedAt,
-
         cancelled:
           false,
       };
-
-
       const edition =
         existingEdition
           ? await transaction.tournamentEdition.update({
@@ -565,14 +431,11 @@ export async function syncAtpTournamentDailyMatches(
                 id:
                   existingEdition.id,
               },
-
               data:
                 editionData,
-
               select: {
                 id:
                   true,
-
                 drawSize:
                   true,
               },
@@ -581,32 +444,23 @@ export async function syncAtpTournamentDailyMatches(
               data: {
                 tournamentId:
                   tournament.id,
-
                 year:
                   input.year,
-
                 editionKey:
                   "main",
-
                 circuit:
                   TournamentCircuit.ATP,
-
                 drawSize:
                   null,
-
                 ...editionData,
               },
-
               select: {
                 id:
                   true,
-
                 drawSize:
                   true,
               },
             });
-
-
       /*
        * Creiamo una mappa unica dei giocatori
        * presenti nel programma giornaliero.
@@ -616,8 +470,6 @@ export async function syncAtpTournamentDailyMatches(
           string,
           DailyPlayerInput
         >();
-
-
       for (
         const match
         of input.matches
@@ -628,15 +480,12 @@ export async function syncAtpTournamentDailyMatches(
           ),
           match.playerOne,
         );
-
         uniquePlayers.set(
           getPlayerKey(
             match.playerTwo,
           ),
           match.playerTwo,
         );
-
-
         if (match.winner) {
           uniquePlayers.set(
             getPlayerKey(
@@ -646,22 +495,15 @@ export async function syncAtpTournamentDailyMatches(
           );
         }
       }
-
-
       const entryIdsByPlayerKey =
         new Map<
           string,
           string
         >();
-
-
       let entriesCreated =
         0;
-
       let entriesUpdated =
         0;
-
-
       for (
         const [
           playerKey,
@@ -675,47 +517,47 @@ export async function syncAtpTournamentDailyMatches(
             {
               name:
                 playerInput.name,
-
               profileSlug:
                 playerInput.profileSlug,
             },
           );
-
-
-        const existingEntry =
+        let existingEntry =
           await transaction.tournamentEntry.findUnique({
             where: {
               editionId_externalId: {
                 editionId:
                   edition.id,
-
                 externalId:
                   playerKey,
               },
             },
-
             select: {
               id:
                 true,
             },
           });
-
-
+        // Reuse the same player entry when ATP and ESPN expose different keys.
+        if (!existingEntry) {
+          const samePlayerEntries = await transaction.tournamentEntry.findMany({
+            where: { editionId: edition.id, playerId: resolvedPlayer.id },
+            select: { id: true },
+            take: 2,
+          });
+          if (samePlayerEntries.length > 1) {
+            throw new Error(`Ambiguous tournament entries for ${resolvedPlayer.name}.`);
+          }
+          existingEntry = samePlayerEntries[0] ?? null;
+        }
         const entryData = {
           name:
             resolvedPlayer.name,
-
           playerId:
             resolvedPlayer.id,
-
           countryCode:
             resolvedPlayer.countryCode,
-
           entryStatus:
             TournamentEntryStatus.DIRECT_ACCEPTANCE,
         };
-
-
         const entry =
           existingEntry
             ? await transaction.tournamentEntry.update({
@@ -723,10 +565,8 @@ export async function syncAtpTournamentDailyMatches(
                   id:
                     existingEntry.id,
                 },
-
                 data:
                   entryData,
-
                 select: {
                   id:
                     true,
@@ -736,20 +576,15 @@ export async function syncAtpTournamentDailyMatches(
                 data: {
                   editionId:
                     edition.id,
-
                   externalId:
                     playerKey,
-
                   ...entryData,
                 },
-
                 select: {
                   id:
                     true,
                 },
               });
-
-
         if (existingEntry) {
           entriesUpdated +=
             1;
@@ -757,28 +592,19 @@ export async function syncAtpTournamentDailyMatches(
           entriesCreated +=
             1;
         }
-
-
         entryIdsByPlayerKey.set(
           playerKey,
           entry.id,
         );
       }
-
-
       let matchesCreated =
         0;
-
       let matchesUpdated =
         0;
-
       let matchedByExternalId =
         0;
-
       let matchedByPlayers =
         0;
-
-
       /*
        * Il matchNumber del daily schedule
        * è volutamente provvisorio.
@@ -796,8 +622,6 @@ export async function syncAtpTournamentDailyMatches(
           TournamentRoundValue,
           number
         >();
-
-
       /*
        * DAILY SCHEDULE RECONCILIATION
        *
@@ -822,33 +646,25 @@ export async function syncAtpTournamentDailyMatches(
           (match) =>
             match.externalId,
         );
-
-
       const staleDailyMatches =
         await transaction.tournamentMatch.findMany({
           where: {
             editionId:
               edition.id,
-
             externalId: {
               startsWith:
                 "atp:daily:",
-
               notIn:
                 currentDailyExternalIds,
             },
           },
-
           select: {
             id:
               true,
-
             externalId:
               true,
           },
         });
-
-
       for (
         const staleMatch
         of staleDailyMatches
@@ -856,14 +672,11 @@ export async function syncAtpTournamentDailyMatches(
         if (!staleMatch.externalId) {
           continue;
         }
-
-
         await transaction.tournamentMatch.update({
           where: {
             id:
               staleMatch.id,
           },
-
           data: {
             externalId:
               staleMatch.externalId.replace(
@@ -873,8 +686,6 @@ export async function syncAtpTournamentDailyMatches(
           },
         });
       }
-
-
       for (
         const matchInput
         of input.matches
@@ -883,31 +694,23 @@ export async function syncAtpTournamentDailyMatches(
           parseRound(
             matchInput.roundLabel,
           );
-
-
         if (!round) {
           throw new Error(
             `Unable to resolve round for daily match ${matchInput.externalId}: ${matchInput.roundLabel ?? "null"}.`,
           );
         }
-
-
         const playerOneEntryId =
           entryIdsByPlayerKey.get(
             getPlayerKey(
               matchInput.playerOne,
             ),
           );
-
-
         const playerTwoEntryId =
           entryIdsByPlayerKey.get(
             getPlayerKey(
               matchInput.playerTwo,
             ),
           );
-
-
         if (
           !playerOneEntryId ||
           !playerTwoEntryId
@@ -916,8 +719,6 @@ export async function syncAtpTournamentDailyMatches(
             `Unable to resolve entries for daily match ${matchInput.externalId}.`,
           );
         }
-
-
         const winnerEntryId =
           matchInput.winner
             ? entryIdsByPlayerKey.get(
@@ -927,8 +728,6 @@ export async function syncAtpTournamentDailyMatches(
               ) ??
               null
             : null;
-
-
         /*
          * 1. Prima tentiamo l'identità
          *    esatta del daily extractor.
@@ -939,56 +738,39 @@ export async function syncAtpTournamentDailyMatches(
               editionId_externalId: {
                 editionId:
                   edition.id,
-
                 externalId:
                   matchInput.externalId,
               },
             },
-
             select: {
               id:
                 true,
-
               externalId:
                 true,
-
               status:
                 true,
-
               matchNumber:
                 true,
-
               bracketPosition:
                 true,
-
               scheduledAt:
                 true,
-
               startedAt:
                 true,
-
               completedAt:
                 true,
-
               winnerEntryId:
                 true,
-
               scoreSummary:
                 true,
             },
           });
-
-
         let existingMatch =
           externalIdMatch;
-
-
         if (externalIdMatch) {
           matchedByExternalId +=
             1;
         }
-
-
         /*
          * 2. Se l'externalId non coincide,
          *    cerchiamo lo stesso match nella
@@ -1004,62 +786,45 @@ export async function syncAtpTournamentDailyMatches(
               where: {
                 editionId:
                   edition.id,
-
                 round,
-
                 OR: [
                   {
                     playerOneEntryId,
                     playerTwoEntryId,
                   },
-
                   {
                     playerOneEntryId:
                       playerTwoEntryId,
-
                     playerTwoEntryId:
                       playerOneEntryId,
                   },
                 ],
               },
-
               select: {
                 id:
                   true,
-
                 externalId:
                   true,
-
                 status:
                   true,
-
                 matchNumber:
                   true,
-
                 bracketPosition:
                   true,
-
                 scheduledAt:
                   true,
-
                 startedAt:
                   true,
-
                 completedAt:
                   true,
-
                 winnerEntryId:
                   true,
-
                 scoreSummary:
                   true,
               },
-
               take:
                 2,
             });
-
-
           if (
             pairMatches.length >
             1
@@ -1068,36 +833,26 @@ export async function syncAtpTournamentDailyMatches(
               `Multiple AGE202 matches found for ${matchInput.playerOne.name} vs ${matchInput.playerTwo.name} in ${round}.`,
             );
           }
-
-
           if (
             pairMatches.length ===
             1
           ) {
             existingMatch =
               pairMatches[0];
-
             matchedByPlayers +=
               1;
           }
         }
-
-
         const incomingStatus =
           toPrismaStatus(
             matchInput.status,
           );
-
-
         const finalStatus =
           keepMostAdvancedStatus(
             existingMatch?.status ??
               null,
-
             incomingStatus,
           );
-
-
         /*
          * Non permettiamo mai al daily sync
          * di retrocedere un match già
@@ -1111,8 +866,6 @@ export async function syncAtpTournamentDailyMatches(
                 input.extractedAt
               )
             : null;
-
-
         const startedAt =
           (
             finalStatus ===
@@ -1125,22 +878,19 @@ export async function syncAtpTournamentDailyMatches(
                 input.extractedAt
               )
             : null;
-
-
-        const scoreSummary =
-          normalizeText(
-            matchInput.score,
-          ) ??
-          existingMatch?.scoreSummary ??
-          null;
-
-
+        const staleNonFinalInput =
+          existingMatch?.status === TournamentMatchStatus.COMPLETED &&
+          incomingStatus !== TournamentMatchStatus.COMPLETED;
+        const scoreSummary = staleNonFinalInput
+          ? (existingMatch?.scoreSummary ?? null)
+          : (
+              normalizeText(matchInput.score) ??
+              existingMatch?.scoreSummary ?? null
+            );
         const finalWinnerEntryId =
           winnerEntryId ??
           existingMatch?.winnerEntryId ??
           null;
-
-
         if (existingMatch) {
           /*
            * Se il record proviene già dal draw,
@@ -1168,25 +918,18 @@ export async function syncAtpTournamentDailyMatches(
                 ) ??
               false
             );
-
-
           await transaction.tournamentMatch.update({
             where: {
               id:
                 existingMatch.id,
             },
-
             data: {
               playerOneEntryId,
-
               playerTwoEntryId,
-
               winnerEntryId:
                 finalWinnerEntryId,
-
               status:
                 finalStatus,
-
               scheduledAt:
                 preserveHistoricalScheduledAt
                   ? existingMatch.scheduledAt
@@ -1194,42 +937,29 @@ export async function syncAtpTournamentDailyMatches(
                       matchInput.scheduledAt ??
                       existingMatch.scheduledAt
                     ),
-
               startedAt,
-
               completedAt,
-
               court:
                 matchInput.court ??
                 undefined,
-
               bestOf:
                 tournament.category ===
                 TournamentCategory.GRAND_SLAM
                   ? 5
                   : 3,
-
               scoreSummary,
-
               source:
                 "ATP",
-
               scoreUpdatedAt:
                 input.extractedAt,
-
               lastSyncedAt:
                 input.extractedAt,
             },
           });
-
-
           matchesUpdated +=
             1;
-
           continue;
         }
-
-
         /*
          * Troviamo un matchNumber provvisorio realmente libero
          * per questa edizione + round.
@@ -1242,12 +972,10 @@ export async function syncAtpTournamentDailyMatches(
             round,
           ) ??
           0;
-
         let provisionalMatchNumber =
           PROVISIONAL_MATCH_NUMBER_BASE +
           currentCounter +
           1;
-
         while (true) {
           const occupiedMatch =
             await transaction.tournamentMatch.findUnique({
@@ -1255,143 +983,102 @@ export async function syncAtpTournamentDailyMatches(
                 editionId_round_matchNumber: {
                   editionId:
                     edition.id,
-
                   round,
-
                   matchNumber:
                     provisionalMatchNumber,
                 },
               },
-
               select: {
                 id:
                   true,
               },
             });
-
           if (!occupiedMatch) {
             break;
           }
-
           currentCounter +=
             1;
-
           provisionalMatchNumber =
             PROVISIONAL_MATCH_NUMBER_BASE +
             currentCounter +
             1;
         }
-
         provisionalCounters.set(
           round,
           provisionalMatchNumber -
             PROVISIONAL_MATCH_NUMBER_BASE,
         );
-
-
         await transaction.tournamentMatch.create({
           data: {
             editionId:
               edition.id,
-
             externalId:
               matchInput.externalId,
-
             round,
-
             roundOrder:
               ROUND_ORDER[
                 round
               ],
-
             matchNumber:
               provisionalMatchNumber,
-
             bracketPosition:
               null,
-
             playerOneEntryId,
-
             playerTwoEntryId,
-
             winnerEntryId:
               finalWinnerEntryId,
-
             status:
               finalStatus,
-
             scheduledAt:
               matchInput.scheduledAt,
-
             startedAt,
-
             completedAt,
-
             court:
               matchInput.court,
-
             bestOf:
               tournament.category ===
               TournamentCategory.GRAND_SLAM
                 ? 5
                 : 3,
-
             scoreSummary,
-
             source:
               "ATP",
-
             scoreUpdatedAt:
               input.extractedAt,
-
             lastSyncedAt:
               input.extractedAt,
           },
         });
-
-
         matchesCreated +=
           1;
       }
-
-
       return {
         tournament: {
           id:
             tournament.id,
-
           name:
             tournament.name,
-
           slug:
             tournament.slug,
         },
-
         edition: {
           id:
             edition.id,
-
           created:
             !existingEdition,
         },
-
         entries: {
           created:
             entriesCreated,
-
           updated:
             entriesUpdated,
         },
-
         matches: {
           created:
             matchesCreated,
-
           updated:
             matchesUpdated,
-
           matchedByExternalId,
-
           matchedByPlayers,
         },
       };
@@ -1399,7 +1086,6 @@ export async function syncAtpTournamentDailyMatches(
     {
       maxWait:
         20_000,
-
       timeout:
         120_000,
     },

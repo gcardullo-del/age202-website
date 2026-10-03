@@ -6,23 +6,17 @@ import {
   TournamentMatchStatus,
   TournamentCategory,
 } from "@/generated/prisma/client";
-
 import {
   prisma,
 } from "@/lib/prisma";
-
 import {
   resolvePlayer,
 } from "@/lib/services/atp-tournament-sync.service";
-
-
 type DrawPlayerInput = {
   name: string;
   profileSlug?: string | null;
   externalId?: string | null;
 };
-
-
 type DrawMatchInput = {
   externalId: string;
   round:
@@ -48,8 +42,6 @@ type DrawMatchInput = {
     | "DEFAULT"
     | "ABANDONED";
 };
-
-
 export type SyncAtpTournamentDrawInput = {
   cmsTournamentSlug: string;
   atpTournamentId: string;
@@ -62,8 +54,6 @@ export type SyncAtpTournamentDrawInput = {
   matches: DrawMatchInput[];
   syncMode?: "progressive" | "final";
 };
-
-
 export type SyncAtpTournamentDrawResult = {
   tournament: {
     id: string;
@@ -84,16 +74,12 @@ export type SyncAtpTournamentDrawResult = {
     linkedToNextRound: number;
   };
 };
-
-
 const SUPPORTED_CATEGORIES =
   new Set<TournamentCategory>([
     TournamentCategory.GRAND_SLAM,
     TournamentCategory.MASTERS_1000,
     TournamentCategory.ATP_500,
   ]);
-
-
 function normalizeText(
   value: string | null | undefined,
 ): string | null {
@@ -101,11 +87,8 @@ function normalizeText(
     value
       ?.trim()
       .replace(/\s+/g, " ");
-
   return normalized || null;
 }
-
-
 function normalizeSlug(
   value: string | null | undefined,
 ): string | null {
@@ -125,11 +108,8 @@ function normalizeSlug(
         /^-+|-+$/g,
         "",
       );
-
   return normalized || null;
 }
-
-
 function getPlayerKey(
   player: DrawPlayerInput,
 ): string {
@@ -137,35 +117,27 @@ function getPlayerKey(
     normalizeText(
       player.externalId,
     )?.toUpperCase();
-
   if (externalId) {
     return `atp:${externalId}`;
   }
-
   const profileSlug =
     normalizeSlug(
       player.profileSlug,
     );
-
   if (profileSlug) {
     return `atp-slug:${profileSlug}`;
   }
-
   const nameSlug =
     normalizeSlug(
       player.name,
     );
-
   if (!nameSlug) {
     throw new Error(
       "Unable to generate tournament entry key.",
     );
   }
-
   return `atp-name:${nameSlug}`;
 }
-
-
 function validateInput(
   input: SyncAtpTournamentDrawInput,
 ) {
@@ -178,29 +150,24 @@ function validateInput(
       `Invalid tournament year: ${input.year}.`,
     );
   }
-
   if (input.players.length === 0) {
     throw new Error(
       "ATP draw does not contain players.",
     );
   }
-
   if (input.matches.length === 0) {
     throw new Error(
       "ATP draw does not contain matches.",
     );
   }
-
   const finalMatches =
     input.matches.filter(
       (match) =>
         match.round === "FINAL",
     );
-
   const syncMode =
     input.syncMode ??
     "final";
-
   if (
     syncMode === "final" &&
     finalMatches.length !== 1
@@ -209,7 +176,6 @@ function validateInput(
       `ATP final draw must contain exactly one final; found ${finalMatches.length}.`,
     );
   }
-
   if (
     syncMode === "progressive" &&
     finalMatches.length > 1
@@ -218,7 +184,6 @@ function validateInput(
       `ATP progressive draw can contain at most one final; found ${finalMatches.length}.`,
     );
   }
-
   const matchIds =
     new Set(
       input.matches.map(
@@ -226,7 +191,6 @@ function validateInput(
           match.externalId,
       ),
     );
-
   if (
     matchIds.size !==
     input.matches.length
@@ -236,24 +200,19 @@ function validateInput(
     );
   }
 }
-
-
 export async function syncAtpTournamentDraw(
   input: SyncAtpTournamentDrawInput,
 ): Promise<SyncAtpTournamentDrawResult> {
   validateInput(input);
-
   const cmsTournamentSlug =
     normalizeSlug(
       input.cmsTournamentSlug,
     );
-
   if (!cmsTournamentSlug) {
     throw new Error(
       "CMS tournament slug is required.",
     );
   }
-
   return prisma.$transaction(
     async (transaction) => {
       const tournament =
@@ -270,19 +229,16 @@ export async function syncAtpTournamentDraw(
             active: true,
           },
         });
-
       if (!tournament) {
         throw new Error(
           `Tournament not found in AGE202: ${cmsTournamentSlug}.`,
         );
       }
-
       if (!tournament.active) {
         throw new Error(
           `Tournament is inactive in AGE202: ${cmsTournamentSlug}.`,
         );
       }
-
       if (
         !SUPPORTED_CATEGORIES.has(
           tournament.category,
@@ -292,10 +248,8 @@ export async function syncAtpTournamentDraw(
           `${tournament.name} is ${tournament.category}; draw sync supports only ATP Grand Slams, Masters 1000 and ATP 500.`,
         );
       }
-
       const editionExternalId =
         `atp:${input.atpTournamentId}:${input.year}:singles`;
-
       const existingEdition =
         await transaction.tournamentEdition.findUnique({
           where: {
@@ -314,11 +268,9 @@ export async function syncAtpTournamentDraw(
             id: true,
           },
         });
-
       const syncMode =
         input.syncMode ??
         "final";
-
       const editionData = {
         startDate:
           input.startDate ??
@@ -344,7 +296,6 @@ export async function syncAtpTournamentDraw(
         cancelled:
           false,
       };
-
       const edition =
         existingEdition
           ? await transaction.tournamentEdition.update({
@@ -374,25 +325,20 @@ export async function syncAtpTournamentDraw(
                 id: true,
               },
             });
-
       const uniquePlayers =
         new Map<string, DrawPlayerInput>();
-
       for (const player of input.players) {
         uniquePlayers.set(
           getPlayerKey(player),
           player,
         );
       }
-
       let entriesCreated =
         0;
       let entriesUpdated =
         0;
-
       const entryIdsByPlayerKey =
         new Map<string, string>();
-
       for (
         const [playerKey, playerInput]
         of uniquePlayers
@@ -407,8 +353,7 @@ export async function syncAtpTournamentDraw(
                 playerInput.profileSlug,
             },
           );
-
-        const existingEntry =
+        let existingEntry =
           await transaction.tournamentEntry.findUnique({
             where: {
               editionId_externalId: {
@@ -422,7 +367,18 @@ export async function syncAtpTournamentDraw(
               id: true,
             },
           });
-
+        // Reuse the same player entry when ATP and ESPN expose different keys.
+        if (!existingEntry) {
+          const samePlayerEntries = await transaction.tournamentEntry.findMany({
+            where: { editionId: edition.id, playerId: resolvedPlayer.id },
+            select: { id: true },
+            take: 2,
+          });
+          if (samePlayerEntries.length > 1) {
+            throw new Error(`Ambiguous tournament entries for ${resolvedPlayer.name}.`);
+          }
+          existingEntry = samePlayerEntries[0] ?? null;
+        }
         const entryData = {
           name:
             resolvedPlayer.name,
@@ -433,7 +389,6 @@ export async function syncAtpTournamentDraw(
           entryStatus:
             TournamentEntryStatus.DIRECT_ACCEPTANCE,
         };
-
         const entry =
           existingEntry
             ? await transaction.tournamentEntry.update({
@@ -459,7 +414,6 @@ export async function syncAtpTournamentDraw(
                   id: true,
                 },
               });
-
         if (existingEntry) {
           entriesUpdated +=
             1;
@@ -467,21 +421,17 @@ export async function syncAtpTournamentDraw(
           entriesCreated +=
             1;
         }
-
         entryIdsByPlayerKey.set(
           playerKey,
           entry.id,
         );
       }
-
       let matchesCreated =
         0;
       let matchesUpdated =
         0;
-
       const matchIdsByExternalId =
         new Map<string, string>();
-
       for (const matchInput of input.matches) {
         const playerOneEntryId =
           entryIdsByPlayerKey.get(
@@ -489,21 +439,18 @@ export async function syncAtpTournamentDraw(
               matchInput.playerOne,
             ),
           );
-
         const playerTwoEntryId =
           entryIdsByPlayerKey.get(
             getPlayerKey(
               matchInput.playerTwo,
             ),
           );
-
         const winnerEntryId =
           entryIdsByPlayerKey.get(
             getPlayerKey(
               matchInput.winner,
             ),
           );
-
         if (
           !playerOneEntryId ||
           !playerTwoEntryId ||
@@ -513,7 +460,6 @@ export async function syncAtpTournamentDraw(
             `Unable to resolve entries for match ${matchInput.externalId}.`,
           );
         }
-
         /*
          * 1. Identità ufficiale del draw.
          *
@@ -539,10 +485,8 @@ export async function syncAtpTournamentDraw(
               court: true,
             },
           });
-
         let existingMatch =
           externalIdMatch;
-
         /*
          * 2. Reconciliation con il daily schedule.
          *
@@ -591,7 +535,6 @@ export async function syncAtpTournamentDraw(
               },
             });
         }
-
         /*
          * Progressive mode:
          * - never assigns the extractor's temporary 1..N positions;
@@ -604,10 +547,8 @@ export async function syncAtpTournamentDraw(
          */
         let persistedMatchNumber:
           number;
-
         let persistedBracketPosition:
           number;
-
         if (
           syncMode ===
           "progressive"
@@ -615,7 +556,6 @@ export async function syncAtpTournamentDraw(
           if (existingMatch) {
             persistedMatchNumber =
               existingMatch.matchNumber;
-
             persistedBracketPosition =
               existingMatch.bracketPosition ??
               existingMatch.matchNumber;
@@ -641,7 +581,6 @@ export async function syncAtpTournamentDraw(
                     true,
                 },
               });
-
             persistedMatchNumber =
               Math.max(
                 1001,
@@ -651,7 +590,6 @@ export async function syncAtpTournamentDraw(
                   1000
                 ) + 1,
               );
-
             persistedBracketPosition =
               persistedMatchNumber;
           }
@@ -673,7 +611,6 @@ export async function syncAtpTournamentDraw(
                 externalId: true,
               },
             });
-
           if (
             officialNumberMatch &&
             (
@@ -686,14 +623,11 @@ export async function syncAtpTournamentDraw(
               `Draw reconciliation conflict for ${matchInput.externalId}: ${matchInput.round} matchNumber ${matchInput.matchNumber} already belongs to ${officialNumberMatch.externalId}.`,
             );
           }
-
           persistedMatchNumber =
             matchInput.matchNumber;
-
           persistedBracketPosition =
             matchInput.bracketPosition;
         }
-
         const matchData = {
           externalId:
             matchInput.externalId,
@@ -740,7 +674,6 @@ export async function syncAtpTournamentDraw(
           lastSyncedAt:
             input.extractedAt,
         };
-
         const match =
           existingMatch
             ? await transaction.tournamentMatch.update({
@@ -764,7 +697,6 @@ export async function syncAtpTournamentDraw(
                   id: true,
                 },
               });
-
         if (existingMatch) {
           matchesUpdated +=
             1;
@@ -772,7 +704,6 @@ export async function syncAtpTournamentDraw(
           matchesCreated +=
             1;
         }
-
         /*
          * Usiamo sempre l'externalId ufficiale del draw come
          * chiave della mappa. Dopo la reconciliation anche il
@@ -783,20 +714,16 @@ export async function syncAtpTournamentDraw(
           match.id,
         );
       }
-
       let linkedToNextRound =
         0;
-
       for (const matchInput of input.matches) {
         if (matchInput.round === "FINAL") {
           continue;
         }
-
         const winnerKey =
           getPlayerKey(
             matchInput.winner,
           );
-
         const nextMatchInput =
           input.matches.find(
             (candidate) =>
@@ -809,35 +736,29 @@ export async function syncAtpTournamentDraw(
                   winnerKey
               ),
           );
-
         if (!nextMatchInput) {
           continue;
         }
-
         const currentMatchId =
           matchIdsByExternalId.get(
             matchInput.externalId,
           );
-
         const nextMatchId =
           matchIdsByExternalId.get(
             nextMatchInput.externalId,
           );
-
         if (
           !currentMatchId ||
           !nextMatchId
         ) {
           continue;
         }
-
         const nextSlot =
           getPlayerKey(
             nextMatchInput.playerOne,
           ) === winnerKey
             ? TournamentMatchSlot.PLAYER_ONE
             : TournamentMatchSlot.PLAYER_TWO;
-
         await transaction.tournamentMatch.update({
           where: {
             id:
@@ -848,11 +769,9 @@ export async function syncAtpTournamentDraw(
             nextSlot,
           },
         });
-
         linkedToNextRound +=
           1;
       }
-
       return {
         tournament: {
           id:
