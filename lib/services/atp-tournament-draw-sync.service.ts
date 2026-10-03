@@ -12,6 +12,58 @@ import {
 import {
   resolvePlayer,
 } from "@/lib/services/atp-tournament-sync.service";
+import type { TransactionClient } from "@/lib/services/atp-tournament-sync.service";
+
+async function syncCompletedMatchSets(
+  transaction: TransactionClient,
+  matchId: string,
+  summary: string | null,
+  resultType: DrawMatchInput["resultType"],
+) {
+  // Keep structured set rows consistent with scoreSummary and player order.
+  const text = (summary ?? "").trim()
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\s*(?:RET(?:IRED)?\.?|W\/?O|WALKOVER|DEF(?:AULT)?\.?)\s*$/i, "")
+    .trim();
+  const tokens = text ? text.split(/[\s,\u00b7]+/).filter(Boolean) : [];
+  if ((!tokens.length && resultType === "STANDARD") || tokens.length > 5) {
+    throw new Error(`Cannot reconcile final set scores for match ${matchId}: ${summary}.`);
+  }
+  const sets = tokens.map((token, index) => {
+    const parsed = /^(\d+)-(\d+)(?:\((\d+)\))?$/.exec(token);
+    if (!parsed) throw new Error(`Unsupported final set score for match ${matchId}: ${token}.`);
+    const one = Number(parsed[1]), two = Number(parsed[2]);
+    const tie = parsed[3] === undefined ? null : Number(parsed[3]);
+    if (one > 100 || two > 100 || (tie !== null && tie > 100)) {
+      throw new Error(`Invalid final set score for match ${matchId}: ${token}.`);
+    }
+    const completed = Math.max(one, two) >= 6 && Math.abs(one - two) >= 2 ||
+      Math.max(one, two) === 7 && Math.min(one, two) === 6;
+    if (resultType === "STANDARD" && !completed) {
+      throw new Error(`Incomplete set in final score for match ${matchId}: ${token}.`);
+    }
+    return {
+      setNumber: index + 1,
+      playerOneScore: one,
+      playerTwoScore: two,
+      // Parentheses contain the losing player's tiebreak points.
+      playerOneTiebreak: one < two ? tie : null,
+      playerTwoTiebreak: two < one ? tie : null,
+      completed,
+    };
+  });
+  for (const set of sets) {
+    await transaction.tournamentMatchSet.upsert({
+      where: { matchId_setNumber: { matchId, setNumber: set.setNumber } },
+      create: { matchId, ...set },
+      update: set,
+    });
+  }
+  // A finished two-set match must not retain an old third live set.
+  await transaction.tournamentMatchSet.deleteMany({
+    where: { matchId, setNumber: { gt: sets.length } },
+  });
+}
 type DrawPlayerInput = {
   name: string;
   profileSlug?: string | null;
@@ -697,6 +749,12 @@ export async function syncAtpTournamentDraw(
                   id: true,
                 },
               });
+        await syncCompletedMatchSets(
+          transaction,
+          match.id,
+          matchData.scoreSummary,
+          matchInput.resultType,
+        );
         if (existingMatch) {
           matchesUpdated +=
             1;
