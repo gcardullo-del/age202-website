@@ -195,7 +195,8 @@ export async function extractEspnAtpDailyMatches(params: Params) {
     const playerOne = context.player(one), playerTwo = context.player(two);
     const winner = completed ? (one.winner ? playerOne : playerTwo) : null;
     const result = completed ? outcome(match) : "STANDARD";
-    const summary = completed && two.winner ? score(two, one, result) : score(one, two, result);
+    // Scores always follow playerOne/playerTwo, independently of the winner.
+    const summary = score(one, two, result);
     if (completed && result === "STANDARD" && !summary) throw new Error(`ESPN: final score missing ${match.id}.`);
     const scheduledAt = match.timeValid ? new Date(match.date) : null;
     if (scheduledAt && Number.isNaN(scheduledAt.getTime())) throw new Error(`ESPN: invalid date ${match.id}.`);
@@ -223,7 +224,8 @@ export async function extractEspnAtpCompletedResults(params: Params) {
     const playerOne = context.player(one), playerTwo = context.player(two);
     const winner = one.winner ? playerOne : playerTwo, loser = one.winner ? playerTwo : playerOne;
     const resultType = outcome(match);
-    const summary = one.winner ? score(one, two, resultType) : score(two, one, resultType);
+    // Match the ATP extractor's contract: first score belongs to playerOne.
+    const summary = score(one, two, resultType);
     if (resultType === "STANDARD" && !summary) throw new Error(`ESPN: final score missing ${match.id}.`);
     const round = context.roundOf(match);
     const number = (counters.get(round) ?? 0) + 1;
