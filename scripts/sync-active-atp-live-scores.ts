@@ -4,13 +4,37 @@ import { prisma } from "../lib/prisma";
 import { getActiveAtpTournaments } from "../lib/data/tournaments/atp-active-tournament-selector";
 import { syncAtpTournamentLiveScores } from "../lib/services/atp-tournament-live-score-sync.service";
 import { extractAtpLiveScores } from "./atp-live-scores-extractor";
+import { extractEspnAtpLiveScores } from "./espn-atp-live-scores-extractor";
+
+async function extractLiveMatches(
+  params: Parameters<typeof extractAtpLiveScores>[0],
+) {
+  try {
+    return await extractAtpLiveScores(params);
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : String(error);
+
+    if (!/ATP live scores HTTP 403\b/.test(message)) {
+      throw error;
+    }
+
+    console.warn(
+      `ATP blocked ${params.tournamentSlug}; trying ESPN.`,
+    );
+
+    return await extractEspnAtpLiveScores(params);
+  }
+}
 
 async function main() {
   const write = process.argv.includes("--write");
   const selection = getActiveAtpTournaments(new Date());
 
   console.log("\n🎾 AGE202 — ATP LIVE SCORE SYNC");
-  console.log(write ? "✍️ WRITE MODE" : "🛡️ DRY RUN — database unchanged");
+  console.log(
+    write ? "✍️ WRITE MODE" : "🛡️ DRY RUN — database unchanged",
+  );
 
   if (selection.tournaments.length === 0) {
     console.log("ℹ️ No supported ATP tournament is active.");
@@ -18,7 +42,9 @@ async function main() {
   }
 
   console.log(`🏷️ Category: ${selection.category}`);
-  console.log(`🎯 Active tournaments: ${selection.tournaments.length}`);
+  console.log(
+    `🎯 Active tournaments: ${selection.tournaments.length}`,
+  );
 
   let totalLive = 0;
   let totalMatched = 0;
@@ -26,27 +52,39 @@ async function main() {
   let totalUnmatched = 0;
   let totalAmbiguous = 0;
   let failedTournaments = 0;
+
   const reportLines: string[] = [];
 
   for (const tournament of selection.tournaments) {
     console.log("\n────────────────────────────────────────");
     console.log(`🏆 ${tournament.name}`);
-    console.log(`ATP: ${tournament.atpSlug}/${tournament.atpTournamentId}`);
+    console.log(
+      `ATP: ${tournament.atpSlug}/${tournament.atpTournamentId}`,
+    );
 
     try {
-      const year = Number.parseInt(tournament.startDate.slice(0, 4), 10);
+      const year = Number.parseInt(
+        tournament.startDate.slice(0, 4),
+        10,
+      );
+
       const extractedAt = new Date();
 
-      const liveMatches = await extractAtpLiveScores({
+      const liveMatches = await extractLiveMatches({
         tournamentSlug: tournament.atpSlug,
         tournamentId: tournament.atpTournamentId,
       });
 
       totalLive += liveMatches.length;
-      console.log(`🔴 Live matches extracted: ${liveMatches.length}`);
+
+      console.log(
+        `🔴 Live matches extracted: ${liveMatches.length}`,
+      );
 
       if (liveMatches.length === 0) {
-        reportLines.push(`- ${tournament.name}: no live matches extracted.`);
+        reportLines.push(
+          `- ${tournament.name}: no live matches extracted.`,
+        );
         continue;
       }
 
@@ -55,7 +93,7 @@ async function main() {
         year,
         extractedAt,
         write,
-        matches: liveMatches.map((match) => ({
+        matches: liveMatches.map(match => ({
           roundLabel: match.roundLabel,
           court: match.court,
           playerOne: { name: match.playerOne.name },
@@ -75,14 +113,22 @@ async function main() {
       );
 
       for (const match of result.results) {
-        console.log(`\n${match.livePlayerOne} vs ${match.livePlayerTwo}`);
-        console.log(`   Match ID: ${match.matchId ?? "not found"}`);
-        console.log(`   Score: ${match.scoreSummary ?? "unavailable"}`);
+        console.log(
+          `\n${match.livePlayerOne} vs ${match.livePlayerTwo}`,
+        );
+        console.log(
+          `   Match ID: ${match.matchId ?? "not found"}`,
+        );
+        console.log(
+          `   Score: ${match.scoreSummary ?? "unavailable"}`,
+        );
         console.log(`   ${match.message}`);
       }
     } catch (error: unknown) {
       failedTournaments += 1;
-      const message = error instanceof Error ? error.message : String(error);
+
+      const message =
+        error instanceof Error ? error.message : String(error);
 
       console.error(`❌ ${tournament.name}: ${message}`);
       console.error(error);
